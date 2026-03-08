@@ -6,6 +6,7 @@ describe("plugin export", () => {
     it("exposes rules and configs", () => {
         expect(plugin.rules).toBeDefined();
         expect(plugin.configs).toBeDefined();
+        expect(plugin.rules["class-match-filename"]).toBeDefined();
         expect(plugin.rules["consistent-source-extension"]).toBeDefined();
         expect(plugin.rules["consistent-symbol-description"]).toBeDefined();
         expect(plugin.rules["max-identifier-blocks"]).toBeDefined();
@@ -26,7 +27,9 @@ describe("plugin export", () => {
         expect(plugin.rules["no-misused-generics"]).toBeDefined();
         expect(plugin.rules["no-negated-conditions"]).toBeDefined();
         expect(plugin.rules["no-nodejs-modules"]).toBeDefined();
+        expect(plugin.rules["no-param-reassign"]).toBeDefined();
         expect(plugin.rules["no-relative-parent-import"]).toBeDefined();
+        expect(plugin.rules["no-shadow"]).toBeDefined();
         expect(plugin.rules["no-t"]).toBeDefined();
         expect(plugin.rules["no-underscore-export"]).toBeDefined();
         expect(plugin.rules["no-unnecessary-as-const"]).toBeDefined();
@@ -40,6 +43,18 @@ describe("plugin export", () => {
         expect(plugin.rules["sort-call-signature"]).toBeDefined();
         expect(plugin.rules["sort-construct-signature"]).toBeDefined();
         expect(plugin.rules["throw-error"]).toBeDefined();
+        expect(
+            plugin.rules["typescript/define-function-in-one-statement"]
+        ).toBeDefined();
+        expect(plugin.rules["typescript/no-boolean-literal-type"]).toBeDefined();
+        expect(plugin.rules["typescript/no-empty-interfaces"]).toBeDefined();
+        expect(plugin.rules["typescript/prefer-class-method"]).toBeDefined();
+        expect(plugin.rules["typescript/prefer-readonly-array"]).toBeDefined();
+        expect(plugin.rules["typescript/prefer-readonly-map"]).toBeDefined();
+        expect(plugin.rules["typescript/prefer-readonly-property"]).toBeDefined();
+        expect(plugin.rules["typescript/prefer-readonly-set"]).toBeDefined();
+        expect(plugin.rules["typescript/require-prop-type-annotation"]).toBeDefined();
+        expect(plugin.rules["typescript/require-this-void"]).toBeDefined();
         expect(plugin.rules["underscore-internal"]).toBeDefined();
         expect(
             plugin.configs.recommended.rules["etc-misc/no-assign-mutated-array"]

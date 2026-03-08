@@ -39,6 +39,7 @@ const isCoreRuleDocId = (ruleDocId: string): boolean =>
         ruleDocId.startsWith("restrict-") ||
         ruleDocId.startsWith("sort-") ||
         ruleDocId.startsWith("throw-") ||
+        ruleDocId.startsWith("typescript-") ||
         ruleDocId.startsWith("underscore-")) &&
     !isTsExtrasRuleDocId(ruleDocId) &&
     !isTypeFestRuleDocId(ruleDocId);

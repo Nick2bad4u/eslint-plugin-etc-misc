@@ -2,6 +2,7 @@
 
 import type { TSESLint } from "@typescript-eslint/utils";
 
+import matchFilenameRule from "./rules/class-match-filename";
 import consistentSourceExtension from "./rules/consistent-source-extension";
 import consistentSymbolDescription from "./rules/consistent-symbol-description";
 import maxIdentifierBlocks from "./rules/max-identifier-blocks";
@@ -22,7 +23,9 @@ import noLanguageMixing from "./rules/no-language-mixing";
 import noMisusedGenerics from "./rules/no-misused-generics";
 import noNegatedConditions from "./rules/no-negated-conditions";
 import noNodejsModules from "./rules/no-nodejs-modules";
+import noParamReassign from "./rules/no-param-reassign";
 import noRelativeParentImport from "./rules/no-relative-parent-import";
+import noShadow from "./rules/no-shadow";
 import noT from "./rules/no-t";
 import noUnderscoreExport from "./rules/no-underscore-export";
 import noUnnecessaryAsConst from "./rules/no-unnecessary-as-const";
@@ -36,6 +39,16 @@ import restrictIdentifierCharacters from "./rules/restrict-identifier-characters
 import sortCallSignature from "./rules/sort-call-signature";
 import sortConstructSignature from "./rules/sort-construct-signature";
 import throwError from "./rules/throw-error";
+import typescriptDefineFunctionInOneStatement from "./rules/typescript-define-function-in-one-statement";
+import typescriptNoBooleanLiteralType from "./rules/typescript-no-boolean-literal-type";
+import typescriptNoEmptyInterfaces from "./rules/typescript-no-empty-interfaces";
+import typescriptPreferClassMethod from "./rules/typescript-prefer-class-method";
+import typescriptPreferReadonlyArray from "./rules/typescript-prefer-readonly-array";
+import typescriptPreferReadonlyMap from "./rules/typescript-prefer-readonly-map";
+import typescriptPreferReadonlyProperty from "./rules/typescript-prefer-readonly-property";
+import typescriptPreferReadonlySet from "./rules/typescript-prefer-readonly-set";
+import typescriptRequirePropTypeAnnotation from "./rules/typescript-require-prop-type-annotation";
+import typescriptRequireThisVoid from "./rules/typescript-require-this-void";
 import underscoreInternal from "./rules/underscore-internal";
 
 type RuleModule = TSESLint.RuleModule<string, readonly unknown[]>;
@@ -44,6 +57,7 @@ type RuleModule = TSESLint.RuleModule<string, readonly unknown[]>;
  * Rule implementations keyed by rule name.
  */
 export const rules: Readonly<Record<string, RuleModule>> = {
+    "class-match-filename": matchFilenameRule,
     "consistent-source-extension": consistentSourceExtension,
     "consistent-symbol-description": consistentSymbolDescription,
     "max-identifier-blocks": maxIdentifierBlocks,
@@ -64,7 +78,9 @@ export const rules: Readonly<Record<string, RuleModule>> = {
     "no-misused-generics": noMisusedGenerics,
     "no-negated-conditions": noNegatedConditions,
     "no-nodejs-modules": noNodejsModules,
+    "no-param-reassign": noParamReassign,
     "no-relative-parent-import": noRelativeParentImport,
+    "no-shadow": noShadow,
     "no-t": noT,
     "no-underscore-export": noUnderscoreExport,
     "no-unnecessary-as-const": noUnnecessaryAsConst,
@@ -78,6 +94,16 @@ export const rules: Readonly<Record<string, RuleModule>> = {
     "sort-call-signature": sortCallSignature,
     "sort-construct-signature": sortConstructSignature,
     "throw-error": throwError,
+    "typescript/define-function-in-one-statement": typescriptDefineFunctionInOneStatement,
+    "typescript/no-boolean-literal-type": typescriptNoBooleanLiteralType,
+    "typescript/no-empty-interfaces": typescriptNoEmptyInterfaces,
+    "typescript/prefer-class-method": typescriptPreferClassMethod,
+    "typescript/prefer-readonly-array": typescriptPreferReadonlyArray,
+    "typescript/prefer-readonly-map": typescriptPreferReadonlyMap,
+    "typescript/prefer-readonly-property": typescriptPreferReadonlyProperty,
+    "typescript/prefer-readonly-set": typescriptPreferReadonlySet,
+    "typescript/require-prop-type-annotation": typescriptRequirePropTypeAnnotation,
+    "typescript/require-this-void": typescriptRequireThisVoid,
     "underscore-internal": underscoreInternal,
 };
 

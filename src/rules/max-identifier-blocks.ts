@@ -30,7 +30,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
         defaultOptions: [],
         meta: {
             docs: {
-                description: "restrict identifier complexity to at most four casing blocks.",
+                description: "disallow identifiers with more than four casing blocks.",
                 recommended: false,
                 url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/max-identifier-blocks.md",
             },
