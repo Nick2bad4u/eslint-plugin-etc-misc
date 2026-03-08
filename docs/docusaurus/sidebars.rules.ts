@@ -33,11 +33,15 @@ const isTypeFestRuleDocId = (ruleDocId: string): boolean =>
 
 const isCoreRuleDocId = (ruleDocId: string): boolean =>
     (ruleDocId.startsWith("consistent-") ||
+        ruleDocId.startsWith("disallow-") ||
         ruleDocId.startsWith("max-") ||
         ruleDocId.startsWith("no-") ||
+        ruleDocId.startsWith("only-") ||
         ruleDocId.startsWith("prefer-") ||
+        ruleDocId.startsWith("require-") ||
         ruleDocId.startsWith("restrict-") ||
         ruleDocId.startsWith("sort-") ||
+        ruleDocId.startsWith("switch-") ||
         ruleDocId.startsWith("throw-") ||
         ruleDocId.startsWith("typescript-") ||
         ruleDocId.startsWith("underscore-")) &&

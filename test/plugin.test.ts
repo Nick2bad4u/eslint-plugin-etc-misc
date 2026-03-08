@@ -9,6 +9,7 @@ describe("plugin export", () => {
         expect(plugin.rules["class-match-filename"]).toBeDefined();
         expect(plugin.rules["consistent-source-extension"]).toBeDefined();
         expect(plugin.rules["consistent-symbol-description"]).toBeDefined();
+        expect(plugin.rules["disallow-import"]).toBeDefined();
         expect(plugin.rules["max-identifier-blocks"]).toBeDefined();
         expect(plugin.rules["no-assign-mutated-array"]).toBeDefined();
         expect(plugin.rules["no-at-sign-import"]).toBeDefined();
@@ -28,9 +29,15 @@ describe("plugin export", () => {
         expect(plugin.rules["no-negated-conditions"]).toBeDefined();
         expect(plugin.rules["no-nodejs-modules"]).toBeDefined();
         expect(plugin.rules["no-param-reassign"]).toBeDefined();
+        expect(plugin.rules["no-restricted-syntax"]).toBeDefined();
         expect(plugin.rules["no-relative-parent-import"]).toBeDefined();
+        expect(plugin.rules["no-self-import"]).toBeDefined();
         expect(plugin.rules["no-shadow"]).toBeDefined();
+        expect(plugin.rules["no-sibling-import"]).toBeDefined();
         expect(plugin.rules["no-t"]).toBeDefined();
+        expect(plugin.rules["no-unnecessary-template-literal"]).toBeDefined();
+        expect(plugin.rules["no-expression-empty-lines"]).toBeDefined();
+        expect(plugin.rules["only-export-name"]).toBeDefined();
         expect(plugin.rules["no-underscore-export"]).toBeDefined();
         expect(plugin.rules["no-unnecessary-as-const"]).toBeDefined();
         expect(plugin.rules["no-unnecessary-break"]).toBeDefined();
@@ -39,15 +46,28 @@ describe("plugin export", () => {
         expect(plugin.rules["prefer-const-require"]).toBeDefined();
         expect(plugin.rules["prefer-interface"]).toBeDefined();
         expect(plugin.rules["prefer-less-than"]).toBeDefined();
+        expect(plugin.rules["prefer-only-export"]).toBeDefined();
+        expect(plugin.rules["require-jsdoc"]).toBeDefined();
+        expect(plugin.rules["require-syntax"]).toBeDefined();
         expect(plugin.rules["restrict-identifier-characters"]).toBeDefined();
         expect(plugin.rules["sort-call-signature"]).toBeDefined();
         expect(plugin.rules["sort-construct-signature"]).toBeDefined();
+        expect(plugin.rules["switch-case-spacing"]).toBeDefined();
         expect(plugin.rules["throw-error"]).toBeDefined();
+        expect(plugin.rules["typescript/array-callback-return-type"]).toBeDefined();
+        expect(plugin.rules["typescript/consistent-array-type-name"]).toBeDefined();
         expect(
             plugin.rules["typescript/define-function-in-one-statement"]
         ).toBeDefined();
+        expect(plugin.rules["typescript/exhaustive-switch"]).toBeDefined();
         expect(plugin.rules["typescript/no-boolean-literal-type"]).toBeDefined();
+        expect(plugin.rules["typescript/no-complex-declarator-type"]).toBeDefined();
+        expect(plugin.rules["typescript/no-complex-return-type"]).toBeDefined();
         expect(plugin.rules["typescript/no-empty-interfaces"]).toBeDefined();
+        expect(plugin.rules["typescript/no-inferrable-types"]).toBeDefined();
+        expect(plugin.rules["typescript/no-multi-type-tuples"]).toBeDefined();
+        expect(plugin.rules["typescript/no-never"]).toBeDefined();
+        expect(plugin.rules["typescript/prefer-array-type-alias"]).toBeDefined();
         expect(plugin.rules["typescript/prefer-class-method"]).toBeDefined();
         expect(plugin.rules["typescript/prefer-readonly-array"]).toBeDefined();
         expect(plugin.rules["typescript/prefer-readonly-map"]).toBeDefined();
