@@ -20,7 +20,13 @@ const getExportedNames = (
             .filter((specifier): specifier is es.ExportSpecifier =>
                 specifier.type === "ExportSpecifier"
             )
-            .map((specifier) => specifier.exported.name);
+            .flatMap((specifier) => {
+                if (specifier.exported.type === "Identifier") {
+                    return [specifier.exported.name];
+                }
+
+                return [];
+            });
     }
 
     const declaration = node.declaration;
@@ -33,11 +39,15 @@ const getExportedNames = (
     }
 
     if (declaration.type === "VariableDeclaration") {
-        return declaration.declarations
-            .filter((declarator): declarator is es.VariableDeclarator & { id: es.Identifier } =>
-                declarator.id.type === "Identifier"
-            )
-            .map((declarator) => declarator.id.name);
+        const names: string[] = [];
+
+        for (const declarator of declaration.declarations) {
+            if (declarator.id.type === "Identifier") {
+                names.push(declarator.id.name);
+            }
+        }
+
+        return names;
     }
 
     return [];

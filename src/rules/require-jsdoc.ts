@@ -66,14 +66,14 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
                         return;
                     }
 
-                    reportMissingJSDoc(context, node.id);
+                    reportMissingJSDoc(context, node);
                 },
                 FunctionDeclaration: (node: Readonly<es.FunctionDeclaration>): void => {
                     if (!kinds.has("function") || node.id === null) {
                         return;
                     }
 
-                    reportMissingJSDoc(context, node.id);
+                    reportMissingJSDoc(context, node);
                 },
                 MethodDefinition: (node: Readonly<es.MethodDefinition>): void => {
                     if (
@@ -84,7 +84,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
                         return;
                     }
 
-                    reportMissingJSDoc(context, node.key);
+                    reportMissingJSDoc(context, node);
                 },
                 "TSTypeAliasDeclaration, TSInterfaceDeclaration": (
                     node: Readonly<es.Node>
@@ -97,7 +97,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
                         node.type === "TSInterfaceDeclaration" ||
                         node.type === "TSTypeAliasDeclaration"
                     ) {
-                        reportMissingJSDoc(context, node.id);
+                        reportMissingJSDoc(context, node);
                     }
                 },
                 VariableDeclarator: (node: Readonly<es.VariableDeclarator>): void => {
@@ -111,7 +111,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
                         return;
                     }
 
-                    reportMissingJSDoc(context, node.id);
+                    reportMissingJSDoc(context, node.parent);
                 },
             };
         },

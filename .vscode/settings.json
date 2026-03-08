@@ -1,3 +1,3 @@
 {
-    "github.copilot.chat.summarizeAgentConversationHistory.enabled": false
+    "github.copilot.chat.summarizeAgentConversationHistory.enabled": true
 }

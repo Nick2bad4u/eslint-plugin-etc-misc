@@ -32,6 +32,12 @@ export const normalizeSyntaxSelector = (
     selector: SyntaxSelectorOption
 ): SyntaxSelectorEntry => {
     if (isSelectorObject(selector)) {
+        if (selector.message === undefined) {
+            return {
+                selector: selector.selector,
+            };
+        }
+
         return {
             message: selector.message,
             selector: selector.selector,

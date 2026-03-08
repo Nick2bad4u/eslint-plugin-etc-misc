@@ -10,7 +10,7 @@ ruleTester.run("no-restricted-syntax", rule, {
         },
         {
             code: "while (true) { break; }",
-            errors: [{ message: "No while loops" }],
+            errors: [{ messageId: "customMessage" }],
             options: [
                 {
                     selectors: [

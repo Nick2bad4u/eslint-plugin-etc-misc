@@ -1,19 +1,65 @@
-import { createSelectorRule } from "../_internal/create-selector-rule";
+import type {
+    TSESTree as es,
+} from "@typescript-eslint/utils";
 
-const selector =
-    "SwitchCase > :matches(:first-child:not([type='BlockStatement'])[loc.start.column!=7], :not(:first-child):not([type='BreakStatement'])[loc.start.column!=8], :last-child:not([type='BreakStatement']))";
+import { ruleCreator } from "../_internal/rule-creator";
+
+type MessageIds = "forbidden";
+
+type Options = readonly [];
+
+const isValidCaseBody = (node: Readonly<es.SwitchCase>): boolean => {
+    if (node.consequent.length === 0) {
+        return true;
+    }
+
+    const [firstStatement] = node.consequent;
+    // eslint-disable-next-line unicorn/prefer-at -- Node >=16.0 support baseline
+    const lastStatement = node.consequent[node.consequent.length - 1];
+    if (firstStatement === undefined || lastStatement === undefined) {
+        return true;
+    }
+
+    const startsOnFollowingLine = firstStatement.loc.start.line > node.loc.start.line;
+    const startsWithBlock = firstStatement.type === "BlockStatement";
+    const endsWithBreak = lastStatement.type === "BreakStatement" || startsWithBlock;
+
+    return (startsOnFollowingLine || startsWithBlock) && endsWithBreak;
+};
 
 /**
  * Enforce consistent spacing and break placement inside switch cases.
  */
-const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
-    description: "enforce consistent spacing and break placement in switch cases.",
-    message: "Case body should start on a new line and end with break.",
-    messageId: "forbidden",
-    name: "switch-case-spacing",
-    selector,
-    type: "suggestion",
-    url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/switch-case-spacing.md",
-});
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
+    ruleCreator<Options, MessageIds>({
+        create: (context) => ({
+            SwitchCase: (node: Readonly<es.SwitchCase>): void => {
+                if (isValidCaseBody(node)) {
+                    return;
+                }
+
+                context.report({
+                    messageId: "forbidden",
+                    node,
+                });
+            },
+        }),
+        defaultOptions: [],
+        meta: {
+            docs: {
+                description:
+                    "enforce consistent spacing and break placement in switch cases.",
+                recommended: false,
+                url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/switch-case-spacing.md",
+            },
+            hasSuggestions: false,
+            messages: {
+                forbidden: "Case body should start on a new line and end with break.",
+            },
+            schema: [],
+            type: "suggestion",
+        },
+        name: "switch-case-spacing",
+    });
 
 export default rule;

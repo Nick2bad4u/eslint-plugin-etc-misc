@@ -55,6 +55,7 @@ describe("plugin export", () => {
         expect(plugin.rules["switch-case-spacing"]).toBeDefined();
         expect(plugin.rules["throw-error"]).toBeDefined();
         expect(plugin.rules["typescript/array-callback-return-type"]).toBeDefined();
+        expect(plugin.rules["typescript/class-methods-use-this"]).toBeDefined();
         expect(plugin.rules["typescript/consistent-array-type-name"]).toBeDefined();
         expect(
             plugin.rules["typescript/define-function-in-one-statement"]
@@ -67,6 +68,7 @@ describe("plugin export", () => {
         expect(plugin.rules["typescript/no-inferrable-types"]).toBeDefined();
         expect(plugin.rules["typescript/no-multi-type-tuples"]).toBeDefined();
         expect(plugin.rules["typescript/no-never"]).toBeDefined();
+        expect(plugin.rules["typescript/no-unsafe-object-assign"]).toBeDefined();
         expect(plugin.rules["typescript/prefer-array-type-alias"]).toBeDefined();
         expect(plugin.rules["typescript/prefer-class-method"]).toBeDefined();
         expect(plugin.rules["typescript/prefer-readonly-array"]).toBeDefined();

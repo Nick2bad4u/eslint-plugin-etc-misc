@@ -22,20 +22,21 @@
   "author": "Nick2bad4u",
   "type": "module",
   "main": "index.js",
-  "scripts": {
-    "test": "vitest --run"
-  },
   "workspaces": [
     "docs/docusaurus"
   ],
+  "scripts": {
+    "test": "vitest --run"
+  },
   "dependencies": {
     "@typescript-eslint/parser": "^8.56.1",
+    "@typescript-eslint/type-utils": "^8.56.1",
     "@typescript-eslint/utils": "^8.56.1",
-    "minimatch": "^10.0.3",
-    "typescript": "^5.9.3",
+    "minimatch": "^10.2.4",
     "ts-extras": "^0.17.0",
     "tsutils": "^3.21.0",
-    "type-fest": "^5.4.4"
+    "type-fest": "^5.4.4",
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
@@ -109,7 +110,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-formatter-unix": "^9.0.1",
     "eslint-import-resolver-typescript": "^4.4.4",
-    "eslint-plugin-array-func": "^5.1.0",
+    "eslint-plugin-array-func": "^5.1.1",
     "eslint-plugin-canonical": "^5.1.3",
     "eslint-plugin-case-police": "^2.2.0",
     "eslint-plugin-comment-length": "^2.3.0",
@@ -160,7 +161,7 @@
     "eslint-plugin-unused-imports": "^4.4.1",
     "eslint-plugin-write-good-comments": "^0.2.0",
     "eslint-plugin-yml": "^3.3.1",
-    "fast-check": "^4.5.3",
+    "fast-check": "^4.6.0",
     "git-cliff": "^2.12.0",
     "gitleaks-secret-scanner": "^2.1.1",
     "globals": "^17.4.0",
@@ -354,7 +355,6 @@
     "toml-eslint-parser": "^1.0.3",
     "ts-unused-exports": "^11.0.1",
     "typedoc": "^0.28.17",
-    "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.1",
     "typesync": "^0.14.3",
     "vfile": "^6.0.3",

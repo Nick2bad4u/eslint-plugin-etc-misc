@@ -1,9 +1,9 @@
+import { ruleCreator } from "../_internal/rule-creator";
 import {
     buildRestrictedSyntaxListeners,
-    type SyntaxSelectorOption,
     normalizeSyntaxSelector,
+    type SyntaxSelectorOption,
 } from "../_internal/syntax-selectors";
-import { ruleCreator } from "../_internal/rule-creator";
 
 type MessageIds = "customMessage" | "forbidden";
 
@@ -44,13 +44,13 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
         },
         defaultOptions: [{ selectors: [] }],
         meta: {
+            defaultOptions: [{ selectors: [] }],
             docs: {
                 description:
                     "disallow syntax nodes selected by configured AST selectors.",
                 recommended: false,
                 url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-restricted-syntax.md",
             },
-            defaultOptions: [{ selectors: [] }],
             hasSuggestions: false,
             messages: {
                 customMessage: "{{message}}",
