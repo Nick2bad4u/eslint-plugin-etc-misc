@@ -1,0 +1,37 @@
+{
+  "name": "eslint-plugin-etc-misc",
+  "version": "1.0.0",
+  "description": "ESLint Plugin combing eslint-plugin-etc and eslint-plugin-misc!",
+  "keywords": [
+    "eslint",
+    "eslint-plugin",
+    "eslintplugin",
+    "etc",
+    "misc",
+    "tslint"
+  ],
+  "homepage": "https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme",
+  "bugs": {
+    "url": "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nick2bad4u/eslint-plugin-etc-misc.git"
+  },
+  "license": "MIT",
+  "author": "Nick2bad4u",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest --run"
+  },
+  "workspaces": [
+    "docs/docusaurus"
+  ],
+  "dependencies": {
+    "@typescript-eslint/parser": "^8.56.1",
+    "@typescript-eslint/utils": "^8.56.1",
+    "ts-extras": "^0.17.0",
+    "type-fest": "^5.4.4"
+  }
+}

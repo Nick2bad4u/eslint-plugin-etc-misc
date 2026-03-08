@@ -1,0 +1,40 @@
+{
+    "$schema": "https://www.schemastore.org/tsconfig.json",
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": true,
+        "erasableSyntaxOnly": true,
+        "incremental": true,
+        "isolatedDeclarations": false,
+        "noCheck": true,
+        "noEmit": true,
+        "tsBuildInfoFile": "./.cache/tsbuildinfo/tsconfig.eslint.tsbuildinfo"
+    },
+    "exclude": [
+        ".cache/**",
+        "coverage/**",
+        "dist/**",
+        "node_modules/**"
+    ],
+    "extends": "./tsconfig.json",
+    "include": [
+        ".remarkrc.mjs",
+        "*.mjs",
+        "benchmarks/**/*.ts",
+        "benchmarks/**/*.mjs",
+        "knip.config.ts",
+        "src/**/*.ts",
+        "src/**/*.mjs",
+        "scripts/**/*.ts",
+        "scripts/**/*.mjs",
+        "test/**/*.d.ts",
+        "test/**/*.ts",
+        "test/**/*.mjs",
+        "vitest.stryker.config.ts",
+        "vite.config.ts",
+        "docs/**/*.mjs",
+        "docs/**/*.mts",
+        "docs/**/*.ts",
+        "docs/**/*.tsx"
+    ]
+}

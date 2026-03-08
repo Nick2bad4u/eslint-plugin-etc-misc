@@ -1,0 +1,387 @@
+/** eslint-disable css/use-baseline */
+/* stylelint-disable plugin/no-low-performance-animation-properties, order/properties-order, no-descending-specificity, csstools/use-nesting, a11y/media-prefers-reduced-motion -- Docusaurus CSS breaks these features */
+
+/**
+ * Global CSS overrides for Docusaurus documentation site.
+ *
+ * Purpose:
+ *   - This file contains global styles that apply to all pages and components.
+ *   - It customizes and extends the default Infima CSS framework bundled with Docusaurus.
+ *   - Use this file to implement advanced design features, accessibility improvements,
+ *     and maintain consistent branding across the documentation.
+ *
+ * Scope:
+ *   - All CSS rules here are global and affect the entire documentation site.
+ *   - Overrides Infima variables, resets, and component styles as needed.
+ *   - Maintainers should review changes for compatibility with Docusaurus updates and
+ *     ensure that customizations do not break core functionality.
+ *
+ * Note:
+ *   - Prefer using CSS variables and utility classes for maintainability.
+ *   - Document any major changes or overrides for future maintainers.
+ */
+
+/* You can override the default Infima variables here. */
+
+:root {
+    --ifm-color-primary: #4f46e5;
+    --ifm-color-primary-dark: #4338ca;
+    --ifm-color-primary-darker: #3730a3;
+    --ifm-color-primary-darkest: #312e81;
+    --ifm-color-primary-light: #6366f1;
+    --ifm-color-primary-lighter: #818cf8;
+    --ifm-color-primary-lightest: #a5b4fc;
+    --ifm-code-font-size: 95%;
+    --sb-accent-overview: #22c55e;
+    --sb-accent-started: #0ea5e9;
+    --sb-accent-developer: #8b5cf6;
+    --sb-accent-rules: #f97316;
+    --sb-accent-presets: #eab308;
+    --sb-accent-api-overview: #6366f1;
+    --sb-accent-api-types: #14b8a6;
+    --sb-accent-api-runtime: #f43f5e;
+    --sb-accent-adr: #f59e0b;
+    --sb-accent-rules-ts: #22c55e;
+    --sb-accent-rules-type-fest: #a855f7;
+}
+
+[data-theme="dark"] {
+    --ifm-color-primary: #818cf8;
+    --ifm-color-primary-dark: #6366f1;
+    --ifm-color-primary-darker: #4f46e5;
+    --ifm-color-primary-darkest: #4338ca;
+    --ifm-color-primary-light: #a5b4fc;
+    --ifm-color-primary-lighter: #c7d2fe;
+    --ifm-color-primary-lightest: #e0e7ff;
+    --sb-accent-overview: #4ade80;
+    --sb-accent-started: #38bdf8;
+    --sb-accent-developer: #c084fc;
+    --sb-accent-rules: #fb923c;
+    --sb-accent-presets: #facc15;
+    --sb-accent-api-overview: #a5b4fc;
+    --sb-accent-api-types: #2dd4bf;
+    --sb-accent-api-runtime: #fb7185;
+    --sb-accent-adr: #fbbf24;
+    --sb-accent-rules-ts: #4ade80;
+    --sb-accent-rules-type-fest: #c084fc;
+}
+
+.theme-doc-sidebar-item-link-level-1 {
+    font-weight: 600;
+}
+
+.theme-doc-sidebar-menu .menu__link {
+    border-radius: 0.45rem;
+    transition:
+        background-color 140ms ease-in-out,
+        border-color 140ms ease-in-out,
+        color 140ms ease-in-out;
+}
+
+.theme-doc-sidebar-menu .menu__link:hover,
+.theme-doc-sidebar-menu .menu__link:focus {
+    background-color: rgb(39 38 63 / 0.1);
+    text-decoration: none;
+}
+
+[data-theme="dark"] .theme-doc-sidebar-menu .menu__link:hover,
+[data-theme="dark"] .theme-doc-sidebar-menu .menu__link:focus {
+    background-color: rgb(129 140 248 / 20%);
+}
+
+.sb-doc-overview > .menu__link,
+.sb-doc-getting-started > .menu__link,
+.sb-doc-api-overview > .menu__link,
+.sb-cat-presets > .menu__list-item-collapsible .menu__link,
+.sb-cat-developer > .menu__list-item-collapsible .menu__link,
+.sb-cat-developer-adr > .menu__list-item-collapsible .menu__link,
+.sb-cat-api-types > .menu__list-item-collapsible .menu__link,
+.sb-cat-api-runtime > .menu__list-item-collapsible .menu__link,
+.sb-cat-rules > .menu__list-item-collapsible .menu__link {
+    border-inline-start: 4px solid transparent;
+    padding-inline-start: calc(var(--ifm-menu-link-padding-horizontal) - 4px);
+}
+
+.sb-doc-overview > .menu__link {
+    border-inline-start-color: var(--sb-accent-overview);
+}
+
+.sb-doc-getting-started > .menu__link {
+    border-inline-start-color: var(--sb-accent-started);
+}
+
+.sb-doc-api-overview > .menu__link {
+    border-inline-start-color: var(--sb-accent-api-overview);
+}
+
+.sb-cat-developer > .menu__list-item-collapsible .menu__link {
+    border-inline-start-color: var(--sb-accent-developer);
+}
+
+.sb-cat-developer-adr > .menu__list-item-collapsible .menu__link {
+    border-inline-start-color: var(--sb-accent-adr);
+}
+
+.sb-cat-presets > .menu__list-item-collapsible .menu__link {
+    border-inline-start-color: var(--sb-accent-presets);
+}
+
+.sb-cat-api-types > .menu__list-item-collapsible .menu__link {
+    border-inline-start-color: var(--sb-accent-api-types);
+}
+
+.sb-cat-api-runtime > .menu__list-item-collapsible .menu__link {
+    border-inline-start-color: var(--sb-accent-api-runtime);
+}
+
+.sb-cat-rules > .menu__list-item-collapsible .menu__link {
+    border-inline-start-color: var(--sb-accent-rules);
+}
+
+.sb-cat-developer > .menu__list-item-collapsible .menu__link,
+.sb-cat-developer-adr > .menu__list-item-collapsible .menu__link,
+.sb-cat-presets > .menu__list-item-collapsible .menu__link,
+.sb-cat-api-types > .menu__list-item-collapsible .menu__link,
+.sb-cat-api-runtime > .menu__list-item-collapsible .menu__link,
+.sb-cat-rules-ts-extras > .menu__list-item-collapsible .menu__link,
+.sb-cat-rules-type-fest > .menu__list-item-collapsible .menu__link,
+.sb-cat-rules > .menu__list-item-collapsible .menu__link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.sb-cat-developer > .menu__list-item-collapsible .menu__link::before,
+.sb-cat-developer-adr > .menu__list-item-collapsible .menu__link::before,
+.sb-cat-presets > .menu__list-item-collapsible .menu__link::before,
+.sb-cat-api-types > .menu__list-item-collapsible .menu__link::before,
+.sb-cat-api-runtime > .menu__list-item-collapsible .menu__link::before,
+.sb-cat-rules-ts-extras > .menu__list-item-collapsible .menu__link::before,
+.sb-cat-rules-type-fest > .menu__list-item-collapsible .menu__link::before,
+.sb-cat-rules > .menu__list-item-collapsible .menu__link::before {
+    margin-inline-start: auto;
+    padding: 0.07rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.sb-cat-developer > .menu__list-item-collapsible .menu__link::before {
+    content: "api";
+    background-color: rgb(139 92 246 / 14%);
+    border: 1px solid rgb(139 92 246 / 40%);
+    color: var(--sb-accent-developer);
+}
+
+.sb-cat-developer-adr > .menu__list-item-collapsible .menu__link::before {
+    content: "adr";
+    background-color: rgb(245 158 11 / 14%);
+    border: 1px solid rgb(245 158 11 / 40%);
+    color: var(--sb-accent-adr);
+}
+
+.sb-cat-rules > .menu__list-item-collapsible .menu__link::before {
+    content: "rules";
+    background-color: rgb(249 115 22 / 12%);
+    border: 1px solid rgb(249 115 22 / 40%);
+    color: var(--sb-accent-rules);
+}
+
+.sb-cat-presets > .menu__list-item-collapsible .menu__link::before {
+    content: "presets";
+    background-color: rgb(234 179 8 / 14%);
+    border: 1px solid rgb(234 179 8 / 40%);
+    color: var(--sb-accent-presets);
+}
+
+.sb-cat-rules-ts-extras > .menu__list-item-collapsible .menu__link {
+    border-inline-start-color: var(--sb-accent-rules-ts);
+}
+
+.sb-cat-rules-ts-extras > .menu__list-item-collapsible .menu__link::before {
+    content: "ts-extras";
+    background-color: rgb(34 197 94 / 12%);
+    border: 1px solid rgb(34 197 94 / 40%);
+    color: var(--sb-accent-rules-ts);
+}
+
+.sb-cat-rules-type-fest > .menu__list-item-collapsible .menu__link {
+    border-inline-start-color: var(--sb-accent-rules-type-fest);
+}
+
+.sb-cat-rules-type-fest > .menu__list-item-collapsible .menu__link::before {
+    content: "type-fest";
+    background-color: rgb(168 85 247 / 12%);
+    border: 1px solid rgb(168 85 247 / 40%);
+    color: var(--sb-accent-rules-type-fest);
+}
+
+.sb-cat-api-types > .menu__list-item-collapsible .menu__link::before {
+    content: "types";
+    background-color: rgb(20 184 166 / 12%);
+    border: 1px solid rgb(20 184 166 / 40%);
+    color: var(--sb-accent-api-types);
+}
+
+.sb-cat-api-runtime > .menu__list-item-collapsible .menu__link::before {
+    content: "runtime";
+    background-color: rgb(244 63 94 / 12%);
+    border: 1px solid rgb(244 63 94 / 40%);
+    color: var(--sb-accent-api-runtime);
+}
+
+.sb-cat-developer:not(.menu__list-item--collapsed)
+    > .menu__list-item-collapsible
+    .menu__link {
+    box-shadow: inset 0 0 0 1px rgb(139 92 246 / 25%);
+}
+
+.sb-cat-developer-adr:not(.menu__list-item--collapsed)
+    > .menu__list-item-collapsible
+    .menu__link {
+    box-shadow: inset 0 0 0 1px rgb(245 158 11 / 25%);
+}
+
+.sb-cat-rules:not(.menu__list-item--collapsed)
+    > .menu__list-item-collapsible
+    .menu__link {
+    box-shadow: inset 0 0 0 1px rgb(249 115 22 / 28%);
+}
+
+.sb-cat-presets:not(.menu__list-item--collapsed)
+    > .menu__list-item-collapsible
+    .menu__link {
+    box-shadow: inset 0 0 0 1px rgb(234 179 8 / 25%);
+}
+
+.sb-cat-rules-ts-extras:not(.menu__list-item--collapsed)
+    > .menu__list-item-collapsible
+    .menu__link {
+    box-shadow: inset 0 0 0 1px rgb(34 197 94 / 25%);
+}
+
+.sb-cat-rules-type-fest:not(.menu__list-item--collapsed)
+    > .menu__list-item-collapsible
+    .menu__link {
+    box-shadow: inset 0 0 0 1px rgb(168 85 247 / 25%);
+}
+
+.sb-cat-api-types:not(.menu__list-item--collapsed)
+    > .menu__list-item-collapsible
+    .menu__link {
+    box-shadow: inset 0 0 0 1px rgb(20 184 166 / 25%);
+}
+
+.sb-cat-api-runtime:not(.menu__list-item--collapsed)
+    > .menu__list-item-collapsible
+    .menu__link {
+    box-shadow: inset 0 0 0 1px rgb(244 63 94 / 30%);
+}
+
+.sb-cat-developer .theme-doc-sidebar-item-link-level-2 > .menu__link {
+    border-inline-start: 2px solid rgb(139 92 246 / 45%);
+}
+
+.sb-cat-developer-adr .theme-doc-sidebar-item-link-level-2 > .menu__link {
+    border-inline-start: 2px solid rgb(245 158 11 / 45%);
+}
+
+.sb-cat-rules .theme-doc-sidebar-item-link-level-2 > .menu__link {
+    border-inline-start: 2px solid rgb(249 115 22 / 45%);
+}
+
+.sb-cat-rules-ts-extras .theme-doc-sidebar-item-link-level-3 > .menu__link,
+.sb-cat-rules-type-fest .theme-doc-sidebar-item-link-level-3 > .menu__link {
+    border-inline-start: 3px solid transparent;
+    padding-inline-start: calc(var(--ifm-menu-link-padding-horizontal) - 3px);
+}
+
+/* ts-extras palette */
+.sb-cat-rules-ts-extras
+    .theme-doc-sidebar-item-link-level-3:nth-child(6n + 1)
+    > .menu__link {
+    border-inline-start-color: #22c55e;
+}
+
+.sb-cat-rules-ts-extras
+    .theme-doc-sidebar-item-link-level-3:nth-child(6n + 2)
+    > .menu__link {
+    border-inline-start-color: #14b8a6;
+}
+
+.sb-cat-rules-ts-extras
+    .theme-doc-sidebar-item-link-level-3:nth-child(6n + 3)
+    > .menu__link {
+    border-inline-start-color: #06b6d4;
+}
+
+.sb-cat-rules-ts-extras
+    .theme-doc-sidebar-item-link-level-3:nth-child(6n + 4)
+    > .menu__link {
+    border-inline-start-color: #0ea5e9;
+}
+
+.sb-cat-rules-ts-extras
+    .theme-doc-sidebar-item-link-level-3:nth-child(6n + 5)
+    > .menu__link {
+    border-inline-start-color: #84cc16;
+}
+
+.sb-cat-rules-ts-extras
+    .theme-doc-sidebar-item-link-level-3:nth-child(6n)
+    > .menu__link {
+    border-inline-start-color: #10b981;
+}
+
+/* type-fest palette */
+.sb-cat-rules-type-fest
+    .theme-doc-sidebar-item-link-level-3:nth-child(6n + 1)
+    > .menu__link {
+    border-inline-start-color: #a855f7;
+}
+
+.sb-cat-rules-type-fest
+    .theme-doc-sidebar-item-link-level-3:nth-child(6n + 2)
+    > .menu__link {
+    border-inline-start-color: #8b5cf6;
+}
+
+.sb-cat-rules-type-fest
+    .theme-doc-sidebar-item-link-level-3:nth-child(6n + 3)
+    > .menu__link {
+    border-inline-start-color: #7c3aed;
+}
+
+.sb-cat-rules-type-fest
+    .theme-doc-sidebar-item-link-level-3:nth-child(6n + 4)
+    > .menu__link {
+    border-inline-start-color: #d946ef;
+}
+
+.sb-cat-rules-type-fest
+    .theme-doc-sidebar-item-link-level-3:nth-child(6n + 5)
+    > .menu__link {
+    border-inline-start-color: #ec4899;
+}
+
+.sb-cat-rules-type-fest
+    .theme-doc-sidebar-item-link-level-3:nth-child(6n)
+    > .menu__link {
+    border-inline-start-color: #c026d3;
+}
+
+.sb-cat-api-types .theme-doc-sidebar-item-link-level-2 > .menu__link {
+    border-inline-start: 2px solid rgb(20 184 166 / 45%);
+}
+
+.sb-cat-api-runtime .theme-doc-sidebar-item-link-level-2 > .menu__link {
+    border-inline-start: 2px solid rgb(244 63 94 / 45%);
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+    scroll-margin-block-start: 6rem;
+}
