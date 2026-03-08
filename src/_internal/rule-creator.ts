@@ -14,6 +14,7 @@ export type AnyRuleModule = TSESLint.RuleModule<
 
 type LegacyDocsMetadata = {
     readonly recommended: boolean;
+    readonly requiresTypeChecking?: boolean;
     readonly suggestion?: boolean;
 };
 

@@ -6,16 +6,40 @@ describe("plugin export", () => {
     it("exposes rules and configs", () => {
         expect(plugin.rules).toBeDefined();
         expect(plugin.configs).toBeDefined();
+        expect(plugin.rules["consistent-source-extension"]).toBeDefined();
+        expect(plugin.rules["consistent-symbol-description"]).toBeDefined();
+        expect(plugin.rules["max-identifier-blocks"]).toBeDefined();
         expect(plugin.rules["no-assign-mutated-array"]).toBeDefined();
+        expect(plugin.rules["no-at-sign-import"]).toBeDefined();
+        expect(plugin.rules["no-at-sign-internal-import"]).toBeDefined();
+        expect(plugin.rules["no-chain-coalescence-mixture"]).toBeDefined();
         expect(plugin.rules["no-commented-out-code"]).toBeDefined();
         expect(plugin.rules["no-const-enum"]).toBeDefined();
         expect(plugin.rules["no-deprecated"]).toBeDefined();
         expect(plugin.rules["no-enum"]).toBeDefined();
         expect(plugin.rules["no-foreach"]).toBeDefined();
         expect(plugin.rules["no-implicit-any-catch"]).toBeDefined();
+        expect(plugin.rules["no-index-import"]).toBeDefined();
+        expect(plugin.rules["no-internal-modules"]).toBeDefined();
         expect(plugin.rules["no-internal"]).toBeDefined();
+        expect(plugin.rules["no-language-mixing"]).toBeDefined();
+        expect(plugin.rules["no-misused-generics"]).toBeDefined();
+        expect(plugin.rules["no-negated-conditions"]).toBeDefined();
+        expect(plugin.rules["no-nodejs-modules"]).toBeDefined();
+        expect(plugin.rules["no-relative-parent-import"]).toBeDefined();
         expect(plugin.rules["no-t"]).toBeDefined();
+        expect(plugin.rules["no-underscore-export"]).toBeDefined();
+        expect(plugin.rules["no-unnecessary-as-const"]).toBeDefined();
+        expect(plugin.rules["no-unnecessary-break"]).toBeDefined();
+        expect(plugin.rules["no-unnecessary-initialization"]).toBeDefined();
+        expect(plugin.rules["prefer-arrow-function-property"]).toBeDefined();
+        expect(plugin.rules["prefer-const-require"]).toBeDefined();
+        expect(plugin.rules["prefer-interface"]).toBeDefined();
         expect(plugin.rules["prefer-less-than"]).toBeDefined();
+        expect(plugin.rules["restrict-identifier-characters"]).toBeDefined();
+        expect(plugin.rules["sort-call-signature"]).toBeDefined();
+        expect(plugin.rules["sort-construct-signature"]).toBeDefined();
+        expect(plugin.rules["throw-error"]).toBeDefined();
         expect(plugin.rules["underscore-internal"]).toBeDefined();
         expect(
             plugin.configs.recommended.rules["etc-misc/no-assign-mutated-array"]

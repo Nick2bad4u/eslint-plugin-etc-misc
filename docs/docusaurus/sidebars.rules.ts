@@ -25,6 +25,24 @@ const isMarkdownFile = (fileName: string): boolean => fileName.endsWith(".md");
 /** Convert a markdown filename (e.g. `foo.md`) to a Docusaurus doc id. */
 const toRuleDocId = (fileName: string): string => fileName.slice(0, -3);
 
+const isTsExtrasRuleDocId = (ruleDocId: string): boolean =>
+    ruleDocId.startsWith("prefer-ts-extras-");
+
+const isTypeFestRuleDocId = (ruleDocId: string): boolean =>
+    ruleDocId.startsWith("prefer-type-fest-");
+
+const isCoreRuleDocId = (ruleDocId: string): boolean =>
+    (ruleDocId.startsWith("consistent-") ||
+        ruleDocId.startsWith("max-") ||
+        ruleDocId.startsWith("no-") ||
+        ruleDocId.startsWith("prefer-") ||
+        ruleDocId.startsWith("restrict-") ||
+        ruleDocId.startsWith("sort-") ||
+        ruleDocId.startsWith("throw-") ||
+        ruleDocId.startsWith("underscore-")) &&
+    !isTsExtrasRuleDocId(ruleDocId) &&
+    !isTypeFestRuleDocId(ruleDocId);
+
 /** Sorted rule-doc ids discovered from `docs/rules/*.md`. */
 const allRuleDocIds = readdirSync(rulesDirectoryPath, {
     withFileTypes: true,
@@ -41,6 +59,20 @@ const createRuleItemsByPrefix = (prefix: string): SidebarDocItem[] =>
             id: ruleDocId,
             type: "doc",
         }));
+
+/** Build sidebar doc items for rule docs matching a predicate. */
+const createRuleItemsByPredicate = (
+    predicate: (ruleDocId: string) => boolean
+): SidebarDocItem[] =>
+    allRuleDocIds
+        .filter((ruleDocId) => predicate(ruleDocId))
+        .map((ruleDocId) => ({
+            id: ruleDocId,
+            type: "doc",
+        }));
+
+/** Sidebar entries for core `etc-misc` rule docs. */
+const coreRuleItems = createRuleItemsByPredicate(isCoreRuleDocId);
 
 /** Sidebar entries for `prefer-ts-extras-*` rule docs. */
 const tsExtrasRuleItems = createRuleItemsByPrefix("prefer-ts-extras-");
@@ -150,6 +182,22 @@ const sidebars: SidebarsConfig = {
                     "Rule documentation for every eslint-plugin-typefest rule.",
             },
             items: [
+                {
+                    className: "sb-cat-rules-core",
+                    collapsed: true,
+                    customProps: {
+                        badge: "core",
+                    },
+                    type: "category",
+                    label: "🧱 Core Rules",
+                    link: {
+                        type: "generated-index",
+                        title: "Core Rules",
+                        description:
+                            "General-purpose etc-misc rules for safer and clearer TypeScript code.",
+                    },
+                    items: coreRuleItems,
+                },
                 {
                     className: "sb-cat-rules-ts-extras",
                     collapsed: true,

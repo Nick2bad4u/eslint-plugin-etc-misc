@@ -31,7 +31,10 @@
   "dependencies": {
     "@typescript-eslint/parser": "^8.56.1",
     "@typescript-eslint/utils": "^8.56.1",
+    "minimatch": "^10.0.3",
+    "typescript": "^5.9.3",
     "ts-extras": "^0.17.0",
+    "tsutils": "^3.21.0",
     "type-fest": "^5.4.4"
   },
   "devDependencies": {
