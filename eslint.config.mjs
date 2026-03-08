@@ -226,6 +226,8 @@ export default defineConfig([
         "**/CHANGELOG.md",
         ".remarkrc.mjs",
         "test/fixtures/**",
+        "eslint-plugin-etc/**",
+        "eslint-plugin-misc/**"
     ]),
     gitignore({
         name: "Global - .gitignore Rules",
