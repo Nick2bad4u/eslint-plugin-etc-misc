@@ -1,0 +1,172 @@
+import type { TSESTree as es } from "@typescript-eslint/utils";
+
+import { ruleCreator } from "../_internal/rule-creator";
+
+type MessageIds = "forbidden";
+
+const internalTagPattern = /@internal\b/u;
+
+const isNonUnderscoreIdentifier = (
+    identifier: Readonly<es.Identifier>
+): boolean => !identifier.name.startsWith("_");
+
+const isExportDeclaration = (
+    node: null | Readonly<es.Node> | undefined
+): node is es.ExportDefaultDeclaration | es.ExportNamedDeclaration =>
+    node?.type === "ExportDefaultDeclaration" ||
+    node?.type === "ExportNamedDeclaration";
+
+/**
+ * Enforce underscore prefixes for declarations marked with `@internal`.
+ */
+const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
+    ruleCreator<readonly [], MessageIds>({
+        create: (context) => {
+            const hasInternalTag = (node: Readonly<es.Node>): boolean => {
+                const commentTargets: es.Node[] = [node];
+                if (isExportDeclaration(node.parent)) {
+                    commentTargets.push(node.parent);
+                }
+
+                return commentTargets.some((commentTarget) =>
+                    context.sourceCode
+                        .getCommentsBefore(commentTarget)
+                        .some((comment) =>
+                            internalTagPattern.test(comment.value)
+                        )
+                );
+            };
+
+            const reportIfInternal = (
+                nameIdentifier: Readonly<es.Identifier>,
+                commentTarget: Readonly<es.Node>
+            ): void => {
+                if (!isNonUnderscoreIdentifier(nameIdentifier)) {
+                    return;
+                }
+
+                if (!hasInternalTag(commentTarget)) {
+                    return;
+                }
+
+                context.report({
+                    messageId: "forbidden",
+                    node: nameIdentifier,
+                });
+            };
+
+            return {
+                "ClassDeclaration[id.type='Identifier']": (
+                    node: Readonly<es.ClassDeclaration>
+                ) => {
+                    if (node.id === null) {
+                        return;
+                    }
+
+                    reportIfInternal(node.id, node);
+                },
+                "FunctionDeclaration[id.type='Identifier']": (
+                    node: Readonly<es.FunctionDeclaration>
+                ) => {
+                    if (node.id === null) {
+                        return;
+                    }
+
+                    reportIfInternal(node.id, node);
+                },
+                "MethodDefinition[key.type='Identifier']": (
+                    node: Readonly<es.MethodDefinition>
+                ) => {
+                    if (node.key.type !== "Identifier") {
+                        return;
+                    }
+
+                    reportIfInternal(node.key, node);
+                },
+                "PropertyDefinition[key.type='Identifier']": (
+                    node: Readonly<es.PropertyDefinition>
+                ) => {
+                    if (node.key.type !== "Identifier") {
+                        return;
+                    }
+
+                    reportIfInternal(node.key, node);
+                },
+                "TSEnumDeclaration[id.type='Identifier']": (
+                    node: Readonly<es.TSEnumDeclaration>
+                ) => {
+                    reportIfInternal(node.id, node);
+                },
+                "TSEnumMember[id.type='Identifier']": (
+                    node: Readonly<es.TSEnumMember>
+                ) => {
+                    if (node.id.type !== "Identifier") {
+                        return;
+                    }
+
+                    reportIfInternal(node.id, node);
+                },
+                "TSInterfaceDeclaration[id.type='Identifier']": (
+                    node: Readonly<es.TSInterfaceDeclaration>
+                ) => {
+                    reportIfInternal(node.id, node);
+                },
+                "TSMethodSignature[key.type='Identifier']": (
+                    node: Readonly<es.TSMethodSignature>
+                ) => {
+                    if (node.key.type !== "Identifier") {
+                        return;
+                    }
+
+                    reportIfInternal(node.key, node);
+                },
+                "TSPropertySignature[key.type='Identifier']": (
+                    node: Readonly<es.TSPropertySignature>
+                ) => {
+                    if (node.key.type !== "Identifier") {
+                        return;
+                    }
+
+                    reportIfInternal(node.key, node);
+                },
+                "TSTypeAliasDeclaration[id.type='Identifier']": (
+                    node: Readonly<es.TSTypeAliasDeclaration>
+                ) => {
+                    reportIfInternal(node.id, node);
+                },
+                "VariableDeclarator[id.type='Identifier']": (
+                    node: Readonly<es.VariableDeclarator>
+                ) => {
+                    if (node.id.type !== "Identifier") {
+                        return;
+                    }
+
+                    const declaration = node.parent;
+                    if (declaration?.type !== "VariableDeclaration") {
+                        return;
+                    }
+
+                    reportIfInternal(node.id, declaration);
+                },
+            };
+        },
+        defaultOptions: [],
+        meta: {
+            docs: {
+                description:
+                    "disallow internal APIs that are not prefixed with underscores.",
+                recommended: false,
+                url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/underscore-internal.md",
+            },
+            hasSuggestions: false,
+            messages: {
+                forbidden:
+                    "Internal APIs not prefixed with underscores are forbidden.",
+            },
+            schema: [],
+            type: "problem",
+        },
+        name: "underscore-internal",
+    });
+
+export default rule;
