@@ -1,0 +1,96 @@
+{
+  "name": "eslint-plugin-misc",
+  "version": "3.3.1",
+  "private": false,
+  "description": "ESLint plugin",
+  "keywords": [
+    "eslint plugin"
+  ],
+  "homepage": "https://github.com/iliubinskii/eslint-plugin-misc",
+  "bugs": {
+    "url": "https://github.com/iliubinskii/eslint-plugin-misc/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/iliubinskii/eslint-plugin-misc.git"
+  },
+  "license": "ISC",
+  "author": "Ilia Liubinskii <ilia.liubinskii@gmail.com> (https://github.com/iliubinskii)",
+  "main": "dist/index.js",
+  "module": "es/index.js",
+  "files": [
+    "/dist",
+    "/es",
+    "/src",
+    "!/dist/dev",
+    "!/es/dev",
+    "!/src/dev"
+  ],
+  "scripts": {
+    "build-commonjs": "cf dist && tsc --project tsconfig-build.json",
+    "build-doc": "cf docs && tsx utils/build-doc.ts && cpy assets/docs/static/* docs",
+    "build-es": "cf es && tsc --project tsconfig-build-es.json",
+    "format": "prettier --log-level warn --write \"**/*.{css,html,json,less,postcss,scss}\"",
+    "install-deps": "npm install --no-audit --save-prod --strict-peer-deps",
+    "install-deps-clean": "npm install-clean --no-audit --save-prod --strict-peer-deps",
+    "install-dev-deps": "npm install --no-audit --save-dev --strict-peer-deps",
+    "install-dev-deps-clean": "npm install-clean --no-audit --save-dev --strict-peer-deps",
+    "lint": "eslint --fix --max-warnings=0 **/*.{cjs,cjsx,js,jsx,mjs,mjsx,ts,tsx}",
+    "lint-commit-msg": "commitlint --edit",
+    "lint-markdown": "markdownlint *.md",
+    "lint-no-fix": "eslint --max-warnings=0 **/*.{cjs,cjsx,js,jsx,mjs,mjsx,ts,tsx}",
+    "lint-profile": "cross-env TIMING=1 eslint --max-warnings=0 **/*.{cjs,cjsx,js,jsx,mjs,mjsx,ts,tsx}",
+    "lint-staged-files": "lint-staged",
+    "ncu-check": "ncu --dep=dev,peer,prod",
+    "ncu-upgrade": "ncu --dep=dev,peer,prod --upgrade && npm run install-deps",
+    "prepare": "husky",
+    "preversion:add": "git add .",
+    "preversion:build": "run-s build-commonjs build-doc build-es",
+    "preversion:fix": "run-p format lint-markdown",
+    "preversion:install": "npm run install-deps",
+    "preversion:lint": "run-p lint-no-fix type-check",
+    "preversion:test": "npm test",
+    "push-tags": "cross-env GIT_SSH_COMMAND=\"ssh -i ../.ssh/id_rsa\" git push --tags",
+    "test": "cf coverage/lcov-report && jest --coverage",
+    "type-check": "tsc --incremental false --noEmit",
+    "update": "npm update --no-audit --strict-peer-deps",
+    "preversion": "run-s preversion:install preversion:fix preversion:lint preversion:test preversion:build preversion:add"
+  },
+  "dependencies": {
+    "@types/estree": "^1",
+    "@types/minimatch": "^5",
+    "@types/natural-compare": "^1",
+    "@typescript-eslint/parser": "^7",
+    "@typescript-eslint/utils": "^7",
+    "javascript-stringify": "^2",
+    "lodash-commonjs-es": "^1.1.0",
+    "minimatch": "^10",
+    "natural-compare": "^1",
+    "tslib": "^2",
+    "tsutils": "^3",
+    "typescript": "^5",
+    "typescript-misc": "^1.2.0"
+  },
+  "devDependencies": {
+    "@jest/expect": "^29",
+    "@jest/globals": "^29",
+    "@types/jest": "^29",
+    "eslint-config-union": "^1.0.1",
+    "get-current-line": "^7",
+    "jest": "^29",
+    "jest-extended": "^4",
+    "ts-jest": "^29"
+  },
+  "peerDependencies": {
+    "@typescript-eslint/parser": "^7",
+    "@typescript-eslint/utils": "^7",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

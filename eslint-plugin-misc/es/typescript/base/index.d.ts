@@ -1,0 +1,10 @@
+export declare const base: {
+    readonly "array-callback-return-type": import("@typescript-eslint/utils/dist/ts-eslint").RuleModule<import("./array-callback-return-type").MessageId, import("../../utils/create-rule").PartialOptionsArray<object, object, never>, import("@typescript-eslint/utils/dist/ts-eslint").RuleListener>;
+    readonly "exhaustive-switch": import("@typescript-eslint/utils/dist/ts-eslint").RuleModule<import("./exhaustive-switch").MessageId, import("../../utils/create-rule").PartialOptionsArray<object, object, never>, import("@typescript-eslint/utils/dist/ts-eslint").RuleListener>;
+    readonly "no-inferrable-types": import("@typescript-eslint/utils/dist/ts-eslint").RuleModule<import("./no-inferrable-types").MessageId, import("../../utils/create-rule").PartialOptionsArray<object, object, never>, import("@typescript-eslint/utils/dist/ts-eslint").RuleListener>;
+    readonly "no-multi-type-tuples": import("@typescript-eslint/utils/dist/ts-eslint").RuleModule<import("./no-multi-type-tuples").MessageId, import("../../utils/create-rule").PartialOptionsArray<object, object, never>, import("@typescript-eslint/utils/dist/ts-eslint").RuleListener>;
+    readonly "no-restricted-syntax": import("@typescript-eslint/utils/dist/ts-eslint").RuleModule<import("./no-restricted-syntax").MessageId, import("../../utils/create-rule").PartialOptionsArray<import("./no-restricted-syntax").Options, object, never>, import("@typescript-eslint/utils/dist/ts-eslint").RuleListener>;
+    readonly "no-unsafe-object-assignment": import("@typescript-eslint/utils/dist/ts-eslint").RuleModule<import("./no-unsafe-object-assignment").MessageId, import("../../utils/create-rule").PartialOptionsArray<object, object, never>, import("@typescript-eslint/utils/dist/ts-eslint").RuleListener>;
+    readonly "prefer-enum": import("@typescript-eslint/utils/dist/ts-eslint").RuleModule<import("./prefer-enum").MessageId, import("../../utils/create-rule").PartialOptionsArray<object, object, never>, import("@typescript-eslint/utils/dist/ts-eslint").RuleListener>;
+};
+//# sourceMappingURL=index.d.ts.map

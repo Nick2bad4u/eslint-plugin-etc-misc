@@ -1,0 +1,87 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "[css]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+      "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[javascriptreact]": {
+      "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[less]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[postcss]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[scss]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[yaml]": {
+      "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "css.validate": false,
+    "debug.javascript.codelens.npmScripts": "never",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.sortPackageJson": "explicit"
+    },
+    "editor.colorDecorators": false,
+    "editor.detectIndentation": false,
+    "editor.foldingStrategy": "indentation",
+    "editor.formatOnSave": true,
+    "editor.lightbulb.enabled": "off",
+    "editor.tabSize": 2,
+    "editor.unicodeHighlight.allowedLocales": {
+      "ru": true
+    },
+    "editor.unicodeHighlight.ambiguousCharacters": true,
+    "eslint.codeActionsOnSave.rules": ["*"],
+    "eslint.format.enable": true,
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "foldOnOpen.targets": ["AllBlockComments"],
+    "javascript.suggestionActions.enabled": false,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "scss.validate": false,
+    "search.exclude": {
+      "dist": true,
+      "docs": true,
+      "es": true,
+      "package-lock.json": true
+    },
+    "sortJSON.excludedPaths": ["assets"],
+    "stylelint.validate": ["css", "less", "postcss", "scss"],
+    "tailwindCSS.experimental.classRegex": [["`([^`]*)`"]],
+    "typescript.suggestionActions.enabled": false,
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "workbench.colorCustomizations": {
+      "editor.foldBackground": "#00000000"
+    },
+    "workbench.startupEditor": "none",
+    "workbench.tree.indent": 30
+  }
+}
