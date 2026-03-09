@@ -40,6 +40,11 @@ function identity<T>(value: T): T {
 This rule forwards options to
 `@typescript-eslint/no-unnecessary-type-parameters`.
 
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`@typescript-eslint/no-unnecessary-type-parameters`](https://typescript-eslint.io/rules/no-unnecessary-type-parameters)
+
 ## ESLint flat config example
 
 ```ts

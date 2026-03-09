@@ -46,7 +46,7 @@ const heroQuickLinks = [
     },
     {
         label: "API docs",
-        to: "/docs/api",
+        to: "/docs/developer/api",
     },
     {
         href: "https://www.npmjs.com/package/eslint-plugin-typefest",
@@ -71,7 +71,7 @@ const homeCards = [
         title: "Presets",
         description:
             "Choose the right preset for your team, from minimal baseline to full strict coverage.",
-        to: "/docs/rules/presets",
+        to: "/docs/rules/presets/all",
     },
     {
         icon: "📚",
@@ -158,7 +158,7 @@ export default function Home() {
                                 </Link>
                                 <Link
                                     className="button button--secondary button--lg"
-                                    to="/docs/rules/presets"
+                                    to="/docs/rules/presets/all"
                                 >
                                     Compare Presets
                                 </Link>

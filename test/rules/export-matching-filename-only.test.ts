@@ -4,7 +4,11 @@ import { ruleTester } from "../_internal/ruleTester";
 ruleTester.run("export-matching-filename-only", rule, {
     invalid: [
         {
-            code: "export class User {}\nexport const extra = 1;",
+            code: [
+                "export class User {}",
+                "const extra = 1;",
+                "export { extra };",
+            ].join("\n"),
             errors: [{ messageId: "onlyExport" }],
             filename: "User.ts",
         },

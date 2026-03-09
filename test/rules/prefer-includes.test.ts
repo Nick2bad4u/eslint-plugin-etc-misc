@@ -1,11 +1,12 @@
-import rule from "../../src/rules/prefer-includes";
-import { ruleTester } from "../_internal/ruleTester";
+import deprecatedRule from "../../src/rules/prefer-includes";
+import { anyMessageError, ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("prefer-includes", rule, {
+ruleTester.run("prefer-includes", deprecatedRule, {
     invalid: [
         {
             code: "const hasValue = [1, 2, 3].indexOf(2) !== -1; void hasValue;",
-            errors: [{ message: /.+/v }],
+            errors: [anyMessageError(/.+/v)],
+            output: "const hasValue = [1, 2, 3].includes(2); void hasValue;",
         },
     ],
     valid: [

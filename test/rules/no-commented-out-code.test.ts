@@ -1,7 +1,7 @@
-import rule from "../../src/rules/no-commented-out-code";
+import deprecatedRule from "../../src/rules/no-commented-out-code";
 import { ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("no-commented-out-code", rule, {
+ruleTester.run("no-commented-out-code", deprecatedRule, {
     invalid: [
         {
             code: "// const answer = 54;\nconst answer = 42;",

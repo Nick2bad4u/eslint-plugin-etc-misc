@@ -1,5 +1,6 @@
 import type { TSESLint } from "@typescript-eslint/utils";
 
+// eslint-disable-next-line import-x/no-deprecated -- ESLint currently exposes core rules through this compatibility entrypoint.
 import { builtinRules } from "eslint/use-at-your-own-risk";
 
 type RuleModule = TSESLint.RuleModule<string, readonly unknown[]>;

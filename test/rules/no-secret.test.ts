@@ -1,11 +1,11 @@
-import rule from "../../src/rules/no-secret";
-import { ruleTester } from "../_internal/ruleTester";
+import deprecatedRule from "../../src/rules/no-secret";
+import { anyMessageError, ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("no-secret", rule, {
+ruleTester.run("no-secret", deprecatedRule, {
     invalid: [
         {
             code: 'const token = "SECRET_ABCD";',
-            errors: [{ message: /.+/v }],
+            errors: [anyMessageError(/.+/v)],
             options: [
                 {
                     additionalRegexes: {

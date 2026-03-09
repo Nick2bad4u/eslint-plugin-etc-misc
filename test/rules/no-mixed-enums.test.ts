@@ -1,11 +1,11 @@
-import rule from "../../src/rules/no-mixed-enums";
-import { ruleTester } from "../_internal/ruleTester";
+import deprecatedRule from "../../src/rules/no-mixed-enums";
+import { anyMessageError, ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("no-mixed-enums", rule, {
+ruleTester.run("no-mixed-enums", deprecatedRule, {
     invalid: [
         {
             code: "enum Status { open = 'open', closed = 2 }",
-            errors: [{ message: /.+/v }],
+            errors: [anyMessageError(/.+/v)],
             filename: "file.ts",
         },
     ],

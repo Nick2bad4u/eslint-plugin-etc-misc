@@ -176,8 +176,7 @@
         "minimatch": "^10.2.4",
         "ts-extras": "^0.17.0",
         "tsutils": "^3.21.0",
-        "type-fest": "^5.4.4",
-        "typescript": "^5.9.3"
+        "type-fest": "^5.4.4"
     },
     "devDependencies": {
         "@arethetypeswrong/cli": "^0.18.2",
@@ -496,6 +495,7 @@
         "toml-eslint-parser": "^1.0.3",
         "ts-unused-exports": "^11.0.1",
         "typedoc": "^0.28.17",
+        "typescript": "^5.9.3",
         "typescript-eslint": "^8.56.1",
         "typesync": "^0.14.3",
         "vfile": "^6.0.3",

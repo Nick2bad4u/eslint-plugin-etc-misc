@@ -33,6 +33,11 @@ const value = 1;
 This rule forwards options and behavior to
 `write-good-comments/write-good-comments`.
 
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`write-good-comments/write-good-comments`](https://github.com/kantord/eslint-plugin-write-good-comments)
+
 ## ESLint flat config example
 
 ```ts

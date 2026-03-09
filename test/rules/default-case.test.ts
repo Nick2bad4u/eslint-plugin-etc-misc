@@ -1,5 +1,5 @@
 import rule from "../../src/rules/default-case";
-import { ruleTester } from "../_internal/ruleTester";
+import { anyMessageError, ruleTester } from "../_internal/ruleTester";
 
 ruleTester.run("default-case", rule, {
     invalid: [
@@ -10,7 +10,7 @@ ruleTester.run("default-case", rule, {
                 "    break;",
                 "}",
             ].join("\n"),
-            errors: [{ message: /.+/v }],
+            errors: [anyMessageError(/.+/v)],
         },
     ],
     valid: [

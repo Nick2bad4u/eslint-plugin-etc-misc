@@ -1,2 +1,0 @@
-export declare const classMethodsUseThis: import("@typescript-eslint/utils/dist/ts-eslint").RuleModule<import("../core/base/wrap").MessageId, import("../utils/create-rule").PartialOptionsArray<import("../core/base/wrap").Options, object, never>, import("@typescript-eslint/utils/dist/ts-eslint").RuleListener>;
-//# sourceMappingURL=class-methods-use-this.d.ts.map

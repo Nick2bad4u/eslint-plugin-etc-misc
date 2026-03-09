@@ -30,6 +30,11 @@ throw new Error("Boom");
 
 This rule forwards options and behavior to `unicorn/throw-new-error`.
 
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`unicorn/throw-new-error`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/throw-new-error.md)
+
 ## ESLint flat config example
 
 ```ts

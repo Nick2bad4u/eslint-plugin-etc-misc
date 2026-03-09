@@ -1,11 +1,12 @@
-import rule from "../../src/rules/array-type";
-import { ruleTester } from "../_internal/ruleTester";
+import deprecatedRule from "../../src/rules/array-type";
+import { anyMessageError, ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("array-type", rule, {
+ruleTester.run("array-type", deprecatedRule, {
     invalid: [
         {
             code: "type Values = Array<string>;",
-            errors: [{ message: /.+/v }],
+            errors: [anyMessageError(/.+/v)],
+            output: "type Values = string[];",
         },
     ],
     valid: [

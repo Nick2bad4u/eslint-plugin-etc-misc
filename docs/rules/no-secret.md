@@ -34,6 +34,12 @@ const token = process.env.API_TOKEN;
 This rule forwards options and behavior to
 `eslint-plugin-no-secrets/no-secrets`.
 
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`no-secrets/no-secrets`](https://github.com/nickdeis/eslint-plugin-no-secrets)
+- **Additional recommendation:** Prefer dedicated scanners such as [Secretlint](https://github.com/secretlint/secretlint) or [detect-secrets](https://github.com/Yelp/detect-secrets).
+
 ## ESLint flat config example
 
 ```ts

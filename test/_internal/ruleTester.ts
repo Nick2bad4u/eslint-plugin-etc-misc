@@ -26,4 +26,25 @@ export const ruleTester: RuleTester = new RuleTester({
     },
 });
 
+type AnyMessageError = Readonly<{
+    messageId: string;
+}>;
+
+type AnyMessageErrorOptions = Readonly<{
+    suggestions?: null | number | readonly unknown[];
+}>;
+
+/**
+ * RuleTester runtime still supports regex `message` assertions, but the current
+ * test-case type only models `messageId` assertions.
+ */
+export const anyMessageError = (pattern: Readonly<RegExp>): AnyMessageError =>
+    ({ message: pattern }) as unknown as AnyMessageError;
+
+export const anyMessageErrorWithOptions = (
+    pattern: Readonly<RegExp>,
+    options: AnyMessageErrorOptions
+): AnyMessageError =>
+    ({ message: pattern, ...options }) as unknown as AnyMessageError;
+
 /* eslint-enable vitest/consistent-test-it, vitest/expect-expect, vitest/require-top-level-describe, vitest/valid-describe-callback -- Re-enable Vitest test-shape rules outside this RuleTester adapter. */

@@ -1,11 +1,12 @@
-import rule from "../../src/rules/throw-new-error";
-import { ruleTester } from "../_internal/ruleTester";
+import deprecatedRule from "../../src/rules/throw-new-error";
+import { anyMessageError, ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("throw-new-error", rule, {
+ruleTester.run("throw-new-error", deprecatedRule, {
     invalid: [
         {
             code: "throw Error('boom');",
-            errors: [{ message: /.+/v }],
+            errors: [anyMessageError(/.+/v)],
+            output: "throw new Error('boom');",
         },
     ],
     valid: [

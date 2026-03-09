@@ -80,9 +80,9 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             },
         };
     },
-    defaultOptions: [{ style: undefined }],
+    defaultOptions: [{}],
     meta: {
-        defaultOptions: [{ style: undefined }],
+        defaultOptions: [{}],
         docs: {
             description:
                 "enforce consistent import declaration style per module source.",

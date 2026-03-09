@@ -1,7 +1,7 @@
-import rule from "../../src/rules/no-value-tostring";
-import { ruleTester } from "../_internal/ruleTester";
+import deprecatedRule from "../../src/rules/no-value-tostring";
+import { anyMessageError, ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("no-value-tostring", rule, {
+ruleTester.run("no-value-tostring", deprecatedRule, {
     invalid: [
         {
             code: [
@@ -9,7 +9,7 @@ ruleTester.run("no-value-tostring", rule, {
                 "const asText = value.toString();",
                 "void asText;",
             ].join("\n"),
-            errors: [{ message: /.+/v }],
+            errors: [anyMessageError(/.+/v)],
             filename: "file.ts",
         },
     ],

@@ -1,7 +1,7 @@
-import rule from "../../src/rules/sort-class-members";
+import deprecatedRule from "../../src/rules/sort-class-members";
 import { ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("sort-class-members", rule, {
+ruleTester.run("sort-class-members", deprecatedRule, {
     invalid: [
         {
             code: "class Example { z() {} a() {} }",

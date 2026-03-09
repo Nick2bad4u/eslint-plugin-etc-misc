@@ -41,6 +41,11 @@ console.log(data.used + data.alsoUsed);
 
 This rule forwards options and behavior to `unicorn/no-unused-properties`.
 
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`unicorn/no-unused-properties`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-unused-properties.md)
+
 ## ESLint flat config example
 
 ```ts

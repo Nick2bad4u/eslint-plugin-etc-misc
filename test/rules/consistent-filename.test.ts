@@ -1,7 +1,7 @@
-import rule from "../../src/rules/consistent-filename";
+import deprecatedRule from "../../src/rules/consistent-filename";
 import { ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("consistent-filename", rule, {
+ruleTester.run("consistent-filename", deprecatedRule, {
     invalid: [
         {
             code: "const value = 1;",

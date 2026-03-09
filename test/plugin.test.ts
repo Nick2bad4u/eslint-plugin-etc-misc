@@ -35,8 +35,22 @@ const hasRuleDeprecationInfo = (
 
 describe("plugin export", () => {
     it("exposes rules and configs", () => {
+        expect(plugin.meta).toEqual({
+            name: "eslint-plugin-etc-misc",
+            namespace: "etc-misc",
+            version: "1.0.0",
+        });
+        expect(plugin.processors).toEqual({});
         expect(plugin.rules).toBeDefined();
         expect(plugin.configs).toBeDefined();
+        expect(plugin.configs.all.plugins["etc-misc"]).toBeDefined();
+        expect(plugin.configs.recommended.plugins["etc-misc"]).toBeDefined();
+        expect(plugin.configs.recommended.plugins["etc-misc"].meta).toEqual(
+            plugin.meta
+        );
+        expect(plugin.configs.recommended.plugins["etc-misc"].rules).toBe(
+            plugin.rules
+        );
         expect(plugin.rules["array-type"]).toBeDefined();
         expect(plugin.rules["class-match-filename"]).toBeDefined();
         expect(plugin.rules["comment-spacing"]).toBeDefined();
@@ -176,16 +190,16 @@ describe("plugin export", () => {
 
         for (const deprecatedRuleId of deprecatedRuleIds) {
             const rule = plugin.rules[deprecatedRuleId];
+
             expect(rule).toBeDefined();
+
             if (rule === undefined) {
                 throw new Error(`Expected rule ${deprecatedRuleId} to exist.`);
             }
 
             expect(rule.meta?.docs?.frozen).toBeTruthy();
-            expect(rule.meta?.docs?.frozen).toBe(true);
 
             expect(hasRuleDeprecationInfo(rule.meta?.deprecated)).toBeTruthy();
-            expect(hasRuleDeprecationInfo(rule.meta?.deprecated)).toBe(true);
 
             if (hasRuleDeprecationInfo(rule.meta?.deprecated)) {
                 expect(rule.meta.deprecated.availableUntil).toBe("2.0.0");

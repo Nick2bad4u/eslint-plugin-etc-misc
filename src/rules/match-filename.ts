@@ -26,12 +26,17 @@ const defaultSelectors = [
 
 const normalizeSelector = (
     selector: Options[0]["selector"]
-): readonly string[] =>
-    selector === undefined
-        ? defaultSelectors
-        : Array.isArray(selector)
-          ? selector
-          : [selector];
+): readonly string[] => {
+    if (selector === undefined) {
+        return defaultSelectors;
+    }
+
+    if (typeof selector === "string") {
+        return [selector];
+    }
+
+    return selector;
+};
 
 /**
  * Enforce that selected declaration identifiers match the current filename.

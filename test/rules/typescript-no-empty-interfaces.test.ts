@@ -1,7 +1,7 @@
-import rule from "../../src/rules/typescript-no-empty-interfaces";
+import deprecatedRule from "../../src/rules/typescript-no-empty-interfaces";
 import { ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("typescript-no-empty-interfaces", rule, {
+ruleTester.run("typescript-no-empty-interfaces", deprecatedRule, {
     invalid: [
         {
             code: "interface I {}",

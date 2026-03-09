@@ -1,7 +1,7 @@
-import rule from "../../src/rules/no-deprecated";
+import deprecatedRule from "../../src/rules/no-deprecated";
 import { ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("no-deprecated", rule, {
+ruleTester.run("no-deprecated", deprecatedRule, {
     invalid: [
         {
             code: [

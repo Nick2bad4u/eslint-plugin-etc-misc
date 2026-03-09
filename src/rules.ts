@@ -1,4 +1,6 @@
+/* eslint-disable canonical/no-re-export -- Rule registry module intentionally re-exports imported rule modules at plugin boundary. */
 import type { TSESLint } from "@typescript-eslint/utils";
+
 import arrayType from "./rules/array-type";
 import matchFilenameRule from "./rules/class-match-filename";
 import commentSpacing from "./rules/comment-spacing";
@@ -216,3 +218,5 @@ export const rules: Readonly<Record<string, RuleModule>> = {
     "uppercase-iife": uppercaseIife,
     words: words,
 };
+
+/* eslint-enable canonical/no-re-export -- Re-enable after plugin registry boundary mapping. */

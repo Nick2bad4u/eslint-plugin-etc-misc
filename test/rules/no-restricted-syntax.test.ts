@@ -1,7 +1,7 @@
-import rule from "../../src/rules/no-restricted-syntax";
+import deprecatedRule from "../../src/rules/no-restricted-syntax";
 import { ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("no-restricted-syntax", rule, {
+ruleTester.run("no-restricted-syntax", deprecatedRule, {
     invalid: [
         {
             code: "if (x) { y(); }",

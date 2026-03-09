@@ -1,7 +1,7 @@
-import rule from "../../src/rules/no-self-import";
+import deprecatedRule from "../../src/rules/no-self-import";
 import { ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("no-self-import", rule, {
+ruleTester.run("no-self-import", deprecatedRule, {
     invalid: [
         {
             code: 'import value from "./file";',

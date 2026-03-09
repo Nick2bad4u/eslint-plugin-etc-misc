@@ -230,6 +230,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             description:
                 "disallow type parameters that cannot be inferred or do not enforce constraints.",
             recommended: false,
+            requiresTypeChecking: true,
             url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-misused-generics.md",
         },
         hasSuggestions: false,

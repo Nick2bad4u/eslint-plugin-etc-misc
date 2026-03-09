@@ -1,2 +1,0 @@
-export declare const noInternalModules: import("@typescript-eslint/utils/dist/ts-eslint").RuleModule<import("./base/disallow-import").MessageId, import("../utils/create-rule").PartialOptionsArray<import("./base/disallow-import").Options, object, never>, import("@typescript-eslint/utils/dist/ts-eslint").RuleListener>;
-//# sourceMappingURL=no-internal-modules.d.ts.map

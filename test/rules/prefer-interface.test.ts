@@ -1,7 +1,7 @@
-import rule from "../../src/rules/prefer-interface";
+import deprecatedRule from "../../src/rules/prefer-interface";
 import { ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("prefer-interface", rule, {
+ruleTester.run("prefer-interface", deprecatedRule, {
     invalid: [
         {
             code: "type T = { length: number; };",

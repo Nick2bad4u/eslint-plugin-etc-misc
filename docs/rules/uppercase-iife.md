@@ -31,6 +31,11 @@ Extra parentheses in IIFE arrow bodies reduce readability and add noise.
 
 This rule forwards options and behavior to `unicorn/no-unreadable-iife`.
 
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`unicorn/no-unreadable-iife`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-unreadable-iife.md)
+
 ## ESLint flat config example
 
 ```ts

@@ -1,11 +1,11 @@
-import rule from "../../src/rules/uppercase-iife";
-import { ruleTester } from "../_internal/ruleTester";
+import deprecatedRule from "../../src/rules/uppercase-iife";
+import { anyMessageError, ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("uppercase-iife", rule, {
+ruleTester.run("uppercase-iife", deprecatedRule, {
     invalid: [
         {
             code: "(() => (doWork()))();",
-            errors: [{ message: /.+/v }],
+            errors: [anyMessageError(/.+/v)],
         },
     ],
     valid: [

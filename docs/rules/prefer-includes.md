@@ -32,6 +32,11 @@ const hasValue = [1, 2, 3].includes(2);
 
 This rule forwards options and behavior to `unicorn/prefer-includes`.
 
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`unicorn/prefer-includes`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-includes.md)
+
 ## ESLint flat config example
 
 ```ts

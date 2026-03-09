@@ -226,9 +226,6 @@ export default defineConfig([
         "**/CHANGELOG.md",
         ".remarkrc.mjs",
         "test/fixtures/**",
-        // Old source plugins
-        "eslint-plugin-etc/**",
-        "eslint-plugin-misc/**",
         // Repo kickstart from other project files
         "docs/rules/getting-started.md",
         "docs/rules/overview.md",

@@ -1,7 +1,7 @@
-import rule from "../../src/rules/typescript-class-methods-use-this";
+import deprecatedRule from "../../src/rules/typescript-class-methods-use-this";
 import { ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("typescript-class-methods-use-this", rule, {
+ruleTester.run("typescript-class-methods-use-this", deprecatedRule, {
     invalid: [
         {
             code: "class C { method() { return 1; } }",

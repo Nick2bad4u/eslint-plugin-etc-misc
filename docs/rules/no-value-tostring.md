@@ -37,6 +37,11 @@ value.toString();
 
 This rule forwards options to `@typescript-eslint/no-base-to-string`.
 
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`@typescript-eslint/no-base-to-string`](https://typescript-eslint.io/rules/no-base-to-string)
+
 ## ESLint flat config example
 
 ```ts

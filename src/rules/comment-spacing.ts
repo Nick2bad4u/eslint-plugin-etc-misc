@@ -21,7 +21,7 @@ const buildFix =
     (
         sourceCode: Readonly<TSESLint.SourceCode>,
         comment: Readonly<es.Comment>,
-        nextNode: Readonly<es.Node>,
+        nextNode: Readonly<es.Node | es.Token>,
         expected: number
     ): TSESLint.ReportFixFunction =>
     (fixer): TSESLint.RuleFix => {

@@ -44,6 +44,14 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 return;
             }
 
+            const firstComment = comments[0];
+            if (firstComment === undefined) {
+                return;
+            }
+
+            // eslint-disable-next-line unicorn/prefer-at -- Node >=16.0 support baseline
+            const lastComment = comments[comments.length - 1] ?? firstComment;
+
             // eslint-disable-next-line unicorn/no-array-sort -- Node >=16.0 support baseline
             const sorted = [...comments].sort((a, b) =>
                 commentText(a).localeCompare(commentText(b))
@@ -58,16 +66,11 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             context.report({
                 fix: (fixer): TSESLint.RuleFix =>
                     fixer.replaceTextRange(
-                        [
-                            comments[0].range[0],
-                            // eslint-disable-next-line unicorn/prefer-at -- Node >=16.0 support baseline
-                            comments[comments.length - 1]?.range[1] ??
-                                comments[0].range[1],
-                        ],
+                        [firstComment.range[0], lastComment.range[1]],
                         buildReplacement(context.sourceCode, comments)
                     ),
                 messageId: "incorrectSorting",
-                node: comments[0],
+                node: firstComment,
             });
         },
     }),

@@ -1,11 +1,11 @@
 import rule from "../../src/rules/no-writeonly";
-import { ruleTester } from "../_internal/ruleTester";
+import { anyMessageError, ruleTester } from "../_internal/ruleTester";
 
 ruleTester.run("no-writeonly", rule, {
     invalid: [
         {
             code: "const state = { set value(next) { this._value = next; } }; void state;",
-            errors: [{ message: /.+/v }],
+            errors: [anyMessageError(/.+/v)],
         },
     ],
     valid: [

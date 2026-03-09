@@ -8,6 +8,18 @@ import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
 const sidebars: SidebarsConfig = {
     docs: [
         {
+            className: "sb-doc-intro",
+            id: "intro",
+            label: "🏁 Intro",
+            type: "doc",
+        },
+        {
+            className: "sb-doc-getting-started",
+            id: "getting-started",
+            label: "🚀 Getting Started",
+            type: "doc",
+        },
+        {
             className: "sb-cat-developer",
             collapsed: true,
             customProps: {
@@ -17,7 +29,7 @@ const sidebars: SidebarsConfig = {
             label: "🛠 Dev",
             link: {
                 type: "doc",
-                id: "developer/index",
+                id: "developer/api/index",
             },
             items: [
                 {
@@ -25,81 +37,6 @@ const sidebars: SidebarsConfig = {
                     id: "developer/api/index",
                     label: "📘 API Overview",
                     type: "doc",
-                },
-                {
-                    className: "sb-cat-developer-adr",
-                    collapsed: true,
-                    customProps: {
-                        badge: "adr",
-                    },
-                    items: [
-                        {
-                            id: "developer/adr/index",
-                            label: "📚 ADR Index",
-                            type: "doc",
-                        },
-                        {
-                            id: "developer/adr/eslint-plugin-kit-adoption",
-                            label: "ADR 0001 · plugin-kit",
-                            type: "doc",
-                        },
-                        {
-                            id: "developer/adr/eslint-config-helpers-scope",
-                            label: "ADR 0002 · config-helpers",
-                            type: "doc",
-                        },
-                        {
-                            id: "developer/adr/eslint-object-schema-adoption",
-                            label: "ADR 0003 · object-schema",
-                            type: "doc",
-                        },
-                        {
-                            id: "developer/adr/rule-docs-specificity-and-shared-guides",
-                            label: "ADR 0004 · rule-doc specificity",
-                            type: "doc",
-                        },
-                        {
-                            id: "developer/adr/runtime-vs-type-level-rule-families",
-                            label: "ADR 0005 · rule families",
-                            type: "doc",
-                        },
-                        {
-                            id: "developer/adr/canonical-rule-doc-urls-use-docusaurus-routes",
-                            label: "ADR 0006 · docs URL canonicalization",
-                            type: "doc",
-                        },
-                        {
-                            id: "developer/adr/rule-doc-footer-links-to-shared-guides",
-                            label: "ADR 0007 · rule footer guide links",
-                            type: "doc",
-                        },
-                        {
-                            id: "developer/adr/typedoc-generation-ci-local-strategy",
-                            label: "ADR 0008 · typedoc CI/local strategy",
-                            type: "doc",
-                        },
-                        {
-                            id: "developer/adr/plugin-blog-as-docs-channel",
-                            label: "ADR 0009 · blog docs channel",
-                            type: "doc",
-                        },
-                        {
-                            id: "developer/adr/autofix-governance-and-global-kill-switch",
-                            label: "ADR 0010 · autofix governance",
-                            type: "doc",
-                        },
-                        {
-                            id: "developer/adr/type-aware-rule-contract-and-fail-fast-behavior",
-                            label: "ADR 0011 · typed-rule contract",
-                            type: "doc",
-                        },
-                    ],
-                    label: "🧭 Architecture Decisions",
-                    link: {
-                        id: "developer/adr/index",
-                        type: "doc",
-                    },
-                    type: "category",
                 },
                 {
                     className: "sb-cat-api-types",

@@ -1,22 +1,54 @@
-/* eslint-disable canonical/no-reassign-imports, canonical/no-re-export -- Flat-config preset object intentionally references imported preset modules. */
+/* eslint-disable canonical/no-reassign-imports -- Flat-config preset object intentionally references imported preset modules. */
 
+import { pluginMeta } from "./_internal/plugin-meta";
 import { all as allConfig } from "./configs/all";
 import { recommended as recommendedConfig } from "./configs/recommended";
+import { rules } from "./rules";
+
+type PluginReference = {
+    readonly meta: typeof pluginMeta;
+    readonly rules: typeof rules;
+};
+
+type PresetWithPlugin<TRules extends Readonly<Record<string, RuleSeverity>>> = {
+    readonly plugins: Readonly<
+        Record<typeof pluginMeta.namespace, PluginReference>
+    >;
+    readonly rules: TRules;
+};
+
+type RuleSeverity = "error";
+
+const pluginReference: PluginReference = {
+    meta: pluginMeta,
+    rules,
+};
+
+const withPluginReference = <
+    TRules extends Readonly<Record<string, RuleSeverity>>,
+>(
+    config: Readonly<{ readonly rules: TRules }>
+): PresetWithPlugin<TRules> => ({
+    plugins: {
+        [pluginMeta.namespace]: pluginReference,
+    },
+    rules: config.rules,
+});
 
 /**
  * Available flat-config presets exported by the plugin.
  */
 export type PluginConfigs = {
-    readonly all: typeof allConfig;
-    readonly recommended: typeof recommendedConfig;
+    readonly all: PresetWithPlugin<typeof allConfig.rules>;
+    readonly recommended: PresetWithPlugin<typeof recommendedConfig.rules>;
 };
 
 /**
  * Plugin configuration presets.
  */
 export const configs: PluginConfigs = {
-    all: allConfig,
-    recommended: recommendedConfig,
+    all: withPluginReference(allConfig),
+    recommended: withPluginReference(recommendedConfig),
 };
 
-/* eslint-enable canonical/no-reassign-imports, canonical/no-re-export -- Re-enable canonical import/export restrictions outside this intentional assembly block. */
+/* eslint-enable canonical/no-reassign-imports -- Re-enable canonical import reassignment restrictions outside this intentional assembly block. */

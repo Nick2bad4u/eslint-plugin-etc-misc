@@ -1,7 +1,7 @@
-import rule from "../../src/rules/require-jsdoc";
+import deprecatedRule from "../../src/rules/require-jsdoc";
 import { ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("require-jsdoc", rule, {
+ruleTester.run("require-jsdoc", deprecatedRule, {
     invalid: [
         {
             code: "function f() {}",

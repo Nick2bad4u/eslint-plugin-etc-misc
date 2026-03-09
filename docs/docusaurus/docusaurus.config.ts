@@ -286,7 +286,7 @@ const config: Config = {
                         },
                         {
                             label: "🎛 Presets",
-                            to: "/docs/rules/presets",
+                            to: "/docs/rules/presets/all",
                         },
                         {
                             label: "📏 Rule Reference",
@@ -366,7 +366,7 @@ const config: Config = {
                     activeBaseRegex: "^/docs/rules/presets(?:/.*)?$",
                     label: "🎛️ Presets",
                     position: "left",
-                    to: "/docs/rules/presets",
+                    to: "/docs/rules/presets/all",
                 },
                 {
                     label: "📰 Blog",
@@ -376,7 +376,7 @@ const config: Config = {
                 {
                     label: "🛠️ Dev",
                     position: "right",
-                    to: "/docs/developer",
+                    to: "/docs/developer/api",
                 },
                 {
                     href: `https://github.com/${organizationName}/${projectName}`,

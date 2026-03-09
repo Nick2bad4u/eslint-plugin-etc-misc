@@ -35,6 +35,11 @@ alert("x");
 This rule forwards options and behavior to
 `@eslint-community/eslint-comments/no-unused-disable`.
 
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`@eslint-community/eslint-comments/no-unused-disable`](https://eslint-community.github.io/eslint-plugin-eslint-comments/rules/no-unused-disable.html)
+
 ## ESLint flat config example
 
 ```ts

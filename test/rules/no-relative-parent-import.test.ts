@@ -1,7 +1,7 @@
-import rule from "../../src/rules/no-relative-parent-import";
+import deprecatedRule from "../../src/rules/no-relative-parent-import";
 import { ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("no-relative-parent-import", rule, {
+ruleTester.run("no-relative-parent-import", deprecatedRule, {
     invalid: [
         {
             code: 'import value from "..";',

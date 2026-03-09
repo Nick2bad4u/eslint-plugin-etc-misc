@@ -39,6 +39,11 @@ enum State {
 This rule forwards options and behavior to
 `@typescript-eslint/no-mixed-enums`.
 
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`@typescript-eslint/no-mixed-enums`](https://typescript-eslint.io/rules/no-mixed-enums)
+
 ## ESLint flat config example
 
 ```ts

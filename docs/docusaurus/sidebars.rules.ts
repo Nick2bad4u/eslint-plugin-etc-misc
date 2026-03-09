@@ -139,38 +139,15 @@ const sidebars: SidebarsConfig = {
             type: "category",
             label: "🎛 Presets",
             link: {
-                type: "doc",
-                id: "presets/index",
+                type: "generated-index",
+                title: "Presets",
+                description:
+                    "Predefined flat-config preset bundles for different adoption levels.",
             },
             items: [
                 {
-                    id: "presets/minimal",
-                    label: "🟢 Minimal",
-                    type: "doc",
-                },
-                {
-                    id: "presets/recommended",
-                    label: "🟡 Recommended",
-                    type: "doc",
-                },
-                {
-                    id: "presets/strict",
-                    label: "🔴 Strict",
-                    type: "doc",
-                },
-                {
                     id: "presets/all",
                     label: "🟣 All",
-                    type: "doc",
-                },
-                {
-                    id: "presets/type-fest-types",
-                    label: "💠 type-fest",
-                    type: "doc",
-                },
-                {
-                    id: "presets/ts-extras-type-guards",
-                    label: "✴️ type-guards",
                     type: "doc",
                 },
             ],

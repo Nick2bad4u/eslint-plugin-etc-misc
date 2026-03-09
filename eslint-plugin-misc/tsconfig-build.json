@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "incremental": false,
-    "module": "CommonJS",
-    "outDir": "dist"
-  },
-  "extends": "./tsconfig",
-  "include": ["src/**/*.ts"]
-}

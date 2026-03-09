@@ -6,6 +6,7 @@ ruleTester.run("comment-spacing", rule, {
         {
             code: "/*\n * docs\n */\nconst value = 1;",
             errors: [{ messageId: "invalidSpacing" }],
+            output: "/*\n * docs\n */\n\nconst value = 1;",
         },
     ],
     valid: [

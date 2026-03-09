@@ -1,15 +1,15 @@
-import rule from "../../src/rules/words";
-import { ruleTester } from "../_internal/ruleTester";
+import deprecatedRule from "../../src/rules/words";
+import { anyMessageError, ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("words", rule, {
+ruleTester.run("words", deprecatedRule, {
     invalid: [
         {
             code: [
-                "// this probably works",
+                "// simply do this",
                 "const value = 1;",
                 "void value;",
             ].join("\n"),
-            errors: [{ message: /.+/v }],
+            errors: [anyMessageError(/.+/v)],
         },
     ],
     valid: [
