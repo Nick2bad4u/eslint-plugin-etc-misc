@@ -1458,7 +1458,9 @@ export default defineConfig([
                   "etc-misc": etcmisc,
               }
             : {},
-        rules: enableLocalEtcMiscDogfooding ? { ...etcmisc.configs.all.rules } : {},
+        rules: enableLocalEtcMiscDogfooding
+            ? { ...etcmisc.configs.all.rules }
+            : {},
     },
     // #endregion
     // #region 🧪 Internal Tooling
