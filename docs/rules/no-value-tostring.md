@@ -1,0 +1,66 @@
+# no-value-tostring
+
+Disallow calling `.toString()` on values that may not provide meaningful output.
+
+> ⚠️ This rule requires type information to run.
+
+## Targeted pattern scope
+
+This rule targets `.toString()` and related stringification calls in typed
+TypeScript code.
+
+## What this rule reports
+
+This rule reports stringification that could produce unhelpful default object
+representations.
+
+## Why this rule exists
+
+Calling `.toString()` on broad object types can produce `"[object Object]"`
+instead of useful text. This rule reports potentially unsafe stringification.
+
+## ❌ Incorrect
+
+```ts
+const value: {} = {};
+value.toString();
+```
+
+## ✅ Correct
+
+```ts
+const value = 42;
+value.toString();
+```
+
+## Behavior and migration notes
+
+This rule forwards options to `@typescript-eslint/no-base-to-string`.
+
+## ESLint flat config example
+
+```ts
+import etcMisc from "eslint-plugin-etc-misc";
+
+export default [
+	{
+		plugins: { "etc-misc": etcMisc },
+		rules: {
+			"etc-misc/no-value-tostring": "error",
+		},
+	},
+];
+```
+
+## When not to use it
+
+Disable this rule if your codebase intentionally permits object default
+stringification and that behavior is covered by runtime tests.
+
+## Package documentation
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+
+## Further reading
+
+- [typescript-eslint: `no-base-to-string`](https://typescript-eslint.io/rules/no-base-to-string)

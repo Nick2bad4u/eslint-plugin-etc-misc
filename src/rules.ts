@@ -2,6 +2,7 @@
 
 import type { TSESLint } from "@typescript-eslint/utils";
 
+import arrayType from "./rules/array-type";
 import matchFilenameRule from "./rules/class-match-filename";
 import commentSpacing from "./rules/comment-spacing";
 import consistentEmptyLines from "./rules/consistent-empty-lines";
@@ -11,6 +12,7 @@ import consistentImport from "./rules/consistent-import";
 import consistentOptionalProps from "./rules/consistent-optional-props";
 import consistentSourceExtension from "./rules/consistent-source-extension";
 import consistentSymbolDescription from "./rules/consistent-symbol-description";
+import defaultCase from "./rules/default-case";
 import disallowImport from "./rules/disallow-import";
 import exportMatchingFilenameOnly from "./rules/export-matching-filename-only";
 import matchFilename from "./rules/match-filename";
@@ -30,28 +32,37 @@ import noIndexImport from "./rules/no-index-import";
 import noInternal from "./rules/no-internal";
 import noInternalModules from "./rules/no-internal-modules";
 import noLanguageMixing from "./rules/no-language-mixing";
+import noMixedEnums from "./rules/no-mixed-enums";
 import noMisusedGenerics from "./rules/no-misused-generics";
 import noNegatedConditions from "./rules/no-negated-conditions";
 import noNodejsModules from "./rules/no-nodejs-modules";
 import noParamReassign from "./rules/no-param-reassign";
 import noRelativeParentImport from "./rules/no-relative-parent-import";
 import noRestrictedSyntax from "./rules/no-restricted-syntax";
+import noSecret from "./rules/no-secret";
 import noSelfImport from "./rules/no-self-import";
 import noShadow from "./rules/no-shadow";
+import noSingleLineComment from "./rules/no-single-line-comment";
 import noSiblingImport from "./rules/no-sibling-import";
 import noT from "./rules/no-t";
+import noUnusedDisable from "./rules/no-unused-disable";
 import noUnderscoreExport from "./rules/no-underscore-export";
 import noUnnecessaryAsConst from "./rules/no-unnecessary-as-const";
 import noUnnecessaryBreak from "./rules/no-unnecessary-break";
 import noUnnecessaryInitialization from "./rules/no-unnecessary-initialization";
 import noUnnecessaryTemplateLiteral from "./rules/no-unnecessary-template-literal";
+import noUselessGenerics from "./rules/no-useless-generics";
+import noValueToString from "./rules/no-value-tostring";
+import noWriteonly from "./rules/no-writeonly";
 import objectFormat from "./rules/object-format";
 import onlyExportName from "./rules/only-export-name";
 import preferArrowFunctionProperty from "./rules/prefer-arrow-function-property";
 import preferConstRequire from "./rules/prefer-const-require";
+import preferIncludes from "./rules/prefer-includes";
 import preferInterface from "./rules/prefer-interface";
 import preferLessThan from "./rules/prefer-less-than";
 import preferOnlyExport from "./rules/prefer-only-export";
+import preferObjectHasOwn from "./rules/prefer-object-has-own";
 import requireJSDoc from "./rules/require-jsdoc";
 import requireSyntax from "./rules/require-syntax";
 import restrictIdentifierCharacters from "./rules/restrict-identifier-characters";
@@ -65,6 +76,7 @@ import sortTopComments from "./rules/sort-top-comments";
 import switchCaseSpacing from "./rules/switch-case-spacing";
 import templateLiteralFormat from "./rules/template-literal-format";
 import throwError from "./rules/throw-error";
+import throwNewError from "./rules/throw-new-error";
 import typescriptArrayCallbackReturnType from "./rules/typescript-array-callback-return-type";
 import typescriptClassMethodsUseThis from "./rules/typescript-class-methods-use-this";
 import typescriptConsistentArrayTypeName from "./rules/typescript-consistent-array-type-name";
@@ -89,7 +101,10 @@ import typescriptPreferReadonlyProperty from "./rules/typescript-prefer-readonly
 import typescriptPreferReadonlySet from "./rules/typescript-prefer-readonly-set";
 import typescriptRequirePropTypeAnnotation from "./rules/typescript-require-prop-type-annotation";
 import typescriptRequireThisVoid from "./rules/typescript-require-this-void";
+import uppercaseIife from "./rules/uppercase-iife";
+import unusedInternalProperties from "./rules/unused-internal-properties";
 import underscoreInternal from "./rules/underscore-internal";
+import words from "./rules/words";
 
 type RuleModule = TSESLint.RuleModule<string, readonly unknown[]>;
 
@@ -97,6 +112,7 @@ type RuleModule = TSESLint.RuleModule<string, readonly unknown[]>;
  * Rule implementations keyed by rule name.
  */
 export const rules: Readonly<Record<string, RuleModule>> = {
+    "array-type": arrayType,
     "class-match-filename": matchFilenameRule,
     "comment-spacing": commentSpacing,
     "consistent-empty-lines": consistentEmptyLines,
@@ -106,6 +122,7 @@ export const rules: Readonly<Record<string, RuleModule>> = {
     "consistent-optional-props": consistentOptionalProps,
     "consistent-source-extension": consistentSourceExtension,
     "consistent-symbol-description": consistentSymbolDescription,
+    "default-case": defaultCase,
     "disallow-import": disallowImport,
     "export-matching-filename-only": exportMatchingFilenameOnly,
     "match-filename": matchFilename,
@@ -125,28 +142,37 @@ export const rules: Readonly<Record<string, RuleModule>> = {
     "no-internal": noInternal,
     "no-internal-modules": noInternalModules,
     "no-language-mixing": noLanguageMixing,
+    "no-mixed-enums": noMixedEnums,
     "no-misused-generics": noMisusedGenerics,
     "no-negated-conditions": noNegatedConditions,
     "no-nodejs-modules": noNodejsModules,
     "no-param-reassign": noParamReassign,
     "no-relative-parent-import": noRelativeParentImport,
     "no-restricted-syntax": noRestrictedSyntax,
+    "no-secret": noSecret,
     "no-self-import": noSelfImport,
     "no-shadow": noShadow,
+    "no-single-line-comment": noSingleLineComment,
     "no-sibling-import": noSiblingImport,
     "no-t": noT,
+    "no-unused-disable": noUnusedDisable,
     "no-underscore-export": noUnderscoreExport,
     "no-unnecessary-as-const": noUnnecessaryAsConst,
     "no-unnecessary-break": noUnnecessaryBreak,
     "no-unnecessary-initialization": noUnnecessaryInitialization,
     "no-unnecessary-template-literal": noUnnecessaryTemplateLiteral,
+    "no-useless-generics": noUselessGenerics,
+    "no-value-tostring": noValueToString,
+    "no-writeonly": noWriteonly,
     "object-format": objectFormat,
     "only-export-name": onlyExportName,
     "prefer-arrow-function-property": preferArrowFunctionProperty,
     "prefer-const-require": preferConstRequire,
+    "prefer-includes": preferIncludes,
     "prefer-interface": preferInterface,
     "prefer-less-than": preferLessThan,
     "prefer-only-export": preferOnlyExport,
+    "prefer-object-has-own": preferObjectHasOwn,
     "require-jsdoc": requireJSDoc,
     "require-syntax": requireSyntax,
     "restrict-identifier-characters": restrictIdentifierCharacters,
@@ -160,10 +186,12 @@ export const rules: Readonly<Record<string, RuleModule>> = {
     "switch-case-spacing": switchCaseSpacing,
     "template-literal-format": templateLiteralFormat,
     "throw-error": throwError,
+    "throw-new-error": throwNewError,
     "typescript/array-callback-return-type": typescriptArrayCallbackReturnType,
     "typescript/class-methods-use-this": typescriptClassMethodsUseThis,
     "typescript/consistent-array-type-name": typescriptConsistentArrayTypeName,
-    "typescript/define-function-in-one-statement": typescriptDefineFunctionInOneStatement,
+    "typescript/define-function-in-one-statement":
+        typescriptDefineFunctionInOneStatement,
     "typescript/exhaustive-switch": typescriptExhaustiveSwitch,
     "typescript/no-boolean-literal-type": typescriptNoBooleanLiteralType,
     "typescript/no-complex-declarator-type": typescriptNoComplexDeclaratorType,
@@ -174,7 +202,8 @@ export const rules: Readonly<Record<string, RuleModule>> = {
     "typescript/no-never": typescriptNoNever,
     "typescript/no-restricted-syntax": typescriptNoRestrictedSyntax,
     "typescript/no-unsafe-object-assign": typescriptNoUnsafeObjectAssign,
-    "typescript/no-unsafe-object-assignment": typescriptNoUnsafeObjectAssignment,
+    "typescript/no-unsafe-object-assignment":
+        typescriptNoUnsafeObjectAssignment,
     "typescript/prefer-array-type-alias": typescriptPreferArrayTypeAlias,
     "typescript/prefer-class-method": typescriptPreferClassMethod,
     "typescript/prefer-enum": typescriptPreferEnum,
@@ -182,9 +211,13 @@ export const rules: Readonly<Record<string, RuleModule>> = {
     "typescript/prefer-readonly-map": typescriptPreferReadonlyMap,
     "typescript/prefer-readonly-property": typescriptPreferReadonlyProperty,
     "typescript/prefer-readonly-set": typescriptPreferReadonlySet,
-    "typescript/require-prop-type-annotation": typescriptRequirePropTypeAnnotation,
+    "typescript/require-prop-type-annotation":
+        typescriptRequirePropTypeAnnotation,
     "typescript/require-this-void": typescriptRequireThisVoid,
+    "uppercase-iife": uppercaseIife,
+    "unused-internal-properties": unusedInternalProperties,
     "underscore-internal": underscoreInternal,
+    words: words,
 };
 
 /* eslint-enable canonical/no-re-export -- Re-enable canonical re-export restriction outside this intentional map. */
