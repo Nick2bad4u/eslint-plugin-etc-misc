@@ -6,7 +6,7 @@ import { createSelectorRule } from "../_internal/create-selector-rule";
 const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
     description: "require defining function properties in a single statement.",
     message:
-        'Use `Object.assign` to define function properties in one statement.',
+        "Use `Object.assign` to define function properties in one statement.",
     messageId: "forbidden",
     name: "typescript/define-function-in-one-statement",
     selector:

@@ -34,7 +34,7 @@ ruleTester.run("no-foreach", rule, {
             code: "for (const value of [42]) { console.log(value); }",
         },
         {
-            code: "import { of } from \"rxjs\"; of(42).forEach((value) => console.log(value));",
+            code: 'import { of } from "rxjs"; of(42).forEach((value) => console.log(value));',
         },
         {
             code: "const map = new Map<string, string>(); map.forEach((value) => console.log(value));",

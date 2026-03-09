@@ -1,6 +1,4 @@
-import type {
-    TSESTree as es,
-} from "@typescript-eslint/utils";
+import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
 
@@ -17,31 +15,33 @@ const disallowedSelector = [
 /**
  * Disallow named exports whose identifier starts with an underscore.
  */
-const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
-    ruleCreator<Options, MessageIds>({
-        create: (context) => ({
-            [disallowedSelector]: (node: Readonly<es.Node>): void => {
-                context.report({
-                    messageId: "forbidden",
-                    node,
-                });
-            },
-        }),
-        defaultOptions: [],
-        meta: {
-            docs: {
-                description: "disallow underscore-prefixed named exports.",
-                recommended: false,
-                url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-underscore-export.md",
-            },
-            hasSuggestions: false,
-            messages: {
-                forbidden: "No underscore exports.",
-            },
-            schema: [],
-            type: "suggestion",
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => ({
+        [disallowedSelector]: (node: Readonly<es.Node>): void => {
+            context.report({
+                messageId: "forbidden",
+                node,
+            });
         },
-        name: "no-underscore-export",
-    });
+    }),
+    defaultOptions: [],
+    meta: {
+        docs: {
+            description: "disallow underscore-prefixed named exports.",
+            recommended: false,
+            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-underscore-export.md",
+        },
+        hasSuggestions: false,
+        messages: {
+            forbidden: "No underscore exports.",
+        },
+        schema: [],
+        type: "suggestion",
+    },
+    name: "no-underscore-export",
+});
 
 export default rule;

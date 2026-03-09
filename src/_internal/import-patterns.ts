@@ -21,10 +21,11 @@ const matchesAnyPattern = (
         })
     );
 
-const getImportSourceText = (
-    node: Readonly<es.Node>
-): string | undefined => {
-    if (node.type === "ExportAllDeclaration" || node.type === "ImportDeclaration") {
+const getImportSourceText = (node: Readonly<es.Node>): string | undefined => {
+    if (
+        node.type === "ExportAllDeclaration" ||
+        node.type === "ImportDeclaration"
+    ) {
         return node.source.value;
     }
 
@@ -56,7 +57,9 @@ const toMergedOptions = (
  * @param sourceText - Source text from an import/export node.
  * @param options - Rule options for allow/disallow overrides.
  * @param defaultDisallowPatterns - Rule-specific default disallow patterns.
- * @returns `true` when the source matches a disallow pattern and no allow pattern.
+ *
+ * @returns `true` when the source matches a disallow pattern and no allow
+ *   pattern.
  */
 export const shouldReportImportSource = (
     sourceText: string,
@@ -75,7 +78,9 @@ export const shouldReportImportSource = (
  * Gets import source text from supported import/export AST nodes.
  *
  * @param node - AST node to inspect.
- * @returns Source text when present and string-literal based, otherwise `undefined`.
+ *
+ * @returns Source text when present and string-literal based, otherwise
+ *   `undefined`.
  */
 export const getImportSourceFromNode = (
     node: Readonly<es.Node>

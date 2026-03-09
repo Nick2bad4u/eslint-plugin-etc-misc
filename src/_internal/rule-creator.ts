@@ -7,10 +7,7 @@ import { ESLintUtils } from "@typescript-eslint/utils";
 /**
  * Broad rule-module type used by incrementally migrated rule files.
  */
-export type AnyRuleModule = TSESLint.RuleModule<
-    string,
-    readonly unknown[]
->;
+export type AnyRuleModule = TSESLint.RuleModule<string, readonly unknown[]>;
 
 type LegacyDocsMetadata = {
     readonly recommended: boolean;
@@ -30,8 +27,8 @@ type RuleCreatorFactory = ReturnType<
  */
 export const ruleCreator: RuleCreatorFactory =
     ESLintUtils.RuleCreator<LegacyDocsMetadata>(
-    (name) =>
-        `https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/${name}.md`
-);
+        (name) =>
+            `https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/${name}.md`
+    );
 
 /* eslint-enable total-functions/no-hidden-type-assertions -- Re-enable hidden assertion checks outside this required generic factory declaration. */

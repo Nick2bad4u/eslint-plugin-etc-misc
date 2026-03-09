@@ -1,7 +1,4 @@
-import type {
-    TSESTree as es,
-    TSESLint,
-} from "@typescript-eslint/utils";
+import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
 import { ESLintUtils } from "@typescript-eslint/utils";
 
@@ -29,7 +26,9 @@ type TypedProgram = NonNullable<
     ReturnType<typeof ESLintUtils.getParserServices>["program"]
 >;
 
-const hasPromiseTypeMethod = (typeChecker: unknown): typeChecker is PromiseTypeChecker =>
+const hasPromiseTypeMethod = (
+    typeChecker: unknown
+): typeChecker is PromiseTypeChecker =>
     typeof typeChecker === "object" &&
     typeChecker !== null &&
     "getPromisedTypeOfPromise" in typeChecker &&
@@ -95,96 +94,85 @@ const annotateImplicitParamFixes = (
 };
 
 /**
- * Require explicit `unknown` (or optionally `any`) for Promise rejection callbacks.
+ * Require explicit `unknown` (or optionally `any`) for Promise rejection
+ * callbacks.
  */
-const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
-    ruleCreator<Options, MessageIds>({
-        create: (context) => {
-            const parserServices = ESLintUtils.getParserServices(context);
-            const sourceCode = context.sourceCode;
-            const typeChecker = parserServices.program.getTypeChecker();
-            const [{ allowExplicitAny = false } = {}] = context.options;
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => {
+        const parserServices = ESLintUtils.getParserServices(context);
+        const sourceCode = context.sourceCode;
+        const typeChecker = parserServices.program.getTypeChecker();
+        const [{ allowExplicitAny = false } = {}] = context.options;
 
-            const checkRejectionCallback = (
-                callExpression: Readonly<es.CallExpression>,
-                callback: Readonly<es.CallExpressionArgument>
-            ): void => {
-                if (
-                    callback.type !== "ArrowFunctionExpression" &&
-                    callback.type !== "FunctionExpression"
-                ) {
-                    return;
-                }
+        const checkRejectionCallback = (
+            callExpression: Readonly<es.CallExpression>,
+            callback: Readonly<es.CallExpressionArgument>
+        ): void => {
+            if (
+                callback.type !== "ArrowFunctionExpression" &&
+                callback.type !== "FunctionExpression"
+            ) {
+                return;
+            }
 
-                const [parameter] = callback.params;
-                if (parameter?.type !== "Identifier") {
-                    return;
-                }
+            const [parameter] = callback.params;
+            if (parameter?.type !== "Identifier") {
+                return;
+            }
 
-                if (
-                    !isPromiseRejectionCall(
-                        callExpression,
-                        parserServices,
-                        typeChecker
-                    )
-                ) {
-                    return;
-                }
+            if (
+                !isPromiseRejectionCall(
+                    callExpression,
+                    parserServices,
+                    typeChecker
+                )
+            ) {
+                return;
+            }
 
-                if (parameter.typeAnnotation === undefined) {
-                    context.report({
-                        fix: (fixer) =>
-                            annotateImplicitParamFixes(
-                                fixer,
-                                sourceCode,
-                                parameter
-                            ),
-                        messageId: "implicitAny",
-                        node: parameter,
-                        suggest: [
-                            {
-                                fix: (fixer) =>
-                                    annotateImplicitParamFixes(
-                                        fixer,
-                                        sourceCode,
-                                        parameter
-                                    ),
-                                messageId: "suggestExplicitUnknown",
-                            },
-                        ],
-                    });
-                    return;
-                }
+            if (parameter.typeAnnotation === undefined) {
+                context.report({
+                    fix: (fixer) =>
+                        annotateImplicitParamFixes(
+                            fixer,
+                            sourceCode,
+                            parameter
+                        ),
+                    messageId: "implicitAny",
+                    node: parameter,
+                    suggest: [
+                        {
+                            fix: (fixer) =>
+                                annotateImplicitParamFixes(
+                                    fixer,
+                                    sourceCode,
+                                    parameter
+                                ),
+                            messageId: "suggestExplicitUnknown",
+                        },
+                    ],
+                });
+                return;
+            }
 
-                const { typeAnnotation } = parameter;
-                const annotationType = typeAnnotation.typeAnnotation.type;
-                if (annotationType === "TSUnknownKeyword") {
-                    return;
-                }
+            const { typeAnnotation } = parameter;
+            const annotationType = typeAnnotation.typeAnnotation.type;
+            if (annotationType === "TSUnknownKeyword") {
+                return;
+            }
 
-                if (annotationType === "TSAnyKeyword") {
-                    if (allowExplicitAny) {
-                        return;
-                    }
-
-                    context.report({
-                        fix: (fixer) =>
-                            replaceWithUnknownFix(fixer, typeAnnotation),
-                        messageId: "explicitAny",
-                        node: parameter,
-                        suggest: [
-                            {
-                                fix: (fixer) =>
-                                    replaceWithUnknownFix(fixer, typeAnnotation),
-                                messageId: "suggestExplicitUnknown",
-                            },
-                        ],
-                    });
+            if (annotationType === "TSAnyKeyword") {
+                if (allowExplicitAny) {
                     return;
                 }
 
                 context.report({
-                    messageId: "narrowed",
+                    fix: (fixer) =>
+                        replaceWithUnknownFix(fixer, typeAnnotation),
+                    messageId: "explicitAny",
                     node: parameter,
                     suggest: [
                         {
@@ -194,65 +182,79 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
                         },
                     ],
                 });
-            };
+                return;
+            }
 
-            return {
-                "CallExpression[callee.property.name='catch']": (
-                    callExpression: Readonly<es.CallExpression>
-                ) => {
-                    const [callback] = callExpression.arguments;
-                    if (callback !== undefined) {
-                        checkRejectionCallback(callExpression, callback);
-                    }
-                },
-                "CallExpression[callee.property.name='then']": (
-                    callExpression: Readonly<es.CallExpression>
-                ) => {
-                    const callback = callExpression.arguments[1];
-                    if (callback !== undefined) {
-                        checkRejectionCallback(callExpression, callback);
-                    }
-                },
-            };
-        },
-        defaultOptions,
-        meta: {
-            defaultOptions: [{}],
-            docs: {
-                description:
-                    "require explicit unknown for Promise rejection callback parameters.",
-                recommended: false,
-                suggestion: true,
-                url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-implicit-any-catch.md",
-            },
-            fixable: "code",
-            hasSuggestions: true,
-            messages: {
-                explicitAny: "Explicit `any` in Promise rejection callback.",
-                implicitAny: "Implicit `any` in Promise rejection callback.",
-                narrowed:
-                    "Error type in Promise rejection callback must be `unknown` or `any`.",
-                suggestExplicitUnknown:
-                    "Use `unknown` to force safe, explicit narrowing before access.",
-            },
-            schema: [
-                {
-                    additionalProperties: false,
-                    description:
-                        "Configuration for Promise rejection callback annotation enforcement.",
-                    properties: {
-                        allowExplicitAny: {
-                            description:
-                                "Whether an explicit `any` annotation is allowed for rejection callback parameters.",
-                            type: "boolean",
-                        },
+            context.report({
+                messageId: "narrowed",
+                node: parameter,
+                suggest: [
+                    {
+                        fix: (fixer) =>
+                            replaceWithUnknownFix(fixer, typeAnnotation),
+                        messageId: "suggestExplicitUnknown",
                     },
-                    type: "object",
-                },
-            ],
-            type: "suggestion",
+                ],
+            });
+        };
+
+        return {
+            "CallExpression[callee.property.name='catch']": (
+                callExpression: Readonly<es.CallExpression>
+            ) => {
+                const [callback] = callExpression.arguments;
+                if (callback !== undefined) {
+                    checkRejectionCallback(callExpression, callback);
+                }
+            },
+            "CallExpression[callee.property.name='then']": (
+                callExpression: Readonly<es.CallExpression>
+            ) => {
+                const callback = callExpression.arguments[1];
+                if (callback !== undefined) {
+                    checkRejectionCallback(callExpression, callback);
+                }
+            },
+        };
+    },
+    defaultOptions,
+    meta: {
+        defaultOptions: [{}],
+        docs: {
+            description:
+                "require explicit unknown for Promise rejection callback parameters.",
+            recommended: false,
+            suggestion: true,
+            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-implicit-any-catch.md",
         },
-        name: "no-implicit-any-catch",
-    });
+        fixable: "code",
+        hasSuggestions: true,
+        messages: {
+            explicitAny: "Explicit `any` in Promise rejection callback.",
+            implicitAny: "Implicit `any` in Promise rejection callback.",
+            narrowed:
+                "Error type in Promise rejection callback must be `unknown` or `any`.",
+            suggestExplicitUnknown:
+                "Use `unknown` to force safe, explicit narrowing before access.",
+        },
+        schema: [
+            {
+                additionalProperties: false,
+                description:
+                    "Configuration for Promise rejection callback annotation enforcement.",
+                properties: {
+                    allowExplicitAny: {
+                        description:
+                            "Whether an explicit `any` annotation is allowed for rejection callback parameters.",
+                        type: "boolean",
+                    },
+                },
+                type: "object",
+            },
+        ],
+        type: "suggestion",
+    },
+    name: "no-implicit-any-catch",
+});
 
 export default rule;

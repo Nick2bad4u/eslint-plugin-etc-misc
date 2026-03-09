@@ -1,7 +1,4 @@
-import type {
-    TSESTree as es,
-    TSESLint,
-} from "@typescript-eslint/utils";
+import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
 
@@ -49,8 +46,7 @@ const doesTypeTextMatch = (
     }
 
     return (
-        typeText === configuredType ||
-        typeText.startsWith(`${configuredType}<`)
+        typeText === configuredType || typeText.startsWith(`${configuredType}<`)
     );
 };
 
@@ -58,7 +54,9 @@ const includesConfiguredType = (
     rawTypeText: string,
     configuredTypes: readonly string[]
 ): boolean => {
-    const typeVariants = rawTypeText.split("|").map((typeText) => typeText.trim());
+    const typeVariants = rawTypeText
+        .split("|")
+        .map((typeText) => typeText.trim());
 
     return typeVariants.some((typeText) =>
         configuredTypes.some((configuredType) =>
@@ -70,21 +68,22 @@ const includesConfiguredType = (
 /**
  * Disallow calling `forEach` on configured collection types.
  */
-const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
-    ruleCreator<Options, MessageIds>({
-        create: (context) => {
-            const parserServices = context.sourceCode.parserServices;
-            if (!isTypedParserServices(parserServices)) {
-                return {};
-            }
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => {
+        const parserServices = context.sourceCode.parserServices;
+        if (!isTypedParserServices(parserServices)) {
+            return {};
+        }
 
-            const [{ types = defaultTypes } = {}] = context.options;
-            const typeChecker = parserServices.program.getTypeChecker();
+        const [{ types = defaultTypes } = {}] = context.options;
+        const typeChecker = parserServices.program.getTypeChecker();
 
-            return {
-                "CallExpression[callee.type='MemberExpression'][callee.property.type='Identifier'][callee.property.name='forEach']": (
-                    callExpression: Readonly<es.CallExpression>
-                ) => {
+        return {
+            "CallExpression[callee.type='MemberExpression'][callee.property.type='Identifier'][callee.property.name='forEach']":
+                (callExpression: Readonly<es.CallExpression>) => {
                     const { callee } = callExpression;
                     if (callee.type !== "MemberExpression") {
                         return;
@@ -103,42 +102,42 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
                         node: callee.property,
                     });
                 },
-            };
+        };
+    },
+    defaultOptions,
+    meta: {
+        defaultOptions: [{}],
+        docs: {
+            description:
+                "disallow calling forEach on configured collection types.",
+            recommended: false,
+            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-foreach.md",
         },
-        defaultOptions,
-        meta: {
-            defaultOptions: [{}],
-            docs: {
+        hasSuggestions: false,
+        messages: {
+            forbidden: "Calling `forEach` is forbidden for this type.",
+        },
+        schema: [
+            {
+                additionalProperties: false,
                 description:
-                    "disallow calling forEach on configured collection types.",
-                recommended: false,
-                url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-foreach.md",
-            },
-            hasSuggestions: false,
-            messages: {
-                forbidden: "Calling `forEach` is forbidden for this type.",
-            },
-            schema: [
-                {
-                    additionalProperties: false,
-                    description:
-                        "Configuration for collection type names that are not allowed to use forEach.",
-                    properties: {
-                        types: {
-                            description:
-                                "Type names to disallow forEach on (for example Array, Map, NodeList, Set).",
-                            items: {
-                                type: "string",
-                            },
-                            type: "array",
+                    "Configuration for collection type names that are not allowed to use forEach.",
+                properties: {
+                    types: {
+                        description:
+                            "Type names to disallow forEach on (for example Array, Map, NodeList, Set).",
+                        items: {
+                            type: "string",
                         },
+                        type: "array",
                     },
-                    type: "object",
                 },
-            ],
-            type: "problem",
-        },
-        name: "no-foreach",
-    });
+                type: "object",
+            },
+        ],
+        type: "problem",
+    },
+    name: "no-foreach",
+});
 
 export default rule;

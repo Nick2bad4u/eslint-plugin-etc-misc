@@ -1,6 +1,4 @@
-import type {
-    TSESTree as es,
-} from "@typescript-eslint/utils";
+import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "./rule-creator";
 
@@ -17,7 +15,8 @@ type CreateSelectorRuleInput = Readonly<{
 type Options = readonly [];
 
 /**
- * Create a no-options rule that reports every node matching the provided selector.
+ * Create a no-options rule that reports every node matching the provided
+ * selector.
  */
 export const createSelectorRule = (
     input: CreateSelectorRuleInput

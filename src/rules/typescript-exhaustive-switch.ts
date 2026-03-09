@@ -7,7 +7,8 @@ const selector =
  * Require a default case in non-trivial switch statements.
  */
 const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
-    description: "require a default case in switch statements with multiple branches.",
+    description:
+        "require a default case in switch statements with multiple branches.",
     message: "Add a default case to make this switch exhaustive.",
     messageId: "forbidden",
     name: "typescript/exhaustive-switch",

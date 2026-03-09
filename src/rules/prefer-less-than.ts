@@ -1,15 +1,8 @@
-import type {
-    TSESTree as es,
-    TSESLint,
-} from "@typescript-eslint/utils";
+import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
 
-type MessageIds =
-    | "forbiddenGT"
-    | "forbiddenGTE"
-    | "suggestLT"
-    | "suggestLTE";
+type MessageIds = "forbiddenGT" | "forbiddenGTE" | "suggestLT" | "suggestLTE";
 
 const createFixes = (
     fixer: Readonly<TSESLint.RuleFixer>,
@@ -82,8 +75,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                 forbiddenGTE:
                     "Greater-than-or-equal comparisons are forbidden.",
                 suggestLT: "Use a less-than comparison instead.",
-                suggestLTE:
-                    "Use a less-than-or-equal comparison instead.",
+                suggestLTE: "Use a less-than-or-equal comparison instead.",
             },
             schema: [],
             type: "suggestion",

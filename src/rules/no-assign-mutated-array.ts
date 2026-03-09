@@ -1,13 +1,14 @@
-import type {
-    TSESTree as es,
-    TSESLint,
-} from "@typescript-eslint/utils";
+import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
 
 type MessageIds = "forbidden";
 
-const mutatingMethodNames = new Set(["fill", "reverse", "sort"]);
+const mutatingMethodNames = new Set([
+    "fill",
+    "reverse",
+    "sort",
+]);
 
 const creatorMethodNames = new Set([
     "concat",
@@ -103,7 +104,8 @@ const mutatesReferencedArray = (
 };
 
 /**
- * Disallow assigning arrays returned by mutating methods like `fill`, `reverse`, and `sort`.
+ * Disallow assigning arrays returned by mutating methods like `fill`,
+ * `reverse`, and `sort`.
  */
 const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
     ruleCreator<readonly [], MessageIds>({
@@ -114,49 +116,58 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                 : undefined;
 
             return {
-                "CallExpression[callee.type='MemberExpression'][callee.property.type='Identifier']": (
-                    callExpression: Readonly<es.CallExpression>
-                ) => {
-                    const { callee } = callExpression;
-                    if (callee.type !== "MemberExpression") {
-                        return;
-                    }
-
-                    const { property } = callee;
-                    if (
-                        property.type !== "Identifier" ||
-                        !mutatingMethodNames.has(property.name)
-                    ) {
-                        return;
-                    }
-
-                    if (callExpression.parent?.type === "ExpressionStatement") {
-                        return;
-                    }
-
-                    if (typeChecker !== undefined && isTypedParserServices(parserServices)) {
-                        const objectType = parserServices.getTypeAtLocation(callee.object);
-                        const typeText = typeChecker.typeToString(objectType);
-                        if (!isArrayTypeText(typeText)) {
+                "CallExpression[callee.type='MemberExpression'][callee.property.type='Identifier']":
+                    (callExpression: Readonly<es.CallExpression>) => {
+                        const { callee } = callExpression;
+                        if (callee.type !== "MemberExpression") {
                             return;
                         }
-                    }
 
-                    if (!mutatesReferencedArray(callExpression)) {
-                        return;
-                    }
+                        const { property } = callee;
+                        if (
+                            property.type !== "Identifier" ||
+                            !mutatingMethodNames.has(property.name)
+                        ) {
+                            return;
+                        }
 
-                    context.report({
-                        messageId: "forbidden",
-                        node: property,
-                    });
-                },
+                        if (
+                            callExpression.parent?.type ===
+                            "ExpressionStatement"
+                        ) {
+                            return;
+                        }
+
+                        if (
+                            typeChecker !== undefined &&
+                            isTypedParserServices(parserServices)
+                        ) {
+                            const objectType = parserServices.getTypeAtLocation(
+                                callee.object
+                            );
+                            const typeText =
+                                typeChecker.typeToString(objectType);
+                            if (!isArrayTypeText(typeText)) {
+                                return;
+                            }
+                        }
+
+                        if (!mutatesReferencedArray(callExpression)) {
+                            return;
+                        }
+
+                        context.report({
+                            messageId: "forbidden",
+                            node: property,
+                        });
+                    },
             };
         },
         defaultOptions: [],
         meta: {
             docs: {
-                description: "disallow assigning values returned from mutating array methods.",
+                description:
+                    "disallow assigning values returned from mutating array methods.",
                 recommended: false,
                 url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-assign-mutated-array.md",
             },

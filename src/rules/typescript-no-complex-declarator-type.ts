@@ -9,7 +9,8 @@ const selector =
 const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
     description:
         "disallow complex inferred declarator types without explicit annotation.",
-    message: "Add a type annotation (or `as const`) for this complex declarator.",
+    message:
+        "Add a type annotation (or `as const`) for this complex declarator.",
     messageId: "forbidden",
     name: "typescript/no-complex-declarator-type",
     selector,

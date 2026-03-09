@@ -1,7 +1,4 @@
-import type {
-    TSESTree as es,
-    TSESLint,
-} from "@typescript-eslint/utils";
+import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 import type * as ts from "typescript";
 
 import { ruleCreator } from "../_internal/rule-creator";
@@ -104,9 +101,8 @@ const createIntersectionFixText = (
         .join(", ");
     const extendsClause =
         baseTypesText.length > 0 ? ` extends ${baseTypesText}` : "";
-    const bodyText = literalNode === undefined
-        ? "{}"
-        : sourceCode.getText(literalNode);
+    const bodyText =
+        literalNode === undefined ? "{}" : sourceCode.getText(literalNode);
 
     return `interface ${typeAliasDeclaration.id.name}${aliasTypeParameters}${extendsClause} ${bodyText}`;
 };
@@ -118,9 +114,9 @@ const canSafelyConvertIntersection = (
 ):
     | undefined
     | {
-        readonly literals: readonly Readonly<es.TSTypeLiteral>[];
-        readonly references: readonly Readonly<es.TSTypeReference>[];
-    } => {
+          readonly literals: readonly Readonly<es.TSTypeLiteral>[];
+          readonly references: readonly Readonly<es.TSTypeReference>[];
+      } => {
     const literals: es.TSTypeLiteral[] = [];
     const references: es.TSTypeReference[] = [];
 
@@ -184,153 +180,155 @@ const reportTypeAlias = (
 /**
  * Prefer interface declarations when a type alias can be represented safely.
  */
-const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
-    ruleCreator<Options, MessageIds>({
-        create: (context) => {
-            const [{ allowIntersection = true, allowLocal = false } = {}] =
-                context.options;
-            const sourceCode = context.sourceCode;
-            const parserServices = sourceCode.parserServices;
-            const typeChecker = hasTypedParserServices(parserServices)
-                ? parserServices.program.getTypeChecker()
-                : undefined;
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => {
+        const [{ allowIntersection = true, allowLocal = false } = {}] =
+            context.options;
+        const sourceCode = context.sourceCode;
+        const parserServices = sourceCode.parserServices;
+        const typeChecker = hasTypedParserServices(parserServices)
+            ? parserServices.program.getTypeChecker()
+            : undefined;
 
-            const shouldSkipForAllowLocal = (
-                typeAliasDeclaration: Readonly<es.TSTypeAliasDeclaration>
-            ): boolean => allowLocal && !isExportedTypeAlias(typeAliasDeclaration);
+        const shouldSkipForAllowLocal = (
+            typeAliasDeclaration: Readonly<es.TSTypeAliasDeclaration>
+        ): boolean => allowLocal && !isExportedTypeAlias(typeAliasDeclaration);
 
-            return {
-                "TSTypeAliasDeclaration > TSFunctionType": (
-                    functionTypeNode: Readonly<es.TSFunctionType>
-                ) => {
-                    const typeAliasDeclaration = getTypeAliasDeclarationParent(
-                        functionTypeNode.parent
-                    );
-                    if (typeAliasDeclaration === undefined) {
-                        return;
-                    }
+        return {
+            "TSTypeAliasDeclaration > TSFunctionType": (
+                functionTypeNode: Readonly<es.TSFunctionType>
+            ) => {
+                const typeAliasDeclaration = getTypeAliasDeclarationParent(
+                    functionTypeNode.parent
+                );
+                if (typeAliasDeclaration === undefined) {
+                    return;
+                }
 
-                    if (shouldSkipForAllowLocal(typeAliasDeclaration)) {
-                        return;
-                    }
+                if (shouldSkipForAllowLocal(typeAliasDeclaration)) {
+                    return;
+                }
 
-                    reportTypeAlias(
-                        context,
+                reportTypeAlias(
+                    context,
+                    typeAliasDeclaration,
+                    createFunctionTypeFixText(
+                        sourceCode,
                         typeAliasDeclaration,
-                        createFunctionTypeFixText(
-                            sourceCode,
-                            typeAliasDeclaration,
-                            functionTypeNode
-                        )
-                    );
-                },
-                "TSTypeAliasDeclaration > TSIntersectionType": (
-                    intersectionTypeNode: Readonly<es.TSIntersectionType>
-                ) => {
-                    if (allowIntersection || typeChecker === undefined) {
-                        return;
-                    }
+                        functionTypeNode
+                    )
+                );
+            },
+            "TSTypeAliasDeclaration > TSIntersectionType": (
+                intersectionTypeNode: Readonly<es.TSIntersectionType>
+            ) => {
+                if (allowIntersection || typeChecker === undefined) {
+                    return;
+                }
 
-                    const typeAliasDeclaration = getTypeAliasDeclarationParent(
-                        intersectionTypeNode.parent
-                    );
-                    if (typeAliasDeclaration === undefined) {
-                        return;
-                    }
+                const typeAliasDeclaration = getTypeAliasDeclarationParent(
+                    intersectionTypeNode.parent
+                );
+                if (typeAliasDeclaration === undefined) {
+                    return;
+                }
 
-                    if (shouldSkipForAllowLocal(typeAliasDeclaration)) {
-                        return;
-                    }
+                if (shouldSkipForAllowLocal(typeAliasDeclaration)) {
+                    return;
+                }
 
-                    if (!hasTypedParserServices(parserServices)) {
-                        return;
-                    }
+                if (!hasTypedParserServices(parserServices)) {
+                    return;
+                }
 
-                    const conversion = canSafelyConvertIntersection(
-                        intersectionTypeNode,
-                        parserServices,
-                        typeChecker
-                    );
-                    if (conversion === undefined) {
-                        return;
-                    }
+                const conversion = canSafelyConvertIntersection(
+                    intersectionTypeNode,
+                    parserServices,
+                    typeChecker
+                );
+                if (conversion === undefined) {
+                    return;
+                }
 
-                    reportTypeAlias(
-                        context,
+                reportTypeAlias(
+                    context,
+                    typeAliasDeclaration,
+                    createIntersectionFixText(
+                        sourceCode,
                         typeAliasDeclaration,
-                        createIntersectionFixText(
-                            sourceCode,
-                            typeAliasDeclaration,
-                            conversion.literals[0],
-                            conversion.references
-                        )
-                    );
-                },
-                "TSTypeAliasDeclaration > TSTypeLiteral": (
-                    typeLiteralNode: Readonly<es.TSTypeLiteral>
-                ) => {
-                    const typeAliasDeclaration = getTypeAliasDeclarationParent(
-                        typeLiteralNode.parent
-                    );
-                    if (typeAliasDeclaration === undefined) {
-                        return;
-                    }
+                        conversion.literals[0],
+                        conversion.references
+                    )
+                );
+            },
+            "TSTypeAliasDeclaration > TSTypeLiteral": (
+                typeLiteralNode: Readonly<es.TSTypeLiteral>
+            ) => {
+                const typeAliasDeclaration = getTypeAliasDeclarationParent(
+                    typeLiteralNode.parent
+                );
+                if (typeAliasDeclaration === undefined) {
+                    return;
+                }
 
-                    if (shouldSkipForAllowLocal(typeAliasDeclaration)) {
-                        return;
-                    }
+                if (shouldSkipForAllowLocal(typeAliasDeclaration)) {
+                    return;
+                }
 
-                    reportTypeAlias(
-                        context,
+                reportTypeAlias(
+                    context,
+                    typeAliasDeclaration,
+                    createTypeLiteralFixText(
+                        sourceCode,
                         typeAliasDeclaration,
-                        createTypeLiteralFixText(
-                            sourceCode,
-                            typeAliasDeclaration,
-                            typeLiteralNode
-                        )
-                    );
-                },
-            };
+                        typeLiteralNode
+                    )
+                );
+            },
+        };
+    },
+    defaultOptions,
+    meta: {
+        defaultOptions: [{}],
+        docs: {
+            description:
+                "disallow equivalent type aliases when an interface declaration can be used.",
+            recommended: false,
+            suggestion: true,
+            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/prefer-interface.md",
         },
-        defaultOptions,
-        meta: {
-            defaultOptions: [{}],
-            docs: {
+        fixable: "code",
+        hasSuggestions: true,
+        messages: {
+            forbidden: "Type alias can be declared using an interface.",
+            suggest: "Use an interface instead of a type alias.",
+        },
+        schema: [
+            {
+                additionalProperties: false,
                 description:
-                    "disallow equivalent type aliases when an interface declaration can be used.",
-                recommended: false,
-                suggestion: true,
-                url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/prefer-interface.md",
-            },
-            fixable: "code",
-            hasSuggestions: true,
-            messages: {
-                forbidden: "Type alias can be declared using an interface.",
-                suggest: "Use an interface instead of a type alias.",
-            },
-            schema: [
-                {
-                    additionalProperties: false,
-                    description:
-                        "Options for allowing local aliases and intersection aliases.",
-                    properties: {
-                        allowIntersection: {
-                            description:
-                                "Whether type aliases that use intersections are allowed.",
-                            type: "boolean",
-                        },
-                        allowLocal: {
-                            description:
-                                "Whether non-exported type aliases are allowed.",
-                            type: "boolean",
-                        },
+                    "Options for allowing local aliases and intersection aliases.",
+                properties: {
+                    allowIntersection: {
+                        description:
+                            "Whether type aliases that use intersections are allowed.",
+                        type: "boolean",
                     },
-                    type: "object",
+                    allowLocal: {
+                        description:
+                            "Whether non-exported type aliases are allowed.",
+                        type: "boolean",
+                    },
                 },
-            ],
-            type: "suggestion",
-        },
-        name: "prefer-interface",
-    });
+                type: "object",
+            },
+        ],
+        type: "suggestion",
+    },
+    name: "prefer-interface",
+});
 
 export default rule;

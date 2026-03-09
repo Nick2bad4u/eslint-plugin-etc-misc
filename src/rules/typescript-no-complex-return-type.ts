@@ -9,7 +9,8 @@ const selector =
 const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
     description:
         "disallow complex inferred arrow-function return types without explicit annotation.",
-    message: "Add an explicit return type annotation for complex return expressions.",
+    message:
+        "Add an explicit return type annotation for complex return expressions.",
     messageId: "forbidden",
     name: "typescript/no-complex-return-type",
     selector,

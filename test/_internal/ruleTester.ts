@@ -2,11 +2,7 @@
 
 import parser from "@typescript-eslint/parser";
 import { RuleTester } from "@typescript-eslint/rule-tester";
-import {
-    afterAll,
-    describe,
-    it,
-} from "vitest";
+import { afterAll, describe, it } from "vitest";
 
 RuleTester.afterAll = afterAll;
 RuleTester.describe = (name, callback): void => {

@@ -1,6 +1,4 @@
-import type {
-    TSESTree as es,
-} from "@typescript-eslint/utils";
+import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
 import {
@@ -19,112 +17,114 @@ type Options = readonly [
 /**
  * Require at least one occurrence of each configured syntax selector.
  */
-const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
-    ruleCreator<Options, MessageIds>({
-        create: (context, [options]) => {
-            const entries = (options.selectors ?? []).map((selector) =>
-                normalizeSyntaxSelector(selector)
-            );
-            const counters = entries.map(() => 0);
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context, [options]) => {
+        const entries = (options.selectors ?? []).map((selector) =>
+            normalizeSyntaxSelector(selector)
+        );
+        const counters = entries.map(() => 0);
 
-            const selectorListeners: Record<
-                string,
-                (node: Readonly<es.Node>) => void
-            > = {};
+        const selectorListeners: Record<
+            string,
+            (node: Readonly<es.Node>) => void
+        > = {};
 
-            for (const [index, entry] of entries.entries()) {
-                selectorListeners[entry.selector] = (): void => {
+        for (const [index, entry] of entries.entries()) {
+            selectorListeners[entry.selector] = (): void => {
+                const count = counters[index] ?? 0;
+                counters[index] = count + 1;
+            };
+        }
+
+        return {
+            ...selectorListeners,
+            "Program:exit": (node: Readonly<es.Program>): void => {
+                for (const [index, entry] of entries.entries()) {
                     const count = counters[index] ?? 0;
-                    counters[index] = count + 1;
-                };
-            }
+                    if (count > 0) {
+                        continue;
+                    }
 
-            return {
-                ...selectorListeners,
-                "Program:exit": (node: Readonly<es.Program>): void => {
-                    for (const [index, entry] of entries.entries()) {
-                        const count = counters[index] ?? 0;
-                        if (count > 0) {
-                            continue;
-                        }
-
-                        if (entry.message !== undefined) {
-                            context.report({
-                                data: {
-                                    message: entry.message,
-                                },
-                                messageId: "customMessage",
-                                node,
-                            });
-                            continue;
-                        }
-
+                    if (entry.message !== undefined) {
                         context.report({
                             data: {
-                                selector: entry.selector,
+                                message: entry.message,
                             },
-                            messageId: "missing",
+                            messageId: "customMessage",
                             node,
                         });
+                        continue;
                     }
-                },
-            };
-        },
-        defaultOptions: [{ selectors: [] }],
-        meta: {
-            defaultOptions: [{ selectors: [] }],
-            docs: {
-                description:
-                    "require at least one match for each configured AST selector.",
-                recommended: false,
-                url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/require-syntax.md",
-            },
-            hasSuggestions: false,
-            messages: {
-                customMessage: "{{message}}",
-                missing: "Required syntax '{{selector}}' was not found.",
-            },
-            schema: [
-                {
-                    additionalProperties: false,
-                    description:
-                        "Configuration for syntax selectors that must appear at least once.",
-                    properties: {
-                        selectors: {
-                            description:
-                                "Selector list. Each entry can be a selector string or a selector/message object.",
-                            items: {
-                                oneOf: [
-                                    {
-                                        minLength: 1,
-                                        type: "string",
-                                    },
-                                    {
-                                        additionalProperties: false,
-                                        properties: {
-                                            message: {
-                                                minLength: 1,
-                                                type: "string",
-                                            },
-                                            selector: {
-                                                minLength: 1,
-                                                type: "string",
-                                            },
-                                        },
-                                        required: ["selector"],
-                                        type: "object",
-                                    },
-                                ],
-                            },
-                            type: "array",
+
+                    context.report({
+                        data: {
+                            selector: entry.selector,
                         },
-                    },
-                    type: "object",
-                },
-            ],
-            type: "suggestion",
+                        messageId: "missing",
+                        node,
+                    });
+                }
+            },
+        };
+    },
+    defaultOptions: [{ selectors: [] }],
+    meta: {
+        defaultOptions: [{ selectors: [] }],
+        docs: {
+            description:
+                "require at least one match for each configured AST selector.",
+            recommended: false,
+            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/require-syntax.md",
         },
-        name: "require-syntax",
-    });
+        hasSuggestions: false,
+        messages: {
+            customMessage: "{{message}}",
+            missing: "Required syntax '{{selector}}' was not found.",
+        },
+        schema: [
+            {
+                additionalProperties: false,
+                description:
+                    "Configuration for syntax selectors that must appear at least once.",
+                properties: {
+                    selectors: {
+                        description:
+                            "Selector list. Each entry can be a selector string or a selector/message object.",
+                        items: {
+                            oneOf: [
+                                {
+                                    minLength: 1,
+                                    type: "string",
+                                },
+                                {
+                                    additionalProperties: false,
+                                    properties: {
+                                        message: {
+                                            minLength: 1,
+                                            type: "string",
+                                        },
+                                        selector: {
+                                            minLength: 1,
+                                            type: "string",
+                                        },
+                                    },
+                                    required: ["selector"],
+                                    type: "object",
+                                },
+                            ],
+                        },
+                        type: "array",
+                    },
+                },
+                type: "object",
+            },
+        ],
+        type: "suggestion",
+    },
+    name: "require-syntax",
+});
 
 export default rule;

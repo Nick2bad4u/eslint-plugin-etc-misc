@@ -6,7 +6,7 @@ ruleTester.run("throw-error", rule, {
         {
             code: [
                 "const fail = (): never => {",
-                "    throw \"kaboom\";",
+                '    throw "kaboom";',
                 "};",
             ].join("\n"),
             errors: [
@@ -17,7 +17,7 @@ ruleTester.run("throw-error", rule, {
             ],
         },
         {
-            code: "const result = Promise.reject(\"kaboom\");",
+            code: 'const result = Promise.reject("kaboom");',
             errors: [
                 {
                     data: { usage: "Rejecting with" },
@@ -26,7 +26,7 @@ ruleTester.run("throw-error", rule, {
             ],
         },
         {
-            code: "const result = new Promise((resolve, reject) => reject(\"kaboom\"));",
+            code: 'const result = new Promise((resolve, reject) => reject("kaboom"));',
             errors: [
                 {
                     data: { usage: "Rejecting with" },
@@ -37,29 +37,29 @@ ruleTester.run("throw-error", rule, {
     ],
     valid: [
         {
-            code: "const fail = (): never => { throw new Error(\"kaboom\"); };",
+            code: 'const fail = (): never => { throw new Error("kaboom"); };',
         },
         {
-            code: "const fail = (): never => { throw new DOMException(\"kaboom\"); };",
+            code: 'const fail = (): never => { throw new DOMException("kaboom"); };',
         },
         {
             code: [
                 "class CustomError extends Error {}",
                 "const fail = (): never => {",
-                "    throw new CustomError(\"kaboom\");",
+                '    throw new CustomError("kaboom");',
                 "};",
             ].join("\n"),
         },
         {
-            code: "const result = Promise.reject(new Error(\"kaboom\"));",
+            code: 'const result = Promise.reject(new Error("kaboom"));',
         },
         {
-            code: "const result = new Promise((resolve, reject) => reject(new Error(\"kaboom\")));",
+            code: 'const result = new Promise((resolve, reject) => reject(new Error("kaboom")));',
         },
         {
             code: [
                 "try {",
-                "    throw new Error(\"kaboom\");",
+                '    throw new Error("kaboom");',
                 "} catch (error: unknown) {",
                 "    throw error;",
                 "}",
@@ -72,7 +72,7 @@ ruleTester.run("throw-error", rule, {
                 "        return value;",
                 "    },",
                 "};",
-                "logger.reject(\"kaboom\");",
+                'logger.reject("kaboom");',
             ].join("\n"),
         },
     ],

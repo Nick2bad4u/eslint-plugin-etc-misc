@@ -25,8 +25,7 @@ const parseCommentProgram = (content: string): es.Program | undefined => {
 const isRegionComment = (content: string): boolean => {
     const normalized = content.trimStart().toLowerCase();
     return (
-        normalized.startsWith("#endregion") ||
-        normalized.startsWith("#region")
+        normalized.startsWith("#endregion") || normalized.startsWith("#region")
     );
 };
 
@@ -71,9 +70,7 @@ const toCommentBlocks = (
                 ? blocks.length - 1
                 : -1;
         const previousBlock =
-            previousBlockIndex >= 0
-                ? blocks[previousBlockIndex]
-                : undefined;
+            previousBlockIndex >= 0 ? blocks[previousBlockIndex] : undefined;
 
         if (previousBlock === undefined) {
             blocks.push({
@@ -96,7 +93,9 @@ const toCommentBlocks = (
     return blocks;
 };
 
-const isExpressionOrIdentifierOrLiteral = (node: Readonly<es.Node>): boolean => {
+const isExpressionOrIdentifierOrLiteral = (
+    node: Readonly<es.Node>
+): boolean => {
     if (node.type === "Identifier" || node.type === "Literal") {
         return true;
     }
@@ -174,7 +173,8 @@ const getWrappedContent = (
 };
 
 /**
- * Disallow comment blocks that appear to contain executable or declaration code.
+ * Disallow comment blocks that appear to contain executable or declaration
+ * code.
  */
 const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
     ruleCreator<readonly [], MessageIds>({
@@ -182,7 +182,9 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
             Program: () => {
                 const { sourceCode } = context;
 
-                for (const block of toCommentBlocks(sourceCode.getAllComments())) {
+                for (const block of toCommentBlocks(
+                    sourceCode.getAllComments()
+                )) {
                     if (isRegionComment(block.content)) {
                         continue;
                     }
@@ -201,7 +203,10 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
 
                     const index = sourceCode.getIndexFromLoc(block.loc.start);
                     const node = sourceCode.getNodeByRangeIndex(index);
-                    const wrappedContent = getWrappedContent(block.content, node);
+                    const wrappedContent = getWrappedContent(
+                        block.content,
+                        node
+                    );
                     if (wrappedContent === undefined) {
                         continue;
                     }

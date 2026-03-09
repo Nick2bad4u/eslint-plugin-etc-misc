@@ -11,7 +11,8 @@ import { ruleCreator } from "./rule-creator";
  */
 interface CreateImportPatternRuleOptions {
     /**
-     * Default disallow patterns applied when options do not override `disallow`.
+     * Default disallow patterns applied when options do not override
+     * `disallow`.
      */
     readonly defaultDisallowPatterns: readonly string[];
     /**
@@ -39,38 +40,47 @@ type ImportPatternRuleOptions = readonly [
 const createImportVisitors = (
     context: Parameters<
         ReturnType<
-            typeof ruleCreator<ImportPatternRuleOptions, ImportPatternMessageIds>
+            typeof ruleCreator<
+                ImportPatternRuleOptions,
+                ImportPatternMessageIds
+            >
         >["create"]
     >[0],
     defaultDisallowPatterns: readonly string[]
 ): Record<string, (node: Readonly<es.Node>) => void> => ({
-    "ImportDeclaration, ExportNamedDeclaration[source], ExportAllDeclaration, ImportExpression": (
-        node: Readonly<es.Node>
-    ): void => {
-        const sourceText = getImportSourceFromNode(node);
-        if (sourceText === undefined) {
-            return;
-        }
+    "ImportDeclaration, ExportNamedDeclaration[source], ExportAllDeclaration, ImportExpression":
+        (node: Readonly<es.Node>): void => {
+            const sourceText = getImportSourceFromNode(node);
+            if (sourceText === undefined) {
+                return;
+            }
 
-        const [options = {}] = context.options;
-        if (!shouldReportImportSource(sourceText, options, defaultDisallowPatterns)) {
-            return;
-        }
+            const [options = {}] = context.options;
+            if (
+                !shouldReportImportSource(
+                    sourceText,
+                    options,
+                    defaultDisallowPatterns
+                )
+            ) {
+                return;
+            }
 
-        context.report({
-            data: {
-                source: sourceText,
-            },
-            messageId: "disallowedSource",
-            node,
-        });
-    },
+            context.report({
+                data: {
+                    source: sourceText,
+                },
+                messageId: "disallowedSource",
+                node,
+            });
+        },
 });
 
 /**
  * Creates a rule that disallows import/export sources by glob pattern.
  *
  * @param options - Rule creation options.
+ *
  * @returns ESLint rule module.
  */
 export const createImportPatternRule = ({
@@ -81,7 +91,8 @@ export const createImportPatternRule = ({
     typeof ruleCreator<ImportPatternRuleOptions, ImportPatternMessageIds>
 > =>
     ruleCreator<ImportPatternRuleOptions, ImportPatternMessageIds>({
-        create: (context) => createImportVisitors(context, defaultDisallowPatterns),
+        create: (context) =>
+            createImportVisitors(context, defaultDisallowPatterns),
         defaultOptions: [{}],
         meta: {
             defaultOptions: [{}],

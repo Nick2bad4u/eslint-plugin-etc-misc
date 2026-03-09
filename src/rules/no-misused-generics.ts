@@ -1,6 +1,4 @@
-import type {
-    TSESTree as es,
-} from "@typescript-eslint/utils";
+import type { TSESTree as es } from "@typescript-eslint/utils";
 import type * as ts from "typescript";
 
 import { ESLintUtils } from "@typescript-eslint/utils";
@@ -105,150 +103,146 @@ const getTypeParameterReplacement = (
 };
 
 /**
- * Disallow type parameters that cannot be inferred or do not enforce constraints.
+ * Disallow type parameters that cannot be inferred or do not enforce
+ * constraints.
  */
-const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
-    ruleCreator<Options, MessageIds>({
-        create: (context) => {
-            const parserServices = ESLintUtils.getParserServices(context);
-            let usageMap: null | VariableUsageMap = null;
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => {
+        const parserServices = ESLintUtils.getParserServices(context);
+        let usageMap: null | VariableUsageMap = null;
 
-            const checkTypeParameters = (
-                typeParameters: readonly Readonly<ts.TypeParameterDeclaration>[],
-                signature: Readonly<ts.SignatureDeclaration>
-            ): void => {
-                if (usageMap === null) {
-                    usageMap = tsutils.collectVariableUsage(
-                        signature.getSourceFile()
-                    );
-                }
+        const checkTypeParameters = (
+            typeParameters: readonly Readonly<ts.TypeParameterDeclaration>[],
+            signature: Readonly<ts.SignatureDeclaration>
+        ): void => {
+            if (usageMap === null) {
+                usageMap = tsutils.collectVariableUsage(
+                    signature.getSourceFile()
+                );
+            }
 
-                const sourceFile = signature.getSourceFile();
+            const sourceFile = signature.getSourceFile();
 
-                for (const typeParameter of typeParameters) {
-                    const uses = getVariableUses(usageMap, typeParameter.name);
-                    let appearsInMultipleParameters = false;
-                    let usedInParameters = false;
-                    let usedInReturnOrExtends = tsutils.isFunctionWithBody(
-                        signature
-                    );
+            for (const typeParameter of typeParameters) {
+                const uses = getVariableUses(usageMap, typeParameter.name);
+                let appearsInMultipleParameters = false;
+                let usedInParameters = false;
+                let usedInReturnOrExtends =
+                    tsutils.isFunctionWithBody(signature);
 
-                    for (const use of uses) {
-                        if (
-                            isUseWithinParameterRange(
-                                use.location.pos,
-                                signature
-                            )
-                        ) {
-                            if (usedInParameters) {
-                                appearsInMultipleParameters = true;
-                                break;
-                            }
-
-                            usedInParameters = true;
-                            continue;
-                        }
-
-                        if (usedInReturnOrExtends) {
-                            continue;
-                        }
-
-                        usedInReturnOrExtends =
-                            use.location.pos > signature.parameters.end ||
-                            isTypeUseInsideConstraint(
-                                use.location,
-                                typeParameters
-                            );
-                    }
-
-                    if (appearsInMultipleParameters) {
-                        continue;
-                    }
-
-                    if (!usedInParameters) {
-                        context.report({
-                            data: {
-                                name: typeParameter.name.text,
-                            },
-                            loc: toReportLocation(sourceFile, typeParameter),
-                            messageId: "cannotInfer",
-                        });
-                        continue;
-                    }
-
+                for (const use of uses) {
                     if (
-                        !usedInReturnOrExtends &&
-                        usageMap !== null &&
-                        !isConstrainedByAnotherTypeParameter(
-                            typeParameter,
-                            typeParameters,
-                            usageMap
-                        )
+                        isUseWithinParameterRange(use.location.pos, signature)
                     ) {
-                        context.report({
-                            data: {
-                                name: typeParameter.name.text,
-                                replacement: getTypeParameterReplacement(
-                                    sourceFile,
-                                    typeParameter
-                                ),
-                            },
-                            loc: toReportLocation(sourceFile, typeParameter),
-                            messageId: "canReplace",
-                        });
+                        if (usedInParameters) {
+                            appearsInMultipleParameters = true;
+                            break;
+                        }
+
+                        usedInParameters = true;
+                        continue;
                     }
-                }
-            };
 
-            const checkSignature = (node: Readonly<es.Node>): void => {
-                const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
+                    if (usedInReturnOrExtends) {
+                        continue;
+                    }
+
+                    usedInReturnOrExtends =
+                        use.location.pos > signature.parameters.end ||
+                        isTypeUseInsideConstraint(use.location, typeParameters);
+                }
+
+                if (appearsInMultipleParameters) {
+                    continue;
+                }
+
+                if (!usedInParameters) {
+                    context.report({
+                        data: {
+                            name: typeParameter.name.text,
+                        },
+                        loc: toReportLocation(sourceFile, typeParameter),
+                        messageId: "cannotInfer",
+                    });
+                    continue;
+                }
+
                 if (
-                    !tsutils.isSignatureDeclaration(tsNode) ||
-                    tsNode.typeParameters === undefined
+                    !usedInReturnOrExtends &&
+                    usageMap !== null &&
+                    !isConstrainedByAnotherTypeParameter(
+                        typeParameter,
+                        typeParameters,
+                        usageMap
+                    )
                 ) {
-                    return;
+                    context.report({
+                        data: {
+                            name: typeParameter.name.text,
+                            replacement: getTypeParameterReplacement(
+                                sourceFile,
+                                typeParameter
+                            ),
+                        },
+                        loc: toReportLocation(sourceFile, typeParameter),
+                        messageId: "canReplace",
+                    });
                 }
+            }
+        };
 
-                checkTypeParameters(tsNode.typeParameters, tsNode);
-            };
+        const checkSignature = (node: Readonly<es.Node>): void => {
+            const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
+            if (
+                !tsutils.isSignatureDeclaration(tsNode) ||
+                tsNode.typeParameters === undefined
+            ) {
+                return;
+            }
 
-            return {
-                ArrowFunctionExpression: checkSignature,
-                FunctionDeclaration: checkSignature,
-                FunctionExpression: checkSignature,
-                MethodDefinition: checkSignature,
-                "Program:exit": () => {
-                    usageMap = null;
-                },
-                TSCallSignatureDeclaration: checkSignature,
-                TSConstructorType: checkSignature,
-                TSConstructSignatureDeclaration: checkSignature,
-                TSDeclareFunction: checkSignature,
-                TSFunctionType: checkSignature,
-                TSIndexSignature: checkSignature,
-                TSMethodSignature: checkSignature,
-                TSPropertySignature: checkSignature,
-            };
-        },
-        defaultOptions: [],
-        meta: {
-            docs: {
-                description:
-                    "disallow type parameters that cannot be inferred or do not enforce constraints.",
-                recommended: false,
-                url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-misused-generics.md",
+            checkTypeParameters(tsNode.typeParameters, tsNode);
+        };
+
+        return {
+            ArrowFunctionExpression: checkSignature,
+            FunctionDeclaration: checkSignature,
+            FunctionExpression: checkSignature,
+            MethodDefinition: checkSignature,
+            "Program:exit": () => {
+                usageMap = null;
             },
-            hasSuggestions: false,
-            messages: {
-                cannotInfer:
-                    "Type parameter '{{name}}' cannot be inferred from any parameter.",
-                canReplace:
-                    "Type parameter '{{name}}' does not enforce a relation between types and can be replaced with '{{replacement}}'.",
-            },
-            schema: [],
-            type: "problem",
+            TSCallSignatureDeclaration: checkSignature,
+            TSConstructorType: checkSignature,
+            TSConstructSignatureDeclaration: checkSignature,
+            TSDeclareFunction: checkSignature,
+            TSFunctionType: checkSignature,
+            TSIndexSignature: checkSignature,
+            TSMethodSignature: checkSignature,
+            TSPropertySignature: checkSignature,
+        };
+    },
+    defaultOptions: [],
+    meta: {
+        docs: {
+            description:
+                "disallow type parameters that cannot be inferred or do not enforce constraints.",
+            recommended: false,
+            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-misused-generics.md",
         },
-        name: "no-misused-generics",
-    });
+        hasSuggestions: false,
+        messages: {
+            cannotInfer:
+                "Type parameter '{{name}}' cannot be inferred from any parameter.",
+            canReplace:
+                "Type parameter '{{name}}' does not enforce a relation between types and can be replaced with '{{replacement}}'.",
+        },
+        schema: [],
+        type: "problem",
+    },
+    name: "no-misused-generics",
+});
 
 export default rule;

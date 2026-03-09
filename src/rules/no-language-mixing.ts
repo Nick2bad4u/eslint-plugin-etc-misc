@@ -1,6 +1,4 @@
-import type {
-    TSESTree as es,
-} from "@typescript-eslint/utils";
+import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
 
@@ -17,32 +15,34 @@ const disallowedSelector = [
 /**
  * Disallow mixing latin and non-latin letters within the same token.
  */
-const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
-    ruleCreator<Options, MessageIds>({
-        create: (context) => ({
-            [disallowedSelector]: (node: Readonly<es.Node>): void => {
-                context.report({
-                    messageId: "forbidden",
-                    node,
-                });
-            },
-        }),
-        defaultOptions: [],
-        meta: {
-            docs: {
-                description:
-                    "disallow mixed-language tokens combining latin and non-latin letters.",
-                recommended: false,
-                url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-language-mixing.md",
-            },
-            hasSuggestions: false,
-            messages: {
-                forbidden: "Do not mix languages in a single token.",
-            },
-            schema: [],
-            type: "suggestion",
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => ({
+        [disallowedSelector]: (node: Readonly<es.Node>): void => {
+            context.report({
+                messageId: "forbidden",
+                node,
+            });
         },
-        name: "no-language-mixing",
-    });
+    }),
+    defaultOptions: [],
+    meta: {
+        docs: {
+            description:
+                "disallow mixed-language tokens combining latin and non-latin letters.",
+            recommended: false,
+            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-language-mixing.md",
+        },
+        hasSuggestions: false,
+        messages: {
+            forbidden: "Do not mix languages in a single token.",
+        },
+        schema: [],
+        type: "suggestion",
+    },
+    name: "no-language-mixing",
+});
 
 export default rule;

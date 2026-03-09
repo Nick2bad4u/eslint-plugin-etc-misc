@@ -45,7 +45,9 @@ type TypeWithOptionalSymbol = Readonly<{
 
 const defaultOptions: Options = [{}];
 
-const isImportOrExportSpecifier = (parent: Readonly<es.Node> | undefined): boolean =>
+const isImportOrExportSpecifier = (
+    parent: Readonly<es.Node> | undefined
+): boolean =>
     parent?.type === "ExportSpecifier" ||
     parent?.type === "ImportDefaultSpecifier" ||
     parent?.type === "ImportNamespaceSpecifier" ||
@@ -57,7 +59,10 @@ const isDeclarationIdentifier = (node: Readonly<es.Identifier>): boolean => {
         return false;
     }
 
-    if (parent.type === "TSInterfaceDeclaration" || parent.type === "TSTypeAliasDeclaration") {
+    if (
+        parent.type === "TSInterfaceDeclaration" ||
+        parent.type === "TSTypeAliasDeclaration"
+    ) {
         return parent.id === node;
     }
 
@@ -98,7 +103,9 @@ const toTagComment = (
     return normalized.length > 0 ? normalized : undefined;
 };
 
-const isTypeWithOptionalSymbol = (value: unknown): value is TypeWithOptionalSymbol =>
+const isTypeWithOptionalSymbol = (
+    value: unknown
+): value is TypeWithOptionalSymbol =>
     typeof value === "object" && value !== null && "symbol" in value;
 
 const isSymbolWithJsDocTags = (
@@ -187,104 +194,111 @@ const getIdentifierSymbol = (
 /**
  * Disallow usages of symbols tagged with `@deprecated`.
  */
-const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
-    ruleCreator<Options, MessageIds>({
-        create: (context) => {
-            const [{ ignored = {} } = {}] = context.options;
-            const parserServices = ESLintUtils.getParserServices(context);
-            const typeChecker = parserServices.program.getTypeChecker();
-            const ignorePatterns = toIgnorePatterns(ignored);
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => {
+        const [{ ignored = {} } = {}] = context.options;
+        const parserServices = ESLintUtils.getParserServices(context);
+        const typeChecker = parserServices.program.getTypeChecker();
+        const ignorePatterns = toIgnorePatterns(ignored);
 
-            return {
-                Identifier: (node: Readonly<es.Identifier>) => {
-                    if (isImportOrExportSpecifier(node.parent)) {
-                        return;
-                    }
+        return {
+            Identifier: (node: Readonly<es.Identifier>) => {
+                if (isImportOrExportSpecifier(node.parent)) {
+                    return;
+                }
 
-                    if (isDeclarationIdentifier(node)) {
-                        return;
-                    }
+                if (isDeclarationIdentifier(node)) {
+                    return;
+                }
 
-                    const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
-                    const symbol = getIdentifierSymbol(typeChecker, tsNode);
-                    if (symbol === undefined) {
-                        return;
-                    }
+                const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
+                const symbol = getIdentifierSymbol(typeChecker, tsNode);
+                if (symbol === undefined) {
+                    return;
+                }
 
-                    const symbolName = symbol.getName();
-                    if (matchesAnyPattern(symbolName, ignorePatterns.name)) {
-                        return;
-                    }
+                const symbolName = symbol.getName();
+                if (matchesAnyPattern(symbolName, ignorePatterns.name)) {
+                    return;
+                }
 
-                    const fullyQualifiedName = typeChecker.getFullyQualifiedName(symbol);
-                    if (matchesAnyPattern(fullyQualifiedName, ignorePatterns.path)) {
-                        return;
-                    }
+                const fullyQualifiedName =
+                    typeChecker.getFullyQualifiedName(symbol);
+                if (
+                    matchesAnyPattern(fullyQualifiedName, ignorePatterns.path)
+                ) {
+                    return;
+                }
 
-                    const deprecatedComments = getDeprecatedTagComments(
-                        symbol,
-                        typeChecker
-                    );
-                    if (deprecatedComments.length === 0) {
-                        return;
-                    }
+                const deprecatedComments = getDeprecatedTagComments(
+                    symbol,
+                    typeChecker
+                );
+                if (deprecatedComments.length === 0) {
+                    return;
+                }
 
-                    for (const comment of deprecatedComments) {
-                        if (comment === undefined) {
-                            context.report({
-                                data: { name: symbolName },
-                                messageId: "forbidden",
-                                node,
-                            });
-                            continue;
-                        }
-
+                for (const comment of deprecatedComments) {
+                    if (comment === undefined) {
                         context.report({
-                            data: {
-                                comment,
-                                name: symbolName,
-                            },
-                            messageId: "forbiddenWithComment",
+                            data: { name: symbolName },
+                            messageId: "forbidden",
                             node,
                         });
+                        continue;
                     }
-                },
-            };
-        },
-        defaultOptions,
-        meta: {
-            defaultOptions: [{}],
-            docs: {
-                description: "disallow usage of APIs tagged with @deprecated.",
-                recommended: false,
-                url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-deprecated.md",
-            },
-            hasSuggestions: false,
-            messages: {
-                forbidden: '"{{name}}" is deprecated.',
-                forbiddenWithComment: '"{{name}}" is deprecated: {{comment}}',
-            },
-            schema: [
-                {
-                    additionalProperties: false,
-                    description: "Options for ignoring deprecated symbols by name or declaration path pattern.",
-                    properties: {
-                        ignored: {
-                            additionalProperties: {
-                                description: "Match behavior for the pattern key. Use \"name\" to match symbol names or \"path\" to match fully-qualified declaration paths.",
-                                enum: ["name", "path"],
-                                type: "string",
-                            },
-                            description: "Map of regex patterns to ignore mode.",
-                            type: "object",
+
+                    context.report({
+                        data: {
+                            comment,
+                            name: symbolName,
                         },
-                    },
-                    type: "object",
-                },
-            ],
-            type: "problem",
+                        messageId: "forbiddenWithComment",
+                        node,
+                    });
+                }
+            },
+        };
+    },
+    defaultOptions,
+    meta: {
+        defaultOptions: [{}],
+        docs: {
+            description: "disallow usage of APIs tagged with @deprecated.",
+            recommended: false,
+            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-deprecated.md",
         },
-        name: "no-deprecated",
-    });
+        hasSuggestions: false,
+        messages: {
+            forbidden: '"{{name}}" is deprecated.',
+            forbiddenWithComment: '"{{name}}" is deprecated: {{comment}}',
+        },
+        schema: [
+            {
+                additionalProperties: false,
+                description:
+                    "Options for ignoring deprecated symbols by name or declaration path pattern.",
+                properties: {
+                    ignored: {
+                        additionalProperties: {
+                            description:
+                                'Match behavior for the pattern key. Use "name" to match symbol names or "path" to match fully-qualified declaration paths.',
+                            enum: ["name", "path"],
+                            type: "string",
+                        },
+                        description: "Map of regex patterns to ignore mode.",
+                        type: "object",
+                    },
+                },
+                type: "object",
+            },
+        ],
+        type: "problem",
+    },
+    name: "no-deprecated",
+});
 
 export default rule;

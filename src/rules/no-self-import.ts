@@ -1,6 +1,4 @@
-import type {
-    TSESTree as es,
-} from "@typescript-eslint/utils";
+import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { dirname, resolve } from "node:path";
 
@@ -30,26 +28,29 @@ const toResolvedCandidates = (
     baseDirectory: string,
     importSource: string
 ): readonly string[] =>
-    importFileSuffixes.map((suffix) => resolve(baseDirectory, `${importSource}${suffix}`));
+    importFileSuffixes.map((suffix) =>
+        resolve(baseDirectory, `${importSource}${suffix}`)
+    );
 
 /**
  * Disallow importing the current file from itself.
  */
-const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
-    ruleCreator<Options, MessageIds>({
-        create: (context) => {
-            const currentFilePath = context.filename;
-            if (currentFilePath === "<input>") {
-                return {};
-            }
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => {
+        const currentFilePath = context.filename;
+        if (currentFilePath === "<input>") {
+            return {};
+        }
 
-            const normalizedCurrentFilePath = resolve(currentFilePath);
-            const currentFileDirectory = dirname(normalizedCurrentFilePath);
+        const normalizedCurrentFilePath = resolve(currentFilePath);
+        const currentFileDirectory = dirname(normalizedCurrentFilePath);
 
-            return {
-                "ImportDeclaration, ExportNamedDeclaration[source], ExportAllDeclaration, ImportExpression": (
-                    node: Readonly<es.Node>
-                ): void => {
+        return {
+            "ImportDeclaration, ExportNamedDeclaration[source], ExportAllDeclaration, ImportExpression":
+                (node: Readonly<es.Node>): void => {
                     const sourceText = getImportSourceFromNode(node);
                     if (sourceText?.startsWith(".") !== true) {
                         return;
@@ -67,23 +68,23 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
                         });
                     }
                 },
-            };
+        };
+    },
+    defaultOptions: [],
+    meta: {
+        docs: {
+            description: "disallow importing the current file from itself.",
+            recommended: false,
+            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-self-import.md",
         },
-        defaultOptions: [],
-        meta: {
-            docs: {
-                description: "disallow importing the current file from itself.",
-                recommended: false,
-                url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-self-import.md",
-            },
-            hasSuggestions: false,
-            messages: {
-                forbidden: "Do not import the current file from itself.",
-            },
-            schema: [],
-            type: "problem",
+        hasSuggestions: false,
+        messages: {
+            forbidden: "Do not import the current file from itself.",
         },
-        name: "no-self-import",
-    });
+        schema: [],
+        type: "problem",
+    },
+    name: "no-self-import",
+});
 
 export default rule;

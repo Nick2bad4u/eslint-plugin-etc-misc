@@ -45,7 +45,7 @@ ruleTester.run("no-commented-out-code", rule, {
                 "  a,",
                 "  // b,",
                 "  c,",
-                "} from \"outer\";",
+                '} from "outer";',
             ].join("\n"),
             errors: [{ messageId: "forbidden" }],
         },
@@ -90,7 +90,11 @@ ruleTester.run("no-commented-out-code", rule, {
             code: "// 00000000-0000-0000-0000-000000000000",
         },
         {
-            code: ["// arrange", "// act", "// assert"].join("\n"),
+            code: [
+                "// arrange",
+                "// act",
+                "// assert",
+            ].join("\n"),
         },
     ],
 });

@@ -1,6 +1,4 @@
-import type {
-    TSESTree as es,
-} from "@typescript-eslint/utils";
+import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
 
@@ -17,31 +15,34 @@ const disallowedSelector = [
 /**
  * Disallow identifiers containing more than four casing blocks.
  */
-const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
-    ruleCreator<Options, MessageIds>({
-        create: (context) => ({
-            [disallowedSelector]: (node: Readonly<es.Node>): void => {
-                context.report({
-                    messageId: "forbidden",
-                    node,
-                });
-            },
-        }),
-        defaultOptions: [],
-        meta: {
-            docs: {
-                description: "disallow identifiers with more than four casing blocks.",
-                recommended: false,
-                url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/max-identifier-blocks.md",
-            },
-            hasSuggestions: false,
-            messages: {
-                forbidden: "Identifier should not contain more than 4 blocks.",
-            },
-            schema: [],
-            type: "suggestion",
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => ({
+        [disallowedSelector]: (node: Readonly<es.Node>): void => {
+            context.report({
+                messageId: "forbidden",
+                node,
+            });
         },
-        name: "max-identifier-blocks",
-    });
+    }),
+    defaultOptions: [],
+    meta: {
+        docs: {
+            description:
+                "disallow identifiers with more than four casing blocks.",
+            recommended: false,
+            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/max-identifier-blocks.md",
+        },
+        hasSuggestions: false,
+        messages: {
+            forbidden: "Identifier should not contain more than 4 blocks.",
+        },
+        schema: [],
+        type: "suggestion",
+    },
+    name: "max-identifier-blocks",
+});
 
 export default rule;

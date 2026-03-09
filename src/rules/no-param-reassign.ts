@@ -1,7 +1,4 @@
-import type {
-    TSESTree as es,
-    TSESLint,
-} from "@typescript-eslint/utils";
+import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
 
@@ -43,15 +40,22 @@ const getScopeVariable = (
     return undefined;
 };
 
-const isParameterVariable = (variable: Readonly<Variable> | undefined): boolean =>
-    variable?.defs.some((definition) => definition.type === "Parameter") ?? false;
+const isParameterVariable = (
+    variable: Readonly<Variable> | undefined
+): boolean =>
+    variable?.defs.some((definition) => definition.type === "Parameter") ??
+    false;
 
 const isInFirstFunctionExpressionStatement = (
     sourceCode: Readonly<SourceCode>,
     node: Readonly<es.Node>
 ): boolean => {
     const ancestors = sourceCode.getAncestors(node);
-    let enclosingFunction: es.ArrowFunctionExpression | es.FunctionDeclaration | es.FunctionExpression | undefined = undefined;
+    let enclosingFunction:
+        | es.ArrowFunctionExpression
+        | es.FunctionDeclaration
+        | es.FunctionExpression
+        | undefined = undefined;
 
     for (let index = ancestors.length - 1; index >= 0; index -= 1) {
         const ancestor = ancestors[index];
@@ -78,70 +82,78 @@ const isInFirstFunctionExpressionStatement = (
         return false;
     }
 
-    return node.range[0] >= firstStatement.range[0] && node.range[1] <= firstStatement.range[1];
+    return (
+        node.range[0] >= firstStatement.range[0] &&
+        node.range[1] <= firstStatement.range[1]
+    );
 };
 
 /**
- * Disallow parameter reassignment, except in the first expression statement of a function body.
+ * Disallow parameter reassignment, except in the first expression statement of
+ * a function body.
  */
-const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
-    ruleCreator<Options, MessageIds>({
-        create: (context) => {
-            const { sourceCode } = context;
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => {
+        const { sourceCode } = context;
 
-            const reportIfParameterReassignment = (identifier: Readonly<es.Identifier>): void => {
-                if (isInFirstFunctionExpressionStatement(sourceCode, identifier)) {
+        const reportIfParameterReassignment = (
+            identifier: Readonly<es.Identifier>
+        ): void => {
+            if (isInFirstFunctionExpressionStatement(sourceCode, identifier)) {
+                return;
+            }
+
+            const variable = getScopeVariable(sourceCode, identifier);
+            if (!isParameterVariable(variable)) {
+                return;
+            }
+
+            context.report({
+                messageId: "forbidden",
+                node: identifier,
+            });
+        };
+
+        return {
+            AssignmentExpression: (
+                node: Readonly<es.AssignmentExpression>
+            ): void => {
+                const identifier = getAssignmentTargetIdentifier(node);
+                if (identifier === undefined) {
                     return;
                 }
 
-                const variable = getScopeVariable(sourceCode, identifier);
-                if (!isParameterVariable(variable)) {
+                reportIfParameterReassignment(identifier);
+            },
+            UpdateExpression: (node: Readonly<es.UpdateExpression>): void => {
+                if (node.argument.type !== "Identifier") {
                     return;
                 }
 
-                context.report({
-                    messageId: "forbidden",
-                    node: identifier,
-                });
-            };
-
-            return {
-                AssignmentExpression: (
-                    node: Readonly<es.AssignmentExpression>
-                ): void => {
-                    const identifier = getAssignmentTargetIdentifier(node);
-                    if (identifier === undefined) {
-                        return;
-                    }
-
-                    reportIfParameterReassignment(identifier);
-                },
-                UpdateExpression: (node: Readonly<es.UpdateExpression>): void => {
-                    if (node.argument.type !== "Identifier") {
-                        return;
-                    }
-
-                    reportIfParameterReassignment(node.argument);
-                },
-            };
-        },
-        defaultOptions: [],
-        meta: {
-            docs: {
-                description:
-                    "disallow parameter reassignment except in the first expression statement of a function body.",
-                recommended: false,
-                url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-param-reassign.md",
+                reportIfParameterReassignment(node.argument);
             },
-            hasSuggestions: false,
-            messages: {
-                forbidden:
-                    "Do not reassign function parameters outside the first expression statement in the function body.",
-            },
-            schema: [],
-            type: "problem",
+        };
+    },
+    defaultOptions: [],
+    meta: {
+        docs: {
+            description:
+                "disallow parameter reassignment except in the first expression statement of a function body.",
+            recommended: false,
+            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-param-reassign.md",
         },
-        name: "no-param-reassign",
-    });
+        hasSuggestions: false,
+        messages: {
+            forbidden:
+                "Do not reassign function parameters outside the first expression statement in the function body.",
+        },
+        schema: [],
+        type: "problem",
+    },
+    name: "no-param-reassign",
+});
 
 export default rule;

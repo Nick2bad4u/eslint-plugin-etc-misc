@@ -1,14 +1,15 @@
 import { createSelectorRule } from "../_internal/create-selector-rule";
 
-const selector =
-    "TemplateLiteral[expressions.length=0] > TemplateElement";
+const selector = "TemplateLiteral[expressions.length=0] > TemplateElement";
 
 /**
  * Disallow template literals with no expressions.
  */
 const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
-    description: "disallow template literals that have no interpolated expressions.",
-    message: "Use a string literal instead of an expression-free template literal.",
+    description:
+        "disallow template literals that have no interpolated expressions.",
+    message:
+        "Use a string literal instead of an expression-free template literal.",
     messageId: "forbidden",
     name: "no-unnecessary-template-literal",
     selector,

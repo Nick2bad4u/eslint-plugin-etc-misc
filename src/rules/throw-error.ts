@@ -1,7 +1,4 @@
-import type {
-    TSESTree as es,
-    TSESLint,
-} from "@typescript-eslint/utils";
+import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 import type * as ts from "typescript";
 
 import { ruleCreator } from "../_internal/rule-creator";
@@ -89,51 +86,52 @@ const getNodeType = (
 /**
  * Disallow throwing or rejecting values that are not Error-like.
  */
-const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
-    ruleCreator<Options, MessageIds>({
-        create: (context) => {
-            const parserServices = context.sourceCode.parserServices;
-            if (!hasTypedParserServices(parserServices)) {
-                return {};
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => {
+        const parserServices = context.sourceCode.parserServices;
+        if (!hasTypedParserServices(parserServices)) {
+            return {};
+        }
+
+        const typeChecker = parserServices.program.getTypeChecker();
+
+        const reportIfNonErrorLike = (
+            node: Readonly<es.Node>,
+            usage: "Rejecting with" | "Throwing"
+        ): void => {
+            const type = getNodeType(parserServices, typeChecker, node);
+            if (type === undefined) {
+                return;
             }
 
-            const typeChecker = parserServices.program.getTypeChecker();
+            if (couldBeAllowedThrowableType(type, typeChecker)) {
+                return;
+            }
 
-            const reportIfNonErrorLike = (
-                node: Readonly<es.Node>,
-                usage: "Rejecting with" | "Throwing"
-            ): void => {
-                const type = getNodeType(parserServices, typeChecker, node);
-                if (type === undefined) {
-                    return;
-                }
+            context.report({
+                data: { usage },
+                messageId: "forbidden",
+                node,
+            });
+        };
 
-                if (couldBeAllowedThrowableType(type, typeChecker)) {
-                    return;
-                }
+        const checkRejectionCall = (
+            callExpression: Readonly<es.CallExpression>
+        ): void => {
+            const rejectionValue = callExpression.arguments[0];
+            if (rejectionValue === undefined) {
+                return;
+            }
 
-                context.report({
-                    data: { usage },
-                    messageId: "forbidden",
-                    node,
-                });
-            };
+            reportIfNonErrorLike(rejectionValue, "Rejecting with");
+        };
 
-            const checkRejectionCall = (
-                callExpression: Readonly<es.CallExpression>
-            ): void => {
-                const rejectionValue = callExpression.arguments[0];
-                if (rejectionValue === undefined) {
-                    return;
-                }
-
-                reportIfNonErrorLike(rejectionValue, "Rejecting with");
-            };
-
-            return {
-                "CallExpression[callee.type='MemberExpression'][callee.property.type='Identifier'][callee.property.name='reject']": (
-                    callExpression: Readonly<es.CallExpression>
-                ) => {
+        return {
+            "CallExpression[callee.type='MemberExpression'][callee.property.type='Identifier'][callee.property.name='reject']":
+                (callExpression: Readonly<es.CallExpression>) => {
                     const { callee } = callExpression;
                     if (
                         callee.type !== "MemberExpression" ||
@@ -164,7 +162,8 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
 
                     checkRejectionCall(callExpression);
                 },
-                "NewExpression[callee.type='Identifier'][callee.name='Promise'] > ArrowFunctionExpression, NewExpression[callee.type='Identifier'][callee.name='Promise'] > FunctionExpression": (
+            "NewExpression[callee.type='Identifier'][callee.name='Promise'] > ArrowFunctionExpression, NewExpression[callee.type='Identifier'][callee.name='Promise'] > FunctionExpression":
+                (
                     callback:
                         | Readonly<es.ArrowFunctionExpression>
                         | Readonly<es.FunctionExpression>
@@ -195,33 +194,33 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
                         }
                     }
                 },
-                ThrowStatement: (throwStatement: Readonly<es.ThrowStatement>) => {
-                    const { argument } = throwStatement;
-                    if (argument === null) {
-                        return;
-                    }
+            ThrowStatement: (throwStatement: Readonly<es.ThrowStatement>) => {
+                const { argument } = throwStatement;
+                if (argument === null) {
+                    return;
+                }
 
-                    reportIfNonErrorLike(argument, "Throwing");
-                },
-            };
-        },
-        defaultOptions: [],
-        meta: {
-            docs: {
-                description:
-                    "disallow throwing or rejecting values that are not Error-like.",
-                recommended: false,
-                requiresTypeChecking: true,
-                url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/throw-error.md",
+                reportIfNonErrorLike(argument, "Throwing");
             },
-            hasSuggestions: false,
-            messages: {
-                forbidden: "{{usage}} non-`Error` values is forbidden.",
-            },
-            schema: [],
-            type: "problem",
+        };
+    },
+    defaultOptions: [],
+    meta: {
+        docs: {
+            description:
+                "disallow throwing or rejecting values that are not Error-like.",
+            recommended: false,
+            requiresTypeChecking: true,
+            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/throw-error.md",
         },
-        name: "throw-error",
-    });
+        hasSuggestions: false,
+        messages: {
+            forbidden: "{{usage}} non-`Error` values is forbidden.",
+        },
+        schema: [],
+        type: "problem",
+    },
+    name: "throw-error",
+});
 
 export default rule;

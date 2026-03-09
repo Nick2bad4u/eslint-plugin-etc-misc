@@ -14,7 +14,10 @@ ruleTester.run("no-restricted-syntax", rule, {
             options: [
                 {
                     selectors: [
-                        { message: "No while loops", selector: "WhileStatement" },
+                        {
+                            message: "No while loops",
+                            selector: "WhileStatement",
+                        },
                     ],
                 },
             ],

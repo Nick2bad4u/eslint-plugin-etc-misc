@@ -56,8 +56,7 @@ ruleTester.run("prefer-interface", rule, {
                     suggestions: [
                         {
                             messageId: "suggest",
-                            output:
-                                "export interface Exported { value: number; }",
+                            output: "export interface Exported { value: number; }",
                         },
                     ],
                 },

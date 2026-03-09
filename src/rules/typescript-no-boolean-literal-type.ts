@@ -9,7 +9,8 @@ const selector = [
  * Disallow optional boolean literal property types.
  */
 const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
-    description: "disallow optional boolean literal types in property signatures.",
+    description:
+        "disallow optional boolean literal types in property signatures.",
     message: 'Use "boolean" type instead.',
     messageId: "forbidden",
     name: "typescript/no-boolean-literal-type",

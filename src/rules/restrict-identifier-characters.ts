@@ -1,6 +1,4 @@
-import type {
-    TSESTree as es,
-} from "@typescript-eslint/utils";
+import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
 
@@ -13,33 +11,35 @@ const disallowedSelector = String.raw`Identifier[name=/[^$\w]/u]`;
 /**
  * Restrict identifiers to latin letters, digits, underscores, and dollar signs.
  */
-const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
-    ruleCreator<Options, MessageIds>({
-        create: (context) => ({
-            [disallowedSelector]: (node: Readonly<es.Node>): void => {
-                context.report({
-                    messageId: "forbidden",
-                    node,
-                });
-            },
-        }),
-        defaultOptions: [],
-        meta: {
-            docs: {
-                description:
-                    "require identifiers to contain only english characters, digits, underscore, or dollar sign.",
-                recommended: false,
-                url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/restrict-identifier-characters.md",
-            },
-            hasSuggestions: false,
-            messages: {
-                forbidden:
-                    "Identifier must consist of english characters and dollar sign.",
-            },
-            schema: [],
-            type: "suggestion",
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => ({
+        [disallowedSelector]: (node: Readonly<es.Node>): void => {
+            context.report({
+                messageId: "forbidden",
+                node,
+            });
         },
-        name: "restrict-identifier-characters",
-    });
+    }),
+    defaultOptions: [],
+    meta: {
+        docs: {
+            description:
+                "require identifiers to contain only english characters, digits, underscore, or dollar sign.",
+            recommended: false,
+            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/restrict-identifier-characters.md",
+        },
+        hasSuggestions: false,
+        messages: {
+            forbidden:
+                "Identifier must consist of english characters and dollar sign.",
+        },
+        schema: [],
+        type: "suggestion",
+    },
+    name: "restrict-identifier-characters",
+});
 
 export default rule;

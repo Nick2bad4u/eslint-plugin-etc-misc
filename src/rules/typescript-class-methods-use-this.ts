@@ -1,6 +1,4 @@
-import type {
-    TSESTree as es,
-} from "@typescript-eslint/utils";
+import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
 
@@ -50,7 +48,9 @@ const containsThisExpression = (root: Readonly<es.Node>): boolean => {
 const hasThisParameter = (node: Readonly<es.MethodDefinition>): boolean => {
     const [firstParameter] = node.value.params;
 
-    return firstParameter?.type === "Identifier" && firstParameter.name === "this";
+    return (
+        firstParameter?.type === "Identifier" && firstParameter.name === "this"
+    );
 };
 
 const usesThisExpression = (node: Readonly<es.MethodDefinition>): boolean =>
@@ -59,41 +59,45 @@ const usesThisExpression = (node: Readonly<es.MethodDefinition>): boolean =>
 /**
  * Require non-static class methods to reference `this`.
  */
-const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> =
-    ruleCreator<Options, MessageIds>({
-        create: (context) => ({
-            MethodDefinition: (node: Readonly<es.MethodDefinition>): void => {
-                if (
-                    node.kind !== "method" ||
-                    node.static ||
-                    node.value.body === null ||
-                    hasThisParameter(node) ||
-                    usesThisExpression(node)
-                ) {
-                    return;
-                }
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => ({
+        MethodDefinition: (node: Readonly<es.MethodDefinition>): void => {
+            if (
+                node.kind !== "method" ||
+                node.static ||
+                node.value.body === null ||
+                hasThisParameter(node) ||
+                usesThisExpression(node)
+            ) {
+                return;
+            }
 
-                context.report({
-                    messageId: "forbidden",
-                    node,
-                });
-            },
-        }),
-        defaultOptions: [],
-        meta: {
-            docs: {
-                description: "require non-static class methods to reference `this`.",
-                recommended: false,
-                url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/typescript-class-methods-use-this.md",
-            },
-            hasSuggestions: false,
-            messages: {
-                forbidden: "Class method should use `this` or declare a `this` parameter.",
-            },
-            schema: [],
-            type: "suggestion",
+            context.report({
+                messageId: "forbidden",
+                node,
+            });
         },
-        name: "typescript/class-methods-use-this",
-    });
+    }),
+    defaultOptions: [],
+    meta: {
+        docs: {
+            description:
+                "require non-static class methods to reference `this`.",
+            recommended: false,
+            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/typescript-class-methods-use-this.md",
+        },
+        hasSuggestions: false,
+        messages: {
+            forbidden:
+                "Class method should use `this` or declare a `this` parameter.",
+        },
+        schema: [],
+        type: "suggestion",
+    },
+    name: "typescript/class-methods-use-this",
+});
 
 export default rule;
