@@ -5,7 +5,7 @@ ruleTester.run("no-writeonly", rule, {
     invalid: [
         {
             code: "const state = { set value(next) { this._value = next; } }; void state;",
-            errors: [{ message: /.+/u }],
+            errors: [{ message: /.+/v }],
         },
     ],
     valid: [

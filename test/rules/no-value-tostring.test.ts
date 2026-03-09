@@ -9,7 +9,7 @@ ruleTester.run("no-value-tostring", rule, {
                 "const asText = value.toString();",
                 "void asText;",
             ].join("\n"),
-            errors: [{ message: /.+/u }],
+            errors: [{ message: /.+/v }],
             filename: "file.ts",
         },
     ],

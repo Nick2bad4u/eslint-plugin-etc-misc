@@ -5,7 +5,7 @@ ruleTester.run("no-mixed-enums", rule, {
     invalid: [
         {
             code: "enum Status { open = 'open', closed = 2 }",
-            errors: [{ message: /.+/u }],
+            errors: [{ message: /.+/v }],
             filename: "file.ts",
         },
     ],

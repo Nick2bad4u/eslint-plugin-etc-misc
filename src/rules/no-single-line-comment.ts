@@ -45,6 +45,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     },
     defaultOptions: [{ allowDirectiveComments: true }],
     meta: {
+        defaultOptions: [],
         docs: {
             description: "forbid single-line comments.",
             recommended: false,

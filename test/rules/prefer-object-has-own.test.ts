@@ -8,7 +8,7 @@ ruleTester.run("prefer-object-has-own", rule, {
                 "const value = Object.prototype.hasOwnProperty.call({ a: 1 }, 'a');",
                 "void value;",
             ].join("\n"),
-            errors: [{ message: /.+/u }],
+            errors: [{ message: /.+/v }],
         },
     ],
     valid: [

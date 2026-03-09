@@ -7,7 +7,7 @@ ruleTester.run("no-unused-disable", rule, {
             code: ["/* eslint-disable no-alert */", "const value = 1;"].join(
                 "\n"
             ),
-            errors: [{ message: /.+/u }],
+            errors: [{ message: /.+/v }],
         },
     ],
     valid: [

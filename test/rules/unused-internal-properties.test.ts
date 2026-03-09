@@ -8,7 +8,7 @@ ruleTester.run("unused-internal-properties", rule, {
                 "const data = { used: 1, unused: 2 };",
                 "console.log(data.used);",
             ].join("\n"),
-            errors: [{ message: /.+/u }],
+            errors: [{ message: /.+/v }],
         },
     ],
     valid: [

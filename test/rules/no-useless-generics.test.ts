@@ -5,7 +5,7 @@ ruleTester.run("no-useless-generics", rule, {
     invalid: [
         {
             code: "function toUpper<T>(value: string): string { return value.toUpperCase(); }",
-            errors: [{ message: /.+/u }],
+            errors: [{ message: /.+/v }],
             filename: "file.ts",
         },
     ],

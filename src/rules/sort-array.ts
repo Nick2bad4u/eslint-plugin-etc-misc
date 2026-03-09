@@ -25,11 +25,7 @@ const buildFix =
         sorted: readonly (es.Expression | es.SpreadElement)[]
     ): TSESLint.ReportFixFunction =>
     (fixer): TSESLint.RuleFix => {
-        // eslint-disable-next-line unicorn/prefer-at -- Node >=16.0 support baseline
-        const [first, last] = [
-            node.elements[0],
-            node.elements[node.elements.length - 1],
-        ];
+        const [first, last] = [node.elements[0], node.elements.at(-1)];
         if (
             first === null ||
             first === undefined ||

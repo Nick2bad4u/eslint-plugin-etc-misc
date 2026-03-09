@@ -10,7 +10,7 @@ ruleTester.run("default-case", rule, {
                 "    break;",
                 "}",
             ].join("\n"),
-            errors: [{ message: /.+/u }],
+            errors: [{ message: /.+/v }],
         },
     ],
     valid: [

@@ -5,7 +5,7 @@ ruleTester.run("uppercase-iife", rule, {
     invalid: [
         {
             code: "(() => (doWork()))();",
-            errors: [{ message: /.+/u }],
+            errors: [{ message: /.+/v }],
         },
     ],
     valid: [

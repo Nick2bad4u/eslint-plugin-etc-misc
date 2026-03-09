@@ -9,7 +9,7 @@ ruleTester.run("words", rule, {
                 "const value = 1;",
                 "void value;",
             ].join("\n"),
-            errors: [{ message: /.+/u }],
+            errors: [{ message: /.+/v }],
         },
     ],
     valid: [

@@ -5,6 +5,7 @@ ruleTester.run("no-secret", rule, {
     invalid: [
         {
             code: 'const token = "SECRET_ABCD";',
+            errors: [{ message: /.+/v }],
             options: [
                 {
                     additionalRegexes: {
@@ -12,7 +13,6 @@ ruleTester.run("no-secret", rule, {
                     },
                 },
             ],
-            errors: [{ message: /.+/u }],
         },
     ],
     valid: [

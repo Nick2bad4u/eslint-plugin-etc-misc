@@ -5,7 +5,7 @@ ruleTester.run("array-type", rule, {
     invalid: [
         {
             code: "type Values = Array<string>;",
-            errors: [{ message: /.+/u }],
+            errors: [{ message: /.+/v }],
         },
     ],
     valid: [

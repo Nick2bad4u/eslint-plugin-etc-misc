@@ -5,7 +5,7 @@ ruleTester.run("throw-new-error", rule, {
     invalid: [
         {
             code: "throw Error('boom');",
-            errors: [{ message: /.+/u }],
+            errors: [{ message: /.+/v }],
         },
     ],
     valid: [

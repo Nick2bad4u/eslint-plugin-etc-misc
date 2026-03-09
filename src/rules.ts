@@ -32,8 +32,8 @@ import noIndexImport from "./rules/no-index-import";
 import noInternal from "./rules/no-internal";
 import noInternalModules from "./rules/no-internal-modules";
 import noLanguageMixing from "./rules/no-language-mixing";
-import noMixedEnums from "./rules/no-mixed-enums";
 import noMisusedGenerics from "./rules/no-misused-generics";
+import noMixedEnums from "./rules/no-mixed-enums";
 import noNegatedConditions from "./rules/no-negated-conditions";
 import noNodejsModules from "./rules/no-nodejs-modules";
 import noParamReassign from "./rules/no-param-reassign";
@@ -42,15 +42,15 @@ import noRestrictedSyntax from "./rules/no-restricted-syntax";
 import noSecret from "./rules/no-secret";
 import noSelfImport from "./rules/no-self-import";
 import noShadow from "./rules/no-shadow";
-import noSingleLineComment from "./rules/no-single-line-comment";
 import noSiblingImport from "./rules/no-sibling-import";
+import noSingleLineComment from "./rules/no-single-line-comment";
 import noT from "./rules/no-t";
-import noUnusedDisable from "./rules/no-unused-disable";
 import noUnderscoreExport from "./rules/no-underscore-export";
 import noUnnecessaryAsConst from "./rules/no-unnecessary-as-const";
 import noUnnecessaryBreak from "./rules/no-unnecessary-break";
 import noUnnecessaryInitialization from "./rules/no-unnecessary-initialization";
 import noUnnecessaryTemplateLiteral from "./rules/no-unnecessary-template-literal";
+import noUnusedDisable from "./rules/no-unused-disable";
 import noUselessGenerics from "./rules/no-useless-generics";
 import noValueToString from "./rules/no-value-tostring";
 import noWriteonly from "./rules/no-writeonly";
@@ -61,8 +61,8 @@ import preferConstRequire from "./rules/prefer-const-require";
 import preferIncludes from "./rules/prefer-includes";
 import preferInterface from "./rules/prefer-interface";
 import preferLessThan from "./rules/prefer-less-than";
-import preferOnlyExport from "./rules/prefer-only-export";
 import preferObjectHasOwn from "./rules/prefer-object-has-own";
+import preferOnlyExport from "./rules/prefer-only-export";
 import requireJSDoc from "./rules/require-jsdoc";
 import requireSyntax from "./rules/require-syntax";
 import restrictIdentifierCharacters from "./rules/restrict-identifier-characters";
@@ -101,9 +101,9 @@ import typescriptPreferReadonlyProperty from "./rules/typescript-prefer-readonly
 import typescriptPreferReadonlySet from "./rules/typescript-prefer-readonly-set";
 import typescriptRequirePropTypeAnnotation from "./rules/typescript-require-prop-type-annotation";
 import typescriptRequireThisVoid from "./rules/typescript-require-this-void";
-import uppercaseIife from "./rules/uppercase-iife";
-import unusedInternalProperties from "./rules/unused-internal-properties";
 import underscoreInternal from "./rules/underscore-internal";
+import unusedInternalProperties from "./rules/unused-internal-properties";
+import uppercaseIife from "./rules/uppercase-iife";
 import words from "./rules/words";
 
 type RuleModule = TSESLint.RuleModule<string, readonly unknown[]>;
@@ -142,8 +142,8 @@ export const rules: Readonly<Record<string, RuleModule>> = {
     "no-internal": noInternal,
     "no-internal-modules": noInternalModules,
     "no-language-mixing": noLanguageMixing,
-    "no-mixed-enums": noMixedEnums,
     "no-misused-generics": noMisusedGenerics,
+    "no-mixed-enums": noMixedEnums,
     "no-negated-conditions": noNegatedConditions,
     "no-nodejs-modules": noNodejsModules,
     "no-param-reassign": noParamReassign,
@@ -152,15 +152,15 @@ export const rules: Readonly<Record<string, RuleModule>> = {
     "no-secret": noSecret,
     "no-self-import": noSelfImport,
     "no-shadow": noShadow,
-    "no-single-line-comment": noSingleLineComment,
     "no-sibling-import": noSiblingImport,
+    "no-single-line-comment": noSingleLineComment,
     "no-t": noT,
-    "no-unused-disable": noUnusedDisable,
     "no-underscore-export": noUnderscoreExport,
     "no-unnecessary-as-const": noUnnecessaryAsConst,
     "no-unnecessary-break": noUnnecessaryBreak,
     "no-unnecessary-initialization": noUnnecessaryInitialization,
     "no-unnecessary-template-literal": noUnnecessaryTemplateLiteral,
+    "no-unused-disable": noUnusedDisable,
     "no-useless-generics": noUselessGenerics,
     "no-value-tostring": noValueToString,
     "no-writeonly": noWriteonly,
@@ -171,8 +171,8 @@ export const rules: Readonly<Record<string, RuleModule>> = {
     "prefer-includes": preferIncludes,
     "prefer-interface": preferInterface,
     "prefer-less-than": preferLessThan,
-    "prefer-only-export": preferOnlyExport,
     "prefer-object-has-own": preferObjectHasOwn,
+    "prefer-only-export": preferOnlyExport,
     "require-jsdoc": requireJSDoc,
     "require-syntax": requireSyntax,
     "restrict-identifier-characters": restrictIdentifierCharacters,
@@ -214,9 +214,9 @@ export const rules: Readonly<Record<string, RuleModule>> = {
     "typescript/require-prop-type-annotation":
         typescriptRequirePropTypeAnnotation,
     "typescript/require-this-void": typescriptRequireThisVoid,
-    "uppercase-iife": uppercaseIife,
-    "unused-internal-properties": unusedInternalProperties,
     "underscore-internal": underscoreInternal,
+    "unused-internal-properties": unusedInternalProperties,
+    "uppercase-iife": uppercaseIife,
     words: words,
 };
 

@@ -5,7 +5,7 @@ ruleTester.run("prefer-includes", rule, {
     invalid: [
         {
             code: "const hasValue = [1, 2, 3].indexOf(2) !== -1; void hasValue;",
-            errors: [{ message: /.+/u }],
+            errors: [{ message: /.+/v }],
         },
     ],
     valid: [
