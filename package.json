@@ -183,6 +183,7 @@
     },
     "devDependencies": {
         "@arethetypeswrong/cli": "^0.18.2",
+        "@codecov/vite-plugin": "^1.9.1",
         "@csstools/stylelint-formatter-github": "^2.0.0",
         "@docusaurus/eslint-plugin": "^3.9.2",
         "@double-great/remark-lint-alt-text": "^1.1.1",

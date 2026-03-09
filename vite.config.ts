@@ -1,6 +1,7 @@
 // eslint-disable-next-line @eslint-community/eslint-comments/disable-enable-pair -- project-wide disable pattern for build configs
 /* eslint-disable n/no-process-env, comment-length/limit-single-line-comments   -- Disable specific rules for build configs */
 
+import { codecovVitePlugin } from "@codecov/vite-plugin";
 import pc from "picocolors";
 import {
     coverageConfigDefaults,
@@ -31,10 +32,44 @@ const testExcludePatterns = [
 const testFilePatterns = ["test/**/*.{test,spec}.{ts,tsx,js,mjs,cjs,mts,cts}"];
 
 /**
- * Vitest configuration for eslint-plugin-typefest.
+ * Vitest configuration for eslint-plugin-etc-misc.
  */
 const vitestConfig: ReturnType<typeof defineConfig> = defineConfig({
+    build: {
+        assetsDir: "assets",
+        chunkSizeWarningLimit: 500, // Increase chunk size warning limit to accommodate larger bundles without false positives
+        lib: {
+            entry: "src/plugin.ts",
+            formats: ["es", "cjs"],
+            name: "ESLintPluginEtcMisc",
+        },
+        license: {
+            fileName: "LICENSE",
+        },
+        outDir: ".cache/vite/eslint-plugin-etc-misc", // Output directory for built files, separate from source and coverage
+        rollupOptions: {
+            external: [
+                // Exclude dependencies from the bundle to reduce size and avoid duplication in consuming projects
+                "eslint",
+                "typescript",
+            ],
+            cache: true, // Enable Rollup caching to improve build performance
+            context: "this", // Set Rollup context to 'this' for better compatibility with ESLint's expected environment
+            experimentalLogSideEffects: true, // Enable experimental logging of side effects for better tree-shaking insights
+            shimMissingExports: true, // Automatically shim missing exports to prevent build errors from re-exports without direct imports
+        },
+        sourcemap: true, // Generate source maps for accurate coverage mapping
+    },
     cacheDir: "./.cache/vitest",
+    plugins: [
+        // Put the Codecov vite plugin after all other plugins
+        codecovVitePlugin({
+            bundleName: "eslint-plugin-etc-misc",
+            enableBundleAnalysis: process.env["CODECOV_TOKEN"] !== undefined,
+            retryCount: 3,
+            uploadToken: process.env["CODECOV_TOKEN"] ?? "",
+        }),
+    ],
     test: {
         // Directory for storing Vitest test attachments (screenshots, logs, etc.) in a hidden cache folder.
         // This helps keep test artifacts organized and out of the main source tree.
