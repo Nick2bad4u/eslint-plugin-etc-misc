@@ -41,6 +41,8 @@ export default [
 
 Disable this rule if your codebase intentionally allows other naming styles for Symbol descriptions.
 
+> **Rule catalog ID:** R010
+
 ## Further Reading
 
 - [MDN: `Symbol()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Symbol/Symbol)

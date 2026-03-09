@@ -72,6 +72,8 @@ export default [
 Disable this rule if your team intentionally keeps commented examples inline
 instead of using docs, snippets, or tests.
 
+> **Rule catalog ID:** R020
+
 ## Further Reading
 
 - [ESLint: Working with Rules](https://eslint.org/docs/latest/extend/custom-rules)

@@ -44,3 +44,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if class-property arrow functions are your preferred pattern.
+
+> **Rule catalog ID:** R096
+
+## Further reading
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)

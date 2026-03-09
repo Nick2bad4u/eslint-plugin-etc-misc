@@ -55,6 +55,8 @@ export default [
 
 Disable this rule if your project intentionally favors iterator callbacks and does not enforce loop-style consistency.
 
+> **Rule catalog ID:** R025
+
 ## Further Reading
 
 - [MDN: Array.prototype.forEach()](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)

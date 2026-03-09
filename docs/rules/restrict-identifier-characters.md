@@ -41,6 +41,8 @@ export default [
 
 Disable this rule if your codebase allows non-latin identifier names.
 
+> **Rule catalog ID:** R064
+
 ## Further Reading
 
 - [MDN: Lexical grammar (Identifiers)](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Lexical_grammar#identifiers)

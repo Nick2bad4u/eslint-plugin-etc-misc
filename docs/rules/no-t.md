@@ -72,6 +72,8 @@ algorithm-heavy APIs).
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
+> **Rule catalog ID:** R043
+
 ## Further reading
 
 - [TypeScript Handbook: Generics](https://www.typescriptlang.org/docs/handbook/2/generics.html)

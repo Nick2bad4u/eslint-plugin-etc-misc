@@ -40,3 +40,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if your project does not standardize alias naming for array and tuple types.
+
+> **Rule catalog ID:** R095
+
+## Further reading
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)

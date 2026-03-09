@@ -84,6 +84,8 @@ Disable this rule if your codebase intentionally uses non-`Error` throw/reject v
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
+> **Rule catalog ID:** R074
+
 ## Further reading
 
 - [MDN: throw](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/throw)

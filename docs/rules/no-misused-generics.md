@@ -76,6 +76,8 @@ Disable this rule if your project intentionally keeps explicit, documentation-on
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
+> **Rule catalog ID:** R031
+
 ## Further reading
 
 - [The Golden Rule of Generics](https://effectivetypescript.com/2020/08/12/generics-golden-rule/)

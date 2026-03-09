@@ -69,6 +69,8 @@ parameters for generated declarations or staged migrations.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
+> **Rule catalog ID:** R050
+
 ## Further reading
 
 - [typescript-eslint: `no-unnecessary-type-parameters`](https://typescript-eslint.io/rules/no-unnecessary-type-parameters)

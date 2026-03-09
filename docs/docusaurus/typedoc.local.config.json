@@ -389,7 +389,7 @@
             "z.ZodError": "https://zod.dev/?id=error-handling"
         }
     },
-    "favicon": "./static/img/logo.svg",
+    "favicon": "./static/img/favicon.ico",
     "formatWithPrettier": true,
     "gitRemote": "origin",
     "gitRevision": "main",

@@ -9,15 +9,19 @@ import { ESLintUtils } from "@typescript-eslint/utils";
  */
 export type AnyRuleModule = TSESLint.RuleModule<string, readonly unknown[]>;
 
-type LegacyDocsMetadata = {
+type RuleCreatorFactory = ReturnType<
+    typeof ESLintUtils.RuleCreator<RuleDocsMetadata>
+>;
+
+type RuleDocsMetadata = {
+    readonly catalogId?: string;
+    readonly catalogIndex?: number;
+    readonly frozen?: boolean;
     readonly recommended: boolean;
     readonly requiresTypeChecking?: boolean;
+    readonly ruleName?: string;
     readonly suggestion?: boolean;
 };
-
-type RuleCreatorFactory = ReturnType<
-    typeof ESLintUtils.RuleCreator<LegacyDocsMetadata>
->;
 
 /**
  * Shared rule factory for plugin rules.
@@ -26,7 +30,7 @@ type RuleCreatorFactory = ReturnType<
  * Typed factory for defining plugin rules with consistent docs URLs.
  */
 export const ruleCreator: RuleCreatorFactory =
-    ESLintUtils.RuleCreator<LegacyDocsMetadata>((name) => {
+    ESLintUtils.RuleCreator<RuleDocsMetadata>((name) => {
         const docsPathName = name.replaceAll("/", "-");
 
         return `https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/${docsPathName}`;

@@ -49,6 +49,8 @@ export default [
 
 Disable this rule if your project intentionally standardizes on TypeScript enums and accepts their emitted runtime output.
 
+> **Rule catalog ID:** R023
+
 ## Further Reading
 
 - [TypeScript Handbook: Enums](https://www.typescriptlang.org/docs/handbook/enums.html)

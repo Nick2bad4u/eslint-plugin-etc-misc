@@ -66,3 +66,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if your code style does not require JSDoc for declarations.
+
+> **Rule catalog ID:** R062
+
+## Further reading
+
+- [eslint-plugin-jsdoc: `require-jsdoc`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/require-jsdoc.md)

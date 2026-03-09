@@ -155,6 +155,16 @@ const config = defineConfig({
     ignoreDisables: false,
 
     /**
+     * Files that should never be parsed as stylesheets.
+     *
+     * @remarks
+     * The docs app includes a PWA webmanifest file under `static/img/` which is
+     * JSON, not CSS. Stylelint may still discover it when linting the docs
+     * folder directly, so it must be explicitly ignored.
+     */
+    ignoreFiles: ["**/*.webmanifest"],
+
+    /**
      * File-type specific configuration overrides for different CSS syntaxes and
      * contexts.
      *

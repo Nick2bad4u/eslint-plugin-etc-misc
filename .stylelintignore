@@ -73,6 +73,7 @@ web_modules/
 **/*.d.ts
 **/*.d.mts
 **/*.d.cts
+**/*.webmanifest
 
 # Optional npm cache directory
 .npm

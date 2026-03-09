@@ -63,6 +63,8 @@ checks and intentionally avoid `default` branches.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
+> **Rule catalog ID:** R011
+
 ## Further reading
 
 - [ESLint: `default-case`](https://eslint.org/docs/latest/rules/default-case)

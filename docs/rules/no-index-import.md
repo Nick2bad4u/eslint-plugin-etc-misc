@@ -58,3 +58,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if your project intentionally uses `"."` barrel imports.
+
+> **Rule catalog ID:** R027
+
+## Further reading
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)

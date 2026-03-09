@@ -59,6 +59,8 @@ export default [
 
 Disable this rule if your project uses a different naming convention for internal APIs.
 
+> **Rule catalog ID:** R076
+
 ## Further Reading
 
 - [TSDoc `@internal` tag](https://tsdoc.org/pages/tags/internal/)

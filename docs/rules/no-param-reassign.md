@@ -47,6 +47,8 @@ export default [
 
 Disable this rule if your codebase allows unrestricted parameter mutation.
 
+> **Rule catalog ID:** R035
+
 ## Further Reading
 
 - [MDN: Function parameters](https://developer.mozilla.org/docs/Web/JavaScript/Guide/Functions)

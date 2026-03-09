@@ -28,3 +28,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if the enforced convention does not fit your codebase requirements.
+
+> **Rule catalog ID:** R003
+
+## Further reading
+
+- [ESLint: `spaced-comment`](https://eslint.org/docs/latest/rules/spaced-comment)

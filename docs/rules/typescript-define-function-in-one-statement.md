@@ -41,3 +41,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if function property assignment across statements is accepted in your codebase.
+
+> **Rule catalog ID:** R083
+
+## Further reading
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)

@@ -46,3 +46,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if your project prefers explicit `undefined` initializers for clarity.
+
+> **Rule catalog ID:** R047
+
+## Further reading
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)

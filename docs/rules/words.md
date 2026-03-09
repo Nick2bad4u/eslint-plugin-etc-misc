@@ -61,6 +61,8 @@ Disable this rule if your team does not want prose-quality checks for comments.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
+> **Rule catalog ID:** R079
+
 ## Further reading
 
 - [eslint-plugin-write-good-comments](https://github.com/kantord/eslint-plugin-write-good-comments)

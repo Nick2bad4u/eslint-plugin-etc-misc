@@ -70,7 +70,7 @@ const homeCards = [
 ];
 
 export default function Home() {
-    const logoSrc = useBaseUrl("/img/logo.svg");
+    const logoSrc = useBaseUrl("/img/logo.png");
 
     return (
         <Layout

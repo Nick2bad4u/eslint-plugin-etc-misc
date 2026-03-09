@@ -28,3 +28,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if the enforced convention does not fit your codebase requirements.
+
+> **Rule catalog ID:** R005
+
+## Further reading
+
+- [TypeScript handbook: `enum`s](https://www.typescriptlang.org/docs/handbook/enums.html)

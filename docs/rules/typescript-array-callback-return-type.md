@@ -52,3 +52,9 @@ Disable this rule if your team accepts inferred callback return types.
 ## Type Checking
 
 This rule requires type information and only reports callbacks when the receiver is typed as an array-like value.
+
+> **Rule catalog ID:** R080
+
+## Further reading
+
+- [TypeScript handbook: function return types](https://www.typescriptlang.org/docs/handbook/2/functions.html#return-type-annotations)

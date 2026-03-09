@@ -106,6 +106,8 @@ export default [
 Disable this rule if your project intentionally relies on deprecated APIs during
 a planned migration window and you want to manage those usages manually.
 
+> **Rule catalog ID:** R022
+
 ## Further Reading
 
 - [TypeScript-ESLint: Typed Linting](https://typescript-eslint.io/getting-started/typed-linting)

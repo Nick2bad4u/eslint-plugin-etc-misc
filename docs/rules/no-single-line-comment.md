@@ -74,6 +74,8 @@ notes.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
+> **Rule catalog ID:** R042
+
 ## Further reading
 
 - [ESLint comment directives](https://eslint.org/docs/latest/use/configure/rules#using-configuration-comments)

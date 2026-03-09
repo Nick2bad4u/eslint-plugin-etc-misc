@@ -43,6 +43,8 @@ export default [
 
 Disable this rule if underscore-prefixed exports are part of your public API conventions.
 
+> **Rule catalog ID:** R044
+
 ## Further Reading
 
 - [MDN: `export`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export)

@@ -57,6 +57,8 @@ export default [
 
 Disable this rule if your project explicitly depends on `const enum` inlining and your build toolchain guarantees consistent handling.
 
+> **Rule catalog ID:** R021
+
 ## Further Reading
 
 - [TypeScript Handbook: Const enums](https://www.typescriptlang.org/docs/handbook/enums.html#const-enums)

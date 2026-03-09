@@ -56,6 +56,8 @@ export default [
 
 Disable this rule if shadowed variable names are acceptable in your code style.
 
+> **Rule catalog ID:** R040
+
 ## Further Reading
 
 - [TypeScript Handbook: Variable Declarations](https://www.typescriptlang.org/docs/handbook/variable-declarations.html)

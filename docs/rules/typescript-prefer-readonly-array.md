@@ -40,3 +40,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if mutable arrays and tuples are preferred in your API design.
+
+> **Rule catalog ID:** R098
+
+## Further reading
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)

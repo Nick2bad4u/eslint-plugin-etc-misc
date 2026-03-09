@@ -70,7 +70,7 @@ const config: Config = {
     baseUrl,
     baseUrlIssueBanner: true,
     deploymentBranch: "gh-pages",
-    favicon: "img/favicon.svg",
+    favicon: "img/favicon.ico",
     // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
     future: futureConfig,
     clientModules: [modernEnhancementsClientModule],
@@ -134,7 +134,7 @@ const config: Config = {
                     },
                     {
                         color: pwaMaskIconColor,
-                        href: `${baseUrl}img/logo.svg`,
+                        href: `${baseUrl}img/logo-128x128.svg`,
                         rel: "mask-icon",
                         tagName: "link",
                     },
@@ -340,13 +340,13 @@ const config: Config = {
             logo: {
                 alt: "eslint-plugin-etc-misc logo",
                 href: `https://github.com/${organizationName}/${projectName}`,
-                src: "img/logo.svg",
-                width: 60,
-                height: 60,
+                src: "img/logo_128x128.png",
+                width: "auto",
+                height: "auto",
             },
             style: "dark",
         },
-        image: "img/logo.svg",
+        image: "img/logo.png",
         navbar: {
             items: [
                 {
@@ -385,10 +385,10 @@ const config: Config = {
             ],
             logo: {
                 alt: "eslint-plugin-etc-misc logo",
-                height: 48,
+                height: "auto",
                 href: baseUrl,
-                src: "img/logo.svg",
-                width: 48,
+                src: "img/logo.png",
+                width: "auto",
             },
             title: "eslint-plugin-etc-misc",
         },

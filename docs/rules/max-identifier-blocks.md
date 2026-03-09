@@ -43,6 +43,8 @@ export default [
 
 Disable this rule if your project allows long compound identifier names.
 
+> **Rule catalog ID:** R015
+
 ## Further Reading
 
 - [TypeScript Handbook: Variable Declarations](https://www.typescriptlang.org/docs/handbook/variable-declarations.html)

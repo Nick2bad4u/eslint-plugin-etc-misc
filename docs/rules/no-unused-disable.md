@@ -64,6 +64,8 @@ placeholder disables are explicitly managed.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
+> **Rule catalog ID:** R049
+
 ## Further reading
 
 - [eslint-comments: `no-unused-disable`](https://eslint-community.github.io/eslint-plugin-eslint-comments/rules/no-unused-disable.html)

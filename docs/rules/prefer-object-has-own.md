@@ -55,6 +55,8 @@ cannot polyfill it.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
+> **Rule catalog ID:** R060
+
 ## Further reading
 
 - [ESLint: `prefer-object-has-own`](https://eslint.org/docs/latest/rules/prefer-object-has-own)

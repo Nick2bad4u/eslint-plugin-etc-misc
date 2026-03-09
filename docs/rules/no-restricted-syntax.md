@@ -76,3 +76,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if your project does not rely on selector-based syntax restrictions.
+
+> **Rule catalog ID:** R037
+
+## Further reading
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)

@@ -68,6 +68,8 @@ wire formats.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
+> **Rule catalog ID:** R032
+
 ## Further reading
 
 - [typescript-eslint: `no-mixed-enums`](https://typescript-eslint.io/rules/no-mixed-enums)

@@ -47,6 +47,8 @@ export default [
 
 Disable this rule if interface member order is not important in your style guide.
 
+> **Rule catalog ID:** R066
+
 ## Further Reading
 
 - [TypeScript Handbook: Interfaces](https://www.typescriptlang.org/docs/handbook/interfaces.html)

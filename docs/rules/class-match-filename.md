@@ -43,6 +43,8 @@ export default [
 
 Disable this rule if your project intentionally allows class names that do not mirror file names.
 
+> **Rule catalog ID:** R002
+
 ## Further Reading
 
 - [TypeScript Handbook: Classes](https://www.typescriptlang.org/docs/handbook/2/classes.html)

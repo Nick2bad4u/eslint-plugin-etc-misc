@@ -53,3 +53,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if your codebase intentionally requires `node:`-prefixed imports.
+
+> **Rule catalog ID:** R034
+
+## Further reading
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)

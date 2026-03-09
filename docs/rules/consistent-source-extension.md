@@ -52,6 +52,8 @@ export default [
 
 Disable this rule if your module resolver requires explicit source file extensions.
 
+> **Rule catalog ID:** R009
+
 ## Further Reading
 
 - [TypeScript: `moduleResolution` reference](https://www.typescriptlang.org/tsconfig/#moduleResolution)

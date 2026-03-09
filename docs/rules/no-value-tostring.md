@@ -66,6 +66,8 @@ stringification and that behavior is covered by runtime tests.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
+> **Rule catalog ID:** R051
+
 ## Further reading
 
 - [typescript-eslint: `no-base-to-string`](https://typescript-eslint.io/rules/no-base-to-string)

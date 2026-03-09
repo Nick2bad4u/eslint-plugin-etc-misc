@@ -53,3 +53,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if your tooling resolves `"@"` as a valid direct module import.
+
+> **Rule catalog ID:** R017
+
+## Further reading
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)

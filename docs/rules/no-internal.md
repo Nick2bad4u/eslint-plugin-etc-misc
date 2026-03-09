@@ -102,6 +102,8 @@ export default [
 Disable this rule if your project intentionally consumes internal contracts and
 accepts the maintenance risk from those unstable dependencies.
 
+> **Rule catalog ID:** R028
+
 ## Further Reading
 
 - [TypeScript-ESLint: Typed Linting](https://typescript-eslint.io/getting-started/typed-linting)

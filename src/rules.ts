@@ -1,6 +1,8 @@
-/* eslint-disable canonical/no-re-export -- Rule registry module intentionally re-exports imported rule modules at plugin boundary. */
 import type { TSESLint } from "@typescript-eslint/utils";
 
+import type { RuleCatalogEntry } from "./_internal/rule-catalog.js";
+
+import { buildRuleCatalog } from "./_internal/rule-catalog.js";
 import arrayType from "./rules/array-type.js";
 import matchFilenameRule from "./rules/class-match-filename.js";
 import commentSpacing from "./rules/comment-spacing.js";
@@ -105,12 +107,38 @@ import unusedInternalProperties from "./rules/unused-internal-properties.js";
 import uppercaseIife from "./rules/uppercase-iife.js";
 import words from "./rules/words.js";
 
+type RuleDocsMetadata = Readonly<{
+    catalogId?: string;
+    catalogIndex?: number;
+    description?: string;
+    frozen?: boolean;
+    recommended?: boolean;
+    requiresTypeChecking?: boolean;
+    ruleName?: string;
+    suggestion?: boolean;
+    url?: string;
+}>;
+
 type RuleModule = TSESLint.RuleModule<string, readonly unknown[]>;
+
+const rulesWithRequiredTypeChecking = new Set<string>([
+    "no-assign-mutated-array",
+    "no-deprecated",
+    "no-foreach",
+    "no-implicit-any-catch",
+    "no-internal",
+    "no-misused-generics",
+    "throw-error",
+    "typescript/array-callback-return-type",
+    "typescript/no-never",
+    "typescript/no-unsafe-object-assign",
+    "typescript/prefer-enum",
+]);
 
 /**
  * Rule implementations keyed by rule name.
  */
-export const rules: Readonly<Record<string, RuleModule>> = {
+const baseRules: Readonly<Record<string, RuleModule>> = {
     "array-type": arrayType,
     "class-match-filename": matchFilenameRule,
     "comment-spacing": commentSpacing,
@@ -219,4 +247,67 @@ export const rules: Readonly<Record<string, RuleModule>> = {
     words: words,
 };
 
-/* eslint-enable canonical/no-re-export -- Re-enable after plugin registry boundary mapping. */
+const ruleCatalog = buildRuleCatalog(Object.keys(baseRules));
+
+/**
+ * Globally ordered catalog entries for every rule.
+ */
+export const ruleCatalogEntries: readonly RuleCatalogEntry[] =
+    ruleCatalog.ordered;
+
+/**
+ * Catalog metadata keyed by rule name.
+ */
+export const ruleCatalogByRuleName: Readonly<Record<string, RuleCatalogEntry>> =
+    ruleCatalog.byRuleName;
+
+/**
+ * Catalog metadata keyed by documentation id (`/` replaced with `-`).
+ */
+export const ruleCatalogByDocId: Readonly<Record<string, RuleCatalogEntry>> =
+    ruleCatalog.byDocId;
+
+const withCatalogDocsMetadata = (
+    ruleName: string,
+    ruleModule: Readonly<RuleModule>
+): RuleModule => {
+    const catalogEntry = ruleCatalog.byRuleName[ruleName];
+
+    if (!catalogEntry) {
+        throw new Error(`Missing rule catalog entry for rule "${ruleName}".`);
+    }
+
+    const currentDocsMetadata = (ruleModule.meta.docs ??
+        {}) as RuleDocsMetadata;
+    const hasRequiredTypeChecking = rulesWithRequiredTypeChecking.has(ruleName);
+    const docsWithCatalogMetadata = {
+        ...currentDocsMetadata,
+        catalogId: catalogEntry.catalogId,
+        catalogIndex: catalogEntry.catalogIndex,
+        frozen: currentDocsMetadata.frozen ?? false,
+        recommended: currentDocsMetadata.recommended ?? false,
+        requiresTypeChecking:
+            currentDocsMetadata.requiresTypeChecking ?? hasRequiredTypeChecking,
+        ruleName,
+    } as NonNullable<RuleModule["meta"]["docs"]>;
+
+    return {
+        ...ruleModule,
+        meta: {
+            ...ruleModule.meta,
+            docs: docsWithCatalogMetadata,
+        },
+    };
+};
+
+const decoratedRules: Record<string, RuleModule> = {};
+
+for (const [ruleName, ruleModule] of Object.entries(baseRules)) {
+    decoratedRules[ruleName] = withCatalogDocsMetadata(ruleName, ruleModule);
+}
+
+/**
+ * Rule implementations keyed by rule name with normalized docs metadata.
+ */
+export const rules: Readonly<Record<string, RuleModule>> =
+    Object.freeze(decoratedRules);

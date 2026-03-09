@@ -65,3 +65,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if files should not be forced to contain specific syntax forms.
+
+> **Rule catalog ID:** R063
+
+## Further reading
+
+- [ESLint selectors reference](https://eslint.org/docs/latest/extend/selectors)

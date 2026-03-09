@@ -66,6 +66,8 @@ pattern is documented.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
+> **Rule catalog ID:** R052
+
 ## Further reading
 
 - [ESLint: `accessor-pairs`](https://eslint.org/docs/latest/rules/accessor-pairs)

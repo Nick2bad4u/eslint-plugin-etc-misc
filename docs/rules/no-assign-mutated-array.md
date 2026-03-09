@@ -60,6 +60,8 @@ export default [
 
 Disable this rule if your codebase intentionally relies on mutating array methods and treats assigned return values as an accepted pattern.
 
+> **Rule catalog ID:** R016
+
 ## Further Reading
 
 - [MDN: Array.prototype.fill()](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/fill)

@@ -134,6 +134,8 @@ Disable this rule if your project intentionally standardizes on type aliases for
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
+> **Rule catalog ID:** R058
+
 ## Further reading
 
 - [TypeScript Handbook: Interfaces](https://www.typescriptlang.org/docs/handbook/2/objects.html)

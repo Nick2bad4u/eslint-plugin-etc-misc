@@ -53,3 +53,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if `@/` internal alias imports are part of your standard architecture.
+
+> **Rule catalog ID:** R018
+
+## Further reading
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)

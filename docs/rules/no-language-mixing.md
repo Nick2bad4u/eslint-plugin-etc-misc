@@ -44,6 +44,8 @@ export default [
 
 Disable this rule if mixed-language tokens are expected and accepted in your project.
 
+> **Rule catalog ID:** R030
+
 ## Further Reading
 
 - [Unicode Standard](https://www.unicode.org/standard/standard.html)

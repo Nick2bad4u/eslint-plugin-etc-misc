@@ -44,3 +44,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if readonly object mutation via `Object.assign` is intentionally allowed.
+
+> **Rule catalog ID:** R093
+
+## Further reading
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)

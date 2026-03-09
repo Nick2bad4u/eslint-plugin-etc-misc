@@ -59,6 +59,8 @@ Disable this rule if your project intentionally allows mixed array type styles.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
+> **Rule catalog ID:** R001
+
 ## Further reading
 
 - [typescript-eslint: `array-type`](https://typescript-eslint.io/rules/array-type)

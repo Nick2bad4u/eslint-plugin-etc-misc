@@ -44,3 +44,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if mutable properties are part of your coding conventions.
+
+> **Rule catalog ID:** R100
+
+## Further reading
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)

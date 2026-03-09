@@ -71,6 +71,8 @@ readability and does not want operand-swapping autofixes.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
+> **Rule catalog ID:** R059
+
 ## Further reading
 
 - [MDN: Less than (`<`)](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Less_than)

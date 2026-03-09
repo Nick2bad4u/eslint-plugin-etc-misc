@@ -51,3 +51,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if sibling imports are part of your module design.
+
+> **Rule catalog ID:** R041
+
+## Further reading
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)

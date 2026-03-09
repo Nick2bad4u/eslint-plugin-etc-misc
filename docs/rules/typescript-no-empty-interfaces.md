@@ -49,3 +49,9 @@ export default [
 ## When Not To Use It
 
 Disable this rule if marker interfaces are intentionally used in your project.
+
+> **Rule catalog ID:** R088
+
+## Further reading
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)

@@ -87,6 +87,8 @@ export default [
 Disable this rule if your codebase intentionally relies on broad rejection
 parameter typing and you do not want to enforce explicit `unknown` handling.
 
+> **Rule catalog ID:** R026
+
 ## Further Reading
 
 - [TypeScript-ESLint: no-implicit-any-catch](https://typescript-eslint.io/rules/no-implicit-any-catch/)
