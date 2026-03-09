@@ -76,3 +76,5 @@ ignore:
     - "**/*.d.ts"
     - "**/*.test.*"
     - "**/*.spec.*"
+    - "eslint-plugin-etc/**"
+    - "eslint-plugin-misc/**"

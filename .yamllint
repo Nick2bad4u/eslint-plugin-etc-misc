@@ -35,6 +35,16 @@ ignore: |
     # CI/CD files with known issues
     docs/docusaurus/docs/documents/docs/Packages/**
     **/.stryker-tmp/**
+    eslint-plugin-etc/**
+    eslint-plugin-misc/**
+
+    docs/rules/getting-started.md
+    docs/rules/overview.md
+    docs/rules/prefer-ts-extras-array-at.md
+    docs/rules/guides/adoption-checklist.md
+    docs/rules/guides/rollout-and-fix-safety.md
+    docs/rules/presets/all.md
+    src/prefer-ts-extras-assert-error.ts
 
 rules:
     # Enable anchor rules for better YAML structure
