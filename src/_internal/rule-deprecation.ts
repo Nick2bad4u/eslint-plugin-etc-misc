@@ -32,9 +32,7 @@ export const createReplacementRuleInfo = (
         }>;
     }>
 ): ReplacedByInfo => ({
-    ...(replacement.plugin === undefined
-        ? {}
-        : { plugin: replacement.plugin }),
+    ...(replacement.plugin === undefined ? {} : { plugin: replacement.plugin }),
     ...(replacement.rule === undefined ? {} : { rule: replacement.rule }),
 });
 
