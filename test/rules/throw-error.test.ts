@@ -55,6 +55,19 @@ ruleTester.run("throw-error", rule, {
                 },
             ],
         },
+        {
+            code: [
+                "const shouldThrow = (value: Error | string): never => {",
+                "    throw value;",
+                "};",
+            ].join("\n"),
+            errors: [
+                {
+                    data: { usage: "Throwing" },
+                    messageId: "forbidden",
+                },
+            ],
+        },
     ],
     valid: [
         {

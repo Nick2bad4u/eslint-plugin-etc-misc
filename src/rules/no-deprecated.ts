@@ -1,5 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { getConstrainedTypeAtLocation } from "@typescript-eslint/type-utils";
 import { ESLintUtils } from "@typescript-eslint/utils";
 
 import {
@@ -40,10 +41,6 @@ type TypedProgram = NonNullable<
 >;
 
 type TypeSymbol = Parameters<TypeChecker["getFullyQualifiedName"]>[0];
-
-type TypeWithOptionalSymbol = Readonly<{
-    symbol?: TypeSymbol;
-}>;
 
 const defaultOptions: Options = [{}];
 
@@ -105,11 +102,6 @@ const toTagComment = (
     return normalized.length > 0 ? normalized : undefined;
 };
 
-const isTypeWithOptionalSymbol = (
-    value: unknown
-): value is TypeWithOptionalSymbol =>
-    typeof value === "object" && value !== null && "symbol" in value;
-
 const isSymbolWithJsDocTags = (
     symbol: unknown
 ): symbol is SymbolWithJsDocTags => {
@@ -147,23 +139,17 @@ const matchesAnyPattern = (
 ): boolean => patterns.some((pattern) => pattern.test(text));
 
 const getIdentifierSymbol = (
-    typeChecker: TypeChecker,
-    tsNode: Parameters<TypeChecker["getTypeAtLocation"]>[0]
+    parserServices: Readonly<
+        Parameters<typeof getConstrainedTypeAtLocation>[0]
+    >,
+    node: Readonly<es.Identifier>
 ): TypeSymbol | undefined => {
-    const symbolFromLocation = typeChecker.getSymbolAtLocation(tsNode);
+    const symbolFromLocation = parserServices.getSymbolAtLocation(node);
     if (symbolFromLocation !== undefined) {
         return symbolFromLocation;
     }
 
-    const typeAtLocation = typeChecker.getTypeAtLocation(tsNode);
-    if (
-        isTypeWithOptionalSymbol(typeAtLocation) &&
-        typeAtLocation.symbol !== undefined
-    ) {
-        return typeAtLocation.symbol;
-    }
-
-    return undefined;
+    return getConstrainedTypeAtLocation(parserServices, node).getSymbol();
 };
 
 /**
@@ -191,8 +177,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     return;
                 }
 
-                const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
-                const symbol = getIdentifierSymbol(typeChecker, tsNode);
+                const symbol = getIdentifierSymbol(parserServices, node);
                 if (symbol === undefined) {
                     return;
                 }

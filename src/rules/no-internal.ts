@@ -1,5 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { getConstrainedTypeAtLocation } from "@typescript-eslint/type-utils";
 import { ESLintUtils } from "@typescript-eslint/utils";
 
 import {
@@ -27,6 +28,14 @@ type SymbolDisplayPart = Readonly<{ text: string }>;
 type SymbolWithJsDocTags = Readonly<{
     getJsDocTags: (checker?: unknown) => readonly JsDocTagInfo[];
 }>;
+
+type TypeChecker = ReturnType<TypedProgram["getTypeChecker"]>;
+
+type TypedProgram = NonNullable<
+    ReturnType<typeof ESLintUtils.getParserServices>["program"]
+>;
+
+type TypeSymbol = Parameters<TypeChecker["getFullyQualifiedName"]>[0];
 
 const defaultOptions: Options = [{}];
 
@@ -121,6 +130,20 @@ const matchesAnyPattern = (
     patterns: readonly Readonly<RegExp>[]
 ): boolean => patterns.some((pattern) => pattern.test(text));
 
+const getIdentifierSymbol = (
+    parserServices: Readonly<
+        Parameters<typeof getConstrainedTypeAtLocation>[0]
+    >,
+    node: Readonly<es.Identifier>
+): TypeSymbol | undefined => {
+    const symbolFromLocation = parserServices.getSymbolAtLocation(node);
+    if (symbolFromLocation !== undefined) {
+        return symbolFromLocation;
+    }
+
+    return getConstrainedTypeAtLocation(parserServices, node).getSymbol();
+};
+
 /**
  * Disallow usages of symbols tagged with `@internal`.
  */
@@ -146,8 +169,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     return;
                 }
 
-                const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
-                const symbol = typeChecker.getSymbolAtLocation(tsNode);
+                const symbol = getIdentifierSymbol(parserServices, node);
                 if (symbol === undefined) {
                     return;
                 }

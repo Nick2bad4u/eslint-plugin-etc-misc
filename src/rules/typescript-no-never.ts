@@ -1,7 +1,10 @@
+import {
+    getConstrainedTypeAtLocation,
+    isTypeNeverType,
+} from "@typescript-eslint/type-utils";
 import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
-import { isNeverType } from "../_internal/typescript-type-utils.js";
 
 type MessageIds = "forbidden";
 
@@ -21,7 +24,6 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 >({
     create: (context) => {
         const parserServices = ESLintUtils.getParserServices(context);
-        const checker = parserServices.program.getTypeChecker();
 
         return {
             Identifier: (node: Readonly<es.Identifier>): void => {
@@ -29,10 +31,9 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     return;
                 }
 
-                const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
-                const type = checker.getTypeAtLocation(tsNode);
+                const type = getConstrainedTypeAtLocation(parserServices, node);
 
-                if (!isNeverType(type)) {
+                if (!isTypeNeverType(type)) {
                     return;
                 }
 

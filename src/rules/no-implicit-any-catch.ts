@@ -1,6 +1,12 @@
-import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
-
-import { ESLintUtils } from "@typescript-eslint/utils";
+import {
+    getConstrainedTypeAtLocation,
+    isPromiseLike,
+} from "@typescript-eslint/type-utils";
+import {
+    type TSESTree as es,
+    ESLintUtils,
+    type TSESLint,
+} from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -12,47 +18,34 @@ type MessageIds =
 
 type Options = readonly [RuleOptions?];
 
-type PromiseTypeChecker = Readonly<{
-    getPromisedTypeOfPromise: (type: unknown) => unknown;
-}>;
-
 type RuleOptions = Readonly<{
     allowExplicitAny?: boolean;
 }>;
-
-type TypeChecker = ReturnType<TypedProgram["getTypeChecker"]>;
 
 type TypedProgram = NonNullable<
     ReturnType<typeof ESLintUtils.getParserServices>["program"]
 >;
 
-const hasPromiseTypeMethod = (
-    typeChecker: unknown
-): typeChecker is PromiseTypeChecker =>
-    typeof typeChecker === "object" &&
-    typeChecker !== null &&
-    "getPromisedTypeOfPromise" in typeChecker &&
-    typeof typeChecker.getPromisedTypeOfPromise === "function";
-
 const defaultOptions: Options = [{}];
 
 const isPromiseRejectionCall = (
     callExpression: Readonly<es.CallExpression>,
-    parserServices: Readonly<ReturnType<typeof ESLintUtils.getParserServices>>,
-    typeChecker: TypeChecker
+    parserServices: Readonly<
+        Parameters<typeof getConstrainedTypeAtLocation>[0]
+    >,
+    program: TypedProgram
 ): boolean => {
     const { callee } = callExpression;
     if (callee.type !== "MemberExpression" || callee.object.type === "Super") {
         return false;
     }
 
-    const tsNode = parserServices.esTreeNodeToTSNodeMap.get(callee.object);
-    const objectType = typeChecker.getTypeAtLocation(tsNode);
-    if (!hasPromiseTypeMethod(typeChecker)) {
-        return false;
-    }
+    const objectType = getConstrainedTypeAtLocation(
+        parserServices,
+        callee.object
+    );
 
-    return typeChecker.getPromisedTypeOfPromise(objectType) !== undefined;
+    return isPromiseLike(program, objectType);
 };
 
 const isParenthesized = (
@@ -104,7 +97,6 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     create: (context) => {
         const parserServices = ESLintUtils.getParserServices(context);
         const sourceCode = context.sourceCode;
-        const typeChecker = parserServices.program.getTypeChecker();
         const [{ allowExplicitAny = false } = {}] = context.options;
 
         const checkRejectionCallback = (
@@ -127,7 +119,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 !isPromiseRejectionCall(
                     callExpression,
                     parserServices,
-                    typeChecker
+                    parserServices.program
                 )
             ) {
                 return;
@@ -199,22 +191,20 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         };
 
         return {
-            "CallExpression[callee.property.name='catch']": (
-                callExpression: Readonly<es.CallExpression>
-            ) => {
-                const [callback] = callExpression.arguments;
-                if (callback !== undefined) {
-                    checkRejectionCallback(callExpression, callback);
-                }
-            },
-            "CallExpression[callee.property.name='then']": (
-                callExpression: Readonly<es.CallExpression>
-            ) => {
-                const callback = callExpression.arguments[1];
-                if (callback !== undefined) {
-                    checkRejectionCallback(callExpression, callback);
-                }
-            },
+            "CallExpression[callee.type='MemberExpression'][callee.property.type='Identifier'][callee.property.name='catch']":
+                (callExpression: Readonly<es.CallExpression>) => {
+                    const [callback] = callExpression.arguments;
+                    if (callback !== undefined) {
+                        checkRejectionCallback(callExpression, callback);
+                    }
+                },
+            "CallExpression[callee.type='MemberExpression'][callee.property.type='Identifier'][callee.property.name='then']":
+                (callExpression: Readonly<es.CallExpression>) => {
+                    const callback = callExpression.arguments[1];
+                    if (callback !== undefined) {
+                        checkRejectionCallback(callExpression, callback);
+                    }
+                },
         };
     },
     defaultOptions,

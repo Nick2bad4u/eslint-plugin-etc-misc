@@ -1,16 +1,30 @@
-import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
+import {
+    containsAllTypesByName,
+    getConstrainedTypeAtLocation,
+    isTypeArrayTypeOrUnionOfArrayTypes,
+} from "@typescript-eslint/type-utils";
+import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
 import type ts from "typescript";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
-import { isArrayLikeType } from "../_internal/typescript-type-utils.js";
 
 type MessageIds = "forbidden";
 
-const mutatingMethodNames = new Set([
-    "fill",
-    "reverse",
-    "sort",
-]);
+const readonlyArrayTypeNames = new Set(["ReadonlyArray"]);
+
+const isArrayLikeType = (
+    typeChecker: Readonly<ts.TypeChecker>,
+    type: Readonly<ts.Type>
+): boolean => {
+    const apparentType = typeChecker.getApparentType(type);
+
+    return (
+        typeChecker.isArrayType(apparentType) ||
+        typeChecker.isTupleType(apparentType) ||
+        isTypeArrayTypeOrUnionOfArrayTypes(type, typeChecker) ||
+        containsAllTypesByName(type, false, readonlyArrayTypeNames, true)
+    );
+};
 
 const creatorMethodNames = new Set([
     "concat",
@@ -22,16 +36,6 @@ const creatorMethodNames = new Set([
     "splice",
     "values",
 ]);
-
-const isTypedParserServices = (
-    parserServices: Readonly<TSESLint.SourceCode["parserServices"]> | undefined
-): parserServices is TSESLint.SourceCode["parserServices"] & {
-    readonly getTypeAtLocation: (node: Readonly<es.Node>) => ts.Type;
-    readonly program: ts.Program;
-} =>
-    parserServices !== undefined &&
-    "getTypeAtLocation" in parserServices &&
-    typeof parserServices.getTypeAtLocation === "function";
 
 const isArrayFactoryCallee = (callee: Readonly<es.Expression>): boolean => {
     if (callee.type === "Identifier") {
@@ -96,13 +100,11 @@ const mutatesReferencedArray = (
 const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
     ruleCreator<readonly [], MessageIds>({
         create: (context) => {
-            const parserServices = context.sourceCode.parserServices;
-            const typeChecker = isTypedParserServices(parserServices)
-                ? parserServices.program.getTypeChecker()
-                : undefined;
+            const parserServices = ESLintUtils.getParserServices(context);
+            const typeChecker = parserServices.program.getTypeChecker();
 
             return {
-                "CallExpression[callee.type='MemberExpression'][callee.property.type='Identifier']":
+                "CallExpression[callee.type='MemberExpression'][callee.property.type='Identifier'][callee.property.name=/^(?:fill|reverse|sort)$/]":
                     (callExpression: Readonly<es.CallExpression>) => {
                         const { callee } = callExpression;
                         if (callee.type !== "MemberExpression") {
@@ -110,10 +112,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                         }
 
                         const { property } = callee;
-                        if (
-                            property.type !== "Identifier" ||
-                            !mutatingMethodNames.has(property.name)
-                        ) {
+                        if (property.type !== "Identifier") {
                             return;
                         }
 
@@ -124,16 +123,12 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                             return;
                         }
 
-                        if (
-                            typeChecker !== undefined &&
-                            isTypedParserServices(parserServices)
-                        ) {
-                            const objectType = parserServices.getTypeAtLocation(
-                                callee.object
-                            );
-                            if (!isArrayLikeType(typeChecker, objectType)) {
-                                return;
-                            }
+                        const objectType = getConstrainedTypeAtLocation(
+                            parserServices,
+                            callee.object
+                        );
+                        if (!isArrayLikeType(typeChecker, objectType)) {
+                            return;
                         }
 
                         if (!mutatesReferencedArray(callExpression)) {
@@ -153,6 +148,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                 description:
                     "disallow assigning values returned from mutating array methods.",
                 recommended: false,
+                requiresTypeChecking: true,
                 url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-assign-mutated-array",
             },
             hasSuggestions: false,

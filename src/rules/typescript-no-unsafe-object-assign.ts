@@ -1,3 +1,4 @@
+import { getConstrainedTypeAtLocation } from "@typescript-eslint/type-utils";
 import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 
@@ -6,13 +7,6 @@ import { ruleCreator } from "../_internal/rule-creator.js";
 type MessageIds = "forbidden";
 
 type Options = readonly [];
-
-const isObjectAssignCall = (node: Readonly<es.CallExpression>): boolean =>
-    node.callee.type === "MemberExpression" &&
-    node.callee.object.type === "Identifier" &&
-    node.callee.object.name === "Object" &&
-    node.callee.property.type === "Identifier" &&
-    node.callee.property.name === "assign";
 
 /**
  * Disallow Object.assign into targets with readonly properties.
@@ -39,28 +33,26 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 );
 
         return {
-            CallExpression: (node: Readonly<es.CallExpression>): void => {
-                if (!isObjectAssignCall(node)) {
-                    return;
-                }
+            "CallExpression[callee.type='MemberExpression'][callee.object.type='Identifier'][callee.object.name='Object'][callee.property.type='Identifier'][callee.property.name='assign']":
+                (node: Readonly<es.CallExpression>): void => {
+                    const [target] = node.arguments;
+                    if (target === undefined) {
+                        return;
+                    }
 
-                const [target] = node.arguments;
-                if (target === undefined) {
-                    return;
-                }
+                    const targetType = getConstrainedTypeAtLocation(
+                        parserServices,
+                        target
+                    );
+                    if (!hasReadonlyProperty(targetType)) {
+                        return;
+                    }
 
-                const tsTarget =
-                    parserServices.esTreeNodeToTSNodeMap.get(target);
-                const targetType = checker.getTypeAtLocation(tsTarget);
-                if (!hasReadonlyProperty(targetType)) {
-                    return;
-                }
-
-                context.report({
-                    messageId: "forbidden",
-                    node,
-                });
-            },
+                    context.report({
+                        messageId: "forbidden",
+                        node,
+                    });
+                },
         };
     },
     defaultOptions: [],

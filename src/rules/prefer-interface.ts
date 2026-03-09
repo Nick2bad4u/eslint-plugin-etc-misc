@@ -1,5 +1,8 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
-import type * as ts from "typescript";
+
+import { getConstrainedTypeAtLocation } from "@typescript-eslint/type-utils";
+import { ESLintUtils } from "@typescript-eslint/utils";
+import * as tsutils from "tsutils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 import {
@@ -16,21 +19,7 @@ type RuleOptions = Readonly<{
     allowLocal?: boolean;
 }>;
 
-type TypedParserServices = TSESLint.SourceCode["parserServices"] & {
-    readonly esTreeNodeToTSNodeMap: Readonly<
-        WeakMap<Readonly<es.Node>, ts.Node>
-    >;
-    readonly program: ts.Program;
-};
-
 const defaultOptions: Options = [{}];
-
-const hasTypedParserServices = (
-    parserServices: Readonly<TSESLint.SourceCode["parserServices"]> | undefined
-): parserServices is TypedParserServices =>
-    parserServices !== undefined &&
-    "esTreeNodeToTSNodeMap" in parserServices &&
-    "program" in parserServices;
 
 const isExportedTypeAlias = (
     typeAliasDeclaration: Readonly<es.TSTypeAliasDeclaration>
@@ -113,8 +102,7 @@ const createIntersectionFixText = (
 
 const canSafelyConvertIntersection = (
     intersectionTypeNode: Readonly<es.TSIntersectionType>,
-    parserServices: Readonly<TypedParserServices>,
-    typeChecker: Readonly<ts.TypeChecker>
+    parserServices: Readonly<Parameters<typeof getConstrainedTypeAtLocation>[0]>
 ):
     | undefined
     | {
@@ -143,13 +131,11 @@ const canSafelyConvertIntersection = (
     }
 
     for (const reference of references) {
-        const tsNode = parserServices.esTreeNodeToTSNodeMap.get(reference);
-        if (tsNode === undefined) {
-            return undefined;
-        }
-
-        const referenceType = typeChecker.getTypeAtLocation(tsNode);
-        if (referenceType.isUnion()) {
+        const referenceType = getConstrainedTypeAtLocation(
+            parserServices,
+            reference
+        );
+        if (tsutils.unionTypeParts(referenceType).length > 1) {
             return undefined;
         }
     }
@@ -159,6 +145,11 @@ const canSafelyConvertIntersection = (
         references,
     };
 };
+
+const hasFullTypeInformation = (
+    parserServices: Readonly<ReturnType<typeof ESLintUtils.getParserServices>>
+): parserServices is Parameters<typeof getConstrainedTypeAtLocation>[0] =>
+    parserServices.program !== null;
 
 const reportTypeAlias = (
     context: Readonly<TSESLint.RuleContext<MessageIds, Options>>,
@@ -192,9 +183,9 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         const [{ allowIntersection = true, allowLocal = false } = {}] =
             context.options;
         const sourceCode = context.sourceCode;
-        const parserServices = sourceCode.parserServices;
-        const typeChecker = hasTypedParserServices(parserServices)
-            ? parserServices.program.getTypeChecker()
+        const parserServices = ESLintUtils.getParserServices(context, true);
+        const typedParserServices = hasFullTypeInformation(parserServices)
+            ? parserServices
             : undefined;
 
         const shouldSkipForAllowLocal = (
@@ -229,7 +220,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             "TSTypeAliasDeclaration > TSIntersectionType": (
                 intersectionTypeNode: Readonly<es.TSIntersectionType>
             ) => {
-                if (allowIntersection || typeChecker === undefined) {
+                if (allowIntersection || typedParserServices === undefined) {
                     return;
                 }
 
@@ -244,14 +235,9 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     return;
                 }
 
-                if (!hasTypedParserServices(parserServices)) {
-                    return;
-                }
-
                 const conversion = canSafelyConvertIntersection(
                     intersectionTypeNode,
-                    parserServices,
-                    typeChecker
+                    typedParserServices
                 );
                 if (conversion === undefined) {
                     return;

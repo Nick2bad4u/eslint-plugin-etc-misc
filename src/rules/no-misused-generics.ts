@@ -1,4 +1,4 @@
-import type { TSESTree as es } from "@typescript-eslint/utils";
+import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 import type * as ts from "typescript";
 
 import { ESLintUtils } from "@typescript-eslint/utils";
@@ -22,22 +22,21 @@ const getVariableUses = (
 ): readonly VariableUse[] => usageMap.get(identifier)?.uses ?? [];
 
 const toReportLocation = (
+    sourceCode: Readonly<TSESLint.SourceCode>,
     sourceFile: Readonly<ts.SourceFile>,
     node: Readonly<ts.Node>
 ): es.SourceLocation => {
-    const start = sourceFile.getLineAndCharacterOfPosition(
-        node.getStart(sourceFile)
-    );
-    const end = sourceFile.getLineAndCharacterOfPosition(node.getEnd());
+    const start = sourceCode.getLocFromIndex(node.getStart(sourceFile));
+    const end = sourceCode.getLocFromIndex(node.getEnd());
 
     return {
         end: {
-            column: end.character,
-            line: end.line + 1,
+            column: end.column,
+            line: end.line,
         },
         start: {
-            column: start.character,
-            line: start.line + 1,
+            column: start.column,
+            line: start.line,
         },
     } satisfies es.SourceLocation;
 };
@@ -164,7 +163,11 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         data: {
                             name: typeParameter.name.text,
                         },
-                        loc: toReportLocation(sourceFile, typeParameter),
+                        loc: toReportLocation(
+                            context.sourceCode,
+                            sourceFile,
+                            typeParameter
+                        ),
                         messageId: "cannotInfer",
                     });
                     continue;
@@ -187,7 +190,11 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                                 typeParameter
                             ),
                         },
-                        loc: toReportLocation(sourceFile, typeParameter),
+                        loc: toReportLocation(
+                            context.sourceCode,
+                            sourceFile,
+                            typeParameter
+                        ),
                         messageId: "canReplace",
                     });
                 }

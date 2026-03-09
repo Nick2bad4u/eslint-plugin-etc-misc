@@ -1,79 +1,51 @@
-import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
-import type * as ts from "typescript";
+import type ts from "typescript";
+
+import {
+    getConstrainedTypeAtLocation,
+    isBuiltinSymbolLike,
+    isErrorLike,
+    isTypeAnyType,
+    isTypeUnknownType,
+} from "@typescript-eslint/type-utils";
+import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
+import * as tsutils from "tsutils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
-import { getTypeNameVariants } from "../_internal/typescript-type-utils.js";
 
 type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-type TypedParserServices = TSESLint.SourceCode["parserServices"] & {
-    readonly esTreeNodeToTSNodeMap: Readonly<
-        WeakMap<Readonly<es.Node>, ts.Node>
-    >;
-    readonly program: ts.Program;
-};
-
-const hasTypedParserServices = (
-    parserServices: Readonly<TSESLint.SourceCode["parserServices"]> | undefined
-): parserServices is TypedParserServices =>
-    parserServices !== undefined &&
-    "esTreeNodeToTSNodeMap" in parserServices &&
-    "program" in parserServices;
-
-const isAnyOrUnknownVariant = (typeVariant: string): boolean =>
-    typeVariant === "any" || typeVariant === "unknown";
-
-const isErrorLikeVariant = (typeVariant: string): boolean =>
-    typeVariant === "Error" ||
-    typeVariant === "DOMException" ||
-    typeVariant.endsWith("Error") ||
-    typeVariant.includes("Error<");
+const isAllowedThrowableVariant = (
+    type: Readonly<ts.Type>,
+    program: Readonly<ts.Program>
+): boolean =>
+    isTypeAnyType(type) ||
+    isTypeUnknownType(type) ||
+    isErrorLike(program, type);
 
 const couldBeAllowedThrowableType = (
     type: Readonly<ts.Type>,
-    typeChecker: Readonly<ts.TypeChecker>
+    program: Readonly<ts.Program>
 ): boolean =>
-    getTypeNameVariants(typeChecker, type).some(
-        (typeVariant) =>
-            isAnyOrUnknownVariant(typeVariant) ||
-            isErrorLikeVariant(typeVariant)
-    );
-
-const isPromiseConstructorVariant = (typeVariant: string): boolean =>
-    typeVariant === "PromiseConstructor" ||
-    typeVariant === "typeof Promise" ||
-    typeVariant.startsWith("PromiseConstructor") ||
-    typeVariant.includes("PromiseConstructor ");
+    tsutils
+        .unionTypeParts(type)
+        .every((typeVariant) =>
+            isAllowedThrowableVariant(typeVariant, program)
+        );
 
 const couldBePromiseConstructorType = (
     type: Readonly<ts.Type>,
-    typeChecker: Readonly<ts.TypeChecker>
+    program: Readonly<ts.Program>
 ): boolean =>
-    getTypeNameVariants(typeChecker, type).some((typeVariant) => {
-        if (isAnyOrUnknownVariant(typeVariant)) {
-            return false;
-        }
-
-        return isPromiseConstructorVariant(typeVariant);
-    });
+    tsutils
+        .unionTypeParts(type)
+        .some((typeVariant) =>
+            isBuiltinSymbolLike(program, typeVariant, "PromiseConstructor")
+        );
 
 const isPromiseIdentifier = (node: Readonly<es.Expression>): boolean =>
     node.type === "Identifier" && node.name === "Promise";
-
-const getNodeType = (
-    parserServices: Readonly<TypedParserServices>,
-    typeChecker: Readonly<ts.TypeChecker>,
-    node: Readonly<es.Node>
-): ts.Type | undefined => {
-    const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
-    if (tsNode === undefined) {
-        return undefined;
-    }
-
-    return typeChecker.getTypeAtLocation(tsNode);
-};
 
 /**
  * Disallow throwing or rejecting values that are not Error-like.
@@ -83,23 +55,16 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     MessageIds
 >({
     create: (context) => {
-        const parserServices = context.sourceCode.parserServices;
-        if (!hasTypedParserServices(parserServices)) {
-            return {};
-        }
-
-        const typeChecker = parserServices.program.getTypeChecker();
+        const parserServices = ESLintUtils.getParserServices(context);
+        const { program } = parserServices;
 
         const reportIfNonErrorLike = (
             node: Readonly<es.Node>,
             usage: "Rejecting with" | "Throwing"
         ): void => {
-            const type = getNodeType(parserServices, typeChecker, node);
-            if (type === undefined) {
-                return;
-            }
+            const type = getConstrainedTypeAtLocation(parserServices, node);
 
-            if (couldBeAllowedThrowableType(type, typeChecker)) {
+            if (couldBeAllowedThrowableType(type, program)) {
                 return;
             }
 
@@ -132,23 +97,14 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         return;
                     }
 
-                    const objectType = getNodeType(
+                    const objectType = getConstrainedTypeAtLocation(
                         parserServices,
-                        typeChecker,
                         callee.object
                     );
-
-                    if (objectType !== undefined) {
-                        if (
-                            !couldBePromiseConstructorType(
-                                objectType,
-                                typeChecker
-                            ) &&
-                            !isPromiseIdentifier(callee.object)
-                        ) {
-                            return;
-                        }
-                    } else if (!isPromiseIdentifier(callee.object)) {
+                    if (
+                        !couldBePromiseConstructorType(objectType, program) &&
+                        !isPromiseIdentifier(callee.object)
+                    ) {
                         return;
                     }
 

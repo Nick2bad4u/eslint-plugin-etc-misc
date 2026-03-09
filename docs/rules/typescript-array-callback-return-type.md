@@ -4,7 +4,7 @@ Require explicit return types for array callback functions.
 
 ## Rule Details
 
-This rule reports callback functions passed to common array methods when no explicit return type is declared.
+This rule reports callback functions passed to common **array/readonly-array** methods when no explicit return type is declared.
 
 ### ❌ Incorrect
 
@@ -16,6 +16,14 @@ This rule reports callback functions passed to common array methods when no expl
 
 ```ts
 [1, 2, 3].map((value): number => value + 1);
+```
+
+```ts
+const collection = {
+    map: (callback: (value: number) => number): number => callback(1),
+};
+
+collection.map((value) => value + 1);
 ```
 
 ## Options
@@ -40,3 +48,7 @@ export default [
 ## When Not To Use It
 
 Disable this rule if your team accepts inferred callback return types.
+
+## Type Checking
+
+This rule requires type information and only reports callbacks when the receiver is typed as an array-like value.

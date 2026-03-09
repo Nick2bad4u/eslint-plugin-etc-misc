@@ -1,8 +1,12 @@
-import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
+import {
+    containsAllTypesByName,
+    getConstrainedTypeAtLocation,
+    isTypeArrayTypeOrUnionOfArrayTypes,
+} from "@typescript-eslint/type-utils";
+import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
 import type ts from "typescript";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
-import { includesConfiguredTypeName } from "../_internal/typescript-type-utils.js";
 
 type MessageIds = "forbidden";
 
@@ -21,15 +25,40 @@ const defaultTypes: readonly string[] = [
     "Set",
 ];
 
-const isTypedParserServices = (
-    parserServices: Readonly<TSESLint.SourceCode["parserServices"]> | undefined
-): parserServices is TSESLint.SourceCode["parserServices"] & {
-    readonly getTypeAtLocation: (node: Readonly<es.Node>) => ts.Type;
-    readonly program: ts.Program;
-} =>
-    parserServices !== undefined &&
-    "getTypeAtLocation" in parserServices &&
-    typeof parserServices.getTypeAtLocation === "function";
+const getConfiguredTypeNames = (
+    configuredTypes: readonly string[]
+): Set<string> => {
+    const typeNames = new Set<string>();
+
+    for (const configuredType of configuredTypes) {
+        typeNames.add(configuredType);
+        if (configuredType === "Array") {
+            typeNames.add("ReadonlyArray");
+        }
+    }
+
+    return typeNames;
+};
+
+const matchesConfiguredCollectionType = (
+    typeChecker: Readonly<ts.TypeChecker>,
+    type: Readonly<ts.Type>,
+    configuredTypeNames: Set<string>
+): boolean => {
+    if (configuredTypeNames.has("Array")) {
+        const apparentType = typeChecker.getApparentType(type);
+
+        if (
+            typeChecker.isArrayType(apparentType) ||
+            typeChecker.isTupleType(apparentType) ||
+            isTypeArrayTypeOrUnionOfArrayTypes(type, typeChecker)
+        ) {
+            return true;
+        }
+    }
+
+    return containsAllTypesByName(type, false, configuredTypeNames, true);
+};
 
 /**
  * Disallow calling `forEach` on configured collection types.
@@ -39,13 +68,11 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     MessageIds
 >({
     create: (context) => {
-        const parserServices = context.sourceCode.parserServices;
-        if (!isTypedParserServices(parserServices)) {
-            return {};
-        }
+        const parserServices = ESLintUtils.getParserServices(context);
+        const typeChecker = parserServices.program.getTypeChecker();
 
         const [{ types = defaultTypes } = {}] = context.options;
-        const typeChecker = parserServices.program.getTypeChecker();
+        const configuredTypeNames = getConfiguredTypeNames(types);
 
         return {
             "CallExpression[callee.type='MemberExpression'][callee.property.type='Identifier'][callee.property.name='forEach']":
@@ -55,14 +82,15 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         return;
                     }
 
-                    const objectType = parserServices.getTypeAtLocation(
+                    const objectType = getConstrainedTypeAtLocation(
+                        parserServices,
                         callee.object
                     );
                     if (
-                        !includesConfiguredTypeName(
+                        !matchesConfiguredCollectionType(
                             typeChecker,
                             objectType,
-                            types
+                            configuredTypeNames
                         )
                     ) {
                         return;
@@ -82,6 +110,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             description:
                 "disallow calling forEach on configured collection types.",
             recommended: false,
+            requiresTypeChecking: true,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-foreach",
         },
         hasSuggestions: false,

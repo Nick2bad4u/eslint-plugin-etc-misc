@@ -1,7 +1,12 @@
+import {
+    getConstrainedTypeAtLocation,
+    isTypeFlagSet,
+} from "@typescript-eslint/type-utils";
 import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
+import * as tsutils from "tsutils";
+import ts from "typescript";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
-import { isEnumLikeOrUndefinedType } from "../_internal/typescript-type-utils.js";
 
 type MessageIds =
     | "preferEnumComparison"
@@ -9,6 +14,33 @@ type MessageIds =
     | "preferEnumUnion";
 
 type Options = readonly [];
+
+const isEnumLikeOrUndefinedType = (
+    checker: Readonly<ts.TypeChecker>,
+    type: Readonly<ts.Type>
+): boolean => {
+    let hasEnumLike = false;
+
+    for (const typeVariant of tsutils.unionTypeParts(type)) {
+        const apparentType = checker.getApparentType(typeVariant);
+
+        if (isTypeFlagSet(typeVariant, ts.TypeFlags.Undefined)) {
+            continue;
+        }
+
+        if (
+            isTypeFlagSet(typeVariant, ts.TypeFlags.EnumLike) ||
+            isTypeFlagSet(apparentType, ts.TypeFlags.EnumLike)
+        ) {
+            hasEnumLike = true;
+            continue;
+        }
+
+        return false;
+    }
+
+    return hasEnumLike;
+};
 
 const isStringLiteral = (node: Readonly<es.Node>): node is es.Literal =>
     node.type === "Literal" && typeof node.value === "string";
@@ -46,9 +78,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     return;
                 }
 
-                const tsNode =
-                    parserServices.esTreeNodeToTSNodeMap.get(expressionNode);
-                const expressionType = checker.getTypeAtLocation(tsNode);
+                const expressionType = getConstrainedTypeAtLocation(
+                    parserServices,
+                    expressionNode
+                );
                 if (!isEnumLikeOrUndefinedType(checker, expressionType)) {
                     return;
                 }
@@ -81,11 +114,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     return;
                 }
 
-                const tsNode =
-                    parserServices.esTreeNodeToTSNodeMap.get(functionNode);
-                const signature = checker
-                    .getTypeAtLocation(tsNode)
-                    .getCallSignatures()[0];
+                const signature = getConstrainedTypeAtLocation(
+                    parserServices,
+                    functionNode
+                ).getCallSignatures()[0];
                 const returnType =
                     signature === undefined
                         ? undefined
