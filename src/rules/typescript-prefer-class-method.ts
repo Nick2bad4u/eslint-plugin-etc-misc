@@ -1,4 +1,4 @@
-import { createSelectorRule } from "../_internal/create-selector-rule";
+import { createSelectorRule } from "../_internal/create-selector-rule.js";
 
 /**
  * Prefer class methods over untyped arrow-function class properties.

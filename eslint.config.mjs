@@ -84,7 +84,7 @@ import { fileURLToPath } from "node:url";
 import * as tomlEslintParser from "toml-eslint-parser";
 import * as yamlEslintParser from "yaml-eslint-parser";
 
-import typefest from "./plugin.mjs";
+import etcmisc from "./plugin.mjs";
 
 // NOTE: eslint-plugin-json-schema-validator may attempt to fetch remote schemas
 // at lint time. That makes linting flaky/offline-hostile.
@@ -109,6 +109,9 @@ const jsonSchemaValidatorPlugins = enableJsonSchemaValidation
 const jsonSchemaValidatorRules = enableJsonSchemaValidation
     ? { "json-schema-validator/no-invalid": "error" }
     : {};
+
+const enableLocalEtcMiscDogfooding =
+    globalThis.process.env["ENABLE_LOCAL_ETC_MISC_DOGFOODING"] === "1";
 
 const canonicalPlugin = fixupPluginRules(pluginCanonical);
 // @ts-expect-error -- Plugin needs update for Eslint v10
@@ -1449,13 +1452,13 @@ export default defineConfig([
             "src/**/*.{ts,tsx,mts,cts}",
             //    "test/**/*.{ts,tsx,mts,cts}"
         ],
-        name: "Local typefest plugin manual dogfooding rules",
-        plugins: {
-            typefest: typefest,
-        },
-        rules: {
-            ...typefest.configs.all.rules,
-        },
+        name: "Local etc-misc plugin manual dogfooding rules",
+        plugins: enableLocalEtcMiscDogfooding
+            ? {
+                  "etc-misc": etcmisc,
+              }
+            : {},
+        rules: enableLocalEtcMiscDogfooding ? { ...etcmisc.configs.all.rules } : {},
     },
     // #endregion
     // #region 🧪 Internal Tooling

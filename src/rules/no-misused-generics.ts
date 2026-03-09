@@ -4,7 +4,7 @@ import type * as ts from "typescript";
 import { ESLintUtils } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 
-import { ruleCreator } from "../_internal/rule-creator";
+import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "cannotInfer" | "canReplace";
 

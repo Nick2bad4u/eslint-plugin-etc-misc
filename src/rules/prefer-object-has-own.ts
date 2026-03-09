@@ -1,9 +1,9 @@
-import { adaptExternalRule } from "../_internal/create-external-rule";
-import { getCoreRule } from "../_internal/get-core-rule";
+import { adaptExternalRule } from "../_internal/create-external-rule.js";
+import { getCoreRule } from "../_internal/get-core-rule.js";
 import {
     createReplacementRuleInfo,
     withDeprecatedRuleLifecycle,
-} from "../_internal/rule-deprecation";
+} from "../_internal/rule-deprecation.js";
 
 const externalRule = getCoreRule("prefer-object-has-own");
 

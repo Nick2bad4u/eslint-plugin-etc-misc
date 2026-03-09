@@ -1,4 +1,4 @@
-import coreNoUnsafeObjectAssignRule from "./typescript-no-unsafe-object-assign";
+import coreNoUnsafeObjectAssignRule from "./typescript-no-unsafe-object-assign.js";
 
 /**
  * TypeScript-prefixed alias for Object.assign readonly-target safety checks.

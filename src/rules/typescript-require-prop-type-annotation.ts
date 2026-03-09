@@ -1,4 +1,4 @@
-import { createSelectorRule } from "../_internal/create-selector-rule";
+import { createSelectorRule } from "../_internal/create-selector-rule.js";
 
 /**
  * Require explicit type annotations for uninitialized class properties.

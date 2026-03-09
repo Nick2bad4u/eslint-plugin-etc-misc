@@ -3,8 +3,8 @@ import type { TSESTree as es } from "@typescript-eslint/utils";
 import {
     getImportSourceFromNode,
     shouldReportImportSource,
-} from "./import-patterns";
-import { ruleCreator } from "./rule-creator";
+} from "./import-patterns.js";
+import { ruleCreator } from "./rule-creator.js";
 
 /**
  * Rule factory options for import source pattern rules.

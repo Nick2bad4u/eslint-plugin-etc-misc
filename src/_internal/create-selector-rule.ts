@@ -1,6 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
-import { ruleCreator } from "./rule-creator";
+import { ruleCreator } from "./rule-creator.js";
 
 type CreateSelectorRuleInput = Readonly<{
     description: string;

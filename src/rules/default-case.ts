@@ -1,5 +1,5 @@
-import { adaptExternalRule } from "../_internal/create-external-rule";
-import { getCoreRule } from "../_internal/get-core-rule";
+import { adaptExternalRule } from "../_internal/create-external-rule.js";
+import { getCoreRule } from "../_internal/get-core-rule.js";
 
 const externalRule = getCoreRule("default-case");
 

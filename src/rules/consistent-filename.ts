@@ -1,9 +1,9 @@
-import { type Casing, filenameStem, toCasing } from "../_internal/casing";
-import { ruleCreator } from "../_internal/rule-creator";
+import { type Casing, filenameStem, toCasing } from "../_internal/casing.js";
+import { ruleCreator } from "../_internal/rule-creator.js";
 import {
     createReplacementRuleInfo,
     withDeprecatedRuleLifecycle,
-} from "../_internal/rule-deprecation";
+} from "../_internal/rule-deprecation.js";
 
 type MessageIds = "inconsistent";
 

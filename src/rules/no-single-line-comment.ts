@@ -1,4 +1,4 @@
-import { ruleCreator } from "../_internal/rule-creator";
+import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
 

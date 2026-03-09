@@ -3,11 +3,11 @@ import eslintCommentsPlugin from "@eslint-community/eslint-plugin-eslint-comment
 import {
     adaptExternalRule,
     getExternalRuleFromPlugin,
-} from "../_internal/create-external-rule";
+} from "../_internal/create-external-rule.js";
 import {
     createReplacementRuleInfo,
     withDeprecatedRuleLifecycle,
-} from "../_internal/rule-deprecation";
+} from "../_internal/rule-deprecation.js";
 
 /**
  * Proxy of external `@eslint-community/eslint-comments/no-unused-disable`.

@@ -1,8 +1,8 @@
 import {
     createReplacementRuleInfo,
     withDeprecatedRuleLifecycle,
-} from "../_internal/rule-deprecation";
-import noRestrictedSyntaxRule from "./no-restricted-syntax";
+} from "../_internal/rule-deprecation.js";
+import noRestrictedSyntaxRule from "./no-restricted-syntax.js";
 
 /**
  * TypeScript-prefixed alias for selector-based restricted syntax checks.

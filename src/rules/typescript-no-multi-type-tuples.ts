@@ -1,4 +1,4 @@
-import { createSelectorRule } from "../_internal/create-selector-rule";
+import { createSelectorRule } from "../_internal/create-selector-rule.js";
 
 const selector = "TSTupleType > TSUnionType:not([types.length=1])";
 

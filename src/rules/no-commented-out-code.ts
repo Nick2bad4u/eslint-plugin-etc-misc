@@ -2,11 +2,11 @@ import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import parser from "@typescript-eslint/parser";
 
-import { ruleCreator } from "../_internal/rule-creator";
+import { ruleCreator } from "../_internal/rule-creator.js";
 import {
     createReplacementRuleInfo,
     withDeprecatedRuleLifecycle,
-} from "../_internal/rule-deprecation";
+} from "../_internal/rule-deprecation.js";
 
 type CommentBlock = Readonly<{
     content: string;

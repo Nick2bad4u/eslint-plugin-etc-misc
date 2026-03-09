@@ -1,8 +1,8 @@
-import { createSelectorRule } from "../_internal/create-selector-rule";
+import { createSelectorRule } from "../_internal/create-selector-rule.js";
 import {
     createReplacementRuleInfo,
     withDeprecatedRuleLifecycle,
-} from "../_internal/rule-deprecation";
+} from "../_internal/rule-deprecation.js";
 
 const selector = [
     "PropertyDefinition[value.type='Literal'] > TSTypeAnnotation",

@@ -1,4 +1,4 @@
-import { createSelectorRule } from "../_internal/create-selector-rule";
+import { createSelectorRule } from "../_internal/create-selector-rule.js";
 
 const selector = [
     "TSPropertySignature[optional=true] > TSTypeAnnotation > TSLiteralType > Literal[value=true]",

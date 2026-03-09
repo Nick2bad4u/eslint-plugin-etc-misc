@@ -2,12 +2,12 @@ import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { dirname, resolve } from "node:path";
 
-import { getImportSourceFromNode } from "../_internal/import-patterns";
-import { ruleCreator } from "../_internal/rule-creator";
+import { getImportSourceFromNode } from "../_internal/import-patterns.js";
+import { ruleCreator } from "../_internal/rule-creator.js";
 import {
     createReplacementRuleInfo,
     withDeprecatedRuleLifecycle,
-} from "../_internal/rule-deprecation";
+} from "../_internal/rule-deprecation.js";
 
 type MessageIds = "forbidden";
 

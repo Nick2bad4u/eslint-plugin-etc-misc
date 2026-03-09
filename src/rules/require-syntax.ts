@@ -1,10 +1,10 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
-import { ruleCreator } from "../_internal/rule-creator";
+import { ruleCreator } from "../_internal/rule-creator.js";
 import {
     normalizeSyntaxSelector,
     type SyntaxSelectorOption,
-} from "../_internal/syntax-selectors";
+} from "../_internal/syntax-selectors.js";
 
 type MessageIds = "customMessage" | "missing";
 

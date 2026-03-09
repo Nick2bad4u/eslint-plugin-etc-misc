@@ -1,7 +1,7 @@
 import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 
-import { ruleCreator } from "../_internal/rule-creator";
+import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
 

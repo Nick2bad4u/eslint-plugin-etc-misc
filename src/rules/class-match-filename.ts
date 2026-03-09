@@ -2,7 +2,7 @@ import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { basename, extname } from "node:path";
 
-import { ruleCreator } from "../_internal/rule-creator";
+import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "mismatch";
 

@@ -1,8 +1,8 @@
-import { createImportPatternRule } from "../_internal/create-import-pattern-rule";
+import { createImportPatternRule } from "../_internal/create-import-pattern-rule.js";
 import {
     createReplacementRuleInfo,
     withDeprecatedRuleLifecycle,
-} from "../_internal/rule-deprecation";
+} from "../_internal/rule-deprecation.js";
 
 /**
  * Disallow relative parent imports like `..` and `../foo`.

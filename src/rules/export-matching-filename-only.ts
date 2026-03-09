@@ -2,8 +2,8 @@ import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { resolve } from "node:path";
 
-import { type Casing, filenameStem, toCasing } from "../_internal/casing";
-import { ruleCreator } from "../_internal/rule-creator";
+import { type Casing, filenameStem, toCasing } from "../_internal/casing.js";
+import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "onlyExport";
 

@@ -1,6 +1,6 @@
-import { pluginMeta, type PluginMeta } from "./_internal/plugin-meta";
-import { configs } from "./configs";
-import { rules } from "./rules";
+import { pluginMeta, type PluginMeta } from "./_internal/plugin-meta.js";
+import { configs } from "./configs.js";
+import { rules } from "./rules.js";
 
 type PluginModule = {
     readonly configs: typeof configs;

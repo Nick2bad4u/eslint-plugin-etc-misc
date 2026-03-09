@@ -1,4 +1,4 @@
-import { createImportPatternRule } from "../_internal/create-import-pattern-rule";
+import { createImportPatternRule } from "../_internal/create-import-pattern-rule.js";
 
 /**
  * Disallow import and export sources by configured glob patterns.

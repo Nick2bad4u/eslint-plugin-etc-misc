@@ -6,7 +6,7 @@
 
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
-import { ruleCreator } from "../_internal/rule-creator";
+import { ruleCreator } from "../_internal/rule-creator.js";
 
 const defaultOptions: readonly {
     prefix?: string;

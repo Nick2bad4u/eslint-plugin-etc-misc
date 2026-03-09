@@ -3,11 +3,11 @@ import unicornPlugin from "eslint-plugin-unicorn";
 import {
     adaptExternalRule,
     getExternalRuleFromPlugin,
-} from "../_internal/create-external-rule";
+} from "../_internal/create-external-rule.js";
 import {
     createReplacementRuleInfo,
     withDeprecatedRuleLifecycle,
-} from "../_internal/rule-deprecation";
+} from "../_internal/rule-deprecation.js";
 
 /**
  * Proxy of external `unicorn/no-unreadable-iife`.

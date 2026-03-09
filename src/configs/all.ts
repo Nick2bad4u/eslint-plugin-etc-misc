@@ -1,6 +1,6 @@
 /* eslint-disable canonical/no-reassign-imports -- Rule entry map intentionally references imported plugin rules object. */
 
-import { rules as pluginRules } from "../rules";
+import { rules as pluginRules } from "../rules.js";
 
 type AllConfig = {
     readonly rules: Readonly<Record<string, "error">>;

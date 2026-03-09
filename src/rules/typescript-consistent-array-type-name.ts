@@ -1,4 +1,4 @@
-import { createSelectorRule } from "../_internal/create-selector-rule";
+import { createSelectorRule } from "../_internal/create-selector-rule.js";
 
 const selector = String.raw`:matches(TSTypeAliasDeclaration[typeAnnotation.type='TSArrayType'], TSTypeAliasDeclaration[typeAnnotation.type='TSTupleType'], TSTypeAliasDeclaration[typeAnnotation.type='TSTypeReference']:has(TSTypeReference > Identifier[name='Array'])) > Identifier.id:not([name=/^(?:[A-Z][a-z\d]*)+(?:Array|s)$/u])`;
 

@@ -1,9 +1,9 @@
 /* eslint-disable canonical/no-reassign-imports -- Flat-config preset object intentionally references imported preset modules. */
 
-import { pluginMeta } from "./_internal/plugin-meta";
-import { all as allConfig } from "./configs/all";
-import { recommended as recommendedConfig } from "./configs/recommended";
-import { rules } from "./rules";
+import { pluginMeta } from "./_internal/plugin-meta.js";
+import { all as allConfig } from "./configs/all.js";
+import { recommended as recommendedConfig } from "./configs/recommended.js";
+import { rules } from "./rules.js";
 
 type PluginReference = {
     readonly meta: typeof pluginMeta;

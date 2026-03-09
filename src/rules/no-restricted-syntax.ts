@@ -1,13 +1,13 @@
-import { ruleCreator } from "../_internal/rule-creator";
+import { ruleCreator } from "../_internal/rule-creator.js";
 import {
     createReplacementRuleInfo,
     withDeprecatedRuleLifecycle,
-} from "../_internal/rule-deprecation";
+} from "../_internal/rule-deprecation.js";
 import {
     buildRestrictedSyntaxListeners,
     normalizeSyntaxSelector,
     type SyntaxSelectorOption,
-} from "../_internal/syntax-selectors";
+} from "../_internal/syntax-selectors.js";
 
 type MessageIds = "customMessage" | "forbidden";
 

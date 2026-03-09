@@ -1,4 +1,4 @@
-import { createSelectorRule } from "../_internal/create-selector-rule";
+import { createSelectorRule } from "../_internal/create-selector-rule.js";
 
 const selector = String.raw`TSEnumMember:not([id.name=/^[A-Z][A-Z_\d]*$/u], [initializer.value=/^[A-Z][A-Z_\d]*$/u])`;
 
