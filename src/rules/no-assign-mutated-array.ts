@@ -1,6 +1,8 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
+import type ts from "typescript";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
+import { isArrayLikeType } from "../_internal/typescript-type-utils.js";
 
 type MessageIds = "forbidden";
 
@@ -24,28 +26,12 @@ const creatorMethodNames = new Set([
 const isTypedParserServices = (
     parserServices: Readonly<TSESLint.SourceCode["parserServices"]> | undefined
 ): parserServices is TSESLint.SourceCode["parserServices"] & {
-    readonly getTypeAtLocation: (node: Readonly<es.Node>) => unknown;
-    readonly program: {
-        readonly getTypeChecker: () => {
-            readonly typeToString: (type: unknown) => string;
-        };
-    };
+    readonly getTypeAtLocation: (node: Readonly<es.Node>) => ts.Type;
+    readonly program: ts.Program;
 } =>
     parserServices !== undefined &&
     "getTypeAtLocation" in parserServices &&
     typeof parserServices.getTypeAtLocation === "function";
-
-const isArrayTypeText = (rawTypeText: string): boolean =>
-    rawTypeText
-        .split("|")
-        .map((typeText) => typeText.trim())
-        .some(
-            (typeText) =>
-                typeText.endsWith("[]") ||
-                typeText.startsWith("Array<") ||
-                typeText.startsWith("ReadonlyArray<") ||
-                (typeText.startsWith("[") && typeText.endsWith("]"))
-        );
 
 const isArrayFactoryCallee = (callee: Readonly<es.Expression>): boolean => {
     if (callee.type === "Identifier") {
@@ -145,9 +131,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                             const objectType = parserServices.getTypeAtLocation(
                                 callee.object
                             );
-                            const typeText =
-                                typeChecker.typeToString(objectType);
-                            if (!isArrayTypeText(typeText)) {
+                            if (!isArrayLikeType(typeChecker, objectType)) {
                                 return;
                             }
                         }

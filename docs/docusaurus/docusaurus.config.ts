@@ -277,15 +277,15 @@ const config: Config = {
                     items: [
                         {
                             label: "🏁 Overview",
-                            to: "/docs/rules/overview",
+                            to: "/docs/intro",
                         },
                         {
                             label: "📖 Getting Started",
-                            to: "/docs/rules/getting-started",
+                            to: "/docs/getting-started",
                         },
                         {
                             label: "🎛 Presets",
-                            to: "/docs/rules/presets/all",
+                            to: "/docs/rules/presets/recommended",
                         },
                         {
                             label: "📏 Rule Reference",
@@ -350,10 +350,10 @@ const config: Config = {
         navbar: {
             items: [
                 {
-                    activeBaseRegex: "^/docs/rules/overview/?$",
+                    activeBaseRegex: "^/docs(?:/(?!rules(?:/|$)).*)?$",
                     label: "📚 Docs",
                     position: "left",
-                    to: "/docs/rules/overview",
+                    to: "/docs/getting-started",
                 },
                 {
                     activeBaseRegex: "^/docs/rules(?:/(?!presets(?:/|$)).*)?$",
@@ -365,7 +365,7 @@ const config: Config = {
                     activeBaseRegex: "^/docs/rules/presets(?:/.*)?$",
                     label: "🎛️ Presets",
                     position: "left",
-                    to: "/docs/rules/presets/all",
+                    to: "/docs/rules/presets/recommended",
                 },
                 {
                     label: "📰 Blog",

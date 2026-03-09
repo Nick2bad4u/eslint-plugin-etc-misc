@@ -15,13 +15,31 @@ type CommentBlock = Readonly<{
 
 type MessageIds = "forbidden";
 
-const parseCommentProgram = (content: string): es.Program | undefined => {
+type ParseCache = Map<string, es.Program | null>;
+
+const parserOptions: Readonly<{
+    ecmaVersion: "latest";
+    sourceType: "module";
+}> = {
+    ecmaVersion: "latest",
+    sourceType: "module",
+};
+
+const parseCommentProgram = (
+    cache: ParseCache,
+    content: string
+): es.Program | undefined => {
+    const cached = cache.get(content);
+    if (cached !== undefined) {
+        return cached ?? undefined;
+    }
+
     try {
-        return parser.parse(content, {
-            ecmaVersion: "latest",
-            sourceType: "module",
-        });
+        const parsed = parser.parse(content, parserOptions);
+        cache.set(content, parsed);
+        return parsed;
     } catch {
+        cache.set(content, null);
         return undefined;
     }
 };
@@ -182,48 +200,60 @@ const getWrappedContent = (
  */
 const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
     ruleCreator<readonly [], MessageIds>({
-        create: (context) => ({
-            Program: () => {
-                const { sourceCode } = context;
+        create: (context) => {
+            const parseCache: ParseCache = new Map();
 
-                for (const block of toCommentBlocks(
-                    sourceCode.getAllComments()
-                )) {
-                    if (isRegionComment(block.content)) {
-                        continue;
-                    }
+            return {
+                Program: () => {
+                    const { sourceCode } = context;
 
-                    const parsedComment = parseCommentProgram(block.content);
-                    if (parsedComment !== undefined) {
-                        if (!isTrivialProgram(parsedComment)) {
+                    for (const block of toCommentBlocks(
+                        sourceCode.getAllComments()
+                    )) {
+                        if (isRegionComment(block.content)) {
+                            continue;
+                        }
+
+                        const parsedComment = parseCommentProgram(
+                            parseCache,
+                            block.content
+                        );
+                        if (parsedComment !== undefined) {
+                            if (!isTrivialProgram(parsedComment)) {
+                                context.report({
+                                    loc: block.loc,
+                                    messageId: "forbidden",
+                                });
+                            }
+
+                            continue;
+                        }
+
+                        const index = sourceCode.getIndexFromLoc(
+                            block.loc.start
+                        );
+                        const node = sourceCode.getNodeByRangeIndex(index);
+                        const wrappedContent = getWrappedContent(
+                            block.content,
+                            node
+                        );
+                        if (wrappedContent === undefined) {
+                            continue;
+                        }
+
+                        if (
+                            parseCommentProgram(parseCache, wrappedContent) !==
+                            undefined
+                        ) {
                             context.report({
                                 loc: block.loc,
                                 messageId: "forbidden",
                             });
                         }
-
-                        continue;
                     }
-
-                    const index = sourceCode.getIndexFromLoc(block.loc.start);
-                    const node = sourceCode.getNodeByRangeIndex(index);
-                    const wrappedContent = getWrappedContent(
-                        block.content,
-                        node
-                    );
-                    if (wrappedContent === undefined) {
-                        continue;
-                    }
-
-                    if (parseCommentProgram(wrappedContent) !== undefined) {
-                        context.report({
-                            loc: block.loc,
-                            messageId: "forbidden",
-                        });
-                    }
-                }
-            },
-        }),
+                },
+            };
+        },
         defaultOptions: [],
         meta: {
             docs: {

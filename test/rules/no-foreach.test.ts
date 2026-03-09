@@ -28,6 +28,16 @@ ruleTester.run("no-foreach", rule, {
             errors: [{ messageId: "forbidden" }],
             options: [{ types: ["Array"] }],
         },
+        {
+            code: "const values: [number, number] = [41, 42]; values.forEach((value) => console.log(value));",
+            errors: [{ messageId: "forbidden" }],
+            options: [{ types: ["Array"] }],
+        },
+        {
+            code: "const values: readonly number[] = [41, 42]; values.forEach((value) => console.log(value));",
+            errors: [{ messageId: "forbidden" }],
+            options: [{ types: ["Array"] }],
+        },
     ],
     valid: [
         {

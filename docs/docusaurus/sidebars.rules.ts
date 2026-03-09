@@ -41,6 +41,46 @@ const toRuleDocId = (fileName: string): string => fileName.slice(0, -3);
 /** Convert a TypeScript filename (e.g. `foo.ts`) to a rule id. */
 const toRuleId = (fileName: string): string => fileName.slice(0, -3);
 
+/** Convert a markdown path (e.g. `foo/bar.md`) to a Docusaurus doc id. */
+const toDocIdFromRelativePath = (relativePath: string): string =>
+    relativePath.replace(/\\/gu, "/").replace(/\.md$/u, "");
+
+/** Collect markdown doc ids recursively from a docs directory. */
+const collectMarkdownDocIdsRecursively = (
+    directoryPath: string,
+    relativeBasePath = ""
+): readonly string[] => {
+    const discoveredDocIds: string[] = [];
+
+    const directoryEntries = readdirSync(directoryPath, {
+        withFileTypes: true,
+    });
+
+    for (const directoryEntry of directoryEntries) {
+        const entryRelativePath =
+            relativeBasePath.length > 0
+                ? `${relativeBasePath}/${directoryEntry.name}`
+                : directoryEntry.name;
+        const entryAbsolutePath = join(directoryPath, directoryEntry.name);
+
+        if (directoryEntry.isDirectory()) {
+            discoveredDocIds.push(
+                ...collectMarkdownDocIdsRecursively(
+                    entryAbsolutePath,
+                    entryRelativePath
+                )
+            );
+            continue;
+        }
+
+        if (directoryEntry.isFile() && isMarkdownFile(directoryEntry.name)) {
+            discoveredDocIds.push(toDocIdFromRelativePath(entryRelativePath));
+        }
+    }
+
+    return discoveredDocIds;
+};
+
 const isTsExtrasRuleDocId = (ruleDocId: string): boolean =>
     ruleDocId.startsWith("prefer-ts-extras-");
 
@@ -54,6 +94,17 @@ const allRulesMarkdownDocIds = readdirSync(rulesDocsDirectoryPath, {
     .filter((entry) => entry.isFile() && isMarkdownFile(entry.name))
     .map((entry) => toRuleDocId(entry.name))
     .sort((left, right) => left.localeCompare(right));
+
+/** Sorted markdown doc ids discovered from `docs/rules/**`. */
+const allRulesPluginDocIds = collectMarkdownDocIdsRecursively(
+    rulesDocsDirectoryPath
+)
+    .slice()
+    .sort((left, right) => left.localeCompare(right));
+const allRulesPluginDocIdSet = new Set(allRulesPluginDocIds);
+
+const hasRulesPluginDocId = (docId: string): boolean =>
+    allRulesPluginDocIdSet.has(docId);
 
 /** Sorted rule ids discovered from `src/rules/*.ts`. */
 const sourceRuleIds = readdirSync(sourceRulesDirectoryPath, {
@@ -103,6 +154,100 @@ const createRuleItems = (ruleDocIds: readonly string[]): SidebarDocItem[] =>
         type: "doc",
     }));
 
+const preRuleDocs: SidebarsConfig["rules"] = [];
+
+if (hasRulesPluginDocId("overview")) {
+    preRuleDocs.push({
+        className: "sb-doc-overview",
+        id: "overview",
+        label: "🏁 Overview",
+        type: "doc",
+    });
+}
+
+if (hasRulesPluginDocId("getting-started")) {
+    preRuleDocs.push({
+        className: "sb-doc-getting-started",
+        id: "getting-started",
+        label: "🚀 Getting Started",
+        type: "doc",
+    });
+}
+
+const guideItems: SidebarsConfig["rules"] = [];
+
+if (hasRulesPluginDocId("guides/adoption-checklist")) {
+    guideItems.push({
+        id: "guides/adoption-checklist",
+        label: "✅ Adoption checklist",
+        type: "doc",
+    });
+}
+
+if (hasRulesPluginDocId("guides/rollout-and-fix-safety")) {
+    guideItems.push({
+        id: "guides/rollout-and-fix-safety",
+        label: "🛡️ Rollout and fix safety",
+        type: "doc",
+    });
+}
+
+if (guideItems.length > 0) {
+    preRuleDocs.push({
+        className: "sb-cat-guides",
+        collapsed: true,
+        customProps: {
+            badge: "guides",
+        },
+        type: "category",
+        label: "🧭 Adoption & Rollout",
+        link: {
+            type: "generated-index",
+            title: "Adoption & Rollout",
+            description:
+                "Shared migration, rollout, and fix-safety guidance for rule adoption.",
+        },
+        items: guideItems,
+    });
+}
+
+const presetItems: SidebarsConfig["rules"] = [];
+
+if (hasRulesPluginDocId("presets/recommended")) {
+    presetItems.push({
+        id: "presets/recommended",
+        label: "🟡 Recommended",
+        type: "doc",
+    });
+}
+
+if (hasRulesPluginDocId("presets/all")) {
+    presetItems.push({
+        id: "presets/all",
+        label: "🟣 All",
+        type: "doc",
+    });
+}
+
+if (presetItems.length > 0) {
+    preRuleDocs.push({
+        className: "sb-cat-presets",
+        collapsed: true,
+        customProps: {
+            badge: "presets",
+        },
+        type: "category",
+        label: "🎛 Presets",
+        link: {
+            type: "generated-index",
+            title: "Presets",
+            description:
+                "Predefined flat-config preset bundles for different adoption levels.",
+        },
+        items: presetItems,
+    });
+}
+
 /** Rule-doc ids for `prefer-ts-extras-*` rules. */
 const tsExtrasRuleDocIds = documentedRuleDocIds.filter(isTsExtrasRuleDocId);
 /** Rule-doc ids for `prefer-type-fest-*` rules. */
@@ -132,72 +277,7 @@ if (uncategorizedRuleDocIds.length > 0) {
 /** Complete sidebar structure for docs site navigation. */
 const sidebars: SidebarsConfig = {
     rules: [
-        {
-            className: "sb-doc-overview",
-            id: "overview",
-            label: "🏁 Overview",
-            type: "doc",
-        },
-        {
-            className: "sb-doc-getting-started",
-            id: "getting-started",
-            label: "🚀 Getting Started",
-            type: "doc",
-        },
-        {
-            className: "sb-cat-guides",
-            collapsed: true,
-            customProps: {
-                badge: "guides",
-            },
-            type: "category",
-            label: "🧭 Adoption & Rollout",
-            link: {
-                type: "generated-index",
-                title: "Adoption & Rollout",
-                description:
-                    "Shared migration, rollout, and fix-safety guidance for rule adoption.",
-            },
-            items: [
-                {
-                    id: "guides/adoption-checklist",
-                    label: "✅ Adoption checklist",
-                    type: "doc",
-                },
-                {
-                    id: "guides/rollout-and-fix-safety",
-                    label: "🛡️ Rollout and fix safety",
-                    type: "doc",
-                },
-            ],
-        },
-        {
-            className: "sb-cat-presets",
-            collapsed: true,
-            customProps: {
-                badge: "presets",
-            },
-            type: "category",
-            label: "🎛 Presets",
-            link: {
-                type: "generated-index",
-                title: "Presets",
-                description:
-                    "Predefined flat-config preset bundles for different adoption levels.",
-            },
-            items: [
-                {
-                    id: "presets/recommended",
-                    label: "🟡 Recommended",
-                    type: "doc",
-                },
-                {
-                    id: "presets/all",
-                    label: "🟣 All",
-                    type: "doc",
-                },
-            ],
-        },
+        ...preRuleDocs,
         {
             className: "sb-cat-rules",
             collapsed: true,

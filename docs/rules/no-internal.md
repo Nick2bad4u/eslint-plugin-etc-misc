@@ -71,6 +71,9 @@ Use `ignored` to suppress some internal symbols by regular-expression pattern:
 - `"name"`: Match against the symbol name.
 - `"path"`: Match against the symbol's fully-qualified declaration path.
 
+If an `ignored` key is not a valid regular expression, the rule reports a
+configuration error (`invalidIgnorePattern`) instead of silently ignoring it.
+
 Example:
 
 ```ts

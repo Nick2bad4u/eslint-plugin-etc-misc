@@ -19,6 +19,10 @@ ruleTester.run("no-assign-mutated-array", rule, {
             code: "const values = [0, 1, 2, 3]; let next: number[]; next = values.fill(0);",
             errors: [{ messageId: "forbidden" }],
         },
+        {
+            code: "const values: [number, number] = [1, 2]; const next = values.reverse();",
+            errors: [{ messageId: "forbidden" }],
+        },
     ],
     valid: [
         {

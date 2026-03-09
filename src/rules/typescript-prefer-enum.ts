@@ -1,6 +1,7 @@
 import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
+import { isEnumLikeOrUndefinedType } from "../_internal/typescript-type-utils.js";
 
 type MessageIds =
     | "preferEnumComparison"
@@ -8,9 +9,6 @@ type MessageIds =
     | "preferEnumUnion";
 
 type Options = readonly [];
-
-const looksEnumType = (typeText: string): boolean =>
-    /^[A-Z]\w*(?:\s\|\sundefined)?$/u.test(typeText);
 
 const isStringLiteral = (node: Readonly<es.Node>): node is es.Literal =>
     node.type === "Literal" && typeof node.value === "string";
@@ -50,10 +48,8 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 
                 const tsNode =
                     parserServices.esTreeNodeToTSNodeMap.get(expressionNode);
-                const typeText = checker.typeToString(
-                    checker.getTypeAtLocation(tsNode)
-                );
-                if (!looksEnumType(typeText)) {
+                const expressionType = checker.getTypeAtLocation(tsNode);
+                if (!isEnumLikeOrUndefinedType(checker, expressionType)) {
                     return;
                 }
 
@@ -98,7 +94,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     return;
                 }
 
-                if (!looksEnumType(checker.typeToString(returnType))) {
+                if (!isEnumLikeOrUndefinedType(checker, returnType)) {
                     return;
                 }
 

@@ -1,6 +1,7 @@
 import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
+import { isNeverType } from "../_internal/typescript-type-utils.js";
 
 type MessageIds = "forbidden";
 
@@ -31,7 +32,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
                 const type = checker.getTypeAtLocation(tsNode);
 
-                if (checker.typeToString(type) !== "never") {
+                if (!isNeverType(type)) {
                     return;
                 }
 

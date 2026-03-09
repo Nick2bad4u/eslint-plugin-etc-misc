@@ -34,6 +34,27 @@ ruleTester.run("throw-error", rule, {
                 },
             ],
         },
+        {
+            code: [
+                "const shouldThrow = (value: string | number): never => {",
+                "    if (typeof value === 'string') {",
+                "        throw value;",
+                "    }",
+                "",
+                "    throw value;",
+                "};",
+            ].join("\n"),
+            errors: [
+                {
+                    data: { usage: "Throwing" },
+                    messageId: "forbidden",
+                },
+                {
+                    data: { usage: "Throwing" },
+                    messageId: "forbidden",
+                },
+            ],
+        },
     ],
     valid: [
         {
@@ -63,6 +84,13 @@ ruleTester.run("throw-error", rule, {
                 "} catch (error: unknown) {",
                 "    throw error;",
                 "}",
+            ].join("\n"),
+        },
+        {
+            code: [
+                "const throwMaybeError = (value: Error | DOMException): never => {",
+                "    throw value;",
+                "};",
             ].join("\n"),
         },
         {

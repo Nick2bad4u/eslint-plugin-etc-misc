@@ -2,6 +2,7 @@ import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 import type * as ts from "typescript";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
+import { getTypeNameVariants } from "../_internal/typescript-type-utils.js";
 
 type MessageIds = "forbidden";
 
@@ -21,15 +22,6 @@ const hasTypedParserServices = (
     "esTreeNodeToTSNodeMap" in parserServices &&
     "program" in parserServices;
 
-const getTypeVariants = (
-    typeChecker: Readonly<ts.TypeChecker>,
-    type: Readonly<ts.Type>
-): readonly string[] =>
-    typeChecker
-        .typeToString(type)
-        .split("|")
-        .map((variant) => variant.trim());
-
 const isAnyOrUnknownVariant = (typeVariant: string): boolean =>
     typeVariant === "any" || typeVariant === "unknown";
 
@@ -43,7 +35,7 @@ const couldBeAllowedThrowableType = (
     type: Readonly<ts.Type>,
     typeChecker: Readonly<ts.TypeChecker>
 ): boolean =>
-    getTypeVariants(typeChecker, type).some(
+    getTypeNameVariants(typeChecker, type).some(
         (typeVariant) =>
             isAnyOrUnknownVariant(typeVariant) ||
             isErrorLikeVariant(typeVariant)
@@ -59,7 +51,7 @@ const couldBePromiseConstructorType = (
     type: Readonly<ts.Type>,
     typeChecker: Readonly<ts.TypeChecker>
 ): boolean =>
-    getTypeVariants(typeChecker, type).some((typeVariant) => {
+    getTypeNameVariants(typeChecker, type).some((typeVariant) => {
         if (isAnyOrUnknownVariant(typeVariant)) {
             return false;
         }

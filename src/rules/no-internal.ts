@@ -2,21 +2,19 @@ import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { ESLintUtils } from "@typescript-eslint/utils";
 
+import {
+    compileIgnorePatterns,
+    type IgnoreMode,
+    type IgnorePatternBuckets,
+} from "../_internal/ignore-patterns.js";
 import { ruleCreator } from "../_internal/rule-creator.js";
-
-type IgnoreMode = "name" | "path";
-
-type IgnorePatterns = Readonly<{
-    name: readonly RegExp[];
-    path: readonly RegExp[];
-}>;
 
 type JsDocTagInfo = Readonly<{
     name: string;
     text?: readonly SymbolDisplayPart[] | string;
 }>;
 
-type MessageIds = "forbidden" | "forbiddenWithComment";
+type MessageIds = "forbidden" | "forbiddenWithComment" | "invalidIgnorePattern";
 
 type Options = readonly [
     {
@@ -77,7 +75,7 @@ const toTagComment = (
     }
 
     if (typeof text === "string") {
-        const normalized = text.trim();
+        const normalized = text.trim().replaceAll(/\s+/gu, " ");
         return normalized.length > 0 ? normalized : undefined;
     }
 
@@ -118,33 +116,6 @@ const getInternalTagComments = (
         .map((tag) => toTagComment(tag.text));
 };
 
-/* eslint-disable security/detect-non-literal-regexp -- Rule options intentionally accept regex patterns. */
-const toIgnorePatterns = (
-    ignored: Readonly<Record<string, IgnoreMode>>
-): IgnorePatterns => {
-    const namePatterns: RegExp[] = [];
-    const pathPatterns: RegExp[] = [];
-
-    for (const [pattern, mode] of Object.entries(ignored)) {
-        try {
-            const regularExpression = new RegExp(pattern, "u");
-            if (mode === "name") {
-                namePatterns.push(regularExpression);
-            } else {
-                pathPatterns.push(regularExpression);
-            }
-        } catch {
-            continue;
-        }
-    }
-
-    return {
-        name: namePatterns,
-        path: pathPatterns,
-    };
-};
-/* eslint-enable security/detect-non-literal-regexp -- Re-enable dynamic-regex checks outside option pattern compilation. */
-
 const matchesAnyPattern = (
     text: string,
     patterns: readonly Readonly<RegExp>[]
@@ -161,7 +132,9 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         const [{ ignored = {} } = {}] = context.options;
         const parserServices = ESLintUtils.getParserServices(context);
         const typeChecker = parserServices.program.getTypeChecker();
-        const ignorePatterns = toIgnorePatterns(ignored);
+        const compiledIgnorePatterns = compileIgnorePatterns(ignored);
+        const ignorePatterns: IgnorePatternBuckets =
+            compiledIgnorePatterns.patterns;
 
         return {
             Identifier: (node: Readonly<es.Identifier>) => {
@@ -220,6 +193,17 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     });
                 }
             },
+            Program: (node: Readonly<es.Program>) => {
+                for (const invalidPattern of compiledIgnorePatterns.invalidPatterns) {
+                    context.report({
+                        data: {
+                            pattern: invalidPattern,
+                        },
+                        messageId: "invalidIgnorePattern",
+                        node,
+                    });
+                }
+            },
         };
     },
     defaultOptions,
@@ -235,6 +219,8 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         messages: {
             forbidden: '"{{name}}" is internal.',
             forbiddenWithComment: '"{{name}}" is internal: {{comment}}',
+            invalidIgnorePattern:
+                "Invalid ignored regex pattern '{{pattern}}'. Update this rule option to a valid regular expression.",
         },
         schema: [
             {

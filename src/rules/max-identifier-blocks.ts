@@ -6,11 +6,20 @@ type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-const blockRegexSuffix = "[name=/^[A-Z]*[^A-Z]+([A-Z]+[^A-Z]+){4}/u]";
+const maxIdentifierBlocks = 4;
+
 const disallowedSelector = [
-    `Identifier.id${blockRegexSuffix}`,
-    `:not(Property[shorthand=true]) > Identifier.key${blockRegexSuffix}`,
+    "Identifier.id",
+    ":not(Property[shorthand=true]) > Identifier.key",
 ].join(", ");
+
+const countIdentifierBlocks = (identifierName: string): number =>
+    identifierName
+        .replaceAll(/(?<=[\da-z])(?=[A-Z])/gu, " ")
+        .replaceAll(/[^0-9A-Za-z]+/gu, " ")
+        .trim()
+        .split(/\s+/u)
+        .filter((segment) => segment.length > 0).length;
 
 /**
  * Disallow identifiers containing more than four casing blocks.
@@ -20,8 +29,15 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     MessageIds
 >({
     create: (context) => ({
-        [disallowedSelector]: (node: Readonly<es.Node>): void => {
+        [disallowedSelector]: (node: Readonly<es.Identifier>): void => {
+            if (countIdentifierBlocks(node.name) <= maxIdentifierBlocks) {
+                return;
+            }
+
             context.report({
+                data: {
+                    max: maxIdentifierBlocks,
+                },
                 messageId: "forbidden",
                 node,
             });
@@ -37,7 +53,8 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         hasSuggestions: false,
         messages: {
-            forbidden: "Identifier should not contain more than 4 blocks.",
+            forbidden:
+                "Identifier should not contain more than {{max}} blocks.",
         },
         schema: [],
         type: "suggestion",

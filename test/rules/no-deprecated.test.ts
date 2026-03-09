@@ -98,6 +98,27 @@ ruleTester.run("no-deprecated", deprecatedRule, {
                 },
             ],
         },
+        {
+            code: [
+                "declare function activeFunction(): void;",
+                "activeFunction();",
+            ].join("\n"),
+            errors: [
+                {
+                    data: {
+                        pattern: "[",
+                    },
+                    messageId: "invalidIgnorePattern",
+                },
+            ],
+            options: [
+                {
+                    ignored: {
+                        "[": "name",
+                    },
+                },
+            ],
+        },
     ],
     valid: [
         {

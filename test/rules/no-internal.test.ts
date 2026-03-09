@@ -56,6 +56,30 @@ ruleTester.run("no-internal", rule, {
                 },
             ],
         },
+        {
+            code: [
+                "interface PublicType {",
+                "  readonly value: number;",
+                "}",
+                "const item: PublicType = { value: 42 };",
+                "console.log(item.value);",
+            ].join("\n"),
+            errors: [
+                {
+                    data: {
+                        pattern: "[",
+                    },
+                    messageId: "invalidIgnorePattern",
+                },
+            ],
+            options: [
+                {
+                    ignored: {
+                        "[": "name",
+                    },
+                },
+            ],
+        },
     ],
     valid: [
         {
