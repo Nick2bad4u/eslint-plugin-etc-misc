@@ -1,0 +1,84 @@
+import type { TSESTree as es } from "@typescript-eslint/utils";
+
+import { ruleCreator } from "../_internal/rule-creator";
+
+type MessageIds = "incorrectSortingOrder";
+
+type Options = readonly [];
+
+const memberName = (
+    member: Readonly<es.MethodDefinition | es.PropertyDefinition>
+): string | undefined => {
+    if (member.key.type === "Identifier") {
+        return member.key.name;
+    }
+
+    if (member.key.type === "Literal" && typeof member.key.value === "string") {
+        return member.key.value;
+    }
+
+    return undefined;
+};
+
+/**
+ * Enforce alphabetical sorting of class members.
+ */
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => ({
+        ClassBody: (node: Readonly<es.ClassBody>): void => {
+            const members: (es.MethodDefinition | es.PropertyDefinition)[] = [];
+            for (const member of node.body) {
+                if (
+                    member.type === "PropertyDefinition" ||
+                    member.type === "MethodDefinition"
+                ) {
+                    members.push(member);
+                }
+            }
+
+            let previousName = "";
+            let hasPreviousName = false;
+            for (const member of members) {
+                const currentName = memberName(member);
+                if (currentName === undefined) {
+                    continue;
+                }
+
+                if (
+                    hasPreviousName &&
+                    currentName.localeCompare(previousName) < 0
+                ) {
+                    context.report({
+                        messageId: "incorrectSortingOrder",
+                        node: member,
+                    });
+                    return;
+                }
+
+                previousName = currentName;
+                hasPreviousName = true;
+            }
+        },
+    }),
+    defaultOptions: [],
+    meta: {
+        docs: {
+            description: "enforce alphabetical sorting of class members.",
+            recommended: false,
+            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/sort-class-members.md",
+        },
+        hasSuggestions: false,
+        messages: {
+            incorrectSortingOrder:
+                "Class members should appear in alphabetical order.",
+        },
+        schema: [],
+        type: "suggestion",
+    },
+    name: "sort-class-members",
+});
+
+export default rule;

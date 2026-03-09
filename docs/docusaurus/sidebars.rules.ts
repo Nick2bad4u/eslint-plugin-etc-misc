@@ -34,14 +34,18 @@ const isTypeFestRuleDocId = (ruleDocId: string): boolean =>
 const isCoreRuleDocId = (ruleDocId: string): boolean =>
     (ruleDocId.startsWith("consistent-") ||
         ruleDocId.startsWith("disallow-") ||
+        ruleDocId.startsWith("export-") ||
         ruleDocId.startsWith("max-") ||
+        ruleDocId.startsWith("match-") ||
         ruleDocId.startsWith("no-") ||
+        ruleDocId.startsWith("object-") ||
         ruleDocId.startsWith("only-") ||
         ruleDocId.startsWith("prefer-") ||
         ruleDocId.startsWith("require-") ||
         ruleDocId.startsWith("restrict-") ||
         ruleDocId.startsWith("sort-") ||
         ruleDocId.startsWith("switch-") ||
+        ruleDocId.startsWith("template-") ||
         ruleDocId.startsWith("throw-") ||
         ruleDocId.startsWith("typescript-") ||
         ruleDocId.startsWith("underscore-")) &&
