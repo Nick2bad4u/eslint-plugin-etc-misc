@@ -46,7 +46,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         docs: {
             description: "disallow const enum declarations.",
             recommended: false,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-const-enum.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-const-enum",
         },
         hasSuggestions: false,
         messages: {

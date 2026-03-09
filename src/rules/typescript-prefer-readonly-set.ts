@@ -10,7 +10,7 @@ const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
     name: "typescript/prefer-readonly-set",
     selector: "TSTypeReference > Identifier[name='Set']",
     type: "suggestion",
-    url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/typescript-prefer-readonly-set.md",
+    url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-prefer-readonly-set",
 });
 
 export default rule;

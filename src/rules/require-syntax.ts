@@ -77,7 +77,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             description:
                 "require at least one match for each configured AST selector.",
             recommended: false,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/require-syntax.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/require-syntax",
         },
         hasSuggestions: false,
         messages: {

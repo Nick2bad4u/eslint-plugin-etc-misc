@@ -14,7 +14,7 @@ const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
     name: "consistent-enum-members",
     selector,
     type: "suggestion",
-    url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/consistent-enum-members.md",
+    url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/consistent-enum-members",
 });
 
 export default rule;

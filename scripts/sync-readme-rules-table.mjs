@@ -8,13 +8,11 @@ import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-import builtPlugin from "../dist/plugin.js";
-
 /**
  * @typedef {Readonly<{
  *     meta?: {
+ *         namespace?: string;
  *         docs?: {
- *             typefestConfigs?: readonly string[] | string;
  *             url?: string;
  *         };
  *         fixable?: string;
@@ -25,86 +23,93 @@ import builtPlugin from "../dist/plugin.js";
 
 /** @typedef {Readonly<Record<string, ReadmeRuleModule>>} ReadmeRulesMap */
 
+/**
+ * @typedef {Readonly<{
+ *     meta?: {
+ *         namespace?: string;
+ *     };
+ *     rules: ReadmeRulesMap;
+ *     configs?: Readonly<
+ *         Record<
+ *             string,
+ *             {
+ *                 rules?: Readonly<Record<string, unknown>>;
+ *             }
+ *         >
+ *     >;
+ * }>} ReadmePlugin
+ */
+
 /** @typedef {keyof typeof presetIconByName} PresetName */
+
+/** @typedef {Readonly<Record<PresetName, Set<string>>>} PresetRuleNamesByPreset */
 
 /** @type {Readonly<Record<string, string>>} */
 const presetIconByName = {
-    all: "🟣",
-    minimal: "🟢",
     recommended: "🟡",
-    "recommended-type-checked": "🟠",
-    strict: "🔴",
-    "ts-extras/type-guards": "✴️",
-    "type-fest/types": "💠",
+    all: "🟣",
 };
 
-const presetOrder = [
-    "minimal",
-    "recommended",
-    "recommended-type-checked",
-    "strict",
-    "all",
-    "type-fest/types",
-    "ts-extras/type-guards",
-];
+const presetOrder = ["recommended", "all"];
 
 const rulesSectionHeading = "## Rules";
 
 /**
- * @param {string} reference
+ * @returns {PresetRuleNamesByPreset}
+ */
+const createEmptyPresetRuleNamesByPreset = () => ({
+    all: new Set(),
+    recommended: new Set(),
+});
+
+/**
+ * @param {string} configuredRuleName
+ * @param {string} namespace
  *
  * @returns {null | string}
  */
-const normalizeTypefestConfigName = (reference) => {
-    const dottedMatch = reference.match(/^typefest\.configs\.(.+)$/u);
+const normalizeConfiguredRuleName = (configuredRuleName, namespace) => {
+    const namespacePrefix = `${namespace}/`;
 
-    if (dottedMatch?.[1]) {
-        return dottedMatch[1];
+    if (configuredRuleName.startsWith(namespacePrefix)) {
+        return configuredRuleName.slice(namespacePrefix.length);
     }
 
-    const bracketedMatch = reference.match(/^typefest\.configs\["(.+)"\]$/u);
+    if (configuredRuleName.includes("/")) {
+        return null;
+    }
 
-    return bracketedMatch?.[1] ?? null;
+    return configuredRuleName;
 };
 
 /**
- * @param {readonly string[] | string | undefined} typefestConfigs
+ * @param {ReadmePlugin} plugin
  *
- * @returns {readonly PresetName[]}
+ * @returns {PresetRuleNamesByPreset}
  */
-const normalizeTypefestConfigNames = (typefestConfigs) => {
-    const references = Array.isArray(typefestConfigs)
-        ? typefestConfigs
-        : [typefestConfigs];
+export const derivePresetRuleNamesByPresetFromPlugin = (plugin) => {
+    const namespace = plugin.meta?.namespace ?? "etc-misc";
+    const presetRuleNamesByPreset = createEmptyPresetRuleNamesByPreset();
 
-    /** @type {PresetName[]} */
-    const names = [];
+    for (const presetName of presetOrder) {
+        const configuredRules = plugin.configs?.[presetName]?.rules ?? {};
+        const presetRuleNames = presetRuleNamesByPreset[presetName];
 
-    for (const reference of references) {
-        if (typeof reference !== "string") {
-            continue;
-        }
+        for (const configuredRuleName of Object.keys(configuredRules)) {
+            const normalizedRuleName = normalizeConfiguredRuleName(
+                configuredRuleName,
+                namespace
+            );
 
-        const configName = normalizeTypefestConfigName(reference);
+            if (normalizedRuleName === null) {
+                continue;
+            }
 
-        if (configName === null) {
-            continue;
-        }
-
-        if (!Object.hasOwn(presetIconByName, configName)) {
-            continue;
-        }
-
-        /** @type {PresetName} */
-        const presetName = configName;
-        const presetNameSet = new Set(names);
-
-        if (!presetNameSet.has(presetName)) {
-            names.push(presetName);
+            presetRuleNames.add(normalizedRuleName);
         }
     }
 
-    return names;
+    return presetRuleNamesByPreset;
 };
 
 /**
@@ -132,20 +137,17 @@ const getRuleFixIndicator = (ruleModule) => {
 };
 
 /**
- * @param {ReadmeRuleModule} ruleModule
+ * @param {string} ruleName
+ * @param {PresetRuleNamesByPreset} presetRuleNamesByPreset
  *
  * @returns {string}
  */
-const getPresetIndicator = (ruleModule) => {
-    const docsTypefestConfigs = ruleModule.meta?.docs?.typefestConfigs;
-    const presetNames = normalizeTypefestConfigNames(docsTypefestConfigs);
-    const presetNamesSet = new Set(presetNames);
-
+const getPresetIndicator = (ruleName, presetRuleNamesByPreset) => {
     /** @type {string[]} */
     const icons = [];
 
     for (const presetName of presetOrder) {
-        if (presetNamesSet.has(presetName)) {
+        if (presetRuleNamesByPreset[presetName].has(ruleName)) {
             icons.push(presetIconByName[presetName]);
         }
     }
@@ -155,32 +157,40 @@ const getPresetIndicator = (ruleModule) => {
 
 /**
  * @param {readonly [string, ReadmeRuleModule]} entry
+ * @param {PresetRuleNamesByPreset} presetRuleNamesByPreset
  *
  * @returns {string}
  */
-const toRuleTableRow = ([ruleName, ruleModule]) => {
+const toRuleTableRow = ([ruleName, ruleModule], presetRuleNamesByPreset) => {
     const docsUrl = ruleModule.meta?.docs?.url;
 
     if (typeof docsUrl !== "string" || docsUrl.trim().length === 0) {
         throw new TypeError(`Rule '${ruleName}' is missing meta.docs.url.`);
     }
 
-    return `| [\`${ruleName}\`](${docsUrl}) | ${getRuleFixIndicator(ruleModule)} | ${getPresetIndicator(ruleModule)} |`;
+    return `| [\`${ruleName}\`](${docsUrl}) | ${getRuleFixIndicator(ruleModule)} | ${getPresetIndicator(ruleName, presetRuleNamesByPreset)} |`;
 };
 
 /**
  * Generate the canonical README rules section from plugin rules metadata.
  *
  * @param {ReadmeRulesMap} rules - Plugin `rules` map.
+ * @param {PresetRuleNamesByPreset} presetRuleNamesByPreset - Rule-name lookup
+ *   for each preset.
  *
  * @returns {string} Full markdown section text starting at `## Rules`.
  */
-export const generateReadmeRulesSectionFromRules = (rules) => {
+export const generateReadmeRulesSectionFromRules = (
+    rules,
+    presetRuleNamesByPreset
+) => {
     const ruleEntries = Object.entries(rules).toSorted((left, right) =>
         left[0].localeCompare(right[0])
     );
 
-    const rows = ruleEntries.map(toRuleTableRow);
+    const rows = ruleEntries.map((entry) =>
+        toRuleTableRow(entry, presetRuleNamesByPreset)
+    );
 
     return [
         "## Rules",
@@ -189,13 +199,41 @@ export const generateReadmeRulesSectionFromRules = (rules) => {
         "  - `🔧` = autofixable",
         "  - `💡` = suggestions available",
         "  - `—` = report only",
-        "- `Preset key` legend: `🟢 minimal` · `🟡 recommended` · `🟠 recommended-type-checked` · `🔴 strict` · `🟣 all` · `💠 type-fest/types` · `✴️ ts-extras/type-guards`",
+        "- `Preset key` legend: `🟡 recommended` · `🟣 all`",
         "",
         "| Rule | Fix | Preset key |",
         "| --- | :-: | :-- |",
         ...rows,
         "",
+        "",
     ].join("\n");
+};
+
+/**
+ * @param {string} workspaceRoot
+ *
+ * @returns {Promise<ReadmePlugin>}
+ */
+const loadBuiltPlugin = async (workspaceRoot) => {
+    const builtPluginUrl = pathToFileURL(
+        resolve(workspaceRoot, "dist/plugin.js")
+    ).href;
+
+    try {
+        // eslint-disable-next-line no-unsanitized/method -- Controlled local file URL derived from workspace root and constant path.
+        const importedModule = await import(builtPluginUrl);
+
+        return /** @type {ReadmePlugin} */ (
+            importedModule.default ?? importedModule
+        );
+    } catch (error) {
+        throw new Error(
+            "Unable to load dist/plugin.js. Run `npm run build` before syncing README rules table.",
+            {
+                cause: error,
+            }
+        );
+    }
 };
 
 /**
@@ -205,6 +243,9 @@ const syncReadmeRulesTable = async ({ writeChanges }) => {
     const workspaceRoot = resolve(fileURLToPath(import.meta.url), "../..");
     const readmePath = resolve(workspaceRoot, "README.md");
     const readmeText = await readFile(readmePath, "utf8");
+    const builtPlugin = await loadBuiltPlugin(workspaceRoot);
+    const presetRuleNamesByPreset =
+        derivePresetRuleNamesByPresetFromPlugin(builtPlugin);
 
     const rulesHeadingOffset = readmeText.indexOf(rulesSectionHeading);
 
@@ -224,7 +265,8 @@ const syncReadmeRulesTable = async ({ writeChanges }) => {
     const readmeSuffix = readmeText.slice(sectionEndOffset);
 
     const generatedRulesSection = generateReadmeRulesSectionFromRules(
-        /** @type {ReadmeRulesMap} */ (builtPlugin.rules)
+        builtPlugin.rules,
+        presetRuleNamesByPreset
     );
 
     const nextReadmeText = `${readmePrefix}\n\n${generatedRulesSection}${readmeSuffix}`;

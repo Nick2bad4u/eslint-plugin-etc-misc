@@ -211,7 +211,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 "disallow throwing or rejecting values that are not Error-like.",
             recommended: false,
             requiresTypeChecking: true,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/throw-error.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/throw-error",
         },
         hasSuggestions: false,
         messages: {

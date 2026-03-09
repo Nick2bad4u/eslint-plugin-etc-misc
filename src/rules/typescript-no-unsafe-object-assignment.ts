@@ -3,6 +3,15 @@ import coreNoUnsafeObjectAssignRule from "./typescript-no-unsafe-object-assign.j
 /**
  * TypeScript-prefixed alias for Object.assign readonly-target safety checks.
  */
-const rule: typeof coreNoUnsafeObjectAssignRule = coreNoUnsafeObjectAssignRule;
+const rule: typeof coreNoUnsafeObjectAssignRule = {
+    ...coreNoUnsafeObjectAssignRule,
+    meta: {
+        ...coreNoUnsafeObjectAssignRule.meta,
+        docs: {
+            ...coreNoUnsafeObjectAssignRule.meta.docs,
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-unsafe-object-assignment",
+        } as NonNullable<typeof coreNoUnsafeObjectAssignRule.meta.docs>,
+    },
+};
 
 export default rule;

@@ -55,7 +55,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             description:
                 "disallow syntax nodes selected by configured AST selectors.",
             recommended: false,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-restricted-syntax.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-restricted-syntax",
         },
         hasSuggestions: false,
         messages: {

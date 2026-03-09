@@ -15,7 +15,7 @@ const rule: ReturnType<typeof adaptExternalRule> = adaptExternalRule(
         "no-mixed-enums",
         "@typescript-eslint/eslint-plugin"
     ),
-    "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-mixed-enums.md"
+    "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-mixed-enums"
 );
 
 /**

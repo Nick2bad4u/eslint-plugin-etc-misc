@@ -79,7 +79,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         docs: {
             description: "disallow importing the current file from itself.",
             recommended: false,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-self-import.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-self-import",
         },
         hasSuggestions: false,
         messages: {

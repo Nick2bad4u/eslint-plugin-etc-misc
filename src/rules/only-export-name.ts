@@ -110,7 +110,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             description:
                 "disallow exported names that are not in a configured allow-list.",
             recommended: false,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/only-export-name.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/only-export-name",
         },
         hasSuggestions: false,
         messages: {

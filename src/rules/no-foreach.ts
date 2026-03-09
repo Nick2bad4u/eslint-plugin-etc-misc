@@ -111,7 +111,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             description:
                 "disallow calling forEach on configured collection types.",
             recommended: false,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-foreach.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-foreach",
         },
         hasSuggestions: false,
         messages: {

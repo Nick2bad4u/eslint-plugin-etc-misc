@@ -31,7 +31,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             description:
                 "disallow mixing chain and coalescence operators in a single expression.",
             recommended: false,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-chain-coalescence-mixture.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-chain-coalescence-mixture",
         },
         hasSuggestions: false,
         messages: {

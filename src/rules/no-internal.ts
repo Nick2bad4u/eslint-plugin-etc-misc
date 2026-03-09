@@ -229,7 +229,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             description: "disallow usage of APIs tagged with @internal.",
             recommended: false,
             requiresTypeChecking: true,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-internal.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-internal",
         },
         hasSuggestions: false,
         messages: {

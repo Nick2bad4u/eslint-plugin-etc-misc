@@ -11,7 +11,7 @@ const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
     name: "typescript/require-prop-type-annotation",
     selector: "PropertyDefinition[typeAnnotation=undefined][value=null]",
     type: "problem",
-    url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/typescript-require-prop-type-annotation.md",
+    url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-require-prop-type-annotation",
 });
 
 export default rule;

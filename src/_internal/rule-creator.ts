@@ -26,9 +26,10 @@ type RuleCreatorFactory = ReturnType<
  * Typed factory for defining plugin rules with consistent docs URLs.
  */
 export const ruleCreator: RuleCreatorFactory =
-    ESLintUtils.RuleCreator<LegacyDocsMetadata>(
-        (name) =>
-            `https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/${name}.md`
-    );
+    ESLintUtils.RuleCreator<LegacyDocsMetadata>((name) => {
+        const docsPathName = name.replaceAll("/", "-");
+
+        return `https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/${docsPathName}`;
+    });
 
 /* eslint-enable total-functions/no-hidden-type-assertions -- Re-enable hidden assertion checks outside this required generic factory declaration. */

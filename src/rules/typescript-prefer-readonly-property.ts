@@ -11,7 +11,7 @@ const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
     selector:
         ":matches(PropertyDefinition, TSPropertySignature)[readonly!=true]",
     type: "suggestion",
-    url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/typescript-prefer-readonly-property.md",
+    url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-prefer-readonly-property",
 });
 
 export default rule;

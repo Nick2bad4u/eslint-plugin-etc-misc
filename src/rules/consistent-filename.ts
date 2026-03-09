@@ -54,7 +54,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         docs: {
             description: "enforce filename casing consistency.",
             recommended: false,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/consistent-filename.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/consistent-filename",
         },
         hasSuggestions: false,
         messages: {

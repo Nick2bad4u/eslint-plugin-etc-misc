@@ -15,7 +15,7 @@ type RuleDeprecationOptions = Readonly<{
 type RuleModule = TSESLint.RuleModule<string, readonly unknown[]>;
 
 const docsBaseUrl =
-    "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules";
+    "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules";
 
 /**
  * Create a replacement descriptor for deprecation metadata.
@@ -48,7 +48,7 @@ export const createDeprecatedRuleInfo = ({
     deprecatedSince: "1.0.0",
     message,
     ...(replacedBy.length === 0 ? {} : { replacedBy }),
-    url: `${docsBaseUrl}/${ruleId}.md`,
+    url: `${docsBaseUrl}/${ruleId.replaceAll("/", "-")}`,
 });
 
 /**

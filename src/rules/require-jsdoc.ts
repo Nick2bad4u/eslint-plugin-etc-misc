@@ -129,7 +129,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             description:
                 "require JSDoc comments for configured declaration kinds.",
             recommended: false,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/require-jsdoc.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/require-jsdoc",
         },
         hasSuggestions: false,
         messages: {

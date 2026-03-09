@@ -302,7 +302,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 "disallow equivalent type aliases when an interface declaration can be used.",
             recommended: false,
             suggestion: true,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/prefer-interface.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/prefer-interface",
         },
         fixable: "code",
         hasSuggestions: true,

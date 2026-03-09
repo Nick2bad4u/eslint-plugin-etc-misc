@@ -15,7 +15,7 @@ const rule: ReturnType<typeof adaptExternalRule> = adaptExternalRule(
         "no-secrets",
         "eslint-plugin-no-secrets"
     ),
-    "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-secret.md"
+    "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-secret"
 );
 
 /**

@@ -56,7 +56,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             description:
                 "enforce consistent spacing and break placement in switch cases.",
             recommended: false,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/switch-case-spacing.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/switch-case-spacing",
         },
         hasSuggestions: false,
         messages: {

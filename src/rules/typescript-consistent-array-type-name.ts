@@ -13,7 +13,7 @@ const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
     name: "typescript/consistent-array-type-name",
     selector,
     type: "suggestion",
-    url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/typescript-consistent-array-type-name.md",
+    url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-consistent-array-type-name",
 });
 
 export default rule;

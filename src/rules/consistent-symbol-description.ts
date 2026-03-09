@@ -28,7 +28,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         docs: {
             description: "require consistent kebab-case symbol descriptions.",
             recommended: false,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/consistent-symbol-description.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/consistent-symbol-description",
         },
         hasSuggestions: false,
         messages: {

@@ -11,7 +11,7 @@ const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
     selector:
         "MethodDefinition[static=true] > FunctionExpression:not([params.0.name='this'][params.0.typeAnnotation.typeAnnotation.type='TSVoidKeyword'])",
     type: "problem",
-    url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/typescript-require-this-void.md",
+    url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-require-this-void",
 });
 
 export default rule;

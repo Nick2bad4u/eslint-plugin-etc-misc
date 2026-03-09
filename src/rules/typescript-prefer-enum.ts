@@ -143,7 +143,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 "enforce enums over string literal comparisons and pure string unions.",
             recommended: false,
             requiresTypeChecking: true,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/typescript-prefer-enum.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-prefer-enum",
         },
         hasSuggestions: false,
         messages: {

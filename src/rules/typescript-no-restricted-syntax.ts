@@ -7,8 +7,16 @@ import noRestrictedSyntaxRule from "./no-restricted-syntax.js";
 /**
  * TypeScript-prefixed alias for selector-based restricted syntax checks.
  */
-const typescriptNoRestrictedSyntaxRule: typeof noRestrictedSyntaxRule =
-    noRestrictedSyntaxRule;
+const typescriptNoRestrictedSyntaxRule: typeof noRestrictedSyntaxRule = {
+    ...noRestrictedSyntaxRule,
+    meta: {
+        ...noRestrictedSyntaxRule.meta,
+        docs: {
+            ...noRestrictedSyntaxRule.meta.docs,
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-restricted-syntax",
+        } as NonNullable<typeof noRestrictedSyntaxRule.meta.docs>,
+    },
+};
 
 /**
  * Wrapper rule with explicit lifecycle metadata and replacement mapping.

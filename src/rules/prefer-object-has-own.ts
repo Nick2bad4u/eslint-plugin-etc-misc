@@ -9,7 +9,7 @@ const externalRule = getCoreRule("prefer-object-has-own");
 
 const rule: ReturnType<typeof adaptExternalRule> = adaptExternalRule(
     externalRule,
-    "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/prefer-object-has-own.md"
+    "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/prefer-object-has-own"
 );
 
 /**

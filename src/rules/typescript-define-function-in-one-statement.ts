@@ -12,7 +12,7 @@ const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
     selector:
         "AssignmentExpression > MemberExpression.left > Identifier.object",
     type: "suggestion",
-    url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/typescript-define-function-in-one-statement.md",
+    url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-define-function-in-one-statement",
 });
 
 export default rule;

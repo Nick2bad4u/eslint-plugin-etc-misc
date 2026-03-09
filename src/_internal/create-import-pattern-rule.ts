@@ -99,7 +99,7 @@ export const createImportPatternRule = ({
             docs: {
                 description,
                 recommended: false,
-                url: `https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/${name}.md`,
+                url: `https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/${name.replaceAll("/", "-")}`,
             },
             hasSuggestions: false,
             messages: {

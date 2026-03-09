@@ -88,7 +88,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             description:
                 "enforce selected declaration identifiers to match filename casing.",
             recommended: false,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/match-filename.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/match-filename",
         },
         hasSuggestions: false,
         messages: {

@@ -48,7 +48,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         docs: {
             description: "require class names to match the current filename.",
             recommended: false,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/class-match-filename.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/class-match-filename",
         },
         hasSuggestions: false,
         messages: {

@@ -8,7 +8,7 @@ const externalRule = getCoreRule("default-case");
  */
 const rule: ReturnType<typeof adaptExternalRule> = adaptExternalRule(
     externalRule,
-    "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/default-case.md"
+    "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/default-case"
 );
 
 export default rule;

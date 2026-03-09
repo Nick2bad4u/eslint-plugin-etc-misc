@@ -226,7 +226,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             recommended: false,
             requiresTypeChecking: true,
             suggestion: true,
-            url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-implicit-any-catch.md",
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-implicit-any-catch",
         },
         fixable: "code",
         hasSuggestions: true,

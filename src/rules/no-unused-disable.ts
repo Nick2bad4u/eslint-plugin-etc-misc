@@ -18,7 +18,7 @@ const rule: ReturnType<typeof adaptExternalRule> = adaptExternalRule(
         "no-unused-disable",
         "@eslint-community/eslint-plugin-eslint-comments"
     ),
-    "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-unused-disable.md"
+    "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-unused-disable"
 );
 
 /**
