@@ -2,46 +2,50 @@
 
 Disallow greater-than comparisons in favor of less-than comparisons.
 
-## Rule Details
+## Targeted pattern scope
 
-This rule reports `>` and `>=` binary comparisons and rewrites them to equivalent `<` or `<=` comparisons with operands swapped.
+This rule targets binary comparisons that use `>` or `>=`.
 
-Some teams prefer reading comparisons in ascending order (`min < value < max`) because it improves scanability in range checks.
+## What this rule reports
 
-### ❌ Incorrect
+This rule reports `>` and `>=` expressions and provides fixes that swap operands
+and convert operators to `<` or `<=`.
+
+## Why this rule exists
+
+Some teams prefer comparison chains that read in ascending order (for example,
+`min <= value && value <= max`). Enforcing less-than style keeps range checks
+visually consistent across a codebase.
+
+## ❌ Incorrect
 
 ```ts
 const isValid = value > min;
-```
 
-```ts
 if (value >= min && value <= max) {
     run();
 }
 ```
 
-### ✅ Correct
+## ✅ Correct
 
 ```ts
 const isValid = min < value;
-```
 
-```ts
 if (min <= value && value <= max) {
     run();
 }
 ```
 
-## Auto-fixing
+## Behavior and migration notes
 
-This rule is auto-fixable. The fixer swaps the left and right operands and replaces the operator:
+This rule has no options.
+
+The rule is auto-fixable. The fixer swaps both operands and rewrites the
+operator:
 
 - `>` → `<`
 - `>=` → `<=`
-
-## Options
-
-This rule has no options.
 
 ## ESLint flat config example
 
@@ -58,11 +62,16 @@ export default [
 ];
 ```
 
-## When Not To Use It
+## When not to use it
 
-Disable this rule if your team intentionally prefers `>` and `>=` comparisons for readability.
+Disable this rule if your team intentionally uses greater-than comparisons for
+readability and does not want operand-swapping autofixes.
 
-## Further Reading
+## Package documentation
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+
+## Further reading
 
 - [MDN: Less than (`<`)](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Less_than)
 - [MDN: Greater than (`>`)](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Greater_than)

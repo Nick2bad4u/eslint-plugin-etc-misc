@@ -48,14 +48,14 @@ const vitestConfig: ReturnType<typeof defineConfig> = defineConfig({
         },
         outDir: ".cache/vite/eslint-plugin-etc-misc", // Output directory for built files, separate from source and coverage
         rollupOptions: {
+            cache: true, // Enable Rollup caching to improve build performance
+            context: "this", // Set Rollup context to 'this' for better compatibility with ESLint's expected environment
+            experimentalLogSideEffects: true, // Enable experimental logging of side effects for better tree-shaking insights
             external: [
                 // Exclude dependencies from the bundle to reduce size and avoid duplication in consuming projects
                 "eslint",
                 "typescript",
             ],
-            cache: true, // Enable Rollup caching to improve build performance
-            context: "this", // Set Rollup context to 'this' for better compatibility with ESLint's expected environment
-            experimentalLogSideEffects: true, // Enable experimental logging of side effects for better tree-shaking insights
             shimMissingExports: true, // Automatically shim missing exports to prevent build errors from re-exports without direct imports
         },
         sourcemap: true, // Generate source maps for accurate coverage mapping

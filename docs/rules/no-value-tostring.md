@@ -48,12 +48,12 @@ This rule forwards options to `@typescript-eslint/no-base-to-string`.
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-	{
-		plugins: { "etc-misc": etcMisc },
-		rules: {
-			"etc-misc/no-value-tostring": "error",
-		},
-	},
+    {
+        plugins: { "etc-misc": etcMisc },
+        rules: {
+            "etc-misc/no-value-tostring": "error",
+        },
+    },
 ];
 ```
 

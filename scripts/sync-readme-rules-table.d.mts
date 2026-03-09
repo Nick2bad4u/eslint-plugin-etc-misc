@@ -1,6 +1,27 @@
+export interface ReadmeReplacementInfo {
+    readonly plugin?:
+        | {
+              readonly name: string;
+              readonly url?: string | undefined;
+          }
+        | undefined;
+    readonly rule?:
+        | {
+              readonly name: string;
+              readonly url?: string | undefined;
+          }
+        | undefined;
+}
+
+export interface ReadmeDeprecatedInfo {
+    readonly message?: string | undefined;
+    readonly replacedBy?: readonly ReadmeReplacementInfo[] | undefined;
+}
+
 export interface ReadmeRuleModule {
     readonly meta?:
         | {
+              readonly deprecated?: boolean | ReadmeDeprecatedInfo | undefined;
               readonly docs?:
                   | {
                         readonly typefestConfigs?:
@@ -47,5 +68,6 @@ export function derivePresetRuleNamesByPresetFromPlugin(
 
 export function generateReadmeRulesSectionFromRules(
     rules: Readonly<Record<string, ReadmeRuleModule>>,
-    presetRuleNamesByPreset: PresetRuleNamesByPreset
+    presetRuleNamesByPreset: PresetRuleNamesByPreset,
+    lineEnding?: "\n" | "\r\n"
 ): string;

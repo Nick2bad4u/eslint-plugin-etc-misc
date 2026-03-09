@@ -2,11 +2,23 @@
 
 Require assigning `require(...)` calls to a `const` variable.
 
-## Rule Details
+## Targeted pattern scope
 
-This rule reports `require(...)` call sites that are not part of a variable declarator.
+This rule targets `require(...)` calls that are not part of a variable
+declaration.
 
-### ❌ Incorrect
+## What this rule reports
+
+This rule reports `require(...)` invocations used inline, such as return
+expressions or nested call arguments.
+
+## Why this rule exists
+
+Binding imports to a named `const` improves readability, simplifies debugging,
+and avoids repeated module resolution expressions in the same scope. It also
+makes migration toward ESM import style easier.
+
+## ❌ Incorrect
 
 ```ts
 function loadPath() {
@@ -14,15 +26,22 @@ function loadPath() {
 }
 ```
 
-### ✅ Correct
+## ✅ Correct
 
 ```ts
 const path = require("node:path");
+
+function loadPath() {
+    return path;
+}
 ```
 
-## Options
+## Behavior and migration notes
 
 This rule has no options.
+
+When adopting this rule, extract inline `require(...)` calls into top-level or
+nearest-scope `const` bindings with descriptive names.
 
 ## ESLint flat config example
 
@@ -39,6 +58,16 @@ export default [
 ];
 ```
 
-## When Not To Use It
+## When not to use it
 
-Disable this rule if your codebase permits inline or return-position `require(...)` usage.
+Disable this rule if your codebase intentionally allows inline CommonJS loading
+patterns (for example, lazy loading inside specific runtime branches).
+
+## Package documentation
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+
+## Further reading
+
+- [Node.js: CommonJS modules](https://nodejs.org/api/modules.html)
+- [TypeScript Handbook: Modules](https://www.typescriptlang.org/docs/handbook/modules/introduction.html)

@@ -2,32 +2,55 @@
 
 Require arrow-function properties when `this` is not required.
 
-## Rule Details
+## Targeted pattern scope
 
-This rule reports object properties implemented as non-`this` function expressions or method shorthand.
+This rule targets object-literal properties implemented with a function expression
+or method shorthand.
 
-### ❌ Incorrect
+## What this rule reports
+
+This rule reports object property functions that do not declare a `this`
+parameter and can be represented as arrow-function properties.
+
+## Why this rule exists
+
+Arrow-function properties make `this` behavior explicit: they capture lexical
+`this` and avoid accidental rebinding through call-site context. For codebases
+that avoid object-method `this` semantics, this rule enforces a consistent,
+low-ambiguity style.
+
+## ❌ Incorrect
 
 ```ts
-const x = {
-    f() {},
-    g: function () {},
+const handlers = {
+    onClick() {
+        return "clicked";
+    },
+    onHover: function () {
+        return "hovered";
+    },
 };
 ```
 
-### ✅ Correct
+## ✅ Correct
 
 ```ts
-const y = {
-    f: () => {},
-    g(this: void) {},
-    h: function (this: void) {},
+const handlers = {
+    onClick: () => "clicked",
+    onHover: () => "hovered",
+    withThis(this: void) {
+        return "ok";
+    },
 };
 ```
 
-## Options
+## Behavior and migration notes
 
 This rule has no options.
+
+When migrating, convert method shorthand and function-expression properties to
+arrow-function properties where `this` is not used. If a function intentionally
+uses method-style `this`, keep it as a method and annotate `this` explicitly.
 
 ## ESLint flat config example
 
@@ -44,11 +67,16 @@ export default [
 ];
 ```
 
-## When Not To Use It
+## When not to use it
 
-Disable this rule if your code style prefers method shorthand or regular function properties.
+Disable this rule if your team intentionally prefers method shorthand for
+object APIs or relies on method-style `this` semantics.
 
-## Further Reading
+## Package documentation
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+
+## Further reading
 
 - [MDN: Arrow function expressions](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
 - [TypeScript: `this` parameters](https://www.typescriptlang.org/docs/handbook/2/functions.html#declaring-this-in-a-function)

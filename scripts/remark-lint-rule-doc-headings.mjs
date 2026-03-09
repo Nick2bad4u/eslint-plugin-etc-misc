@@ -14,6 +14,7 @@ const canonicalHeadingOrder = [
     "Why this rule exists",
     "❌ Incorrect",
     "✅ Correct",
+    "Deprecated",
     "Behavior and migration notes",
     "Additional examples",
     "ESLint flat config example",
@@ -289,6 +290,7 @@ export default function remarkLintRuleDocHeadings() {
         const packageDocumentationIndex = headingNames.indexOf(
             "Package documentation"
         );
+        const deprecatedSectionIndex = headingNames.indexOf("Deprecated");
         const furtherReadingIndex = headingNames.indexOf("Further reading");
 
         for (const requiredHeading of requiredCoreHeadings) {
@@ -354,6 +356,34 @@ export default function remarkLintRuleDocHeadings() {
                 undefined,
                 "remark-lint:rule-doc-headings:missing-further-reading"
             );
+        }
+
+        if (deprecatedSectionIndex !== -1) {
+            const deprecatedSectionHeading = h2Headings[deprecatedSectionIndex];
+            const nextH2Index =
+                h2Headings[deprecatedSectionIndex + 1]?.position?.start?.offset;
+            const deprecatedStartOffset =
+                deprecatedSectionHeading.position?.end?.offset;
+            const markdownStartOffset =
+                typeof deprecatedStartOffset === "number"
+                    ? deprecatedStartOffset
+                    : 0;
+            const markdownEndOffset =
+                typeof nextH2Index === "number"
+                    ? nextH2Index
+                    : String(file).length;
+            const deprecatedSectionContent = String(file).slice(
+                markdownStartOffset,
+                markdownEndOffset
+            );
+
+            if (!/\[[^\]]+\]\([^\)]+\)/u.test(deprecatedSectionContent)) {
+                file.message(
+                    "`## Deprecated` should include a link to the recommended replacement rule or package.",
+                    deprecatedSectionHeading,
+                    "remark-lint:rule-doc-headings:deprecated-replacement-link"
+                );
+            }
         }
 
         if (

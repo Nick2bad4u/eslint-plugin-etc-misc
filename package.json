@@ -22,7 +22,14 @@
         "url": "git+https://github.com/Nick2bad4u/eslint-plugin-etc-misc.git"
     },
     "license": "MIT",
-    "author": "Nick2bad4u <20943337+Nick2bad4u@users.noreply.github.com> (https://nick2bad4u.github.io/eslint-plugin-etc-misc)",
+    "author": "Nick2bad4u",
+    "contributors": [
+        {
+            "name": "Nick2bad4u",
+            "email": "20943337+Nick2bad4u@users.noreply.github.com",
+            "url": "https://nick2bad4u.github.io/eslint-plugin-etc-misc"
+        }
+    ],
     "sideEffects": false,
     "type": "module",
     "exports": {

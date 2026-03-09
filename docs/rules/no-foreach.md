@@ -4,7 +4,7 @@ Disallow calling `forEach` on configured collection types.
 
 ## Rule Details
 
-This rule reports `.forEach(...)` calls for configured type names (by default: `Array`, `Map`, `NodeList`, and `Set`). In many codebases, explicit `for...of` loops are preferred for readability and flow control.
+This rule reports `.forEach(...)` calls for configured type names (by default: `Array`, `Map`, `NodeList`, and `Set`). In codebases that standardize on explicit loops, `for...of` improves control-flow clarity (for example, with `break`, `continue`, and `return`).
 
 ### ❌ Incorrect
 

@@ -10,8 +10,29 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 /**
  * @typedef {Readonly<{
+ *     plugin?: {
+ *         name: string;
+ *         url?: string;
+ *     };
+ *     rule?: {
+ *         name: string;
+ *         url?: string;
+ *     };
+ * }>} ReadmeReplacement
+ */
+
+/**
+ * @typedef {Readonly<{
+ *     message?: string;
+ *     replacedBy?: readonly ReadmeReplacement[];
+ * }>} ReadmeDeprecatedInfo
+ */
+
+/**
+ * @typedef {Readonly<{
  *     meta?: {
  *         namespace?: string;
+ *         deprecated?: boolean | ReadmeDeprecatedInfo;
  *         docs?: {
  *             url?: string;
  *         };
@@ -53,6 +74,14 @@ const presetIconByName = {
 const presetOrder = ["recommended", "all"];
 
 const rulesSectionHeading = "## Rules";
+
+/**
+ * @param {string} markdownText
+ *
+ * @returns {"\n" | "\r\n"}
+ */
+const detectLineEnding = (markdownText) =>
+    markdownText.includes("\r\n") ? "\r\n" : "\n";
 
 /**
  * @returns {PresetRuleNamesByPreset}
@@ -156,6 +185,95 @@ const getPresetIndicator = (ruleName, presetRuleNamesByPreset) => {
 };
 
 /**
+ * @param {ReadmeRuleModule} ruleModule
+ *
+ * @returns {readonly ReadmeReplacement[]}
+ */
+const getReplacementRules = (ruleModule) => {
+    const deprecatedInfo = ruleModule.meta?.deprecated;
+
+    if (deprecatedInfo === undefined || deprecatedInfo === false) {
+        return [];
+    }
+
+    if (
+        typeof deprecatedInfo === "object" &&
+        Array.isArray(deprecatedInfo.replacedBy)
+    ) {
+        return deprecatedInfo.replacedBy;
+    }
+
+    return [];
+};
+
+/**
+ * @param {ReadmeReplacement} replacement
+ *
+ * @returns {string}
+ */
+const formatReplacement = (replacement) => {
+    const pluginName = replacement.plugin?.name;
+    const ruleName = replacement.rule?.name;
+    const normalizedPluginName =
+        typeof pluginName === "string" && pluginName.length > 0
+            ? pluginName
+            : undefined;
+    const normalizedRuleName =
+        typeof ruleName === "string" && ruleName.length > 0
+            ? ruleName
+            : undefined;
+
+    const displayName =
+        typeof normalizedPluginName === "string" &&
+        typeof normalizedRuleName === "string"
+            ? normalizedPluginName === normalizedRuleName ||
+              normalizedPluginName.endsWith(`/${normalizedRuleName}`)
+                ? normalizedPluginName
+                : normalizedRuleName.startsWith(`${normalizedPluginName}/`)
+                  ? normalizedRuleName
+                  : `${normalizedPluginName}/${normalizedRuleName}`
+            : typeof normalizedRuleName === "string"
+              ? normalizedRuleName
+              : typeof normalizedPluginName === "string"
+                ? normalizedPluginName
+                : "replacement";
+    const replacementUrl = replacement.rule?.url ?? replacement.plugin?.url;
+
+    if (typeof replacementUrl === "string" && replacementUrl.length > 0) {
+        return `[\`${displayName}\`](${replacementUrl})`;
+    }
+
+    return `\`${displayName}\``;
+};
+
+/**
+ * @param {ReadmeRuleModule} ruleModule
+ *
+ * @returns {string}
+ */
+const getDeprecatedIndicator = (ruleModule) =>
+    ruleModule.meta?.deprecated === undefined ||
+    ruleModule.meta?.deprecated === false
+        ? "—"
+        : "⚠️";
+
+/**
+ * @param {ReadmeRuleModule} ruleModule
+ *
+ * @returns {string}
+ */
+const getRecommendedReplacementIndicator = (ruleModule) => {
+    const replacements = getReplacementRules(ruleModule);
+    if (replacements.length === 0) {
+        return "—";
+    }
+
+    return replacements
+        .map((replacement) => formatReplacement(replacement))
+        .join(" · ");
+};
+
+/**
  * @param {readonly [string, ReadmeRuleModule]} entry
  * @param {PresetRuleNamesByPreset} presetRuleNamesByPreset
  *
@@ -168,7 +286,7 @@ const toRuleTableRow = ([ruleName, ruleModule], presetRuleNamesByPreset) => {
         throw new TypeError(`Rule '${ruleName}' is missing meta.docs.url.`);
     }
 
-    return `| [\`${ruleName}\`](${docsUrl}) | ${getRuleFixIndicator(ruleModule)} | ${getPresetIndicator(ruleName, presetRuleNamesByPreset)} |`;
+    return `| [\`${ruleName}\`](${docsUrl}) | ${getRuleFixIndicator(ruleModule)} | ${getPresetIndicator(ruleName, presetRuleNamesByPreset)} | ${getDeprecatedIndicator(ruleModule)} | ${getRecommendedReplacementIndicator(ruleModule)} |`;
 };
 
 /**
@@ -182,7 +300,8 @@ const toRuleTableRow = ([ruleName, ruleModule], presetRuleNamesByPreset) => {
  */
 export const generateReadmeRulesSectionFromRules = (
     rules,
-    presetRuleNamesByPreset
+    presetRuleNamesByPreset,
+    lineEnding = "\n"
 ) => {
     const ruleEntries = Object.entries(rules).toSorted((left, right) =>
         left[0].localeCompare(right[0])
@@ -200,13 +319,14 @@ export const generateReadmeRulesSectionFromRules = (
         "  - `💡` = suggestions available",
         "  - `—` = report only",
         "- `Preset key` legend: `🟡 recommended` · `🟣 all`",
+        "- `Deprecated` legend: `⚠️` = deprecated",
         "",
-        "| Rule | Fix | Preset key |",
-        "| --- | :-: | :-- |",
+        "| Rule | Fix | Preset key | Deprecated | Recommended replacement |",
+        "| --- | :-: | :-- | :-: | :-- |",
         ...rows,
         "",
         "",
-    ].join("\n");
+    ].join(lineEnding);
 };
 
 /**
@@ -243,6 +363,7 @@ const syncReadmeRulesTable = async ({ writeChanges }) => {
     const workspaceRoot = resolve(fileURLToPath(import.meta.url), "../..");
     const readmePath = resolve(workspaceRoot, "README.md");
     const readmeText = await readFile(readmePath, "utf8");
+    const lineEnding = detectLineEnding(readmeText);
     const builtPlugin = await loadBuiltPlugin(workspaceRoot);
     const presetRuleNamesByPreset =
         derivePresetRuleNamesByPresetFromPlugin(builtPlugin);
@@ -266,10 +387,11 @@ const syncReadmeRulesTable = async ({ writeChanges }) => {
 
     const generatedRulesSection = generateReadmeRulesSectionFromRules(
         builtPlugin.rules,
-        presetRuleNamesByPreset
+        presetRuleNamesByPreset,
+        lineEnding
     );
 
-    const nextReadmeText = `${readmePrefix}\n\n${generatedRulesSection}${readmeSuffix}`;
+    const nextReadmeText = `${readmePrefix}${lineEnding}${lineEnding}${generatedRulesSection}${readmeSuffix}`;
 
     if (readmeText === nextReadmeText) {
         return {

@@ -2,24 +2,40 @@
 
 Disallow additional exports alongside a default export.
 
-## Rule Details
+## Targeted pattern scope
 
-This rule reports programs that include a `default` export and any additional export.
+This rule targets modules that contain a `default` export together with at
+least one additional export declaration.
 
-### ❌ Incorrect
+## What this rule reports
+
+This rule reports files where default and named exports are mixed.
+
+## Why this rule exists
+
+Some teams enforce a strict module contract: either a module exposes one default
+value, or it exposes named exports, but not both. Mixing both styles can make
+imports inconsistent across the codebase.
+
+## ❌ Incorrect
 
 ```ts
 export default 1;
 export const x = 1;
 ```
 
-### ✅ Correct
+## ✅ Correct
 
 ```ts
 export default 1;
 ```
 
-## Options
+```ts
+export const x = 1;
+export const y = 2;
+```
+
+## Behavior and migration notes
 
 This rule has no options.
 
@@ -38,6 +54,15 @@ export default [
 ];
 ```
 
-## When Not To Use It
+## When not to use it
 
 Disable this rule if combining default and named exports is allowed in your modules.
+
+## Package documentation
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+
+## Further reading
+
+- [MDN: `export` statement](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export)
+- [TypeScript Handbook: Modules](https://www.typescriptlang.org/docs/handbook/modules/introduction.html)

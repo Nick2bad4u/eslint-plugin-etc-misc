@@ -4,7 +4,7 @@ Disallow TypeScript `enum` declarations.
 
 ## Rule Details
 
-This rule reports every `enum` declaration. Enums emit runtime JavaScript and can complicate tree-shaking and interop. In many codebases, literal unions and `as const` objects are easier to reason about and maintain.
+This rule reports every `enum` declaration. Enums emit runtime JavaScript and can complicate tree-shaking and interop. In codebases that prefer structural typing, literal unions and `as const` objects are easier to reason about and maintain.
 
 ### ❌ Incorrect
 

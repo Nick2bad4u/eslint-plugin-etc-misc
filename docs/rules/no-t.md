@@ -11,7 +11,9 @@ This rule helps keep type parameter names self-documenting and easier to read in
 
 ## Why this rule exists
 
-Single-character type parameter names are terse but often ambiguous outside tiny local scopes. Descriptive names improve readability and maintenance.
+Single-character type parameter names are terse but often ambiguous outside
+narrowly scoped declarations. Descriptive names improve readability and
+maintenance.
 
 ## ❌ Incorrect
 
@@ -59,3 +61,17 @@ export default [
     },
 ];
 ```
+
+## When not to use it
+
+Disable this rule if your project intentionally follows short generic naming
+conventions (for example, single-letter parameters in mathematical or
+algorithm-heavy APIs).
+
+## Package documentation
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+
+## Further reading
+
+- [TypeScript Handbook: Generics](https://www.typescriptlang.org/docs/handbook/2/generics.html)

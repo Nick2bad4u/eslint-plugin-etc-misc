@@ -1,10 +1,11 @@
+import type ts from "typescript";
+
 import {
     containsAllTypesByName,
     getConstrainedTypeAtLocation,
     isTypeArrayTypeOrUnionOfArrayTypes,
 } from "@typescript-eslint/type-utils";
 import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
-import type ts from "typescript";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
