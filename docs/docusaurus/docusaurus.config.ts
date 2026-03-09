@@ -70,7 +70,7 @@ const config: Config = {
     baseUrl,
     baseUrlIssueBanner: true,
     deploymentBranch: "gh-pages",
-    favicon: "img/logo.svg",
+    favicon: "img/favicon.svg",
     // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
     future: futureConfig,
     clientModules: [modernEnhancementsClientModule],
@@ -128,18 +128,18 @@ const config: Config = {
                         tagName: "meta",
                     },
                     {
-                        href: `${baseUrl}img/icon-192.png`,
+                        href: `${baseUrl}img/logo_192x192.png`,
                         rel: "apple-touch-icon",
                         tagName: "link",
                     },
                     {
                         color: pwaMaskIconColor,
-                        href: `${baseUrl}img/icon-512.svg`,
+                        href: `${baseUrl}img/logo.svg`,
                         rel: "mask-icon",
                         tagName: "link",
                     },
                     {
-                        content: `${baseUrl}img/icon-192.png`,
+                        content: `${baseUrl}img/logo_192x192.png`,
                         name: "msapplication-TileImage",
                         tagName: "meta",
                     },
@@ -281,7 +281,7 @@ const config: Config = {
                         },
                         {
                             label: "📖 Getting Started",
-                            to: "/docs/getting-started",
+                            to: "/docs/rules/getting-started",
                         },
                         {
                             label: "🎛 Presets",
@@ -305,12 +305,12 @@ const config: Config = {
                             label: "🔍 ESLint Inspector",
                         },
                         {
-                            href: `https://www.npmjs.com/package/ts-extras`,
-                            label: "📦 ts-extras",
+                            to: "/docs/rules/overview",
+                            label: "📏 Rule Docs",
                         },
                         {
-                            href: `https://www.npmjs.com/package/type-fest`,
-                            label: "📦 type-fest",
+                            to: "/docs/rules/presets/all",
+                            label: "🟣 All Preset",
                         },
                     ],
                     title: "🚀 Project",
@@ -350,10 +350,10 @@ const config: Config = {
         navbar: {
             items: [
                 {
-                    activeBaseRegex: "^/docs(?:/(?!rules(?:/|$)).*)?$",
+                    activeBaseRegex: "^/docs/rules/getting-started(?:/.*)?$",
                     label: "📚 Docs",
                     position: "left",
-                    to: "/docs/getting-started",
+                    to: "/docs/rules/getting-started",
                 },
                 {
                     activeBaseRegex: "^/docs/rules(?:/(?!presets(?:/|$)).*)?$",

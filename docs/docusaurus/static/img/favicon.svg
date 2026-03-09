@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">eslint-plugin-etc-misc favicon</title>
+  <desc id="desc">Gradient square with stylized E and M initials.</desc>
+  <defs>
+    <linearGradient id="faviconGradient" x1="8%" y1="8%" x2="92%" y2="92%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="58%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#0ea5e9" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#faviconGradient)" />
+  <path d="M15 17h27v6H21v7h19v6H21v8h22v6H15V17Z" fill="#ffffff" />
+  <path d="M31 17h6l6 11 6-11h6v33h-6V28l-5 8h-6l-5-8v22h-6V17Z" fill="rgb(255 255 255 / 92%)" />
+</svg>

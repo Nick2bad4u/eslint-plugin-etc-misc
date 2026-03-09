@@ -85,7 +85,7 @@
     "excludeInternal": false,
     "excludeNotDocumented": false,
     "excludePrivate": false,
-    "excludePrivateClassFields": true,
+    "excludePrivateClassFields": false,
     "excludeProtected": false,
     "excludeReferences": false,
     "expandObjects": true,

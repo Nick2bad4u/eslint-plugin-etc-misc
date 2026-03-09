@@ -9,7 +9,6 @@
         "documentation",
         "eslint",
         "eslint-plugin",
-        "type-fest",
         "typescript"
     ],
     "homepage": "https://nick2bad4u.github.io/eslint-plugin-etc-misc/",

@@ -9,8 +9,8 @@ declare const styles: {
     readonly "sb-cat-developer-adr": string;
     readonly "sb-cat-presets": string;
     readonly "sb-cat-rules": string;
-    readonly "sb-cat-rules-ts-extras": string;
-    readonly "sb-cat-rules-type-fest": string;
+    readonly "sb-cat-rules-core": string;
+    readonly "sb-cat-rules-typescript": string;
     readonly "sb-doc-api-overview": string;
     readonly "sb-doc-getting-started": string;
     readonly "sb-doc-overview": string;

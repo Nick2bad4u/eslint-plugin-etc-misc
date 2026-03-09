@@ -81,11 +81,8 @@ const collectMarkdownDocIdsRecursively = (
     return discoveredDocIds;
 };
 
-const isTsExtrasRuleDocId = (ruleDocId: string): boolean =>
-    ruleDocId.startsWith("prefer-ts-extras-");
-
-const isTypeFestRuleDocId = (ruleDocId: string): boolean =>
-    ruleDocId.startsWith("prefer-type-fest-");
+const isTypeScriptRuleDocId = (ruleDocId: string): boolean =>
+    ruleDocId.startsWith("typescript-");
 
 /** Sorted markdown doc ids discovered from `docs/rules/*.md`. */
 const allRulesMarkdownDocIds = readdirSync(rulesDocsDirectoryPath, {
@@ -248,20 +245,16 @@ if (presetItems.length > 0) {
     });
 }
 
-/** Rule-doc ids for `prefer-ts-extras-*` rules. */
-const tsExtrasRuleDocIds = documentedRuleDocIds.filter(isTsExtrasRuleDocId);
-/** Rule-doc ids for `prefer-type-fest-*` rules. */
-const typeFestRuleDocIds = documentedRuleDocIds.filter(isTypeFestRuleDocId);
 /** Rule-doc ids for all remaining core etc-misc rules. */
 const coreRuleDocIds = documentedRuleDocIds.filter(
-    (ruleDocId) =>
-        !isTsExtrasRuleDocId(ruleDocId) && !isTypeFestRuleDocId(ruleDocId)
+    (ruleDocId) => !isTypeScriptRuleDocId(ruleDocId)
 );
+/** Rule-doc ids for TypeScript-scoped rules. */
+const typeScriptRuleDocIds = documentedRuleDocIds.filter(isTypeScriptRuleDocId);
 
 const categorizedRuleDocIdSet = new Set<string>([
     ...coreRuleDocIds,
-    ...tsExtrasRuleDocIds,
-    ...typeFestRuleDocIds,
+    ...typeScriptRuleDocIds,
 ]);
 
 const uncategorizedRuleDocIds = documentedRuleDocIds.filter(
@@ -311,36 +304,20 @@ const sidebars: SidebarsConfig = {
                     items: createRuleItems(coreRuleDocIds),
                 },
                 {
-                    className: "sb-cat-rules-ts-extras",
+                    className: "sb-cat-rules-typescript",
                     collapsed: true,
                     customProps: {
-                        badge: "ts-extras",
+                        badge: "typescript",
                     },
                     type: "category",
-                    label: "🧰 ts-extras Rules",
+                    label: "🧠 TypeScript Rules",
                     link: {
                         type: "generated-index",
-                        title: "ts-extras Rules",
+                        title: "TypeScript Rules",
                         description:
-                            "Rules that prefer ts-extras runtime helpers and utility functions.",
+                            "Rules focused on stronger TypeScript-only constraints and type-level consistency.",
                     },
-                    items: createRuleItems(tsExtrasRuleDocIds),
-                },
-                {
-                    className: "sb-cat-rules-type-fest",
-                    collapsed: true,
-                    customProps: {
-                        badge: "type-fest",
-                    },
-                    type: "category",
-                    label: "✨ type-fest Rules",
-                    link: {
-                        type: "generated-index",
-                        title: "type-fest Rules",
-                        description:
-                            "Rules that prefer expressive type-fest utility types for clearer type-level code.",
-                    },
-                    items: createRuleItems(typeFestRuleDocIds),
+                    items: createRuleItems(typeScriptRuleDocIds),
                 },
             ],
         },

@@ -8,17 +8,20 @@ import styles from "./index.module.css";
 
 const heroBadges = [
     {
-        description: "Drop-in config for ESLint v9+ and modern repos.",
+        description:
+            "Flat-config presets built specifically for eslint-plugin-etc-misc.",
         icon: "⚙️",
         label: "Flat Config native",
     },
     {
-        description: "Type-aware guidance without sacrificing readability.",
+        description:
+            "Curated blend of eslint-plugin-etc and eslint-plugin-misc best practices.",
         icon: "🧠",
-        label: "TypeScript-first",
+        label: "Merged plugin conventions",
     },
     {
-        description: "Clear diagnostics with safe autofixes and suggestions.",
+        description:
+            "Detailed rule docs with incorrect/correct snippets and rollout guidance.",
         icon: "🛠️",
         label: "Actionable rule docs",
     },
@@ -28,7 +31,7 @@ const heroStats = [
     {
         description:
             "Coverage across naming, imports, structure, and TypeScript correctness.",
-        headline: "📏 100+ Rules",
+        headline: "📏 103 Rules",
     },
     {
         description:
@@ -36,8 +39,9 @@ const heroStats = [
         headline: "🎛️ 2 Presets",
     },
     {
-        description: "Safe rewrites where semantics are preserved.",
-        headline: "✨ DX-first Autofix & Suggestions",
+        description:
+            "Core and TypeScript-specific rule families with consistent navigation.",
+        headline: "✨ Core + TypeScript Rule Groups",
     },
 ];
 
@@ -121,13 +125,13 @@ export default function Home() {
                                     className="button button--primary button--lg"
                                     to="/docs/rules/overview"
                                 >
-                                    Start with Overview
+                                    Open Rule Overview
                                 </Link>
                                 <Link
                                     className="button button--secondary button--lg"
                                     to="/docs/rules/presets/all"
                                 >
-                                    Compare Presets
+                                    See All Preset Rules
                                 </Link>
                             </div>
                         </div>

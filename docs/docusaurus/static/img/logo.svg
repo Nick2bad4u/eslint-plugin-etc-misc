@@ -1,13 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
-  <title id="title">eslint-plugin-typefest logo</title>
-  <desc id="desc">Stylized hexagon containing TF initials.</desc>
+  <title id="title">eslint-plugin-etc-misc logo</title>
+  <desc id="desc">Rounded square mark with layered E and M glyphs for eslint-plugin-etc-misc.</desc>
   <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="brandGradient" x1="10%" y1="8%" x2="92%" y2="94%">
       <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="55%" stop-color="#6366f1" />
       <stop offset="100%" stop-color="#0ea5e9" />
     </linearGradient>
   </defs>
-  <rect width="128" height="128" rx="20" fill="url(#g)" />
-  <path d="M23 30h82v14H70v54H56V44H23V30Z" fill="#fff" />
-  <path d="M70 52h35v12H82v34H70V52Z" fill="#fff" opacity="0.92" />
+  <rect width="128" height="128" rx="26" fill="url(#brandGradient)" />
+  <rect x="16" y="16" width="96" height="96" rx="20" fill="none" stroke="rgb(255 255 255 / 18%)" stroke-width="2" />
+  <path d="M34 35h52v10H44v13h36v10H44v15h42v10H34V35Z" fill="#ffffff" />
+  <path d="M64 35h10l11 19 11-19h10v58H96V54L85 73H75L64 54v39H54V35Z" fill="rgb(255 255 255 / 92%)" />
 </svg>
