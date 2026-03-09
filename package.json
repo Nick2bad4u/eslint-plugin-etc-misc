@@ -22,7 +22,7 @@
         "url": "git+https://github.com/Nick2bad4u/eslint-plugin-etc-misc.git"
     },
     "license": "MIT",
-    "author": "Nick2bad4u <20943337+Nick2bad4u@users.noreply.github.com> (https://nick2bad4u.github.io/eslint-plugin-typefest)",
+    "author": "Nick2bad4u <20943337+Nick2bad4u@users.noreply.github.com> (https://nick2bad4u.github.io/eslint-plugin-etc-misc)",
     "sideEffects": false,
     "type": "module",
     "exports": {
@@ -46,7 +46,7 @@
     "scripts": {
         "build": "tsc -p tsconfig.build.json",
         "build:clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
-        "build:eslint-inspector": "npx @eslint/config-inspector build --outDir \"docs/docusaurus/static/eslint-inspector\" --base \"/eslint-plugin-typefest/eslint-inspector/\"",
+        "build:eslint-inspector": "npx @eslint/config-inspector build --outDir \"docs/docusaurus/static/eslint-inspector\" --base \"/eslint-plugin-etc-misc/eslint-inspector/\"",
         "build:eslint-inspector:local": "npx @eslint/config-inspector",
         "changelog:generate": "git-cliff --config cliff.toml --output CHANGELOG.md",
         "changelog:preview": "git-cliff --config cliff.toml --unreleased",
@@ -85,6 +85,7 @@
         "docs:typedoc:local": "npm run --workspace docs/docusaurus docs:api:local",
         "docs:validate-links": "remark docs --use remark-validate-links --frail",
         "knip": "cross-env NODE_OPTIONS=--max_old_space_size=4096 NODE_NO_WARNINGS=1 npx knip -c knip.config.ts --include-libs --cache --cache-location .cache/knip --tsConfig tsconfig.json",
+        "prelint": "npm run build",
         "lint": "cross-env NODE_OPTIONS=--max_old_space_size=16384 eslint --cache --cache-strategy content --cache-location .cache/.eslintcache",
         "lint:action": "npm run lint:actions",
         "lint:actions": "node scripts/lint-actionlint.mjs",
@@ -92,6 +93,7 @@
         "lint:all:fix": "npm run lint:fix && npm run lint:css:fix && npm run lint:prettier:fix && npm run lint:remark && npm run lint:package && npm run lint:secretlint && npm run lint:yaml:fix && npm run lint:actions && npm run lint:circular",
         "lint:all:fix:quiet": "npm run lint:fix:quiet && npm run lint:css:fix && npm run lint:prettier:fix && npm run lint:remark && npm run lint:package && npm run lint:secretlint && npm run lint:yaml:fix && npm run lint:actions && npm run lint:circular",
         "lint:circular": "npm run madge:circular",
+        "prelint:compat:eslint9": "npm run build",
         "lint:compat:eslint9": "node scripts/eslint9-compat-smoke.mjs",
         "lint:config:build": "npm run build:eslint-inspector",
         "lint:config:inspect": "npx eslint --inspect-config",
@@ -107,7 +109,7 @@
         "lint:exports": "ts-unused-exports tsconfig.json src/plugin.ts --excludePathsFromReport=plugin.ts",
         "lint:fix": "cross-env NODE_OPTIONS=--max_old_space_size=16384 eslint --cache --cache-strategy content --cache-location .cache/.eslintcache --fix",
         "lint:fix:quiet": "cross-env ESLINT_PROGRESS=off NODE_OPTIONS=--max_old_space_size=16384 eslint --cache --cache-strategy content --cache-location .cache/.eslintcache --fix && echo \"Eslint fix done!\"",
-        "lint:grype": "grype . -c .grype.yaml --name eslint-plugin-typefest",
+        "lint:grype": "grype . -c .grype.yaml --name eslint-plugin-etc-misc",
         "lint:knip": "npm run knip",
         "lint:knip:exports": "npm run knip -- --include exports,nsExports,classMembers,types,nsTypes,enumMembers,duplicates",
         "lint:knip:unused:exports": "npm run knip -- --dependencies --exports",

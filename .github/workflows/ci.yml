@@ -83,7 +83,7 @@ jobs:
                   CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
               with:
                   token: ${{ env.CODECOV_TOKEN }}
-                  slug: Nick2bad4u/eslint-plugin-typefest
+                  slug: Nick2bad4u/eslint-plugin-etc-misc
                   files: ./coverage/lcov.info
                   flags: unit,${{ matrix.codecov_flag }}
                   name: vitest-unit-coverage-${{ matrix.codecov_flag }}

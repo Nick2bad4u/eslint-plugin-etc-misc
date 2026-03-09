@@ -72,7 +72,7 @@
     "emit": "docs",
     "entryPointStrategy": "resolve",
     "entryPoints": [
-        "C:/Users/Nick/Dropbox/PC (2)/Documents/GitHub/eslint-plugin-typefest/src/plugin.ts"
+        "../../src/plugin.ts"
     ],
     "exclude": [
         "**/dist/**",
@@ -418,7 +418,7 @@
         "ini",
         "diff"
     ],
-    "hostedBaseUrl": "https://nick2bad4u.github.io/eslint-plugin-typefest/",
+    "hostedBaseUrl": "https://nick2bad4u.github.io/eslint-plugin-etc-misc/",
     "includeDocCommentReferences": false,
     "includeHierarchySummary": true,
     "includeVersion": true,
@@ -516,7 +516,7 @@
         "@sealed",
         "@virtual"
     ],
-    "name": "eslint-plugin-typefest Documentation",
+    "name": "eslint-plugin-etc-misc Documentation",
     "navigation": {
         "compactFolders": false,
         "excludeReferences": false,
@@ -524,7 +524,7 @@
         "includeFolders": true,
         "includeGroups": true
     },
-    "out": "C:/Users/Nick/Dropbox/PC (2)/Documents/GitHub/eslint-plugin-typefest/docs/docusaurus/site-docs/developer/api",
+    "out": "site-docs/developer/api",
     "placeInternalsInOwningModule": true,
     "plugin": [
         "./typedoc-plugins/hashToBangLinks.mjs",
@@ -542,7 +542,7 @@
     ],
     "preserveLinkText": true,
     "preserveWatchOutput": false,
-    "prettierConfigFile": "C:/Users/Nick/Dropbox/PC (2)/Documents/GitHub/eslint-plugin-typefest/.prettierrc",
+    "prettierConfigFile": "../../.prettierrc",
     "readme": "none",
     "replaceText": {
         "inCodeCommentTags": true,

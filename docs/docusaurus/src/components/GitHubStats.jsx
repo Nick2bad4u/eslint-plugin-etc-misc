@@ -5,33 +5,33 @@ import styles from "../pages/index.module.css";
 const liveBadges = [
     {
         alt: "npm license",
-        href: "https://www.npmjs.com/package/eslint-plugin-typefest",
-        src: "https://flat.badgen.net/npm/license/eslint-plugin-typefest?color=purple",
+        href: "https://www.npmjs.com/package/eslint-plugin-etc-misc",
+        src: "https://flat.badgen.net/npm/license/eslint-plugin-etc-misc?color=purple",
     },
     {
         alt: "npm total downloads",
-        href: "https://www.npmjs.com/package/eslint-plugin-typefest",
-        src: "https://flat.badgen.net/npm/dt/eslint-plugin-typefest?color=pink",
+        href: "https://www.npmjs.com/package/eslint-plugin-etc-misc",
+        src: "https://flat.badgen.net/npm/dt/eslint-plugin-etc-misc?color=pink",
     },
     {
         alt: "latest GitHub release",
-        href: "https://github.com/Nick2bad4u/eslint-plugin-typefest/releases",
-        src: "https://flat.badgen.net/github/release/Nick2bad4u/eslint-plugin-typefest?color=cyan",
+        href: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/releases",
+        src: "https://flat.badgen.net/github/release/Nick2bad4u/eslint-plugin-etc-misc?color=cyan",
     },
     {
         alt: "GitHub stars",
-        href: "https://github.com/Nick2bad4u/eslint-plugin-typefest/stargazers",
-        src: "https://flat.badgen.net/github/stars/Nick2bad4u/eslint-plugin-typefest?color=yellow",
+        href: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/stargazers",
+        src: "https://flat.badgen.net/github/stars/Nick2bad4u/eslint-plugin-etc-misc?color=yellow",
     },
     {
         alt: "GitHub forks",
-        href: "https://github.com/Nick2bad4u/eslint-plugin-typefest/forks",
-        src: "https://flat.badgen.net/github/forks/Nick2bad4u/eslint-plugin-typefest?color=green",
+        href: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/forks",
+        src: "https://flat.badgen.net/github/forks/Nick2bad4u/eslint-plugin-etc-misc?color=green",
     },
     {
         alt: "GitHub open issues",
-        href: "https://github.com/Nick2bad4u/eslint-plugin-typefest/issues",
-        src: "https://flat.badgen.net/github/open-issues/Nick2bad4u/eslint-plugin-typefest?color=red",
+        href: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/issues",
+        src: "https://flat.badgen.net/github/open-issues/Nick2bad4u/eslint-plugin-etc-misc?color=red",
     },
 ];
 

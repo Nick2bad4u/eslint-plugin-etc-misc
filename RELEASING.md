@@ -1,8 +1,8 @@
-# Releasing `eslint-plugin-typefest`
+# Releasing `eslint-plugin-etc-misc`
 
 ## One-time setup
 
-1. Ensure you can publish this package name on npm (`eslint-plugin-typefest`).
+1. Ensure you can publish this package name on npm (`eslint-plugin-etc-misc`).
 2. In GitHub repo settings, add secret: `NPM_TOKEN`.
    - Use an npm automation token with publish access.
 3. Confirm Actions are enabled for the repository.
@@ -45,7 +45,7 @@ The release workflow will:
 - publish with provenance (`npm publish --provenance`)
 - create the GitHub release using generated notes from `temp/release-notes.md`
 
-`workflow_dispatch` runs verification only; publish is tag-gated (`refs/tags/v*`).
+`workflow_dispatch` can perform a full release (version bump, tag, publish) when configured with a valid target branch and npm token.
 
 ## Notes
 

@@ -43,7 +43,7 @@ jobs:
             - name: Setup Node.js
               uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
               with:
-                  node-version: "24"
+                  node-version: "20.19.0"
                   cache: "npm"
 
             - name: Install dependencies
@@ -51,6 +51,9 @@ jobs:
 
             - name: Build before TypeDoc
               run: npm run build
+
+            - name: Check documentation links
+              run: npm run docs:check-links
 
             - name: Build Docusaurus site
               run: npm run docs:build

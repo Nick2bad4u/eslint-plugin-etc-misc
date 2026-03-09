@@ -26,12 +26,14 @@ const heroBadges = [
 
 const heroStats = [
     {
-        description: "Type-safe patterns from type-fest and ts-extras.",
-        headline: "📏 70+ Rules",
+        description:
+            "Coverage across naming, imports, structure, and TypeScript correctness.",
+        headline: "📏 100+ Rules",
     },
     {
-        description: "Start small, then scale to stricter coverage.",
-        headline: "🎛️ 6 Presets",
+        description:
+            "A focused baseline plus full enforcement when you need everything.",
+        headline: "🎛️ 2 Presets",
     },
     {
         description: "Safe rewrites where semantics are preserved.",
@@ -44,15 +46,15 @@ const homeCards = [
         icon: "\uf135",
         title: "Get Started",
         description:
-            "Install the plugin, enable a preset, and start enforcing type-safe ts-extras and type-fest patterns.",
+            "Install the plugin, enable a preset, and start enforcing consistent TypeScript-first conventions.",
         to: "/docs/rules/getting-started",
     },
     {
         icon: "\uf14e",
         title: "Presets",
         description:
-            "Choose the right preset for your team, from minimal baseline to full strict coverage.",
-        to: "/docs/rules/presets",
+            "Choose between the focused recommended preset and the complete all-rules preset.",
+        to: "/docs/rules/presets/all",
     },
     {
         icon: "\uf02d",
@@ -68,8 +70,8 @@ export default function Home() {
 
     return (
         <Layout
-            title="eslint-plugin-typefest docs"
-            description="Documentation for eslint-plugin-typefest"
+            title="eslint-plugin-etc-misc docs"
+            description="Documentation for eslint-plugin-etc-misc"
         >
             <header className={styles.heroBanner}>
                 <div className={`container ${styles.heroContent}`}>
@@ -79,30 +81,13 @@ export default function Home() {
                                 🛠️ ESLint plugin for modern TypeScript teams 🚀
                             </p>
                             <Heading as="h1" className={styles.heroTitle}>
-                                eslint-plugin-typefest
+                                eslint-plugin-etc-misc
                             </Heading>
                             <p className={styles.heroSubtitle}>
-                                ESLint rules that recommend safer, clearer
-                                TypeScript types, type guards, and other
-                                patterns by utilizing{" "}
-                                <Link
-                                    className={`${styles.heroInlineLink} ${styles.heroInlineLinkTypeFest}`}
-                                    href="https://github.com/sindresorhus/type-fest"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    type-fest
-                                </Link>{" "}
-                                and{" "}
-                                <Link
-                                    className={`${styles.heroInlineLink} ${styles.heroInlineLinkTsExtras}`}
-                                    href="https://github.com/sindresorhus/ts-extras"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    ts-extras
-                                </Link>
-                                .
+                                ESLint rules for teams that want a single,
+                                pragmatic plugin combining the strongest
+                                conventions from eslint-plugin-etc and
+                                eslint-plugin-misc.
                             </p>
 
                             <div className={styles.heroBadgeRow}>
@@ -140,7 +125,7 @@ export default function Home() {
                                 </Link>
                                 <Link
                                     className="button button--secondary button--lg"
-                                    to="/docs/rules/presets"
+                                    to="/docs/rules/presets/all"
                                 >
                                     Compare Presets
                                 </Link>
@@ -149,7 +134,7 @@ export default function Home() {
 
                         <aside className={styles.heroPanel}>
                             <img
-                                alt="eslint-plugin-typefest logo"
+                                alt="eslint-plugin-etc-misc logo"
                                 className={styles.heroPanelLogo}
                                 decoding="async"
                                 height="240"

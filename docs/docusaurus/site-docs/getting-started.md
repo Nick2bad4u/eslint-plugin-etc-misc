@@ -7,31 +7,24 @@ sidebar_position: 2
 Install the plugin:
 
 ```bash
-npm install --save-dev eslint-plugin-typefest
+npm install --save-dev eslint-plugin-etc-misc
 ```
 
 Then enable it in your Flat Config:
 
 ```ts
-import typefest from "eslint-plugin-typefest";
+import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: {
-            typefest,
-        },
-        rules: {
-            "typefest/prefer-ts-extras-is-defined": "error",
-        },
-    },
+    etcMisc.configs.recommended,
 ];
 ```
 
 ## Recommended approach
 
-- Start with one ruleset (`typefest.configs.recommended` or `typefest.configs.strict`).
+- Start with `etcMisc.configs.recommended`.
 - Fix violations in small batches.
-- Promote warnings to errors after stabilization.
+- Move to `etcMisc.configs.all` when you want every available rule enabled.
 
 ## Rule navigation
 

@@ -2,17 +2,17 @@
 sidebar_position: 1
 ---
 
-# eslint-plugin-typefest
+# eslint-plugin-etc-misc
 
-`eslint-plugin-typefest` helps TypeScript codebases adopt more explicit, safer patterns with:
-
-- [`type-fest`](https://github.com/sindresorhus/type-fest) utility types.
-- [`ts-extras`](https://github.com/sindresorhus/ts-extras) runtime helpers.
+`eslint-plugin-etc-misc` combines rules from `eslint-plugin-etc` and
+`eslint-plugin-misc` into one Flat Config-ready plugin for modern TypeScript
+projects.
 
 ## What this documentation includes
 
 - A complete **rule reference** with examples for every rule.
-- **Getting Started** guidance for Flat Config projects.
+- **Getting Started** guidance for Flat Config projects and preset adoption.
+- **Architecture** notes and ADRs explaining key documentation and design decisions.
 - A small **Developer API** section generated with TypeDoc.
 
 ## Next step

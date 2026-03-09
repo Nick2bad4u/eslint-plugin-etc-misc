@@ -10,7 +10,7 @@ const siteUrl =
     process.env["DOCUSAURUS_SITE_URL"] ?? "https://nick2bad4u.github.io";
 /** Route base path where docs site is deployed (GitHub Pages project path). */
 const baseUrl =
-    process.env["DOCUSAURUS_BASE_URL"] ?? "/eslint-plugin-typefest/";
+    process.env["DOCUSAURUS_BASE_URL"] ?? "/eslint-plugin-etc-misc/";
 /** Opt-in flag for experimental Docusaurus performance features. */
 const enableExperimentalFaster =
     process.env["DOCUSAURUS_ENABLE_EXPERIMENTAL"] === "true";
@@ -18,7 +18,7 @@ const enableExperimentalFaster =
 /** GitHub organization used for edit links and project metadata. */
 const organizationName = "Nick2bad4u";
 /** Repository name used for edit links and project metadata. */
-const projectName = "eslint-plugin-typefest";
+const projectName = "eslint-plugin-etc-misc";
 /** Client module path for runtime DOM enhancement bootstrap script. */
 const modernEnhancementsClientModule = fileURLToPath(
     new URL("src/js/modernEnhancements.ts", import.meta.url)
@@ -67,7 +67,7 @@ const futureConfig = {
 
 /** Full Docusaurus site configuration exported to the build/runtime. */
 const config: Config = {
-    baseUrl: "/eslint-plugin-typefest/",
+    baseUrl,
     baseUrlIssueBanner: true,
     deploymentBranch: "gh-pages",
     favicon: "img/logo.svg",
@@ -170,10 +170,10 @@ const config: Config = {
             {
                 blog: {
                     blogDescription:
-                        "Updates, architecture notes, and practical guidance for eslint-plugin-typefest users.",
+                        "Updates, architecture notes, and practical guidance for eslint-plugin-etc-misc users.",
                     blogSidebarCount: "ALL",
                     blogSidebarTitle: "All posts",
-                    blogTitle: "eslint-plugin-typefest Blog",
+                    blogTitle: "eslint-plugin-etc-misc Blog",
                     editUrl: `https://github.com/${organizationName}/${projectName}/tree/main/docs/docusaurus/blog/`,
                     feedOptions: {
                         type: ["rss", "atom"],
@@ -201,8 +201,7 @@ const config: Config = {
                     sidebarPath: "./sidebars.ts",
                 },
                 pages: {
-                    editUrl:
-                        "https://github.com/Nick2bad4u/eslint-plugin-typefest/issues/new?template=custom-issue.md#",
+                    editUrl: `https://github.com/${organizationName}/${projectName}/issues/new?template=custom-issue.md#`,
                     exclude: [
                         // Declarations (often generated next to CSS modules)
                         // must never become routable pages.
@@ -258,7 +257,7 @@ const config: Config = {
     ],
     projectName,
     tagline:
-        "Type-safe ESLint rules for preferring type-fest and ts-extras patterns.",
+        "TypeScript-first ESLint rules combining eslint-plugin-etc and eslint-plugin-misc.",
     themeConfig: {
         colorMode: {
             defaultMode: "dark",
@@ -267,7 +266,7 @@ const config: Config = {
         },
         metadata: [
             {
-                content: "eslint-plugin-typefest",
+                content: "eslint-plugin-etc-misc",
                 name: "keywords",
             },
         ],
@@ -339,7 +338,7 @@ const config: Config = {
                 },
             ],
             logo: {
-                alt: "eslint-plugin-typefest logo",
+                alt: "eslint-plugin-etc-misc logo",
                 href: `https://github.com/${organizationName}/${projectName}`,
                 src: "img/logo.svg",
                 width: 60,
@@ -385,13 +384,13 @@ const config: Config = {
                 },
             ],
             logo: {
-                alt: "eslint-plugin-typefest logo",
+                alt: "eslint-plugin-etc-misc logo",
                 height: 48,
                 href: baseUrl,
                 src: "img/logo.svg",
                 width: 48,
             },
-            title: "eslint-plugin-typefest",
+            title: "eslint-plugin-etc-misc",
         },
         prism: {
             additionalLanguages: [
@@ -450,7 +449,7 @@ const config: Config = {
             },
         ],
     ],
-    title: "eslint-plugin-typefest",
+    title: "eslint-plugin-etc-misc",
     trailingSlash: false,
     url: "https://nick2bad4u.github.io",
 };
