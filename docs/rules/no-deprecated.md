@@ -2,6 +2,13 @@
 
 Disallow usage of symbols tagged with `@deprecated`.
 
+## Status
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`@typescript-eslint/no-deprecated`](https://typescript-eslint.io/rules/no-deprecated)
+
 ## Rule Details
 
 Deprecated APIs are still callable in TypeScript unless you add explicit checks.

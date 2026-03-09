@@ -5,7 +5,10 @@ import {
     getExternalRuleFromPlugin,
 } from "../_internal/create-external-rule";
 
-const rule = adaptExternalRule(
+/**
+ * Proxy of external `write-good-comments/write-good-comments`.
+ */
+const rule: ReturnType<typeof adaptExternalRule> = adaptExternalRule(
     getExternalRuleFromPlugin(
         writeGoodCommentsPlugin,
         "write-good-comments",

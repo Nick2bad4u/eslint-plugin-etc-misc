@@ -1,6 +1,10 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 
 type MessageIds = "forbidden";
 
@@ -100,4 +104,25 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "typescript/class-methods-use-this",
 });
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message:
+        "Deprecated in favor of @typescript-eslint/class-methods-use-this.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "@typescript-eslint",
+                url: "https://typescript-eslint.io/",
+            },
+            rule: {
+                name: "class-methods-use-this",
+                url: "https://typescript-eslint.io/rules/class-methods-use-this",
+            },
+        }),
+    ],
+    ruleId: "typescript/class-methods-use-this",
+});
+
+export default deprecatedRule;

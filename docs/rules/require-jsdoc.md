@@ -2,6 +2,13 @@
 
 Require JSDoc comments for configured declaration kinds.
 
+## Status
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`jsdoc/require-jsdoc`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/require-jsdoc.md)
+
 ## Rule Details
 
 This rule reports declarations of configured `kinds` when they do not have a leading JSDoc block comment.

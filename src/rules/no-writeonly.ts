@@ -1,14 +1,12 @@
-import { builtinRules } from "eslint/use-at-your-own-risk";
-
 import { adaptExternalRule } from "../_internal/create-external-rule";
+import { getCoreRule } from "../_internal/get-core-rule";
 
-const externalRule = builtinRules.get("accessor-pairs");
+const externalRule = getCoreRule("accessor-pairs");
 
-if (externalRule === undefined) {
-    throw new Error('Missing core ESLint rule "accessor-pairs".');
-}
-
-const rule = adaptExternalRule(
+/**
+ * Proxy of ESLint core `accessor-pairs` with plugin-local docs URL.
+ */
+const rule: ReturnType<typeof adaptExternalRule> = adaptExternalRule(
     externalRule,
     "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-writeonly.md"
 );

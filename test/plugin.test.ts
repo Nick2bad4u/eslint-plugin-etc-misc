@@ -2,6 +2,37 @@ import { describe, expect, it } from "vitest";
 
 import plugin from "../src/plugin";
 
+const deprecatedRuleIds = [
+    "array-type",
+    "consistent-filename",
+    "consistent-source-extension",
+    "no-commented-out-code",
+    "no-deprecated",
+    "no-mixed-enums",
+    "no-relative-parent-import",
+    "no-secret",
+    "no-self-import",
+    "no-shadow",
+    "no-useless-generics",
+    "no-value-tostring",
+    "prefer-includes",
+    "prefer-interface",
+    "prefer-object-has-own",
+    "require-jsdoc",
+    "sort-class-members",
+    "switch-case-spacing",
+    "throw-new-error",
+    "typescript/class-methods-use-this",
+    "typescript/exhaustive-switch",
+    "typescript/no-empty-interfaces",
+    "typescript/no-inferrable-types",
+] as const;
+
+const hasRuleDeprecationInfo = (
+    value: unknown
+): value is Readonly<{ availableUntil?: null | string }> =>
+    typeof value === "object" && value !== null && "availableUntil" in value;
+
 describe("plugin export", () => {
     it("exposes rules and configs", () => {
         expect(plugin.rules).toBeDefined();
@@ -128,13 +159,13 @@ describe("plugin export", () => {
         expect(plugin.rules["uppercase-iife"]).toBeDefined();
         expect(plugin.rules["unused-internal-properties"]).toBeDefined();
         expect(plugin.rules["underscore-internal"]).toBeDefined();
-        expect(plugin.rules.words).toBeDefined();
+        expect(plugin.rules["words"]).toBeDefined();
         expect(
             plugin.configs.recommended.rules["etc-misc/no-assign-mutated-array"]
         ).toBe("error");
-        expect(plugin.configs.recommended.rules["etc-misc/no-deprecated"]).toBe(
-            "warn"
-        );
+        expect(
+            "etc-misc/no-deprecated" in plugin.configs.recommended.rules
+        ).toBeFalsy();
         expect(
             plugin.configs.recommended.rules["etc-misc/no-implicit-any-catch"]
         ).toBe("error");
@@ -142,5 +173,23 @@ describe("plugin export", () => {
             "error"
         );
         expect(plugin.configs.recommended.rules["etc-misc/no-t"]).toBe("error");
+
+        for (const deprecatedRuleId of deprecatedRuleIds) {
+            const rule = plugin.rules[deprecatedRuleId];
+            expect(rule).toBeDefined();
+            if (rule === undefined) {
+                throw new Error(`Expected rule ${deprecatedRuleId} to exist.`);
+            }
+
+            expect(rule.meta?.docs?.frozen).toBeTruthy();
+            expect(rule.meta?.docs?.frozen).toBe(true);
+
+            expect(hasRuleDeprecationInfo(rule.meta?.deprecated)).toBeTruthy();
+            expect(hasRuleDeprecationInfo(rule.meta?.deprecated)).toBe(true);
+
+            if (hasRuleDeprecationInfo(rule.meta?.deprecated)) {
+                expect(rule.meta.deprecated.availableUntil).toBe("2.0.0");
+            }
+        }
     });
 });

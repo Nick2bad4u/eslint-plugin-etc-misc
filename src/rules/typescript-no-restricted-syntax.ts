@@ -1,3 +1,7 @@
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 import noRestrictedSyntaxRule from "./no-restricted-syntax";
 
 /**
@@ -6,4 +10,26 @@ import noRestrictedSyntaxRule from "./no-restricted-syntax";
 const typescriptNoRestrictedSyntaxRule: typeof noRestrictedSyntaxRule =
     noRestrictedSyntaxRule;
 
-export default typescriptNoRestrictedSyntaxRule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof typescriptNoRestrictedSyntaxRule =
+    withDeprecatedRuleLifecycle(typescriptNoRestrictedSyntaxRule, {
+        message:
+            "Deprecated in favor of @typescript-eslint/no-restricted-syntax.",
+        replacedBy: [
+            createReplacementRuleInfo({
+                plugin: {
+                    name: "@typescript-eslint",
+                    url: "https://typescript-eslint.io/",
+                },
+                rule: {
+                    name: "no-restricted-syntax",
+                    url: "https://typescript-eslint.io/rules/no-restricted-syntax",
+                },
+            }),
+        ],
+        ruleId: "typescript/no-restricted-syntax",
+    });
+
+export default deprecatedRule;

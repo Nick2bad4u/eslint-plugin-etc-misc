@@ -1,6 +1,10 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 
 type MessageIds = "forbidden";
 
@@ -101,4 +105,24 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "no-shadow",
 });
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message: "Deprecated in favor of @typescript-eslint/no-shadow.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "@typescript-eslint",
+                url: "https://typescript-eslint.io/",
+            },
+            rule: {
+                name: "no-shadow",
+                url: "https://typescript-eslint.io/rules/no-shadow",
+            },
+        }),
+    ],
+    ruleId: "no-shadow",
+});
+
+export default deprecatedRule;

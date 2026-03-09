@@ -4,6 +4,10 @@ import { dirname, resolve } from "node:path";
 
 import { getImportSourceFromNode } from "../_internal/import-patterns";
 import { ruleCreator } from "../_internal/rule-creator";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 
 type MessageIds = "forbidden";
 
@@ -87,4 +91,24 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "no-self-import",
 });
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message: "Deprecated in favor of import/no-self-import.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "import",
+                url: "https://github.com/import-js/eslint-plugin-import",
+            },
+            rule: {
+                name: "no-self-import",
+                url: "https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-self-import.md",
+            },
+        }),
+    ],
+    ruleId: "no-self-import",
+});
+
+export default deprecatedRule;

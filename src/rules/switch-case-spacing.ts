@@ -1,6 +1,10 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 
 type MessageIds = "forbidden";
 
@@ -65,4 +69,24 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "switch-case-spacing",
 });
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message: "Deprecated in favor of @stylistic/switch-colon-spacing.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "@stylistic",
+                url: "https://eslint.style/",
+            },
+            rule: {
+                name: "switch-colon-spacing",
+                url: "https://eslint.style/rules/switch-colon-spacing",
+            },
+        }),
+    ],
+    ruleId: "switch-case-spacing",
+});
+
+export default deprecatedRule;

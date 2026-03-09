@@ -1,4 +1,8 @@
 import { createSelectorRule } from "../_internal/create-selector-rule";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 
 const selector = [
     "PropertyDefinition[value.type='Literal'] > TSTypeAnnotation",
@@ -19,4 +23,24 @@ const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
     url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/typescript-no-inferrable-types.md",
 });
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message: "Deprecated in favor of @typescript-eslint/no-inferrable-types.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "@typescript-eslint",
+                url: "https://typescript-eslint.io/",
+            },
+            rule: {
+                name: "no-inferrable-types",
+                url: "https://typescript-eslint.io/rules/no-inferrable-types",
+            },
+        }),
+    ],
+    ruleId: "typescript/no-inferrable-types",
+});
+
+export default deprecatedRule;

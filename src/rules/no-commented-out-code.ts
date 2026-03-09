@@ -3,6 +3,10 @@ import type { TSESTree as es } from "@typescript-eslint/utils";
 import parser from "@typescript-eslint/parser";
 
 import { ruleCreator } from "../_internal/rule-creator";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 
 type CommentBlock = Readonly<{
     content: string;
@@ -237,4 +241,25 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
         name: "no-commented-out-code",
     });
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message:
+        "Deprecated in favor of eslint-plugin-no-commented-code/no-commented-code.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "no-commented-code",
+                url: "https://www.npmjs.com/package/eslint-plugin-no-commented-code",
+            },
+            rule: {
+                name: "no-commented-code",
+                url: "https://www.npmjs.com/package/eslint-plugin-no-commented-code",
+            },
+        }),
+    ],
+    ruleId: "no-commented-out-code",
+});
+
+export default deprecatedRule;

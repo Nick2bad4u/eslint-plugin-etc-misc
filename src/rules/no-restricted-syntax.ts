@@ -1,5 +1,9 @@
 import { ruleCreator } from "../_internal/rule-creator";
 import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
+import {
     buildRestrictedSyntaxListeners,
     normalizeSyntaxSelector,
     type SyntaxSelectorOption,
@@ -100,4 +104,20 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "no-restricted-syntax",
 });
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message: "Deprecated in favor of ESLint core no-restricted-syntax.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            rule: {
+                name: "no-restricted-syntax",
+                url: "https://eslint.org/docs/latest/rules/no-restricted-syntax",
+            },
+        }),
+    ],
+    ruleId: "no-restricted-syntax",
+});
+
+export default deprecatedRule;

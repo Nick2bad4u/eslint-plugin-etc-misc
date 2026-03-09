@@ -1,14 +1,12 @@
-import { builtinRules } from "eslint/use-at-your-own-risk";
-
 import { adaptExternalRule } from "../_internal/create-external-rule";
+import { getCoreRule } from "../_internal/get-core-rule";
 
-const externalRule = builtinRules.get("default-case");
+const externalRule = getCoreRule("default-case");
 
-if (externalRule === undefined) {
-    throw new Error('Missing core ESLint rule "default-case".');
-}
-
-const rule = adaptExternalRule(
+/**
+ * Proxy of ESLint core `default-case` with plugin-local docs URL.
+ */
+const rule: ReturnType<typeof adaptExternalRule> = adaptExternalRule(
     externalRule,
     "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/default-case.md"
 );

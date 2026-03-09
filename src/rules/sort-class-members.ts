@@ -1,6 +1,10 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 
 type MessageIds = "incorrectSortingOrder";
 
@@ -81,4 +85,31 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "sort-class-members",
 });
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message:
+        "Deprecated in favor of sort-class-members/sort-class-members or perfectionist sorting rules.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "sort-class-members",
+                url: "https://www.npmjs.com/package/eslint-plugin-sort-class-members",
+            },
+            rule: {
+                name: "sort-class-members",
+                url: "https://www.npmjs.com/package/eslint-plugin-sort-class-members",
+            },
+        }),
+        createReplacementRuleInfo({
+            plugin: {
+                name: "perfectionist",
+                url: "https://perfectionist.dev/",
+            },
+        }),
+    ],
+    ruleId: "sort-class-members",
+});
+
+export default deprecatedRule;

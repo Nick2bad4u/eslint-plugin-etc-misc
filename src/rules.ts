@@ -1,7 +1,4 @@
-/* eslint-disable canonical/no-re-export -- Rules map intentionally references imported rule implementations. */
-
 import type { TSESLint } from "@typescript-eslint/utils";
-
 import arrayType from "./rules/array-type";
 import matchFilenameRule from "./rules/class-match-filename";
 import commentSpacing from "./rules/comment-spacing";
@@ -219,5 +216,3 @@ export const rules: Readonly<Record<string, RuleModule>> = {
     "uppercase-iife": uppercaseIife,
     words: words,
 };
-
-/* eslint-enable canonical/no-re-export -- Re-enable canonical re-export restriction outside this intentional map. */

@@ -2,6 +2,13 @@
 
 Disallow syntax using selector rules with optional type-group filters.
 
+## Status
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`@typescript-eslint/no-restricted-syntax`](https://typescript-eslint.io/rules/no-restricted-syntax)
+
 ## Rule Details
 
 This rule enforces the documented pattern for `typescript/no-restricted-syntax`.

@@ -5,7 +5,10 @@ import {
     getExternalRuleFromPlugin,
 } from "../_internal/create-external-rule";
 
-const rule = adaptExternalRule(
+/**
+ * Proxy of external `unicorn/no-unreadable-iife`.
+ */
+const rule: ReturnType<typeof adaptExternalRule> = adaptExternalRule(
     getExternalRuleFromPlugin(
         unicornPlugin,
         "no-unreadable-iife",

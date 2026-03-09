@@ -2,6 +2,13 @@
 
 Require a default branch in switch statements with multiple cases.
 
+## Status
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`@typescript-eslint/switch-exhaustiveness-check`](https://typescript-eslint.io/rules/switch-exhaustiveness-check)
+
 ## Rule Details
 
 This rule reports non-trivial switch statements that have no `default` case.

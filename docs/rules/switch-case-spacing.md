@@ -2,6 +2,13 @@
 
 Enforce consistent spacing and break placement in switch cases.
 
+## Status
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`@stylistic/switch-colon-spacing`](https://eslint.style/rules/switch-colon-spacing)
+
 ## Rule Details
 
 This rule reports switch case bodies that do not match the expected spacing/break style.

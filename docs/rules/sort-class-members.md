@@ -2,6 +2,13 @@
 
 Enforce alphabetical sorting of class members.
 
+## Status
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`sort-class-members/sort-class-members`](https://www.npmjs.com/package/eslint-plugin-sort-class-members) or [Perfectionist sorting rules](https://perfectionist.dev/)
+
 ## Rule Details
 
 This rule enforces the documented pattern for `sort-class-members`.

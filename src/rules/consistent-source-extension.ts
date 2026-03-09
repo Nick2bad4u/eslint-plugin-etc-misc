@@ -1,6 +1,10 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 
 type MessageIds = "forbidden";
 
@@ -43,4 +47,24 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "consistent-source-extension",
 });
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message: "Deprecated in favor of import/extensions.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "import",
+                url: "https://github.com/import-js/eslint-plugin-import",
+            },
+            rule: {
+                name: "extensions",
+                url: "https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/extensions.md",
+            },
+        }),
+    ],
+    ruleId: "consistent-source-extension",
+});
+
+export default deprecatedRule;

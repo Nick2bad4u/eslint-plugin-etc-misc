@@ -2,6 +2,13 @@
 
 Disallow comment blocks that appear to contain executable or declaration code.
 
+## Status
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`no-commented-code/no-commented-code`](https://www.npmjs.com/package/eslint-plugin-no-commented-code)
+
 ## Rule Details
 
 Commented-out code creates maintenance noise, hides stale implementation paths,

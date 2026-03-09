@@ -4,8 +4,12 @@ import {
     adaptExternalRule,
     getExternalRuleFromPlugin,
 } from "../_internal/create-external-rule";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 
-const rule = adaptExternalRule(
+const rule: ReturnType<typeof adaptExternalRule> = adaptExternalRule(
     getExternalRuleFromPlugin(
         tsEslintPlugin,
         "array-type",
@@ -14,4 +18,24 @@ const rule = adaptExternalRule(
     "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/array-type.md"
 );
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message: "Deprecated in favor of @typescript-eslint/array-type.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "@typescript-eslint",
+                url: "https://typescript-eslint.io/",
+            },
+            rule: {
+                name: "array-type",
+                url: "https://typescript-eslint.io/rules/array-type",
+            },
+        }),
+    ],
+    ruleId: "array-type",
+});
+
+export default deprecatedRule;

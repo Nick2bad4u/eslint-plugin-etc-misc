@@ -1,5 +1,9 @@
 import { type Casing, filenameStem, toCasing } from "../_internal/casing";
 import { ruleCreator } from "../_internal/rule-creator";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 
 type MessageIds = "inconsistent";
 
@@ -81,4 +85,24 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "consistent-filename",
 });
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message: "Deprecated in favor of unicorn/filename-case.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "unicorn",
+                url: "https://github.com/sindresorhus/eslint-plugin-unicorn",
+            },
+            rule: {
+                name: "filename-case",
+                url: "https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/filename-case.md",
+            },
+        }),
+    ],
+    ruleId: "consistent-filename",
+});
+
+export default deprecatedRule;

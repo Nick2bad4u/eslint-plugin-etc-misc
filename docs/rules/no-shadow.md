@@ -2,6 +2,13 @@
 
 Disallow shadowing variables from outer scopes.
 
+## Status
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`@typescript-eslint/no-shadow`](https://typescript-eslint.io/rules/no-shadow)
+
 ## Rule Details
 
 This rule reports variables that reuse names from outer scopes. Enum declarations are ignored.

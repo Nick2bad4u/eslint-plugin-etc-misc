@@ -2,6 +2,13 @@
 
 Require consistent import/export source paths without file extensions.
 
+## Status
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`import/extensions`](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/extensions.md)
+
 ## Rule Details
 
 This rule reports import/export paths that end with `.js`, `.json`, or `.ts`.

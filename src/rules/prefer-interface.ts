@@ -2,6 +2,10 @@ import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 import type * as ts from "typescript";
 
 import { ruleCreator } from "../_internal/rule-creator";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 
 type MessageIds = "forbidden" | "suggest";
 
@@ -331,4 +335,25 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "prefer-interface",
 });
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message:
+        "Deprecated in favor of @typescript-eslint/consistent-type-definitions.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "@typescript-eslint",
+                url: "https://typescript-eslint.io/",
+            },
+            rule: {
+                name: "consistent-type-definitions",
+                url: "https://typescript-eslint.io/rules/consistent-type-definitions",
+            },
+        }),
+    ],
+    ruleId: "prefer-interface",
+});
+
+export default deprecatedRule;

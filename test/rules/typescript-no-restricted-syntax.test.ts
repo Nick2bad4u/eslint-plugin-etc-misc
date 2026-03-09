@@ -8,7 +8,7 @@ ruleTester.run("typescript-no-restricted-syntax", rule, {
             errors: [{ messageId: "forbidden" }],
             options: [
                 {
-                    rules: [{ selector: "IfStatement" }],
+                    selectors: [{ selector: "IfStatement" }],
                 },
             ],
         },
@@ -18,7 +18,7 @@ ruleTester.run("typescript-no-restricted-syntax", rule, {
             code: "while (value) { call(); }",
             options: [
                 {
-                    rules: [{ selector: "IfStatement" }],
+                    selectors: [{ selector: "IfStatement" }],
                 },
             ],
         },

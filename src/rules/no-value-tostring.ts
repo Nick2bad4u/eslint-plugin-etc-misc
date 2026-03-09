@@ -4,8 +4,12 @@ import {
     adaptExternalRule,
     getExternalRuleFromPlugin,
 } from "../_internal/create-external-rule";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 
-const rule = adaptExternalRule(
+const rule: ReturnType<typeof adaptExternalRule> = adaptExternalRule(
     getExternalRuleFromPlugin(
         tsEslintPlugin,
         "no-base-to-string",
@@ -14,4 +18,24 @@ const rule = adaptExternalRule(
     "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-value-tostring.md"
 );
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message: "Deprecated in favor of @typescript-eslint/no-base-to-string.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "@typescript-eslint",
+                url: "https://typescript-eslint.io/",
+            },
+            rule: {
+                name: "no-base-to-string",
+                url: "https://typescript-eslint.io/rules/no-base-to-string",
+            },
+        }),
+    ],
+    ruleId: "no-value-tostring",
+});
+
+export default deprecatedRule;

@@ -1,4 +1,8 @@
 import { createSelectorRule } from "../_internal/create-selector-rule";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 
 /**
  * Disallow empty interfaces without extends clauses.
@@ -14,4 +18,24 @@ const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
     url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/typescript-no-empty-interfaces.md",
 });
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message: "Deprecated in favor of @typescript-eslint/no-empty-object-type.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "@typescript-eslint",
+                url: "https://typescript-eslint.io/",
+            },
+            rule: {
+                name: "no-empty-object-type",
+                url: "https://typescript-eslint.io/rules/no-empty-object-type",
+            },
+        }),
+    ],
+    ruleId: "typescript/no-empty-interfaces",
+});
+
+export default deprecatedRule;

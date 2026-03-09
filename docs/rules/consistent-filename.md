@@ -2,6 +2,13 @@
 
 Enforce filename casing consistency.
 
+## Status
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`unicorn/filename-case`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/filename-case.md)
+
 ## Rule Details
 
 This rule enforces the documented pattern for `consistent-filename`.

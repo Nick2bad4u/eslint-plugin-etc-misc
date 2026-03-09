@@ -4,8 +4,12 @@ import {
     adaptExternalRule,
     getExternalRuleFromPlugin,
 } from "../_internal/create-external-rule";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 
-const rule = adaptExternalRule(
+const rule: ReturnType<typeof adaptExternalRule> = adaptExternalRule(
     getExternalRuleFromPlugin(
         unicornPlugin,
         "prefer-includes",
@@ -14,4 +18,24 @@ const rule = adaptExternalRule(
     "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/prefer-includes.md"
 );
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message: "Deprecated in favor of unicorn/prefer-includes.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "unicorn",
+                url: "https://github.com/sindresorhus/eslint-plugin-unicorn",
+            },
+            rule: {
+                name: "prefer-includes",
+                url: "https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-includes.md",
+            },
+        }),
+    ],
+    ruleId: "prefer-includes",
+});
+
+export default deprecatedRule;

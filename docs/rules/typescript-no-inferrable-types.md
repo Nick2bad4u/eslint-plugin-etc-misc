@@ -2,6 +2,13 @@
 
 Disallow explicit primitive type annotations when the type is inferrable.
 
+## Status
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`@typescript-eslint/no-inferrable-types`](https://typescript-eslint.io/rules/no-inferrable-types)
+
 ## Rule Details
 
 This rule reports type annotations on variable/property declarations initialized with literals.

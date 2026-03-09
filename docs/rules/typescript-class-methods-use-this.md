@@ -2,6 +2,13 @@
 
 Require non-static class methods to reference `this`.
 
+## Status
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`@typescript-eslint/class-methods-use-this`](https://typescript-eslint.io/rules/class-methods-use-this)
+
 ## Rule Details
 
 This rule reports class instance methods that do not use `this` and do not declare a `this` parameter.

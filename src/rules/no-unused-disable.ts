@@ -5,7 +5,10 @@ import {
     getExternalRuleFromPlugin,
 } from "../_internal/create-external-rule";
 
-const rule = adaptExternalRule(
+/**
+ * Proxy of external `@eslint-community/eslint-comments/no-unused-disable`.
+ */
+const rule: ReturnType<typeof adaptExternalRule> = adaptExternalRule(
     getExternalRuleFromPlugin(
         eslintCommentsPlugin,
         "no-unused-disable",

@@ -1,6 +1,10 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 
 type JSDocKind = "arrow-function" | "class" | "function" | "method" | "type";
 
@@ -155,4 +159,24 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "require-jsdoc",
 });
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message: "Deprecated in favor of jsdoc/require-jsdoc.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "jsdoc",
+                url: "https://github.com/gajus/eslint-plugin-jsdoc",
+            },
+            rule: {
+                name: "require-jsdoc",
+                url: "https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/require-jsdoc.md",
+            },
+        }),
+    ],
+    ruleId: "require-jsdoc",
+});
+
+export default deprecatedRule;

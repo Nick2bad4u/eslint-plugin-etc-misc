@@ -92,3 +92,5 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 });
 
 export default rule;
+
+/* eslint-enable @typescript-eslint/prefer-readonly-parameter-types -- Re-enable after file-scoped fixer callback implementations. */

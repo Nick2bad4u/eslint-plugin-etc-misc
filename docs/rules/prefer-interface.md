@@ -54,6 +54,9 @@ type Worker = Person | Robot;
 
 This rule accepts one options object:
 
+Lifecycle: Deprecated and frozen since `v1.0.0` and available until `v2.0.0`.
+Use instead: [`@typescript-eslint/consistent-type-definitions`](https://typescript-eslint.io/rules/consistent-type-definitions).
+
 ```ts
 type Options = {
     allowIntersection?: boolean;

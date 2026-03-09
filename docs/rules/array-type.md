@@ -31,18 +31,23 @@ type Values = string[];
 
 This rule forwards options and behavior to `@typescript-eslint/array-type`.
 
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`@typescript-eslint/array-type`](https://typescript-eslint.io/rules/array-type)
+
 ## ESLint flat config example
 
 ```ts
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-	{
-		plugins: { "etc-misc": etcMisc },
-		rules: {
-			"etc-misc/array-type": "error",
-		},
-	},
+    {
+        plugins: { "etc-misc": etcMisc },
+        rules: {
+            "etc-misc/array-type": "error",
+        },
+    },
 ];
 ```
 

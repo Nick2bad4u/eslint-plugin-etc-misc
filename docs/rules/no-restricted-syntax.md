@@ -2,6 +2,13 @@
 
 Disallow syntax matched by configured AST selectors.
 
+## Status
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`no-restricted-syntax`](https://eslint.org/docs/latest/rules/no-restricted-syntax)
+
 ## Rule Details
 
 This rule reports nodes selected by any configured selector in `selectors`.

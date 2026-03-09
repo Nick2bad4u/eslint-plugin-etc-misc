@@ -14,6 +14,9 @@ const directiveCommentPattern =
 const isDirectiveComment = (commentText: string): boolean =>
     directiveCommentPattern.test(commentText.trimStart());
 
+/**
+ * Disallow single-line comments except optionally allowed directive comments.
+ */
 const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     Options,
     MessageIds
@@ -45,9 +48,9 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     },
     defaultOptions: [{ allowDirectiveComments: true }],
     meta: {
-        defaultOptions: [],
+        defaultOptions: [{ allowDirectiveComments: true }],
         docs: {
-            description: "forbid single-line comments.",
+            description: "disallow single-line comments.",
             recommended: false,
             url: "https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/docs/rules/no-single-line-comment.md",
         },

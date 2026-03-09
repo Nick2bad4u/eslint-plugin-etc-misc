@@ -3,6 +3,10 @@ import type { TSESTree as es } from "@typescript-eslint/utils";
 import { ESLintUtils } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation";
 
 type IgnoreMode = "name" | "path";
 
@@ -301,4 +305,24 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "no-deprecated",
 });
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    message: "Deprecated in favor of @typescript-eslint/no-deprecated.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "@typescript-eslint",
+                url: "https://typescript-eslint.io/",
+            },
+            rule: {
+                name: "no-deprecated",
+                url: "https://typescript-eslint.io/rules/no-deprecated",
+            },
+        }),
+    ],
+    ruleId: "no-deprecated",
+});
+
+export default deprecatedRule;
