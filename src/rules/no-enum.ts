@@ -19,8 +19,11 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
         }),
         defaultOptions: [],
         meta: {
+        deprecated: false,
             docs: {
+                deprecated: false,
                 description: "disallow TypeScript enum declarations.",
+                frozen: false,
                 recommended: false,
                 url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-enum",
             },

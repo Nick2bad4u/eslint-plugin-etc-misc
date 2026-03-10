@@ -104,9 +104,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     },
     defaultOptions: [],
     meta: {
+        deprecated: false,
         docs: {
+            deprecated: false,
             description:
                 "require explicit return types for array callback functions.",
+            frozen: false,
             recommended: false,
             requiresTypeChecking: true,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-array-callback-return-type",

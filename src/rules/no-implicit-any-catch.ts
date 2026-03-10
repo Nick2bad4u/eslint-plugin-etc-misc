@@ -210,10 +210,13 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     defaultOptions,
     meta: {
         defaultOptions: [{}],
+        deprecated: false,
         docs: {
+            deprecated: false,
             description:
                 "require explicit unknown for Promise rejection callback parameters.",
-            recommended: false,
+            frozen: false,
+            recommended: true,
             requiresTypeChecking: true,
             suggestion: true,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-implicit-any-catch",

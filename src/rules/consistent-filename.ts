@@ -51,8 +51,11 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     defaultOptions: [defaultOptions],
     meta: {
         defaultOptions: [defaultOptions],
+        deprecated: true,
         docs: {
+            deprecated: true,
             description: "enforce filename casing consistency.",
+            frozen: true,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/consistent-filename",
         },

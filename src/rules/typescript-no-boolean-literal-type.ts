@@ -1,4 +1,10 @@
-import { createSelectorRule } from "../_internal/create-selector-rule.js";
+import type { TSESTree as es } from "@typescript-eslint/utils";
+
+import { ruleCreator } from "../_internal/rule-creator.js";
+
+type MessageIds = "forbidden";
+
+type Options = readonly [];
 
 const selector = [
     "TSPropertySignature[optional=true] > TSTypeAnnotation > TSLiteralType > Literal[value=true]",
@@ -8,15 +14,43 @@ const selector = [
 /**
  * Disallow optional boolean literal property types.
  */
-const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
-    description:
-        "disallow optional boolean literal types in property signatures.",
-    message: 'Use "boolean" type instead.',
-    messageId: "forbidden",
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => ({
+        [selector]: (node: Readonly<es.Node>): void => {
+            if (node.type !== "Literal") {
+                return;
+            }
+
+            context.report({
+                fix: (fixer) => fixer.replaceText(node, "boolean"),
+                messageId: "forbidden",
+                node,
+            });
+        },
+    }),
+    defaultOptions: [],
+    meta: {
+        deprecated: false,
+        docs: {
+            deprecated: false,
+            description:
+                "disallow optional boolean literal types in property signatures.",
+            frozen: false,
+            recommended: false,
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-boolean-literal-type",
+        },
+        fixable: "code",
+        hasSuggestions: false,
+        messages: {
+            forbidden: 'Use "boolean" type instead.',
+        },
+        schema: [],
+        type: "suggestion",
+    },
     name: "typescript/no-boolean-literal-type",
-    selector,
-    type: "suggestion",
-    url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-boolean-literal-type",
 });
 
 export default rule;

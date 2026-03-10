@@ -1,8 +1,14 @@
-import { createSelectorRule } from "../_internal/create-selector-rule.js";
+import type { TSESTree as es } from "@typescript-eslint/utils";
+
+import { ruleCreator } from "../_internal/rule-creator.js";
 import {
     createReplacementRuleInfo,
     withDeprecatedRuleLifecycle,
 } from "../_internal/rule-deprecation.js";
+
+type MessageIds = "forbidden";
+
+type Options = readonly [];
 
 const selector = [
     "PropertyDefinition[value.type='Literal'] > TSTypeAnnotation",
@@ -12,15 +18,38 @@ const selector = [
 /**
  * Disallow explicit primitive type annotations when they are inferrable.
  */
-const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
-    description:
-        "disallow explicit primitive type annotations when they are inferrable from literals.",
-    message: "Type annotation can be inferred from the assigned literal value.",
-    messageId: "forbidden",
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => ({
+        [selector]: (node: Readonly<es.Node>): void => {
+            context.report({
+                messageId: "forbidden",
+                node,
+            });
+        },
+    }),
+    defaultOptions: [],
+    meta: {
+        deprecated: true,
+        docs: {
+            deprecated: true,
+            description:
+                "disallow explicit primitive type annotations when they are inferrable from literals.",
+            frozen: true,
+            recommended: false,
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-inferrable-types",
+        },
+        hasSuggestions: false,
+        messages: {
+            forbidden:
+                "Type annotation can be inferred from the assigned literal value.",
+        },
+        schema: [],
+        type: "suggestion",
+    },
     name: "typescript/no-inferrable-types",
-    selector,
-    type: "suggestion",
-    url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-inferrable-types",
 });
 
 /**

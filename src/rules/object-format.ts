@@ -45,9 +45,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     defaultOptions: [{ maxProperties: 1 }],
     meta: {
         defaultOptions: [{ maxProperties: 1 }],
+        deprecated: false,
         docs: {
+            deprecated: false,
             description:
                 "enforce object literal line format based on property count.",
+            frozen: false,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/object-format",
         },

@@ -30,9 +30,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     }),
     defaultOptions: [],
     meta: {
+        deprecated: true,
         docs: {
+            deprecated: true,
             description:
                 "require consistent import/export source paths without file extensions.",
+            frozen: true,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/consistent-source-extension",
         },

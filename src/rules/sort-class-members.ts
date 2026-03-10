@@ -69,8 +69,11 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     }),
     defaultOptions: [],
     meta: {
+        deprecated: true,
         docs: {
+            deprecated: true,
             description: "enforce alphabetical sorting of class members.",
+            frozen: true,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/sort-class-members",
         },

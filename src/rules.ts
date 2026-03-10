@@ -110,6 +110,7 @@ import words from "./rules/words.js";
 type RuleDocsMetadata = Readonly<{
     catalogId?: string;
     catalogIndex?: number;
+    deprecated?: boolean;
     description?: string;
     frozen?: boolean;
     recommended?: boolean;
@@ -133,6 +134,13 @@ const rulesWithRequiredTypeChecking = new Set<string>([
     "typescript/no-never",
     "typescript/no-unsafe-object-assign",
     "typescript/prefer-enum",
+]);
+
+const recommendedRuleNames = new Set<string>([
+    "no-assign-mutated-array",
+    "no-implicit-any-catch",
+    "no-internal",
+    "no-t",
 ]);
 
 /**
@@ -280,12 +288,21 @@ const withCatalogDocsMetadata = (
     const currentDocsMetadata = (ruleModule.meta.docs ??
         {}) as RuleDocsMetadata;
     const hasRequiredTypeChecking = rulesWithRequiredTypeChecking.has(ruleName);
+    const deprecatedMetadata =
+        ruleModule.meta.deprecated === undefined
+            ? false
+            : ruleModule.meta.deprecated;
+    const isDeprecatedRule = deprecatedMetadata !== false;
     const docsWithCatalogMetadata = {
         ...currentDocsMetadata,
         catalogId: catalogEntry.catalogId,
         catalogIndex: catalogEntry.catalogIndex,
-        frozen: currentDocsMetadata.frozen ?? false,
-        recommended: currentDocsMetadata.recommended ?? false,
+        deprecated: currentDocsMetadata.deprecated ?? isDeprecatedRule,
+        frozen:
+            currentDocsMetadata.frozen ??
+            currentDocsMetadata.deprecated ??
+            isDeprecatedRule,
+        recommended: recommendedRuleNames.has(ruleName),
         requiresTypeChecking:
             currentDocsMetadata.requiresTypeChecking ?? hasRequiredTypeChecking,
         ruleName,
@@ -295,6 +312,7 @@ const withCatalogDocsMetadata = (
         ...ruleModule,
         meta: {
             ...ruleModule.meta,
+            deprecated: deprecatedMetadata,
             docs: docsWithCatalogMetadata,
         },
     };

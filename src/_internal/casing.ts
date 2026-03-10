@@ -1,18 +1,14 @@
 import { basename } from "node:path";
 
+import { splitIdentifierBlocks } from "./identifier-blocks.js";
+
 /**
  * Supported casing formats for identifier transformations.
  */
 export type Casing = "camelCase" | "kebab-case" | "PascalCase";
 
 const splitWords = (value: string): readonly string[] =>
-    value
-        .replaceAll(/(?<=[\da-z])(?=[A-Z])/gu, " ")
-        .replaceAll(/[^0-9A-Za-z]+/gu, " ")
-        .trim()
-        .split(/\s+/u)
-        .filter((word) => word.length > 0)
-        .map((word) => word.toLowerCase());
+    splitIdentifierBlocks(value).map((word) => word.toLowerCase());
 
 const toPascal = (value: string): string =>
     splitWords(value)

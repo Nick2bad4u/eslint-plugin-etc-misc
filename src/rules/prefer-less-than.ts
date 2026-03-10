@@ -63,8 +63,11 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
         }),
         defaultOptions: [],
         meta: {
+        deprecated: false,
             docs: {
+                deprecated: false,
                 description: "disallow greater-than comparisons.",
+                frozen: false,
                 recommended: false,
                 url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/prefer-less-than",
             },

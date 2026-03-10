@@ -1,21 +1,50 @@
-import { createSelectorRule } from "../_internal/create-selector-rule.js";
+import type { TSESTree as es } from "@typescript-eslint/utils";
+
+import { ruleCreator } from "../_internal/rule-creator.js";
 import {
     createReplacementRuleInfo,
     withDeprecatedRuleLifecycle,
 } from "../_internal/rule-deprecation.js";
 
+type MessageIds = "forbidden";
+
+type Options = readonly [];
+
 /**
  * Disallow empty interfaces without extends clauses.
  */
-const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
-    description: "disallow empty interfaces without extends clauses.",
-    message: "Empty interface is not allowed.",
-    messageId: "forbidden",
+const selector =
+    "TSInterfaceDeclaration[body.body.length=0][extends.length=0] > Identifier.id";
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => ({
+        [selector]: (node: Readonly<es.Node>): void => {
+            context.report({
+                messageId: "forbidden",
+                node,
+            });
+        },
+    }),
+    defaultOptions: [],
+    meta: {
+        deprecated: true,
+        docs: {
+            deprecated: true,
+            description: "disallow empty interfaces without extends clauses.",
+            frozen: true,
+            recommended: false,
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-empty-interfaces",
+        },
+        hasSuggestions: false,
+        messages: {
+            forbidden: "Empty interface is not allowed.",
+        },
+        schema: [],
+        type: "problem",
+    },
     name: "typescript/no-empty-interfaces",
-    selector:
-        "TSInterfaceDeclaration[body.body.length=0][extends.length=0] > Identifier.id",
-    type: "problem",
-    url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-empty-interfaces",
 });
 
 /**

@@ -1,5 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { countIdentifierBlocks } from "../_internal/identifier-blocks.js";
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
@@ -12,14 +13,6 @@ const disallowedSelector = [
     "Identifier.id",
     ":not(Property[shorthand=true]) > Identifier.key",
 ].join(", ");
-
-const countIdentifierBlocks = (identifierName: string): number =>
-    identifierName
-        .replaceAll(/(?<=[\da-z])(?=[A-Z])/gu, " ")
-        .replaceAll(/[^0-9A-Za-z]+/gu, " ")
-        .trim()
-        .split(/\s+/u)
-        .filter((segment) => segment.length > 0).length;
 
 /**
  * Disallow identifiers containing more than four casing blocks.
@@ -45,9 +38,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     }),
     defaultOptions: [],
     meta: {
+        deprecated: false,
         docs: {
+            deprecated: false,
             description:
                 "disallow identifiers with more than four casing blocks.",
+            frozen: false,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/max-identifier-blocks",
         },

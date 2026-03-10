@@ -6,6 +6,7 @@ ruleTester.run("no-unnecessary-as-const", rule, {
         {
             code: "const x = {} as const; const y: I = { value: 1 } as const;",
             errors: [{ messageId: "forbidden" }, { messageId: "forbidden" }],
+            output: "const x = {}; const y: I = { value: 1 };",
         },
     ],
     valid: [

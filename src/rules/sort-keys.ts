@@ -97,8 +97,11 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     }),
     defaultOptions: [],
     meta: {
+        deprecated: false,
         docs: {
+            deprecated: false,
             description: "enforce alphabetical sorting of object literal keys.",
+            frozen: false,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/sort-keys",
         },

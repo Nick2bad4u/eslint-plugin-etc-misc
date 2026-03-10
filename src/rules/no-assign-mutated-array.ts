@@ -145,10 +145,13 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
         },
         defaultOptions: [],
         meta: {
+        deprecated: false,
             docs: {
+                deprecated: false,
                 description:
                     "disallow assigning values returned from mutating array methods.",
-                recommended: false,
+                frozen: false,
+                recommended: true,
                 requiresTypeChecking: true,
                 url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-assign-mutated-array",
             },

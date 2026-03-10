@@ -6,6 +6,12 @@ ruleTester.run("typescript-prefer-readonly-set", rule, {
         {
             code: "function f(x: Set<string>) {}",
             errors: [{ messageId: "forbidden" }],
+            output: "function f(x: ReadonlySet<string>) {}",
+        },
+        {
+            code: "type Wrapped = Promise<Set<number>>;",
+            errors: [{ messageId: "forbidden" }],
+            output: "type Wrapped = Promise<ReadonlySet<number>>;",
         },
     ],
     valid: [

@@ -9,10 +9,12 @@ const deprecatedRuleIds = [
     "no-commented-out-code",
     "no-deprecated",
     "no-mixed-enums",
+    "no-restricted-syntax",
     "no-relative-parent-import",
     "no-secret",
     "no-self-import",
     "no-shadow",
+    "no-unused-disable",
     "no-useless-generics",
     "no-value-tostring",
     "prefer-includes",
@@ -26,12 +28,29 @@ const deprecatedRuleIds = [
     "typescript/exhaustive-switch",
     "typescript/no-empty-interfaces",
     "typescript/no-inferrable-types",
+    "typescript/no-restricted-syntax",
+    "unused-internal-properties",
+    "uppercase-iife",
+    "words",
+] as const;
+
+const recommendedRuleIds = [
+    "no-assign-mutated-array",
+    "no-implicit-any-catch",
+    "no-internal",
+    "no-t",
 ] as const;
 
 const hasRuleDeprecationInfo = (
     value: unknown
 ): value is Readonly<{ availableUntil?: null | string }> =>
     typeof value === "object" && value !== null && "availableUntil" in value;
+
+type RuleDocsMetadata = Readonly<{
+    deprecated?: boolean;
+    frozen?: boolean;
+    recommended?: boolean;
+}>;
 
 describe("plugin export", () => {
     it("exposes rules and configs", () => {
@@ -203,6 +222,29 @@ describe("plugin export", () => {
 
             if (hasRuleDeprecationInfo(rule.meta?.deprecated)) {
                 expect(rule.meta.deprecated.availableUntil).toBe("2.0.0");
+            }
+        }
+
+        const deprecatedRuleIdSet = new Set<string>(deprecatedRuleIds);
+        const recommendedRuleIdSet = new Set<string>(recommendedRuleIds);
+
+        for (const [ruleId, rule] of Object.entries(plugin.rules)) {
+            const docs = rule.meta?.docs as RuleDocsMetadata | undefined;
+
+            expect(typeof docs?.deprecated).toBe("boolean");
+            expect(typeof docs?.frozen).toBe("boolean");
+            expect(typeof docs?.recommended).toBe("boolean");
+
+            expect(docs?.deprecated).toBe(deprecatedRuleIdSet.has(ruleId));
+            expect(docs?.frozen).toBe(deprecatedRuleIdSet.has(ruleId));
+            expect(docs?.recommended).toBe(recommendedRuleIdSet.has(ruleId));
+
+            if (deprecatedRuleIdSet.has(ruleId)) {
+                expect(hasRuleDeprecationInfo(rule.meta?.deprecated)).toBe(
+                    true
+                );
+            } else {
+                expect(rule.meta?.deprecated).toBe(false);
             }
         }
     });

@@ -73,9 +73,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     defaultOptions: [{ selectors: [] }],
     meta: {
         defaultOptions: [{ selectors: [] }],
+        deprecated: false,
         docs: {
+            deprecated: false,
             description:
                 "require at least one match for each configured AST selector.",
+            frozen: false,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/require-syntax",
         },

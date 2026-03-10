@@ -76,8 +76,11 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     },
     defaultOptions: [],
     meta: {
+        deprecated: true,
         docs: {
+            deprecated: true,
             description: "disallow importing the current file from itself.",
+            frozen: true,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-self-import",
         },

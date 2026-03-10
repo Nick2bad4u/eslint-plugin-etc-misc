@@ -25,9 +25,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     }),
     defaultOptions: [],
     meta: {
+        deprecated: false,
         docs: {
+            deprecated: false,
             description:
                 "require identifiers to contain only english characters, digits, underscore, or dollar sign.",
+            frozen: false,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/restrict-identifier-characters",
         },

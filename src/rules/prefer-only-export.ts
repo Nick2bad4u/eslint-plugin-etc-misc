@@ -1,16 +1,47 @@
-import { createSelectorRule } from "../_internal/create-selector-rule.js";
+import type { TSESTree as es } from "@typescript-eslint/utils";
+
+import { ruleCreator } from "../_internal/rule-creator.js";
+
+type MessageIds = "forbidden";
+
+type Options = readonly [];
+
+const selector = "Program[body.length>1]:has(ExportDefaultDeclaration)";
 
 /**
  * Disallow additional exports when a default export exists.
  */
-const rule: ReturnType<typeof createSelectorRule> = createSelectorRule({
-    description: "disallow additional exports alongside a default export.",
-    message: "Export default should be only export.",
-    messageId: "forbidden",
+const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
+    Options,
+    MessageIds
+>({
+    create: (context) => ({
+        [selector]: (node: Readonly<es.Node>): void => {
+            context.report({
+                messageId: "forbidden",
+                node,
+            });
+        },
+    }),
+    defaultOptions: [],
+    meta: {
+        deprecated: false,
+        docs: {
+            deprecated: false,
+            description:
+                "disallow additional exports alongside a default export.",
+            frozen: false,
+            recommended: false,
+            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/prefer-only-export",
+        },
+        hasSuggestions: false,
+        messages: {
+            forbidden: "Export default should be only export.",
+        },
+        schema: [],
+        type: "suggestion",
+    },
     name: "prefer-only-export",
-    selector: "Program[body.length>1]:has(ExportDefaultDeclaration)",
-    type: "suggestion",
-    url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/prefer-only-export",
 });
 
 export default rule;

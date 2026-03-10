@@ -67,6 +67,7 @@ export const withDeprecatedRuleLifecycle = <TRule extends RuleModule>(
             : {
                   docs: {
                       ...rule.meta.docs,
+                      deprecated: true,
                       frozen: true,
                   },
               }),

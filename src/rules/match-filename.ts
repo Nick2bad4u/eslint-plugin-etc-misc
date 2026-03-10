@@ -84,9 +84,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     defaultOptions: [{ format: "kebab-case", match: true }],
     meta: {
         defaultOptions: [{ format: "kebab-case", match: true }],
+        deprecated: false,
         docs: {
+            deprecated: false,
             description:
                 "enforce selected declaration identifiers to match filename casing.",
+            frozen: false,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/match-filename",
         },

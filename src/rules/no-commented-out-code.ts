@@ -256,8 +256,11 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
         },
         defaultOptions: [],
         meta: {
+        deprecated: true,
             docs: {
+                deprecated: true,
                 description: "disallow commented-out code blocks.",
+                frozen: true,
                 recommended: false,
                 url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-commented-out-code",
             },

@@ -10,8 +10,12 @@ import noRestrictedSyntaxRule from "./no-restricted-syntax.js";
 const typescriptNoRestrictedSyntaxRule: typeof noRestrictedSyntaxRule = {
     ...noRestrictedSyntaxRule,
     meta: {
+        deprecated: true,
         ...noRestrictedSyntaxRule.meta,
         docs: {
+            deprecated: true,
+            frozen: true,
+            recommended: false,
             ...noRestrictedSyntaxRule.meta.docs,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-restricted-syntax",
         } as NonNullable<typeof noRestrictedSyntaxRule.meta.docs>,

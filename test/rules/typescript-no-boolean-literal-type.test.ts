@@ -6,6 +6,7 @@ ruleTester.run("typescript-no-boolean-literal-type", rule, {
         {
             code: "interface I { x?: true; y?: false }",
             errors: [{ messageId: "forbidden" }, { messageId: "forbidden" }],
+            output: "interface I { x?: boolean; y?: boolean }",
         },
     ],
     valid: [

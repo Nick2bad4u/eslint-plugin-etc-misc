@@ -9,6 +9,12 @@ ruleTester.run("no-unnecessary-template-literal", rule, {
         {
             code: "const x = `value`;",
             errors: [{ messageId: "forbidden" }],
+            output: 'const x = "value";',
+        },
+        {
+            code: "const x = `line\\nvalue`;",
+            errors: [{ messageId: "forbidden" }],
+            output: String.raw`const x = "line\nvalue";`,
         },
     ],
     valid: [

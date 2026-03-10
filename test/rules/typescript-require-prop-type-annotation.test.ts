@@ -5,7 +5,18 @@ ruleTester.run("typescript-require-prop-type-annotation", rule, {
     invalid: [
         {
             code: "class C { x; }",
-            errors: [{ messageId: "forbidden" }],
+            errors: [
+                {
+                    messageId: "forbidden",
+                    suggestions: [
+                        {
+                            messageId: "suggestAnnotateUnknown",
+                            output: "class C { x: unknown; }",
+                        },
+                    ],
+                },
+            ],
+            output: "class C { x: unknown; }",
         },
     ],
     valid: [

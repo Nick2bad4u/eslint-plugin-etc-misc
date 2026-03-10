@@ -125,9 +125,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     defaultOptions: [{ kinds: defaultKinds }],
     meta: {
         defaultOptions: [{ kinds: defaultKinds }],
+        deprecated: true,
         docs: {
+            deprecated: true,
             description:
                 "require JSDoc comments for configured declaration kinds.",
+            frozen: true,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/require-jsdoc",
         },

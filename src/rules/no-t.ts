@@ -47,10 +47,13 @@ const rule: ReturnType<typeof ruleCreator<typeof defaultOptions, MessageIds>> =
         },
         defaultOptions,
         meta: {
-            defaultOptions: [{}],
+        defaultOptions: [{}],
+            deprecated: false,
             docs: {
+                deprecated: false,
                 description: "disallow single-character type parameters.",
-                recommended: false,
+                frozen: false,
+                recommended: true,
                 url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-t",
             },
             hasSuggestions: false,

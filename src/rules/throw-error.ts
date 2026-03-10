@@ -154,9 +154,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     },
     defaultOptions: [],
     meta: {
+        deprecated: false,
         docs: {
+            deprecated: false,
             description:
                 "disallow throwing or rejecting values that are not Error-like.",
+            frozen: false,
             recommended: false,
             requiresTypeChecking: true,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/throw-error",

@@ -1,6 +1,5 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
-import { getConstrainedTypeAtLocation } from "@typescript-eslint/type-utils";
 import { ESLintUtils } from "@typescript-eslint/utils";
 
 import {
@@ -13,11 +12,13 @@ import {
     createReplacementRuleInfo,
     withDeprecatedRuleLifecycle,
 } from "../_internal/rule-deprecation.js";
-
-type JsDocTagInfo = Readonly<{
-    name: string;
-    text?: readonly SymbolDisplayPart[] | string;
-}>;
+import {
+    getIdentifierSymbol,
+    getJsDocTagComments,
+    isDeclarationIdentifier,
+    isImportOrExportSpecifier,
+    matchesAnyPattern,
+} from "../_internal/symbol-usage.js";
 
 type MessageIds = "forbidden" | "forbiddenWithComment" | "invalidIgnorePattern";
 
@@ -27,130 +28,7 @@ type Options = readonly [
     }?,
 ];
 
-type SymbolDisplayPart = Readonly<{ text: string }>;
-
-type SymbolWithJsDocTags = Readonly<{
-    getJsDocTags: (checker?: unknown) => readonly JsDocTagInfo[];
-    getName: () => string;
-}>;
-
-type TypeChecker = ReturnType<TypedProgram["getTypeChecker"]>;
-
-type TypedProgram = NonNullable<
-    ReturnType<typeof ESLintUtils.getParserServices>["program"]
->;
-
-type TypeSymbol = Parameters<TypeChecker["getFullyQualifiedName"]>[0];
-
 const defaultOptions: Options = [{}];
-
-const isImportOrExportSpecifier = (
-    parent: Readonly<es.Node> | undefined
-): boolean =>
-    parent?.type === "ExportSpecifier" ||
-    parent?.type === "ImportDefaultSpecifier" ||
-    parent?.type === "ImportNamespaceSpecifier" ||
-    parent?.type === "ImportSpecifier";
-
-const isDeclarationIdentifier = (node: Readonly<es.Identifier>): boolean => {
-    const { parent } = node;
-    if (parent === undefined) {
-        return false;
-    }
-
-    if (
-        parent.type === "TSInterfaceDeclaration" ||
-        parent.type === "TSTypeAliasDeclaration"
-    ) {
-        return parent.id === node;
-    }
-
-    if (
-        parent.type === "ClassDeclaration" ||
-        parent.type === "FunctionDeclaration" ||
-        parent.type === "TSDeclareFunction" ||
-        parent.type === "TSEnumDeclaration"
-    ) {
-        return parent.id === node;
-    }
-
-    if (parent.type === "VariableDeclarator") {
-        return parent.id === node;
-    }
-
-    return false;
-};
-
-const toTagComment = (
-    text: readonly SymbolDisplayPart[] | string | undefined
-): string | undefined => {
-    if (text === undefined) {
-        return undefined;
-    }
-
-    if (typeof text === "string") {
-        const normalized = text.trim().replaceAll(/\s+/gu, " ");
-        return normalized.length > 0 ? normalized : undefined;
-    }
-
-    const normalized = text
-        .map((part) => part.text)
-        .join("")
-        .replaceAll(/\s+/gu, " ")
-        .trim();
-
-    return normalized.length > 0 ? normalized : undefined;
-};
-
-const isSymbolWithJsDocTags = (
-    symbol: unknown
-): symbol is SymbolWithJsDocTags => {
-    if (typeof symbol !== "object" || symbol === null) {
-        return false;
-    }
-
-    if (!("getJsDocTags" in symbol) || !("getName" in symbol)) {
-        return false;
-    }
-
-    return (
-        typeof symbol.getJsDocTags === "function" &&
-        typeof symbol.getName === "function"
-    );
-};
-
-const getDeprecatedTagComments = (
-    symbol: unknown,
-    checker: TypeChecker
-): readonly (string | undefined)[] => {
-    if (!isSymbolWithJsDocTags(symbol)) {
-        return [];
-    }
-
-    return symbol
-        .getJsDocTags(checker)
-        .filter((tag) => tag.name === "deprecated")
-        .map((tag) => toTagComment(tag.text));
-};
-
-const matchesAnyPattern = (
-    text: string,
-    patterns: readonly Readonly<RegExp>[]
-): boolean => patterns.some((pattern) => pattern.test(text));
-
-const getIdentifierSymbol = (
-    parserServices: Readonly<
-        Parameters<typeof getConstrainedTypeAtLocation>[0]
-    >,
-    node: Readonly<es.Identifier>
-): TypeSymbol | undefined => {
-    const symbolFromLocation = parserServices.getSymbolAtLocation(node);
-    if (symbolFromLocation !== undefined) {
-        return symbolFromLocation;
-    }
-
-    return getConstrainedTypeAtLocation(parserServices, node).getSymbol();
-};
 
 /**
  * Disallow usages of symbols tagged with `@deprecated`.
@@ -195,9 +73,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     return;
                 }
 
-                const deprecatedComments = getDeprecatedTagComments(
+                const deprecatedComments = getJsDocTagComments(
                     symbol,
-                    typeChecker
+                    typeChecker,
+                    "deprecated"
                 );
                 if (deprecatedComments.length === 0) {
                     return;
@@ -239,8 +118,11 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     defaultOptions,
     meta: {
         defaultOptions: [{}],
+        deprecated: true,
         docs: {
+            deprecated: true,
             description: "disallow usage of APIs tagged with @deprecated.",
+            frozen: true,
             recommended: false,
             requiresTypeChecking: true,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-deprecated",

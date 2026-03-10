@@ -283,9 +283,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     defaultOptions,
     meta: {
         defaultOptions: [{}],
+        deprecated: true,
         docs: {
+            deprecated: true,
             description:
                 "disallow equivalent type aliases when an interface declaration can be used.",
+            frozen: true,
             recommended: false,
             suggestion: true,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/prefer-interface",

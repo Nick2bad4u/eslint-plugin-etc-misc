@@ -51,9 +51,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     defaultOptions: [{ selectors: [] }],
     meta: {
         defaultOptions: [{ selectors: [] }],
+        deprecated: true,
         docs: {
+            deprecated: true,
             description:
                 "disallow syntax nodes selected by configured AST selectors.",
+            frozen: true,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-restricted-syntax",
         },

@@ -98,9 +98,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     defaultOptions: [{ format: "PascalCase" }],
     meta: {
         defaultOptions: [{ format: "PascalCase" }],
+        deprecated: false,
         docs: {
+            deprecated: false,
             description:
                 "enforce filename-matching exports to be the only export.",
+            frozen: false,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/export-matching-filename-only",
         },

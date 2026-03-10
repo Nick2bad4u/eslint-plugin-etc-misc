@@ -16,6 +16,7 @@ type RuleCreatorFactory = ReturnType<
 type RuleDocsMetadata = {
     readonly catalogId?: string;
     readonly catalogIndex?: number;
+    readonly deprecated?: boolean;
     readonly frozen?: boolean;
     readonly recommended: boolean;
     readonly requiresTypeChecking?: boolean;

@@ -49,8 +49,11 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     defaultOptions: [{ allowDirectiveComments: true }],
     meta: {
         defaultOptions: [{ allowDirectiveComments: true }],
+        deprecated: false,
         docs: {
+            deprecated: false,
             description: "disallow single-line comments.",
+            frozen: false,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-single-line-comment",
         },

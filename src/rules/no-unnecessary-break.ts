@@ -1,12 +1,40 @@
-import type { TSESTree as es } from "@typescript-eslint/utils";
+import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
-type MessageIds = "forbidden";
+type MessageIds = "forbidden" | "suggestRemove";
 
 type Options = readonly [];
 
 const disallowedSelector = "SwitchCase:last-child > BreakStatement.consequent";
+
+const createTrailingBreakRemovalFix = (
+    sourceCode: Readonly<TSESLint.SourceCode>,
+    node: Readonly<es.BreakStatement>
+): TSESLint.ReportFixFunction => {
+    const previousToken = sourceCode.getTokenBefore(node);
+    const previousTokenLine = previousToken?.loc.end.line;
+    const breakLine = node.loc.start.line;
+    const shouldRemoveLeadingWhitespace =
+        previousTokenLine !== undefined && previousTokenLine === breakLine;
+
+    if (previousToken === null || !shouldRemoveLeadingWhitespace) {
+        return (fixer) => fixer.remove(node);
+    }
+
+    const leadingText = sourceCode.text.slice(
+        previousToken.range[1],
+        node.range[0]
+    );
+    const leadingWhitespaceLength =
+        /^[\t ]*/u.exec(leadingText)?.[0].length ?? 0;
+
+    return (fixer) =>
+        fixer.removeRange([
+            node.range[0] - leadingWhitespaceLength,
+            node.range[1],
+        ]);
+};
 
 /**
  * Disallow unnecessary trailing break statements in switch blocks.
@@ -15,25 +43,48 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     Options,
     MessageIds
 >({
-    create: (context) => ({
-        [disallowedSelector]: (node: Readonly<es.Node>): void => {
-            context.report({
-                messageId: "forbidden",
-                node,
-            });
-        },
-    }),
+    create: (context) => {
+        const sourceCode = context.sourceCode;
+
+        return {
+            [disallowedSelector]: (node: Readonly<es.Node>): void => {
+                if (node.type !== "BreakStatement" || node.label !== null) {
+                    return;
+                }
+
+                const fix = createTrailingBreakRemovalFix(sourceCode, node);
+
+                context.report({
+                    fix,
+                    messageId: "forbidden",
+                    node,
+                    suggest: [
+                        {
+                            fix,
+                            messageId: "suggestRemove",
+                        },
+                    ],
+                });
+            },
+        };
+    },
     defaultOptions: [],
     meta: {
+        deprecated: false,
         docs: {
+            deprecated: false,
             description: "disallow unnecessary trailing break statements.",
+            frozen: false,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-unnecessary-break",
         },
-        hasSuggestions: false,
+        fixable: "code",
+        hasSuggestions: true,
         messages: {
             forbidden:
                 "Unnecessary break statement at end of switch case list.",
+            suggestRemove:
+                "Remove the trailing break statement because it is unreachable.",
         },
         schema: [],
         type: "suggestion",
