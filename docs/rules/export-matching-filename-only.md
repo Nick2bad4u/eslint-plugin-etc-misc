@@ -4,40 +4,79 @@ Require filename-matching export to be the only export.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule collects exports in a file and checks whether one export name matches
+the filename-derived expected name.
+
+If that matching export exists **and** the file exports anything else, the
+additional exports are reported.
 
 ## What this rule reports
 
-This rule enforces the documented pattern for `export-matching-filename-only`.
+Expected export name is derived from filename stem using `format`
+(`PascalCase` by default).
+
+When a matching export is present, all non-matching exports in that file are
+reported.
+
+Supported extracted named exports include:
+
+- `export { Name }`
+- `export class Name {}`
+- `export function name() {}`
+
+Default export is tracked as name `default`.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+This enforces a single-primary-export convention for modules whose main export
+name mirrors the file name.
 
 ## ❌ Incorrect
 
 ```ts
-// Example that violates this rule.
+// filename: UserService.ts
+export class UserService {}
+export const helper = 1;
+// ❌ helper export is reported
 ```
 
 ## ✅ Correct
 
 ```ts
-// Example that follows this rule.
+// filename: UserService.ts
+export class UserService {}
 ```
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+If you rely on utility side-exports, move them to dedicated modules before
+enabling this rule at `error`.
 
 ### Options
 
-This rule supports default behavior unless configured otherwise.
+```ts
+type Options = [
+    {
+        format?: "camelCase" | "kebab-case" | "PascalCase";
+    },
+];
+```
+
+Default:
+
+```ts
+{ format: "PascalCase" }
+```
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// filename: user-service.ts
+// config: { format: "kebab-case" }
+export { userService };
+// ✅ filename-matching export and no extra exports
 ```
 
 ## ESLint flat config example
@@ -57,7 +96,8 @@ export default [
 
 ## When not to use it
 
-Disable this rule if the enforced convention does not fit your codebase requirements.
+Disable this rule if modules are designed to export a public surface with
+multiple related symbols from a single file.
 
 ## Package documentation
 

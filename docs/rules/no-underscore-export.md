@@ -4,7 +4,14 @@ Disallow underscore-prefixed named exports.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule reports underscore-prefixed identifiers exported via named export
+declarations.
+
+It targets:
+
+- exported function declarations,
+- exported `declare function` declarations,
+- exported variable declarator identifiers.
 
 ## What this rule reports
 
@@ -12,7 +19,8 @@ This rule reports exported declarations whose identifier starts with `_`.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Underscore prefixes are often used for non-public/internal symbols. This rule
+prevents exposing those symbols as part of named exports.
 
 ## ❌ Incorrect
 
@@ -30,7 +38,10 @@ export function f() {}
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration is usually renaming exported symbols or keeping underscore-prefixed
+values unexported.
 
 ### Options
 
@@ -39,7 +50,12 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const _internal = 1;
+export { _internal };
+// note: this form is not part of the rule's direct selector coverage
+
+export const _apiToken = "x";
+// ❌ reported
 ```
 
 ## ESLint flat config example

@@ -4,40 +4,56 @@ Enforce alphabetical sorting of top-of-file comments.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule inspects comments located before the first top-level program node.
+
+Only that top-of-file comment region is considered.
 
 ## What this rule reports
 
-This rule enforces the documented pattern for `sort-top-comments`.
+If there are at least two top-of-file comments, this rule reports when their
+order is not alphabetical.
+
+An autofix rewrites that comment span in sorted order.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Sorted file headers reduce churn in shared banner/comment blocks and make them
+easier to scan.
 
 ## ❌ Incorrect
 
 ```ts
-// Example that violates this rule.
+// zeta
+// alpha
+const value = 1;
 ```
 
 ## ✅ Correct
 
 ```ts
-// Example that follows this rule.
+// alpha
+// zeta
+const value = 1;
 ```
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is autofixable.
+
+The fixer only rewrites the contiguous top comment span before the first
+statement.
 
 ### Options
 
-This rule supports default behavior unless configured otherwise.
+This rule has no options.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+/* zeta */
+/* alpha */
+import { run } from "./run";
+// ❌ reported and reordered
 ```
 
 ## ESLint flat config example
@@ -57,7 +73,8 @@ export default [
 
 ## When not to use it
 
-Disable this rule if the enforced convention does not fit your codebase requirements.
+Disable this rule if top comments intentionally represent ordered execution
+steps, chronological logs, or legal blocks with fixed sequence.
 
 ## Package documentation
 

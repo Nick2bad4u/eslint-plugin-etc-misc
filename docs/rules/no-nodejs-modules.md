@@ -4,7 +4,14 @@ Disallow importing Node.js built-ins via the `node:` protocol.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule checks import/export source strings across:
+
+- `import ... from "..."`
+- `export ... from "..."`
+- `export * from "..."`
+- dynamic `import("...")`
+
+By default it disallows sources matching `node:*`.
 
 ## What this rule reports
 
@@ -12,7 +19,8 @@ This rule reports source strings that match `"node:*"`.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Some codebases standardize on unprefixed built-in specifiers (`fs`, `path`) for
+compatibility or stylistic consistency. This rule enforces that policy.
 
 ## ❌ Incorrect
 
@@ -28,7 +36,10 @@ import fs from "fs";
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration is generally mechanical: replace `node:fs` with `fs`, `node:path`
+with `path`, and so on.
 
 ### Options
 
@@ -50,7 +61,11 @@ Default:
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+export { readFile } from "node:fs/promises";
+// ❌ reported by default
+
+const fsModule = await import("fs");
+// ✅ valid with default settings
 ```
 
 ## ESLint flat config example

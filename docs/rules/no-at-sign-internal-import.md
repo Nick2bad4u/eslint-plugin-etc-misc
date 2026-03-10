@@ -4,7 +4,8 @@ Disallow internal alias imports under `"@/"`.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule inspects module source strings in imports/exports and reports values
+matching the default disallow glob `"@/**"`.
 
 ## What this rule reports
 
@@ -12,7 +13,8 @@ This rule reports source strings that match `"@/**"`. It is useful when `@` shou
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+If your architecture reserves `@` for package-level entrypoints only, this rule
+prevents deep internal alias imports.
 
 ## ❌ Incorrect
 
@@ -28,7 +30,10 @@ import value from "@";
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Typical migration is switching to package exports, public entrypoints, or
+allowed local relative imports.
 
 ### Options
 
@@ -50,7 +55,12 @@ Default:
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// default disallow: ["@/**"]
+import { helper } from "@/internal/helper";
+// ❌ reported
+
+import { helper } from "@";
+// ✅ not matched by default pattern
 ```
 
 ## ESLint flat config example
@@ -80,7 +90,7 @@ Disable this rule if `@/` internal alias imports are part of your standard archi
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [Node.js packages: entry points and exports](https://nodejs.org/api/packages.html#exports)
 
 ## Adoption resources
 

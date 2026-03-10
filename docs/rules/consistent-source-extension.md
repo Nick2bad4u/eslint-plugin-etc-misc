@@ -4,7 +4,15 @@ Require consistent import/export source paths without file extensions.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule reports string-literal module sources that end with these explicit
+extensions:
+
+- `.js`
+- `.json`
+- `.ts`
+
+It applies to import/export sources and any matching source literal in supported
+module syntax nodes.
 
 ## What this rule reports
 
@@ -12,7 +20,8 @@ This rule reports import/export paths that end with `.js`, `.json`, or `.ts`.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Teams that standardize extensionless internal specifiers use this rule to keep
+import/export declarations consistent.
 
 ## ❌ Incorrect
 
@@ -39,7 +48,9 @@ import x3 from "source";
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is deprecated in favor of `import/extensions`.
+
+It reports only and does not provide an autofix.
 
 ### Options
 
@@ -47,15 +58,16 @@ This rule has no options.
 
 ### Status
 
-- **Lifecycle:** Deprecated and frozen.
-- **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
-- **Use instead:** [`import/extensions`](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/extensions.md)
+Use the **Deprecated** section above for lifecycle details.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+export * from "./utils.ts";
+// ❌ reported
+
+export * from "./utils";
+// ✅ valid
 ```
 
 ## ESLint flat config example

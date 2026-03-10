@@ -4,7 +4,11 @@ Disallow unnecessary trailing `break` statements in `switch` blocks.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule matches `break` statements that appear in the **last** case of a
+`switch` statement.
+
+Specifically, it reports when the final `SwitchCase` ends with `break;`, because
+control flow would already exit the switch at that point.
 
 ## What this rule reports
 
@@ -12,7 +16,8 @@ This rule reports a `break` statement when it appears in the last `SwitchCase`, 
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+A trailing `break` in the final case is dead control-flow noise. Removing it
+keeps `switch` blocks smaller and easier to scan.
 
 ## ❌ Incorrect
 
@@ -37,7 +42,10 @@ switch (x) {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Manual migration is typically trivial: delete the final `break;` in the last
+case when no additional logic depends on it.
 
 ### Options
 
@@ -46,7 +54,14 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+switch (status) {
+    case "ok":
+        handleOk();
+        break;
+    default:
+        handleDefault();
+        break; // ❌ unnecessary (last case)
+}
 ```
 
 ## ESLint flat config example

@@ -4,26 +4,40 @@ Enforce consistent enum member naming/value casing.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule analyzes TypeScript `TSEnumMember` nodes and validates naming for:
+
+- enum member identifiers (for example `ACTIVE_USER`), and
+- string literal member values when provided.
+
+It enforces SCREAMING_SNAKE_CASE in both places.
 
 ## What this rule reports
 
-This rule enforces the documented pattern for `consistent-enum-members`.
+This rule reports enum members that use non-SCREAMING_SNAKE_CASE naming in the
+member name, the string initializer value, or both.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Enums often feed API payloads, persistence layers, and feature flags. Mixed
+casing (`camelCase`, `PascalCase`, kebab-case) creates drift between modules.
+Standardizing enum casing lowers conversion glue and helps grepability.
 
 ## ❌ Incorrect
 
 ```ts
-// Example that violates this rule.
+enum Status {
+    pendingApproval = "PENDING_APPROVAL",
+    ACTIVE_USER = "active_user",
+}
 ```
 
 ## ✅ Correct
 
 ```ts
-// Example that follows this rule.
+enum Status {
+    PENDING_APPROVAL = "PENDING_APPROVAL",
+    ACTIVE_USER = "ACTIVE_USER",
+}
 ```
 
 ## Behavior and migration notes
@@ -32,12 +46,22 @@ Review this rule in your codebase with `--fix-dry-run` first, then roll out with
 
 ### Options
 
-This rule supports default behavior unless configured otherwise.
+This rule has no options.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+enum EventType {
+    USER_CREATED,
+    USER_DELETED,
+}
+```
+
+```ts
+enum Permission {
+    READ_ONLY = "READ_ONLY",
+    READ_WRITE = "READ_WRITE",
+}
 ```
 
 ## ESLint flat config example
@@ -57,7 +81,8 @@ export default [
 
 ## When not to use it
 
-Disable this rule if the enforced convention does not fit your codebase requirements.
+Disable this rule if your project intentionally uses enum names/values that must
+mirror external schemas with different casing requirements.
 
 ## Package documentation
 

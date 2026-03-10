@@ -4,40 +4,82 @@ Require selected declaration names to match filename casing.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule compares selected declaration identifiers to the current filename
+stem.
+
+Default selectors are:
+
+- `ClassDeclaration > Identifier.id`
+- `FunctionDeclaration > Identifier.id`
+- `TSInterfaceDeclaration > Identifier.id`
+- `TSTypeAliasDeclaration > Identifier.id`
+
+You can replace this set with custom selector(s).
 
 ## What this rule reports
 
-This rule enforces the documented pattern for `match-filename`.
+For each matched identifier, the rule derives an expected filename token from
+the identifier name using `format`, plus optional `prefix`/`suffix`.
+
+It then compares that expected value with the current filename stem.
+
+- `match: true` (default) reports when they differ.
+- `match: false` reports when they are equal.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+This enables strict declaration-to-file naming contracts, which helps keep large
+codebases predictable.
 
 ## ❌ Incorrect
 
 ```ts
-// Example that violates this rule.
+// filename: user-service.ts
+export function buildClient() {}
+// ❌ default format derives "build-client", not "user-service"
 ```
 
 ## ✅ Correct
 
 ```ts
-// Example that follows this rule.
+// filename: build-client.ts
+export function buildClient() {}
 ```
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Adopt safely by first applying it to a narrow selector scope, then broadening
+once naming conventions are stable.
 
 ### Options
 
-This rule supports default behavior unless configured otherwise.
+```ts
+type Options = [
+    {
+        format?: "camelCase" | "kebab-case" | "PascalCase";
+        match?: boolean;
+        prefix?: string;
+        selector?: string | string[];
+        suffix?: string;
+    },
+];
+```
+
+Default:
+
+```ts
+{ format: "kebab-case", match: true }
+```
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// filename: use-user-service.ts
+// config: { prefix: "use-", format: "kebab-case" }
+export function userService() {}
+// ✅ expected stem becomes "use-user-service"
 ```
 
 ## ESLint flat config example
@@ -57,7 +99,9 @@ export default [
 
 ## When not to use it
 
-Disable this rule if the enforced convention does not fit your codebase requirements.
+Disable this rule if files intentionally contain multiple unrelated declarations
+or naming is driven by non-code concerns (routing/layout systems, generated
+files, etc.).
 
 ## Package documentation
 

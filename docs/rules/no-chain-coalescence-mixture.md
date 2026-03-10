@@ -4,7 +4,10 @@ Disallow mixing optional chaining and nullish coalescing in one expression.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule reports `LogicalExpression` nodes using `??` where the left-hand side
+is an optional chain (`ChainExpression`).
+
+In practice, it flags patterns like `obj?.value ?? fallback`.
 
 ## What this rule reports
 
@@ -12,7 +15,8 @@ This rule reports expressions like `foo?.bar ?? fallback`.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Combining optional chaining and nullish coalescing inline can hide intent and
+make intermediate values harder to debug. Splitting steps improves readability.
 
 ## ❌ Incorrect
 
@@ -27,9 +31,16 @@ foo?.bar;
 foo ?? fallback;
 ```
 
+```ts
+const value = foo?.bar;
+const result = value ?? fallback;
+```
+
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Typical migration is introducing an intermediate variable before applying `??`.
 
 ### Options
 
@@ -38,7 +49,12 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const title = config?.labels?.title ?? "Untitled";
+// ❌ reported
+
+const maybeTitle = config?.labels?.title;
+const titleSafe = maybeTitle ?? "Untitled";
+// ✅ valid
 ```
 
 ## ESLint flat config example

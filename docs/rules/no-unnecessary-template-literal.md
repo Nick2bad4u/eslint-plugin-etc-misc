@@ -4,7 +4,12 @@ Disallow template literals that contain no expressions.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule matches template literals with zero interpolations:
+
+- `` `plain text` ``
+- `` `` `` (empty template)
+
+It reports only when `expressions.length === 0`.
 
 ## What this rule reports
 
@@ -12,7 +17,8 @@ This rule reports template literals with zero `${...}` expressions.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Expression-free template literals are typically equivalent to normal string
+literals but noisier. Requiring plain strings reduces visual overhead.
 
 ## ❌ Incorrect
 
@@ -26,9 +32,16 @@ const x = `value`;
 const x = `value ${suffix}`;
 ```
 
+```ts
+const y = "value";
+```
+
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Most migrations are straightforward replacements from backticks to single or
+double-quoted strings.
 
 ### Options
 
@@ -37,7 +50,11 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const title = `Dashboard`;
+// ❌ reported
+
+const title = "Dashboard";
+// ✅ valid
 ```
 
 ## ESLint flat config example

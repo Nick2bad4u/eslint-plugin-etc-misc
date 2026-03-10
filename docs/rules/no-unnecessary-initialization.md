@@ -4,7 +4,12 @@ Disallow unnecessary initialization to `undefined`.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule checks for explicit `undefined` initializers in two places:
+
+- variable declarators (`const value = undefined;`), and
+- class property definitions (`field = undefined;`).
+
+Only direct identifier `undefined` is matched.
 
 ## What this rule reports
 
@@ -12,7 +17,8 @@ This rule reports variables and class fields explicitly initialized with `undefi
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Initializing to `undefined` is usually redundant in JavaScript/TypeScript.
+Removing these initializers makes intent clearer and avoids unnecessary syntax.
 
 ## ❌ Incorrect
 
@@ -26,15 +32,17 @@ class C {
 ## ✅ Correct
 
 ```ts
-const value = 1;
+let value: number | undefined;
 class C {
-    field = 1;
+    field?: number;
 }
 ```
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+In most cases, migration is a direct deletion of `= undefined`.
 
 ### Options
 
@@ -43,7 +51,11 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+let cache = undefined;
+// ❌ reported
+
+let cache: string | undefined;
+// ✅ valid
 ```
 
 ## ESLint flat config example

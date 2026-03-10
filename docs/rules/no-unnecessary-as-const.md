@@ -4,7 +4,15 @@ Disallow unnecessary `as const` assertions.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets `as const` assertions inside variable declarators when they
+are likely redundant:
+
+- `{} as const` in variable initializers, and
+- any `as const` initializer when the variable already has an explicit type
+annotation.
+
+This is intentionally narrow and does not report every possible redundant
+`as const` usage.
 
 ## What this rule reports
 
@@ -12,11 +20,14 @@ This rule reports `as const` assertions that do not provide additional value, su
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Redundant `as const` assertions add noise and can imply extra type precision
+where none is actually gained.
 
 ## ❌ Incorrect
 
 ```ts
+type I = { value: number };
+
 const x = {} as const;
 const y: I = { value: 1 } as const;
 ```
@@ -29,7 +40,9 @@ const z = { value: 1 } as const;
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Remove the assertion when it does not change the effective type contract.
 
 ### Options
 
@@ -38,7 +51,13 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const options: Readonly<Record<string, string>> = {
+    mode: "strict",
+} as const;
+// ❌ reported because variable already has explicit type annotation
+
+const tuple = ["a", "b"] as const;
+// ✅ currently not targeted by this rule
 ```
 
 ## ESLint flat config example
@@ -58,7 +77,8 @@ export default [
 
 ## When not to use it
 
-Disable this rule if your codebase intentionally keeps these `as const` assertions for explicitness.
+Disable this rule if your team prefers to keep `as const` for explicitness,
+even when type annotations already constrain the value.
 
 ## Package documentation
 

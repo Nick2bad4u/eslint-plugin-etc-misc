@@ -4,7 +4,14 @@ Disallow negated conditions.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule reports selected negation patterns in conditions:
+
+- `if (!value)`
+- `if (value !== other)`
+- top-level logical combinations that include those negations (`&&` / `||`)
+
+The selector is intentionally focused and does not rewrite all possible boolean
+equivalences.
 
 ## What this rule reports
 
@@ -12,7 +19,8 @@ This rule reports selected negated patterns in conditions and top-level logical 
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Negated conditions can increase cognitive load, especially in compound boolean
+expressions. Positive predicates are usually easier to scan and reason about.
 
 ## ❌ Incorrect
 
@@ -32,7 +40,10 @@ const value = x && y;
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migrations typically involve flipping comparisons (`!==` → `===`) and
+restructuring condition branches for positive checks.
 
 ### Options
 
@@ -41,7 +52,15 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+if (!isReady || hasError) {
+    return;
+}
+// ❌ reported
+
+if (isReady && hasNoError) {
+    start();
+}
+// ✅ valid when predicates are already positive.
 ```
 
 ## ESLint flat config example

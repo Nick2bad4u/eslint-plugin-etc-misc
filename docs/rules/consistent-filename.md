@@ -4,26 +4,37 @@ Enforce filename casing consistency.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule validates the current file’s stem (filename without extension) against
+one configured casing format.
 
 ## What this rule reports
 
-This rule enforces the documented pattern for `consistent-filename`.
+This rule reports a file when its stem is not already in the configured casing.
+
+Supported casing formats:
+
+- `camelCase`
+- `kebab-case` (default)
+- `PascalCase`
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Consistent file naming reduces navigation friction and prevents style drift
+across packages.
 
 ## ❌ Incorrect
 
 ```ts
-// Example that violates this rule.
+// filename: user_service.ts
+export const value = 1;
+// ❌ with default format "kebab-case"
 ```
 
 ## ✅ Correct
 
 ```ts
-// Example that follows this rule.
+// filename: user-service.ts
+export const value = 1;
 ```
 
 ## Deprecated
@@ -35,23 +46,38 @@ Consistent, explicit patterns improve readability, reduce review friction, and p
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is deprecated in favor of `unicorn/filename-case`.
+
+It reports only and does not provide an autofix.
 
 ### Options
 
-This rule supports default behavior unless configured otherwise.
+```ts
+type Options = [
+    {
+        format?: "camelCase" | "kebab-case" | "PascalCase";
+    },
+];
+```
+
+Default:
+
+```ts
+{ format: "kebab-case" }
+```
 
 ### Status
 
-- **Lifecycle:** Deprecated and frozen.
-- **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
-- **Use instead:** [`unicorn/filename-case`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/filename-case.md)
+Use the **Deprecated** section above for lifecycle details.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// filename: dataLoader.ts
+// ✅ valid with { format: "camelCase" }
+
+// filename: DataLoader.ts
+// ✅ valid with { format: "PascalCase" }
 ```
 
 ## ESLint flat config example
@@ -71,7 +97,8 @@ export default [
 
 ## When not to use it
 
-Disable this rule if the enforced convention does not fit your codebase requirements.
+Disable this rule if your repository intentionally mixes naming styles by
+directory or if you are already standardizing on `unicorn/filename-case`.
 
 ## Package documentation
 
@@ -81,7 +108,7 @@ Disable this rule if the enforced convention does not fit your codebase requirem
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [eslint-plugin-unicorn: filename-case](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/filename-case.md)
 
 ## Adoption resources
 

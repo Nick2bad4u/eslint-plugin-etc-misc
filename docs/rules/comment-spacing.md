@@ -4,26 +4,65 @@ Enforce consistent blank-line spacing after comments.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule inspects every comment in the file and measures the number of blank
+lines between the comment end and the next non-comment token.
+
+Expected spacing is content-aware:
+
+- **Line comments** (`// ...`) → no blank line after the comment.
+- **Single-line block comments** (`/* ... */`) → no blank line after the
+  comment.
+- **Multiline block comments** (`/* ...\n... */`) → exactly one blank line
+  after the comment.
+- **ESLint directive block comments** (for example `/* eslint-disable */`) → no
+  blank line after the comment.
 
 ## What this rule reports
 
-This rule enforces the documented pattern for `comment-spacing`.
+This rule reports comments whose trailing blank-line spacing does not match the
+expected spacing model above.
+
+The rule is auto-fixable and rewrites only the whitespace between the comment
+and the next token.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Inconsistent spacing after comments makes scan-reading harder and causes noisy
+diffs. A deterministic spacing rule keeps comment blocks visually consistent
+across contributors and editors.
 
 ## ❌ Incorrect
 
 ```ts
-// Example that violates this rule.
+/*
+ * Renders the profile panel.
+ */
+const renderProfile = () => {
+    // ...
+};
+```
+
+```ts
+// Validate and normalize input.
+
+const normalize = (value: string) => value.trim();
 ```
 
 ## ✅ Correct
 
 ```ts
-// Example that follows this rule.
+/*
+ * Renders the profile panel.
+ */
+
+const renderProfile = () => {
+    // ...
+};
+```
+
+```ts
+// Validate and normalize input.
+const normalize = (value: string) => value.trim();
 ```
 
 ## Behavior and migration notes
@@ -32,12 +71,24 @@ Review this rule in your codebase with `--fix-dry-run` first, then roll out with
 
 ### Options
 
-This rule supports default behavior unless configured otherwise.
+This rule has no options.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+/* eslint-disable no-console */
+const run = () => {
+    console.log("allowed here");
+};
+```
+
+```ts
+/*
+ * This multiline explanation is intentionally separated
+ * from the code it introduces.
+ */
+
+const createTask = () => ({ id: crypto.randomUUID() });
 ```
 
 ## ESLint flat config example

@@ -4,7 +4,15 @@ Disallow importing the current file from itself.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule resolves relative import/export sources from the current file and
+reports when a source points back to the same file path.
+
+It checks:
+
+- `ImportDeclaration`
+- `ExportNamedDeclaration` with `source`
+- `ExportAllDeclaration`
+- dynamic `ImportExpression`
 
 ## What this rule reports
 
@@ -12,7 +20,8 @@ This rule reports relative import/export sources that resolve back to the same f
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Self-imports create circular module references and are usually accidental.
+Preventing them avoids confusing runtime and bundler behavior.
 
 ## ❌ Incorrect
 
@@ -37,7 +46,11 @@ import value from "./other-file";
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is deprecated in favor of `import/no-self-import` from
+`eslint-plugin-import`.
+
+Plan migration by enabling the replacement rule, fixing violations, then
+removing `etc-misc/no-self-import`.
 
 ### Options
 
@@ -45,15 +58,18 @@ This rule has no options.
 
 ### Status
 
-- **Lifecycle:** Deprecated and frozen.
-- **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
-- **Use instead:** [`import/no-self-import`](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-self-import.md)
+Use the **Deprecated** section above for lifecycle details.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// filename: src/utils/math.ts
+export * from "./math";
+// ❌ reported (self re-export)
+
+// filename: src/utils/math.ts
+export * from "./format";
+// ✅ valid
 ```
 
 ## ESLint flat config example

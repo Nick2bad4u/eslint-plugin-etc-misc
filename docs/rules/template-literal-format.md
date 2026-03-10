@@ -4,40 +4,64 @@ Enforce newline-boundary formatting for multiline template literals.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets **multiline** template literals only.
+
+It requires the template content to have boundary newlines:
+
+- the first quasi starts with `\n`
+- the last quasi ends with `\n`
 
 ## What this rule reports
 
-This rule enforces the documented pattern for `template-literal-format`.
+This rule reports multiline template literals that do not start and end on their
+own lines.
+
+It provides an autofix that normalizes indentation in the template body.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Boundary-newline formatting makes multiline templates more readable and stable
+across indentation changes.
 
 ## ❌ Incorrect
 
 ```ts
-// Example that violates this rule.
+const text = `line one
+line two`;
 ```
 
 ## ✅ Correct
 
 ```ts
-// Example that follows this rule.
+const text = `
+    line one
+    line two
+`;
 ```
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is autofixable.
+
+The fixer adds required boundary newlines and normalizes content indentation
+based on minimum detected indent.
 
 ### Options
 
-This rule supports default behavior unless configured otherwise.
+This rule has no options.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const sql = `SELECT *
+FROM users`;
+// ❌ reported
+
+const sqlNormalized = `
+    SELECT *
+    FROM users
+`;
+// ✅ valid
 ```
 
 ## ESLint flat config example
@@ -57,7 +81,8 @@ export default [
 
 ## When not to use it
 
-Disable this rule if the enforced convention does not fit your codebase requirements.
+Disable this rule if your formatter already enforces a different multiline
+template style.
 
 ## Package documentation
 

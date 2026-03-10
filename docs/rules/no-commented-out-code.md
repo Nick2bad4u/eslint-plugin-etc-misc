@@ -4,20 +4,25 @@ Disallow comment blocks that appear to contain executable or declaration code.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule analyzes all comments in the file (line and block) and tries to parse
+their content as code.
+
+It supports grouped consecutive line comments as one logical comment block.
 
 ## What this rule reports
 
 Commented-out code creates maintenance noise, hides stale implementation paths,
-and can mislead readers into thinking dead code is still relevant. This rule
-parses comments and reports ones that look like real code.
+and can mislead readers into thinking dead code is still relevant.
+
+The rule reports comment blocks that parse as non-trivial code.
 
 The rule intentionally ignores non-code commentary patterns like region markers
 and plain prose notes.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Keeping dead code in comments makes reviews and refactors harder. This rule
+helps enforce a cleaner baseline.
 
 ## ❌ Incorrect
 
@@ -28,9 +33,9 @@ const answer = 42;
 
 ```ts
 class Example {
-  public a: string;
-  // public b: string;
-  public c: string;
+    public a: string;
+    // public b: string;
+    public c: string;
 }
 ```
 
@@ -58,7 +63,10 @@ class Example {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is deprecated in favor of
+`no-commented-code/no-commented-code`.
+
+It reports only and does not provide an autofix.
 
 ### Options
 
@@ -66,15 +74,19 @@ This rule has no options.
 
 ### Status
 
-- **Lifecycle:** Deprecated and frozen.
-- **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
-- **Use instead:** [`no-commented-code/no-commented-code`](https://www.npmjs.com/package/eslint-plugin-no-commented-code)
+Use the **Deprecated** section above for lifecycle details.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// #region Helpers
+// #endregion
+// ✅ ignored as region marker comments
+
+// if (flag) {
+//   run();
+// }
+// ❌ reported as commented-out executable code
 ```
 
 ## ESLint flat config example

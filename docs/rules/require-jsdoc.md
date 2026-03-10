@@ -4,7 +4,16 @@ Require JSDoc comments for configured declaration kinds.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule checks declaration nodes that are configured via `kinds`, including:
+
+- `function` (`FunctionDeclaration` with an identifier)
+- `class` (`ClassDeclaration` with an identifier)
+- `method` (`MethodDefinition`, excluding constructors)
+- `type` (`TSInterfaceDeclaration`, `TSTypeAliasDeclaration`)
+- `arrow-function` (named `const` variable declarators initialized with an
+arrow function)
+
+Each targeted declaration must have a leading JSDoc block comment (`/** ... */`).
 
 ## What this rule reports
 
@@ -12,7 +21,9 @@ This rule reports declarations of configured `kinds` when they do not have a lea
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+When teams rely on declarations as API boundaries, missing JSDoc usually means
+missing intent, missing parameter semantics, and inconsistent generated docs.
+This rule enforces baseline documentation hygiene for selected declaration kinds.
 
 ## ❌ Incorrect
 
@@ -29,7 +40,9 @@ with options:
 ## ✅ Correct
 
 ```ts
-/** docs */
+/**
+ * Convert a domain identifier into a cache key.
+ */
 function f() {}
 ```
 
@@ -48,7 +61,11 @@ with options:
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule does not auto-fix because it cannot infer accurate documentation text.
+
+For large repositories, start with a narrower `kinds` set (for example only
+`function` and `class`), then add `method`, `type`, and `arrow-function` after
+the initial backlog is resolved.
 
 ### Options
 
@@ -70,7 +87,20 @@ type Options = {
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const identity = <T>(value: T) => value;
+```
+
+with options:
+
+```ts
+{ kinds: ["arrow-function"] }
+```
+
+```ts
+/**
+ * Return the input value unchanged.
+ */
+const identity = <T>(value: T) => value;
 ```
 
 ## ESLint flat config example
@@ -90,7 +120,8 @@ export default [
 
 ## When not to use it
 
-Disable this rule if your code style does not require JSDoc for declarations.
+Disable this rule if your project uses external documentation sources (for
+example ADRs or API schema files) and intentionally avoids inline JSDoc.
 
 ## Package documentation
 

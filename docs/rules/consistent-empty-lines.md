@@ -4,40 +4,67 @@ Enforce configured empty-line consistency between selected nodes.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule operates on the full file text and checks for runs of empty lines.
+
+It allows:
+
+- zero empty lines, or
+- exactly one empty line between non-empty lines.
+
+It reports when it finds **two or more consecutive empty lines**.
 
 ## What this rule reports
 
-This rule enforces the documented pattern for `consistent-empty-lines`.
+This rule reports files containing consecutive blank-line runs longer than one
+line.
+
+An autofix is provided and collapses each run to a single blank line.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Extra vertical whitespace often accumulates during edits and merge conflict
+resolution. Enforcing a single-blank-line maximum keeps files visually dense and
+reduces noisy formatting diffs.
 
 ## ❌ Incorrect
 
 ```ts
-// Example that violates this rule.
+const first = 1;
+
+
+const second = 2;
 ```
 
 ## ✅ Correct
 
 ```ts
-// Example that follows this rule.
+const first = 1;
+
+const second = 2;
 ```
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is fully autofixable (`fixable: "whitespace"`).
+
+Recommended rollout:
+
+1. Run once with `--fix-dry-run` to estimate churn.
+2. Apply autofix in a dedicated formatting PR.
+3. Enable as `error` to keep the baseline clean.
 
 ### Options
 
-This rule supports default behavior unless configured otherwise.
+This rule has no options.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+function run(): void {
+    stepOne();
+
+    stepTwo();
+}
 ```
 
 ## ESLint flat config example
@@ -57,7 +84,9 @@ export default [
 
 ## When not to use it
 
-Disable this rule if the enforced convention does not fit your codebase requirements.
+Disable this rule if your style guide intentionally allows multiple blank lines
+for sectioning or if another formatter already controls vertical spacing exactly
+as desired.
 
 ## Package documentation
 

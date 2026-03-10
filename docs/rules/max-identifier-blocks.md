@@ -4,7 +4,13 @@ Restrict identifier complexity to at most four casing blocks.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule checks identifier names in:
+
+- declaration identifiers (`Identifier.id`), and
+- non-shorthand object property keys (`Identifier.key` where shorthand is false).
+
+It counts naming "blocks" by splitting on case transitions and non-alphanumeric
+separators.
 
 ## What this rule reports
 
@@ -12,13 +18,18 @@ This rule reports identifiers that contain more than four casing blocks (for exa
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Long compound identifiers are harder to read and often indicate mixed
+concerns in one symbol.
 
 ## ❌ Incorrect
 
 ```ts
 const AaaBbbCccDddEee = 1;
 function aaaBbbCccDddEee() {}
+
+const obj = {
+    veryLongCompoundIdentifierName: 1,
+};
 ```
 
 ## ✅ Correct
@@ -30,7 +41,9 @@ function aaaBbbCccDdd() {}
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+The block limit is fixed at **4** in the current implementation.
+
+This rule reports only and does not provide an autofix.
 
 ### Options
 
@@ -39,7 +52,11 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const parse_http_response_body = true;
+// underscore-separated segments are also counted as blocks
+
+const parseHttpBody = true;
+// ✅ shorter identifier
 ```
 
 ## ESLint flat config example

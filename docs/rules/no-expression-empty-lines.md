@@ -4,7 +4,11 @@ Disallow blank lines inside expression statements.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule inspects `ExpressionStatement` nodes and checks the expression’s raw
+source text for blank lines.
+
+It only applies to expression statements and does not inspect declarations,
+blocks, or other statement kinds.
 
 ## What this rule reports
 
@@ -12,7 +16,9 @@ This rule reports expression statements whose inner source text contains empty l
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Blank lines *inside* a single expression usually come from accidental edits and
+make statement boundaries harder to read. Normalizing these expressions reduces
+formatting noise.
 
 ## ❌ Incorrect
 
@@ -33,7 +39,10 @@ someCall(
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is autofixable.
+
+The fixer removes blank lines inside the expression, trims trailing spaces on
+each line, and rewrites the statement with a terminating semicolon.
 
 ### Options
 
@@ -42,7 +51,18 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+doWork(
+    value,
+
+    nextValue
+);
+// ❌ reported
+
+doWork(
+    value,
+    nextValue
+);
+// ✅ valid
 ```
 
 ## ESLint flat config example

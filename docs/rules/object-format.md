@@ -4,40 +4,76 @@ Enforce object literal line format based on property count.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule checks `ObjectExpression` nodes with more than one property and
+enforces single-line or multi-line formatting based on property count.
 
 ## What this rule reports
 
-This rule enforces the documented pattern for `object-format`.
+For each object literal with at least two properties:
+
+- if property count is less than or equal to `maxProperties`, the object must be
+on a single line;
+- otherwise, the object must span multiple lines.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Object literals with inconsistent line formatting are harder to scan. A
+threshold-based policy keeps short objects compact while forcing larger objects
+to be readable.
 
 ## ❌ Incorrect
 
 ```ts
-// Example that violates this rule.
+// default maxProperties: 1
+const point = { x: 1, y: 2 };
 ```
 
 ## ✅ Correct
 
 ```ts
-// Example that follows this rule.
+// default maxProperties: 1
+const point = {
+    x: 1,
+    y: 2,
+};
+```
+
+```ts
+// with { maxProperties: 2 }
+const point = { x: 1, y: 2 };
 ```
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule currently reports only and does not provide an autofix.
+
+Adopt in warning mode first, then align formatting manually (or with codemods)
+before enforcing as `error`.
 
 ### Options
 
-This rule supports default behavior unless configured otherwise.
+```ts
+type Options = [
+    {
+        maxProperties?: number; // default: 1
+    },
+];
+```
+
+- `maxProperties`: maximum number of properties allowed on one line.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const pair = { left: 1, right: 2 };
+// ✅ valid when configured with { maxProperties: 2 }
+
+const tupleLike = {
+    first: 1,
+    second: 2,
+    third: 3,
+};
+// ✅ required when maxProperties is 2
 ```
 
 ## ESLint flat config example
@@ -57,7 +93,8 @@ export default [
 
 ## When not to use it
 
-Disable this rule if the enforced convention does not fit your codebase requirements.
+Disable this rule if Prettier (or another formatter) already defines the object
+wrapping strategy you want and this threshold approach conflicts with it.
 
 ## Package documentation
 

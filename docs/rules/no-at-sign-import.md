@@ -4,7 +4,8 @@ Disallow importing exactly from `"@"`.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule inspects module source strings in imports/exports and reports sources
+that match `"@"` exactly.
 
 ## What this rule reports
 
@@ -12,7 +13,8 @@ This rule reports source strings that are exactly `"@"`. It is useful when `@` i
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+When `@` is used as a path alias prefix, importing the bare root can be invalid
+or ambiguous. This rule blocks that bare specifier.
 
 ## ❌ Incorrect
 
@@ -28,7 +30,10 @@ import value from "@/feature";
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Typical migration is replacing `"@"` with a concrete module path like
+`"@/feature"`.
 
 ### Options
 
@@ -50,7 +55,11 @@ Default:
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+export { value } from "@";
+// ❌ reported
+
+export { value } from "@/core/value";
+// ✅ valid
 ```
 
 ## ESLint flat config example
@@ -80,7 +89,7 @@ Disable this rule if your tooling resolves `"@"` as a valid direct module import
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript `paths` mapping](https://www.typescriptlang.org/tsconfig/#paths)
 
 ## Adoption resources
 

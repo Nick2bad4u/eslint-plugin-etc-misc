@@ -4,7 +4,11 @@ Disallow calling `forEach` on configured collection types.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+⚠️ This rule requires type information to run. Configure type-aware linting
+(`parserOptions.project` or `projectService`) before enabling it.
+
+This rule targets member calls to `.forEach(...)` and reports only when the
+receiver type matches configured collection names.
 
 ## What this rule reports
 
@@ -12,7 +16,8 @@ This rule reports `.forEach(...)` calls for configured type names (by default: `
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Teams that standardize on explicit loops often prefer `for...of` for control
+flow clarity (`break`, `continue`, early `return`) and debugger ergonomics.
 
 ## ❌ Incorrect
 
@@ -32,7 +37,10 @@ for (const answer of answers) {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Adopt gradually by enabling as `warn`, then migrating hot paths and shared
+utilities to `for...of` before promoting to `error`.
 
 ### Options
 
@@ -44,6 +52,8 @@ type Options = {
 
 Default: `{ types: ["Array", "Map", "NodeList", "Set"] }`
 
+When `Array` is included, `ReadonlyArray` is also treated as matched.
+
 ### `types`
 
 Use this option to control which type names are checked.
@@ -51,7 +61,15 @@ Use this option to control which type names are checked.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const set = new Set([1, 2, 3]);
+set.forEach((value) => console.log(value));
+// ❌ reported with default options
+
+const map = new Map<string, number>();
+for (const [key, value] of map) {
+    console.log(key, value);
+}
+// ✅ preferred style
 ```
 
 ## ESLint flat config example

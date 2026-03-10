@@ -4,7 +4,10 @@ Disallow relative parent imports such as `".."` and `"../*"`.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule reports module sources that traverse to parent directories using
+patterns like `..`, `../**`, `../../**`, and deeper defaults.
+
+It applies to import/export source strings and dynamic import strings.
 
 ## What this rule reports
 
@@ -12,7 +15,8 @@ This rule reports imports/exports that traverse parent directories. It helps enf
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Preventing parent-relative imports helps enforce bounded module layers and
+reduces coupling across directory boundaries.
 
 ## ❌ Incorrect
 
@@ -37,7 +41,10 @@ import utils from "@/utils";
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is deprecated in favor of
+`import/no-relative-parent-imports` from `eslint-plugin-import`.
+
+It reports only and does not provide an autofix.
 
 ### Options
 
@@ -60,15 +67,17 @@ Use `allow` for specific exceptions:
 
 ### Status
 
-- **Lifecycle:** Deprecated and frozen.
-- **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
-- **Use instead:** [`import/no-relative-parent-imports`](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-relative-parent-imports.md)
+Use the **Deprecated** section above for lifecycle details.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// default disallow includes ../** and ../../**
+const mod = await import("../shared/mod");
+// ❌ reported
+
+import mod from "@/shared/mod";
+// ✅ valid when alias paths are allowed by your resolver
 ```
 
 ## ESLint flat config example
@@ -101,7 +110,7 @@ Disable this rule if parent-relative imports are an accepted part of your module
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [eslint-plugin-import: no-relative-parent-imports](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-relative-parent-imports.md)
 
 ## Adoption resources
 

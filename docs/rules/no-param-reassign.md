@@ -4,7 +4,12 @@ Disallow function parameter reassignment outside the first expression statement.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule checks parameter mutations through:
+
+- assignment expressions (`param = ...`), and
+- update expressions (`param++`, `param--`).
+
+It applies only when the target resolves to a parameter variable.
 
 ## What this rule reports
 
@@ -12,7 +17,8 @@ This rule reports parameter reassignment except in the first expression statemen
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Parameter mutation can obscure function contracts and complicate reasoning about
+input values.
 
 ## ❌ Incorrect
 
@@ -32,9 +38,18 @@ function f(value: number) {
 }
 ```
 
+```ts
+function f(value: number): number {
+    const nextValue = value + 1;
+    return nextValue;
+}
+```
+
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+To migrate, prefer introducing local variables for transformed parameter values.
 
 ### Options
 
@@ -43,7 +58,11 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+function increment(count: number): number {
+    count++;
+    // ❌ reported unless this is inside the first expression statement slot
+    return count;
+}
 ```
 
 ## ESLint flat config example

@@ -4,7 +4,10 @@ Disallow shadowing variables from outer scopes.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule walks lexical scopes and reports variable declarations that reuse
+names from parent scopes.
+
+Enum declarations are intentionally ignored.
 
 ## What this rule reports
 
@@ -12,7 +15,7 @@ This rule reports variables that reuse names from outer scopes. Enum declaration
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Shadowing can hide outer bindings and make data flow harder to reason about.
 
 ## ❌ Incorrect
 
@@ -43,7 +46,9 @@ function f() {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is deprecated in favor of `@typescript-eslint/no-shadow`.
+
+It reports only and does not provide an autofix.
 
 ### Options
 
@@ -51,15 +56,20 @@ This rule has no options.
 
 ### Status
 
-- **Lifecycle:** Deprecated and frozen.
-- **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
-- **Use instead:** [`@typescript-eslint/no-shadow`](https://typescript-eslint.io/rules/no-shadow)
+Use the **Deprecated** section above for lifecycle details.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+enum Status {
+    Ready,
+}
+
+function run(Status: number): number {
+    return Status;
+}
+// enum-related declarations are intentionally handled conservatively by this
+// rule's ignore logic.
 ```
 
 ## ESLint flat config example
@@ -89,7 +99,7 @@ Disable this rule if shadowed variable names are acceptable in your code style.
 
 ## Further reading
 
-- [TypeScript Handbook: Variable Declarations](https://www.typescriptlang.org/docs/handbook/variable-declarations.html)
+- [@typescript-eslint/no-shadow](https://typescript-eslint.io/rules/no-shadow)
 
 ## Adoption resources
 

@@ -4,7 +4,16 @@ Require class declarations to match the current filename.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule checks **named class declarations** and compares each class name to the
+current filename stem.
+
+It targets top-level class declarations in these forms:
+
+- `class Name {}`
+- `export class Name {}`
+- `export default class Name {}`
+
+Class expressions are not targeted.
 
 ## What this rule reports
 
@@ -12,25 +21,28 @@ This rule reports class declarations whose identifier does not exactly match the
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Aligning class names with file names improves discoverability and reduces rename
+drift during refactors.
 
 ## ❌ Incorrect
 
 ```ts
-// filename: ClassName.ts
-export class NotClassName {}
+// filename: UserService.ts
+export class AccountService {}
 ```
 
 ## ✅ Correct
 
 ```ts
-// filename: ClassName.ts
-export class ClassName {}
+// filename: UserService.ts
+export class UserService {}
 ```
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration requires renaming either the class identifier or the file stem.
 
 ### Options
 
@@ -39,7 +51,13 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// filename: user-service.ts
+export default class UserService {}
+// ❌ reported (filename stem is "user-service")
+
+// filename: UserService.ts
+export default class UserService {}
+// ✅ valid
 ```
 
 ## ESLint flat config example

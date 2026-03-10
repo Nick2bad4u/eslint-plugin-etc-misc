@@ -4,7 +4,13 @@ Restrict exports to configured names.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule enforces an allow-list of export names.
+
+It checks:
+
+- `ExportDefaultDeclaration` as name `default`
+- `ExportNamedDeclaration` names from specifiers, class/function declarations,
+  and variable declaration identifiers
 
 ## What this rule reports
 
@@ -12,7 +18,8 @@ This rule reports exports whose names are not included in `names`.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+This rule is useful for defining strict module contracts (for example,
+default-only modules or curated public names).
 
 ## ❌ Incorrect
 
@@ -42,7 +49,10 @@ with options:
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Default allow-list is `['default']`, so named exports are blocked unless
+explicitly allowed.
 
 ### Options
 
@@ -55,7 +65,13 @@ type Options = {
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// config: { names: ["createClient", "default"] }
+export function createClient() {}
+export default createClient;
+// ✅ valid
+
+export const version = "1.0.0";
+// ❌ reported unless "version" is added to names
 ```
 
 ## ESLint flat config example
@@ -85,7 +101,7 @@ Disable this rule if exported symbol names do not need to be constrained.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [MDN: export statement](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export)
 
 ## Adoption resources
 

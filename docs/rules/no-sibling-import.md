@@ -4,7 +4,11 @@ Disallow sibling-file imports from the current directory.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule checks module source strings in import/export syntax and reports
+sources matching `./*` by default.
+
+It is built on the same glob-based import-pattern engine as
+`disallow-import`.
 
 ## What this rule reports
 
@@ -12,7 +16,8 @@ This rule reports source paths that match `./*` by default.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Disallowing sibling imports can enforce stricter layering where modules import
+through explicit public boundaries instead of lateral file coupling.
 
 ## ❌ Incorrect
 
@@ -28,7 +33,10 @@ import value from "../source";
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Default `disallow` is `./*`, but you can override with custom `allow` and
+`disallow` patterns.
 
 ### Options
 
@@ -48,7 +56,12 @@ Default:
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// default disallow: ["./*"]
+export { value } from "./value";
+// ❌ reported
+
+export { value } from "../value";
+// ✅ valid
 ```
 
 ## ESLint flat config example
@@ -78,7 +91,7 @@ Disable this rule if sibling imports are part of your module design.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [minimatch glob pattern reference](https://github.com/isaacs/minimatch)
 
 ## Adoption resources
 

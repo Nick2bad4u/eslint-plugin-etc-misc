@@ -4,7 +4,14 @@ Disallow import/export sources by configured glob patterns.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule checks module source strings in:
+
+- `import ... from "..."`
+- `export ... from "..."`
+- `export * from "..."`
+- dynamic `import("...")`
+
+It matches those source values against glob patterns.
 
 ## What this rule reports
 
@@ -12,7 +19,8 @@ This rule matches import and export source values against `disallow` globs, with
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+This rule is a general boundary primitive: it lets you ban path families and
+optionally carve out explicit exceptions.
 
 ## ❌ Incorrect
 
@@ -40,7 +48,10 @@ with options:
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Because the default `disallow` set is empty, this rule does nothing until you
+configure `disallow` patterns.
 
 ### Options
 
@@ -54,7 +65,12 @@ type Options = {
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// config: { disallow: ["../**"], allow: ["../shared/**"] }
+import util from "../feature/util";
+// ❌ reported
+
+import shared from "../shared/math";
+// ✅ allowed by explicit exception
 ```
 
 ## ESLint flat config example
@@ -84,7 +100,7 @@ Disable this rule if your project does not enforce import path restrictions.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [minimatch glob pattern reference](https://github.com/isaacs/minimatch)
 
 ## Adoption resources
 

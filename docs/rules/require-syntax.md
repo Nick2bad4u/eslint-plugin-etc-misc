@@ -4,15 +4,26 @@ Require syntax matched by configured AST selectors.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule runs selector listeners for every configured AST selector and tracks
+whether each selector matched at least once in the current file.
+
+Validation happens on `Program:exit`, so the rule evaluates full-file coverage
+rather than local statement-level checks.
 
 ## What this rule reports
 
-This rule reports when a configured selector has no matches in the file.
+This rule reports each configured selector that has zero matches.
+
+- If the selector is configured as a plain string, the default message is used.
+- If the selector is configured as an object with `message`, your custom message
+is emitted.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Some code standards are existential rather than prohibitive (for example,
+"every module must export a default" or "every React file must declare props").
+`require-syntax` is the inverse of `no-restricted-syntax`: it enforces presence,
+not absence.
 
 ## ❌ Incorrect
 
@@ -40,7 +51,11 @@ with options:
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule has no autofix. Missing required syntax is structural and must be
+added intentionally.
+
+Avoid over-broad selectors on large codebases. Start with specific selectors
+that map to concrete architecture rules.
 
 ### Options
 
@@ -59,7 +74,20 @@ type Options = {
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const x = 1;
+```
+
+with options:
+
+```ts
+{
+    selectors: [
+        {
+            selector: "ExportNamedDeclaration[source]",
+            message: "Files in this folder must re-export from a source module.",
+        },
+    ],
+}
 ```
 
 ## ESLint flat config example
@@ -82,7 +110,8 @@ export default [
 
 ## When not to use it
 
-Disable this rule if files should not be forced to contain specific syntax forms.
+Disable this rule if your project prefers optional patterns and does not enforce
+required syntax per file.
 
 ## Package documentation
 

@@ -4,7 +4,8 @@ Disallow importing directly from `"."`.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule inspects module source strings and reports sources that are exactly
+`"."` by default.
 
 ## What this rule reports
 
@@ -12,7 +13,8 @@ This rule reports import and export source strings that are exactly `"."`.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Bare `"."` imports often hide barrel/index dependencies and make module
+relationships less explicit.
 
 ## ❌ Incorrect
 
@@ -30,7 +32,9 @@ export { value } from "./feature";
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration usually means replacing `"."` with a concrete relative path.
 
 ### Options
 
@@ -55,7 +59,11 @@ Default:
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const moduleRef = await import(".");
+// ❌ reported
+
+const moduleRef = await import("./feature");
+// ✅ valid
 ```
 
 ## ESLint flat config example
@@ -85,7 +93,7 @@ Disable this rule if your project intentionally uses `"."` barrel imports.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [Node.js modules: package entry points](https://nodejs.org/api/packages.html#main)
 
 ## Adoption resources
 
