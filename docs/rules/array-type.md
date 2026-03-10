@@ -39,7 +39,12 @@ This rule forwards options and behavior to `@typescript-eslint/array-type`.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// with default @typescript-eslint/array-type options
+type Values = Array<string>;
+// ❌ reported
+
+type ValuesFixed = string[];
+// ✅ valid
 ```
 
 ## ESLint flat config example

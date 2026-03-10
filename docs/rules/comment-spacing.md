@@ -67,7 +67,11 @@ const normalize = (value: string) => value.trim();
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is autofixable (`fixable: "whitespace"`) and rewrites only the
+whitespace between a comment and the next token.
+
+Use `--fix-dry-run` in CI first if you want to preview spacing churn before
+mass-apply.
 
 ### Options
 
@@ -108,7 +112,8 @@ export default [
 
 ## When not to use it
 
-Disable this rule if the enforced convention does not fit your codebase requirements.
+Disable this rule if your formatter or style guide intentionally uses different
+post-comment spacing conventions.
 
 ## Package documentation
 

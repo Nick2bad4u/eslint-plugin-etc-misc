@@ -4,7 +4,10 @@ Require readonly array and tuple type annotations.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets mutable array-like annotations, including:
+
+- `T[]` and tuple annotations not wrapped in `readonly ...`, and
+- `Array<T>` references.
 
 ## What this rule reports
 
@@ -12,7 +15,8 @@ This rule reports writable array and tuple type annotations.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Readonly array/tuple annotations communicate immutability at API boundaries and
+reduce accidental mutation.
 
 ## ❌ Incorrect
 
@@ -28,7 +32,10 @@ function f(values: readonly string[]) {}
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Common migration targets are `readonly T[]`, `readonly [A, B]`, or
+`ReadonlyArray<T>`.
 
 ### Options
 
@@ -37,7 +44,11 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+function parse(pair: [string, number]): void {}
+// ❌ reported
+
+function parseSafe(pair: readonly [string, number]): void {}
+// ✅ valid
 ```
 
 ## ESLint flat config example
@@ -67,7 +78,7 @@ Disable this rule if mutable arrays and tuples are preferred in your API design.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript: ReadonlyArray<T>](https://www.typescriptlang.org/docs/handbook/interfaces.html#readonly-properties)
 
 ## Adoption resources
 

@@ -12,6 +12,8 @@ It checks:
 - `ExportNamedDeclaration` names from specifiers, class/function declarations,
   and variable declaration identifiers
 
+For `export { local as publicName }`, the rule validates `publicName`.
+
 ## What this rule reports
 
 This rule reports exports whose names are not included in `names`.
@@ -62,6 +64,12 @@ type Options = {
 };
 ```
 
+Default:
+
+```json
+{ "names": ["default"] }
+```
+
 ## Additional examples
 
 ```ts
@@ -72,6 +80,9 @@ export default createClient;
 
 export const version = "1.0.0";
 // ❌ reported unless "version" is added to names
+
+export { buildClient as client };
+// checks "client" (exported name), not "buildClient"
 ```
 
 ## ESLint flat config example

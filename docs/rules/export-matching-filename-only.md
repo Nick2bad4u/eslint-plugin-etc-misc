@@ -107,7 +107,7 @@ multiple related symbols from a single file.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript Handbook: Modules](https://www.typescriptlang.org/docs/handbook/modules/introduction.html)
 
 ## Adoption resources
 

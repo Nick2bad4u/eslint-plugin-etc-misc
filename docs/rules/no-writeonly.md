@@ -45,7 +45,25 @@ This rule forwards options and behavior to ESLint core `accessor-pairs`.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+class Box {
+    set value(next: number) {
+        this._value = next;
+    }
+}
+// ❌ reported
+
+class BoxFixed {
+    _value = 0;
+
+    get value() {
+        return this._value;
+    }
+
+    set value(next: number) {
+        this._value = next;
+    }
+}
+// ✅ valid
 ```
 
 ## ESLint flat config example

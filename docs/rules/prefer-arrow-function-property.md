@@ -55,7 +55,20 @@ uses method-style `this`, keep it as a method and annotate `this` explicitly.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const formatter = {
+    prefix: "#",
+    format(this: { prefix: string }, value: number) {
+        return `${this.prefix}${value}`;
+    },
+};
+// ✅ valid: explicit `this` parameter is allowed by this rule
+
+const formatter2 = {
+    format(value: number) {
+        return String(value);
+    },
+};
+// ❌ reported
 ```
 
 ## ESLint flat config example

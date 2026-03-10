@@ -4,7 +4,13 @@ Disallow assigning values returned from mutating array methods.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+⚠️ This rule requires type information to run. Configure type-aware linting
+(`parserOptions.project` or `projectService`) before enabling it.
+
+This rule targets calls to `fill`, `reverse`, and `sort` on array-like values.
+
+It reports when these calls are used as values (for example assignment,
+argument, return), not when used as standalone statements.
 
 ## What this rule reports
 
@@ -14,7 +20,8 @@ These methods mutate in place and return the same array instance. Assigning thei
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Using the returned value of mutating methods often looks copy-like while still
+mutating shared state, which causes subtle bugs.
 
 ## ❌ Incorrect
 
@@ -26,6 +33,11 @@ const sorted = names.sort();
 ```ts
 const names = ["c", "a", "b"];
 print(names.reverse());
+```
+
+```ts
+const sorted = users.sort();
+return sorted;
 ```
 
 ## ✅ Correct
@@ -45,9 +57,16 @@ const names = ["c", "a", "b"];
 const sorted = names.map((name) => name).reverse();
 ```
 
+```ts
+const sorted = Array.from(users).sort();
+```
+
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+It intentionally does not report when the mutating call is rooted in a new array
+expression or array factory chain (for example `Array.from(...).sort()`).
 
 ### Options
 
@@ -56,7 +75,11 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const result = source.slice().sort();
+// ✅ valid because `slice()` creates a new array before sort
+
+const result2 = source.sort();
+// ❌ reported because `sort()` mutates `source`
 ```
 
 ## ESLint flat config example

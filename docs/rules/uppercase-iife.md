@@ -39,7 +39,11 @@ This rule forwards options and behavior to `unicorn/no-unreadable-iife`.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const value = (() => (compute()))();
+// ❌ reported by forwarded unicorn rule
+
+const valueFixed = (() => compute())();
+// ✅ valid
 ```
 
 ## ESLint flat config example

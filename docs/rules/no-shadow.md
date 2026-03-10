@@ -11,7 +11,10 @@ Enum declarations are intentionally ignored.
 
 ## What this rule reports
 
-This rule reports variables that reuse names from outer scopes. Enum declarations are ignored.
+This rule reports variables that reuse names from outer scopes.
+
+Enum declarations are skipped both when evaluating the current declaration and
+when evaluating potential outer-scope matches.
 
 ## Why this rule exists
 
@@ -68,8 +71,7 @@ enum Status {
 function run(Status: number): number {
     return Status;
 }
-// enum-related declarations are intentionally handled conservatively by this
-// rule's ignore logic.
+// enum-related declarations are intentionally ignored by this rule.
 ```
 
 ## ESLint flat config example

@@ -4,7 +4,9 @@ Disallow union element types directly inside tuple elements.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets union types used directly as tuple element types.
+
+Example target shape: `TSTupleType > TSUnionType`.
 
 ## What this rule reports
 
@@ -12,7 +14,8 @@ This rule reports tuple elements written as unions (for example, `[A | B]`).
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Extracting tuple union elements into named aliases can improve readability and
+reuse.
 
 ## ❌ Incorrect
 
@@ -29,7 +32,10 @@ type T = [Value];
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration is usually introducing a named alias for the union and using that
+alias in the tuple.
 
 ### Options
 
@@ -38,7 +44,12 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+type Pair = [string | number, boolean];
+// ❌ reported on `string | number`
+
+type Value = string | number;
+type PairFixed = [Value, boolean];
+// ✅ valid
 ```
 
 ## ESLint flat config example
@@ -68,7 +79,7 @@ Disable this rule if inline union tuple element types are preferred in your proj
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript: Tuple Types](https://www.typescriptlang.org/docs/handbook/2/objects.html#tuple-types)
 
 ## Adoption resources
 

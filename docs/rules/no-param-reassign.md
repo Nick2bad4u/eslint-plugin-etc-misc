@@ -13,7 +13,8 @@ It applies only when the target resolves to a parameter variable.
 
 ## What this rule reports
 
-This rule reports parameter reassignment except in the first expression statement in the function body.
+This rule reports parameter reassignment except when it occurs inside the first
+`ExpressionStatement` of a function body.
 
 ## Why this rule exists
 
@@ -45,6 +46,14 @@ function f(value: number): number {
 }
 ```
 
+```ts
+function initialize(value: number) {
+    value = normalize(value);
+    // ✅ allowed: reassignment occurs in first expression statement
+    return value;
+}
+```
+
 ## Behavior and migration notes
 
 This rule reports only and does not provide an autofix.
@@ -59,8 +68,9 @@ This rule has no options.
 
 ```ts
 function increment(count: number): number {
+    doWork();
     count++;
-    // ❌ reported unless this is inside the first expression statement slot
+    // ❌ reported: update occurs after the first expression statement
     return count;
 }
 ```

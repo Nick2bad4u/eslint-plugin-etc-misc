@@ -6,7 +6,12 @@ Require explicit error parameter typing in Promise rejection callbacks.
 
 ⚠️ This rule requires type information to run. Configure type-aware linting (`parserOptions.project` or `projectService`) before enabling it.
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets Promise rejection callbacks in:
+
+- `.catch(callback)`
+- `.then(onFulfilled, onRejected)` (second argument)
+
+Only callbacks associated with Promise-like receivers are checked.
 
 ## What this rule reports
 
@@ -23,11 +28,10 @@ By default:
 - Narrower types (for example `string`) are reported with a safe suggestion to
   change to `unknown`.
 
-> ⚠️ This rule requires type information to run.
-
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+It prevents unsafe assumptions about rejection values and encourages explicit
+narrowing before property access.
 
 ## ❌ Incorrect
 
@@ -55,7 +59,10 @@ Promise.reject(new Error("Boom")).catch((error: unknown) => {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is fixable and also provides explicit `suggest` entries.
+
+Automatic fixes annotate missing/`any` parameters as `unknown`. For already
+narrowed annotations, a safe suggestion is provided instead of forced rewrite.
 
 ### Options
 
@@ -99,7 +106,20 @@ export default [
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+Promise.resolve(1).then(
+  (value) => value,
+  (error: string) => {
+    console.error(error);
+  }
+);
+// ❌ reported as narrowed type, with suggestion to use unknown
+
+Promise.resolve(1).catch((error: unknown) => {
+  if (error instanceof Error) {
+    console.error(error.message);
+  }
+});
+// ✅ valid
 ```
 
 ## ESLint flat config example

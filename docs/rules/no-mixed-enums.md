@@ -47,7 +47,17 @@ This rule forwards options and behavior to
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+enum NumericStatus {
+    Open = 1,
+    Closed = 2,
+}
+// ✅ valid
+
+enum MixedStatus {
+    Open = "open",
+    Closed = 2,
+}
+// ❌ reported
 ```
 
 ## ESLint flat config example

@@ -49,7 +49,19 @@ This rule forwards options and behavior to `unicorn/no-unused-properties`.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const result = {
+    id: 1,
+    debug: true,
+};
+console.log(result.id);
+// ❌ `debug` is never read
+
+const resultFixed = {
+    id: 1,
+    debug: true,
+};
+console.log(resultFixed.id, resultFixed.debug);
+// ✅ valid
 ```
 
 ## ESLint flat config example

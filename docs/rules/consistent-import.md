@@ -69,6 +69,15 @@ type Options = [
 
 - `style` (optional): enforce one style for all import declarations.
 
+### Default configuration
+
+```ts
+[{}]
+```
+
+When `style` is omitted, the first seen import style for each module source is
+treated as that source's expected style.
+
 Example:
 
 ```ts
@@ -111,7 +120,7 @@ same module (for example, staged migration from default to named exports).
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [MDN: `import`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/import)
 
 ## Adoption resources
 

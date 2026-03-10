@@ -1,0 +1,7 @@
+import packageDefault from "@scope/package";
+export { namedBinding } from "./named";
+export * from "../all";
+void import("./dynamic");
+const moduleName = "./computed";
+void import(moduleName);
+void packageDefault;

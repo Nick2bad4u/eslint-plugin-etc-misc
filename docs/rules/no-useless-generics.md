@@ -48,7 +48,15 @@ This rule forwards options to
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+function parse<T extends string>(input: string): string {
+    return input.trim();
+}
+// ❌ reported: generic does not add a relation
+
+function first<T>(items: readonly T[]): T | undefined {
+    return items[0];
+}
+// ✅ valid: generic ties parameter and return type
 ```
 
 ## ESLint flat config example

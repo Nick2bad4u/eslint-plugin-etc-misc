@@ -91,7 +91,7 @@ Disable this rule if your team prefers explicit trailing `break` statements for 
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [MDN: `switch`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/switch)
 
 ## Adoption resources
 

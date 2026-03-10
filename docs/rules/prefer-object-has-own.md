@@ -31,10 +31,19 @@ Object.hasOwn(record, "id");
 This rule forwards options and behavior to ESLint core
 `prefer-object-has-own`.
 
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`prefer-object-has-own` (ESLint core)](https://eslint.org/docs/latest/rules/prefer-object-has-own)
+
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+Object.prototype.hasOwnProperty.call(config, "port");
+// ❌ reported
+
+Object.hasOwn(config, "port");
+// ✅ valid
 ```
 
 ## ESLint flat config example

@@ -82,5 +82,4 @@ export const buildRuleCatalog = (ruleNames: readonly string[]): RuleCatalog => {
     };
 };
 
-// eslint-disable-next-line canonical/export-specifier-newline -- prettier tries to un-wrap
 export type { RuleCatalog, RuleCatalogEntry };

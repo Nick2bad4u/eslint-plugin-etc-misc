@@ -4,7 +4,7 @@ Disallow TypeScript `enum` declarations.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule reports every TypeScript `enum` declaration (`TSEnumDeclaration`).
 
 ## What this rule reports
 
@@ -12,7 +12,8 @@ This rule reports every `enum` declaration. Enums emit runtime JavaScript and ca
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+It enforces enum-free TypeScript style where literal unions and `as const`
+objects are preferred over enum runtime constructs.
 
 ## ❌ Incorrect
 
@@ -36,7 +37,9 @@ type Status = (typeof Status)[keyof typeof Status];
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration is typically to `as const` object patterns plus derived union types.
 
 ### Options
 
@@ -45,7 +48,19 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+enum HttpCode {
+    Ok = 200,
+    NotFound = 404,
+}
+// ❌ reported
+
+const HttpCode = {
+    Ok: 200,
+    NotFound: 404,
+} as const;
+
+type HttpCode = (typeof HttpCode)[keyof typeof HttpCode];
+// ✅ valid
 ```
 
 ## ESLint flat config example

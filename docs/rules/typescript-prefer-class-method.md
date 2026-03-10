@@ -4,7 +4,8 @@ Prefer class methods over untyped arrow-function class properties.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets class property definitions whose value is an arrow function
+and whose property itself has no explicit type annotation.
 
 ## What this rule reports
 
@@ -12,7 +13,8 @@ This rule reports class property arrow functions that have no explicit property 
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Method syntax is often clearer for class behavior and avoids extra per-instance
+function property declarations.
 
 ## ❌ Incorrect
 
@@ -32,7 +34,10 @@ class C {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+A typed function property (for example `x: () => void = () => {}`) is not
+reported by this rule.
 
 ### Options
 
@@ -41,7 +46,10 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+class C {
+    handler: () => void = () => {};
+}
+// ✅ valid (explicit property type annotation)
 ```
 
 ## ESLint flat config example
@@ -71,7 +79,7 @@ Disable this rule if class-property arrow functions are your preferred pattern.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript: Classes](https://www.typescriptlang.org/docs/handbook/2/classes.html)
 
 ## Adoption resources
 

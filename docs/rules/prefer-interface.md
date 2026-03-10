@@ -52,19 +52,27 @@ type Worker = Person | Robot;
 
 ## Behavior and migration notes
 
-This rule accepts one options object:
-
 Lifecycle: Deprecated and frozen since `v1.0.0` and available until `v2.0.0`.
 Use instead: [`@typescript-eslint/consistent-type-definitions`](https://typescript-eslint.io/rules/consistent-type-definitions).
 
+### Options
+
 ```ts
-type Options = {
-    allowIntersection?: boolean;
-    allowLocal?: boolean;
-};
+type Options = [
+    {
+        allowIntersection?: boolean;
+        allowLocal?: boolean;
+    }?,
+];
 ```
 
-Default behavior:
+### Default configuration
+
+```ts
+[{}]
+```
+
+Effective behavior with defaults:
 
 ```ts
 { allowIntersection: true, allowLocal: false }

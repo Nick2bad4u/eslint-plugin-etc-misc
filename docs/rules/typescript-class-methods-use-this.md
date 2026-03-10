@@ -4,7 +4,12 @@ Require non-static class methods to reference `this`.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule checks non-static class `MethodDefinition` nodes where:
+
+- `kind === "method"` (constructors/getters/setters are excluded),
+- the method has a block body,
+- the first parameter is **not** `this`, and
+- the method body does **not** contain a `ThisExpression`.
 
 ## What this rule reports
 
@@ -12,7 +17,8 @@ This rule reports class instance methods that do not use `this` and do not decla
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Instance methods that do not use instance state are often better expressed as
+static methods or standalone functions.
 
 ## ❌ Incorrect
 
@@ -51,7 +57,10 @@ class C {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is deprecated in favor of
+`@typescript-eslint/class-methods-use-this`.
+
+It reports only and does not provide an autofix.
 
 ### Options
 
@@ -59,15 +68,21 @@ This rule has no options.
 
 ### Status
 
-- **Lifecycle:** Deprecated and frozen.
-- **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
-- **Use instead:** [`@typescript-eslint/class-methods-use-this`](https://typescript-eslint.io/rules/class-methods-use-this)
+Use the **Deprecated** section above for lifecycle details.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+class Service {
+    static create() {
+        return new Service();
+    }
+
+    run() {
+        return this;
+    }
+}
+// ✅ static methods are outside this rule; instance method uses this
 ```
 
 ## ESLint flat config example
@@ -97,7 +112,7 @@ Disable this rule if methods that do not reference `this` are acceptable.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [@typescript-eslint/class-methods-use-this](https://typescript-eslint.io/rules/class-methods-use-this)
 
 ## Adoption resources
 

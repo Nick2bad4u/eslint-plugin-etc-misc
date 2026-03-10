@@ -4,7 +4,11 @@ Disallow optional boolean literal property types.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets optional interface/type property signatures where the type is
+the boolean literal `true` or `false`.
+
+It applies to `TSPropertySignature[optional=true]` with literal boolean type
+annotations.
 
 ## What this rule reports
 
@@ -12,7 +16,8 @@ This rule reports optional property declarations typed as `true` or `false`.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+For optional properties, literal boolean types are usually overly restrictive
+and are commonly intended to be `boolean`.
 
 ## ❌ Incorrect
 
@@ -32,7 +37,9 @@ interface Flags {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration is typically replacing `?: true` / `?: false` with `?: boolean`.
 
 ### Options
 
@@ -41,7 +48,15 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+interface Flags {
+    enabled?: false;
+}
+// ❌ reported
+
+interface FlagsFixed {
+    enabled?: boolean;
+}
+// ✅ valid
 ```
 
 ## ESLint flat config example
@@ -71,7 +86,7 @@ Disable this rule if optional literal booleans are part of your public type cont
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript: Interfaces](https://www.typescriptlang.org/docs/handbook/interfaces.html)
 
 ## Adoption resources
 

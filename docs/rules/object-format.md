@@ -62,6 +62,12 @@ type Options = [
 
 - `maxProperties`: maximum number of properties allowed on one line.
 
+### Default configuration
+
+```ts
+[{ maxProperties: 1 }]
+```
+
 ## Additional examples
 
 ```ts
@@ -104,7 +110,7 @@ wrapping strategy you want and this threshold approach conflicts with it.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [MDN: Object initializer](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Object_initializer)
 
 ## Adoption resources
 

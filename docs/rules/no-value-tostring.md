@@ -45,7 +45,13 @@ This rule forwards options to `@typescript-eslint/no-base-to-string`.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+declare const value: {};
+String(value);
+// ❌ reported by forwarded `no-base-to-string` behavior
+
+declare const value: Date;
+value.toString();
+// ✅ valid
 ```
 
 ## ESLint flat config example

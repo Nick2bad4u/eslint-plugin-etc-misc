@@ -64,7 +64,13 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+declare const maybeUnknown: unknown;
+throw maybeUnknown;
+// ✅ allowed (unknown is intentionally permitted)
+
+const payload = { code: "E_FAIL" };
+throw payload;
+// ❌ reported (not Error-like)
 ```
 
 ## ESLint flat config example

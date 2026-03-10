@@ -42,7 +42,21 @@ This rule forwards options and behavior to ESLint core `default-case`.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+switch (kind) {
+    case "a":
+        runA();
+        break;
+}
+// ❌ reported
+
+switch (kind) {
+    case "a":
+        runA();
+        break;
+    default:
+        throw new Error(`Unhandled kind: ${kind}`);
+}
+// ✅ valid
 ```
 
 ## ESLint flat config example

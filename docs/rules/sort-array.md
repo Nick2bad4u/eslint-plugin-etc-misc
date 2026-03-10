@@ -83,7 +83,7 @@ or display order), or when you need locale-specific/custom sorting semantics.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [MDN: `Array.prototype.sort()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/sort)
 
 ## Adoption resources
 

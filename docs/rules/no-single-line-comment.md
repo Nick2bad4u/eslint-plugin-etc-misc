@@ -33,6 +33,10 @@ const value = 1;
 
 ## Behavior and migration notes
 
+This rule reports only and does not provide an autofix.
+
+### Options
+
 ```ts
 type Options = [
     {
@@ -40,6 +44,8 @@ type Options = [
     }?,
 ];
 ```
+
+### Default configuration
 
 Default:
 
@@ -53,7 +59,17 @@ When `allowDirectiveComments` is `true`, comments such as
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// eslint-disable-next-line no-console
+console.log("x");
+// ✅ allowed by default (`allowDirectiveComments: true`)
+
+// TODO: refactor this
+const value = 1;
+// ❌ reported
+
+/* TODO: refactor this */
+const nextValue = 2;
+// ✅ valid
 ```
 
 ## ESLint flat config example

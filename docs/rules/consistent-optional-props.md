@@ -4,40 +4,78 @@ Disallow redundant undefined unions on optional properties.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets optional properties that redundantly include `undefined` in
+their union type.
+
+Covered nodes include:
+
+- interface/type property signatures (`TSPropertySignature`), and
+- class property definitions (`PropertyDefinition`).
 
 ## What this rule reports
 
-This rule enforces the documented pattern for `consistent-optional-props`.
+This rule reports `?` properties whose type union explicitly includes
+`undefined`.
+
+Example pattern:
+
+```ts
+name?: string | undefined;
+```
+
+Because `?` already implies `undefined`, the explicit union member is redundant.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Removing redundant `undefined` unions keeps type declarations smaller and easier
+to read.
 
 ## ❌ Incorrect
 
 ```ts
-// Example that violates this rule.
+interface User {
+    name?: string | undefined;
+}
+
+class Config {
+    timeoutMs?: number | undefined;
+}
 ```
 
 ## ✅ Correct
 
 ```ts
-// Example that follows this rule.
+interface User {
+    name?: string;
+}
+
+class Config {
+    timeoutMs?: number;
+}
 ```
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration is straightforward: remove `| undefined` from optional properties.
 
 ### Options
 
-This rule supports default behavior unless configured otherwise.
+This rule has no options.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+type Options = {
+    verbose?: boolean | undefined;
+};
+// ❌ reported
+
+type OptionsFixed = {
+    verbose?: boolean;
+};
+// ✅ valid
 ```
 
 ## ESLint flat config example
@@ -57,7 +95,8 @@ export default [
 
 ## When not to use it
 
-Disable this rule if the enforced convention does not fit your codebase requirements.
+Disable this rule if your codebase intentionally keeps explicit
+`| undefined` unions for documentation style.
 
 ## Package documentation
 
@@ -67,7 +106,7 @@ Disable this rule if the enforced convention does not fit your codebase requirem
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript: Optional Properties](https://www.typescriptlang.org/docs/handbook/interfaces.html#optional-properties)
 
 ## Adoption resources
 

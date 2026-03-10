@@ -84,7 +84,7 @@ steps, chronological logs, or legal blocks with fixed sequence.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [MDN: `String.prototype.localeCompare()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare)
 
 ## Adoption resources
 

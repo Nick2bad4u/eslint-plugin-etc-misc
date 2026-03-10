@@ -4,7 +4,10 @@ Disallow empty interfaces without `extends` clauses.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets interface declarations where:
+
+- `body.body.length === 0` (no members), and
+- `extends.length === 0` (no base interfaces).
 
 ## What this rule reports
 
@@ -12,7 +15,8 @@ This rule reports interfaces that declare no members and no base interfaces.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+An empty interface with no inheritance usually adds no type information and can
+often be replaced by a more explicit construct.
 
 ## ❌ Incorrect
 
@@ -37,7 +41,10 @@ interface I {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is deprecated in favor of
+`@typescript-eslint/no-empty-object-type`.
+
+It reports only and does not provide an autofix.
 
 ### Options
 
@@ -45,15 +52,16 @@ This rule has no options.
 
 ### Status
 
-- **Lifecycle:** Deprecated and frozen.
-- **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
-- **Use instead:** [`@typescript-eslint/no-empty-object-type`](https://typescript-eslint.io/rules/no-empty-object-type)
+Use the **Deprecated** section above for lifecycle details.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+interface Marker extends Base {}
+// ✅ valid: extends is present
+
+interface Empty {}
+// ❌ reported
 ```
 
 ## ESLint flat config example
@@ -83,7 +91,7 @@ Disable this rule if marker interfaces are intentionally used in your project.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [@typescript-eslint/no-empty-object-type](https://typescript-eslint.io/rules/no-empty-object-type)
 
 ## Adoption resources
 

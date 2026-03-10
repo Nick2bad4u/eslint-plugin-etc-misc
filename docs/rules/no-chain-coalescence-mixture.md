@@ -84,7 +84,8 @@ Disable this rule if your project permits `?.` and `??` in the same expression.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [MDN: Optional chaining (`?.`)](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Optional_chaining)
+- [MDN: Nullish coalescing (`??`)](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing)
 
 ## Adoption resources
 

@@ -43,7 +43,13 @@ This rule forwards options and behavior to
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+/* eslint-disable no-console */
+console.log("debug");
+// ✅ valid: disable is used
+
+/* eslint-disable no-console */
+const value = 1;
+// ❌ reported: disable directive is unused
 ```
 
 ## ESLint flat config example

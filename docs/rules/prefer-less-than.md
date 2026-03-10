@@ -50,7 +50,15 @@ operator:
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+if (score >= threshold) {
+    pass();
+}
+// ❌ reported and auto-fixable to `threshold <= score`
+
+if (threshold <= score) {
+    pass();
+}
+// ✅ valid
 ```
 
 ## ESLint flat config example

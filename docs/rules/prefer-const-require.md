@@ -46,7 +46,12 @@ nearest-scope `const` bindings with descriptive names.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+logger.info(require("node:os").platform());
+// ❌ reported: inline require call
+
+const os = require("node:os");
+logger.info(os.platform());
+// ✅ valid
 ```
 
 ## ESLint flat config example

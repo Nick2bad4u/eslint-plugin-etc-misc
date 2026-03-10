@@ -95,7 +95,7 @@ Disable this rule if your codebase intentionally requires `node:`-prefixed impor
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [Node.js: Built-in modules and `node:` specifiers](https://nodejs.org/api/modules.html#built-in-modules)
 
 ## Adoption resources
 

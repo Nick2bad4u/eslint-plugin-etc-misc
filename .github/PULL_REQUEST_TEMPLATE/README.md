@@ -1,4 +1,4 @@
-# Pull Request Templates
+# Pull request templates
 
 Use the shortest template that fits your PR:
 
@@ -6,5 +6,11 @@ Use the shortest template that fits your PR:
 - `bugfix.md` for defect fixes
 - `maintenance.md` for refactors/deps/chore work
 - `documentation.md` for docs-only changes
-- `quick-fix.md` for tiny, low-risk fixes
+- `quick-fix.md` for small, low-risk fixes
 - `pull_request_template.md` as the default fallback
+
+Before opening a PR, run the main local quality gate from the repository root:
+
+- `npm run lint:all:fix:quiet`
+- `npm run typecheck`
+- `npm test`

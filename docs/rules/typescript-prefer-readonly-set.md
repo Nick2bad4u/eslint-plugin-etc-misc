@@ -4,7 +4,7 @@ Require `ReadonlySet` instead of `Set` in type positions.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets `Set` identifier references in TypeScript type references.
 
 ## What this rule reports
 
@@ -12,7 +12,7 @@ This rule reports `Set` type references in TypeScript annotations.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+`ReadonlySet` makes immutability expectations explicit for API consumers.
 
 ## ❌ Incorrect
 
@@ -28,7 +28,10 @@ function f(values: ReadonlySet<string>) {}
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration is usually replacing `Set<T>` with `ReadonlySet<T>` in type
+positions.
 
 ### Options
 
@@ -37,7 +40,11 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+type AllowedRoles = Set<string>;
+// ❌ reported
+
+type AllowedRolesView = ReadonlySet<string>;
+// ✅ valid
 ```
 
 ## ESLint flat config example
@@ -67,7 +74,7 @@ Disable this rule if mutable sets are expected throughout your codebase.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript lib: ReadonlySet](https://github.com/microsoft/TypeScript/blob/main/src/lib/es2015.collection.d.ts)
 
 ## Adoption resources
 

@@ -6,7 +6,11 @@ Disallow usage of symbols tagged with `@deprecated`.
 
 ⚠️ This rule requires type information to run. Configure type-aware linting (`parserOptions.project` or `projectService`) before enabling it.
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule inspects identifier *usages* and resolves each identifier to a
+TypeScript symbol.
+
+If the resolved symbol has one or more `@deprecated` JSDoc tags, usage is
+reported (unless ignored by configuration).
 
 ## What this rule reports
 
@@ -17,11 +21,10 @@ APIs are removed.
 This rule reports identifier usages whose resolved TypeScript symbol includes
 one or more `@deprecated` tags.
 
-> ⚠️ This rule requires type information to run.
-
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+It helps enforce deprecation cleanup and prevents new usage of APIs scheduled
+for removal.
 
 ## ❌ Incorrect
 
@@ -66,7 +69,9 @@ declare function legacyMethod(): void;
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is deprecated in favor of `@typescript-eslint/no-deprecated`.
+
+It reports only and does not provide an autofix.
 
 ### Options
 
@@ -117,15 +122,20 @@ export default [
 
 ### Status
 
-- **Lifecycle:** Deprecated and frozen.
-- **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
-- **Use instead:** [`@typescript-eslint/no-deprecated`](https://typescript-eslint.io/rules/no-deprecated)
+Use the **Deprecated** section above for lifecycle details.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+/** @deprecated internal migration shim */
+declare const legacyApi: () => void;
+
+legacyApi();
+// ❌ reported
+
+// config: { ignored: { "^legacyApi$": "name" } }
+legacyApi();
+// ✅ ignored by option
 ```
 
 ## ESLint flat config example

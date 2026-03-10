@@ -4,7 +4,8 @@ Require construct signatures to be the first member in interfaces.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets `TSConstructSignatureDeclaration` nodes that are not the
+first child in an interface body.
 
 ## What this rule reports
 
@@ -12,7 +13,8 @@ This rule reports interface construct signatures when they are not the first mem
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Putting construct signatures first gives constructor-like interfaces a
+predictable shape.
 
 ## ❌ Incorrect
 
@@ -34,7 +36,10 @@ interface I {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration is mechanical: move construct signatures above other interface
+members.
 
 ### Options
 
@@ -43,7 +48,17 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+interface Factory {
+    id: string;
+    new (): FactoryInstance;
+}
+// ❌ construct signature is not first
+
+interface FactoryFixed {
+    new (): FactoryInstance;
+    id: string;
+}
+// ✅ valid
 ```
 
 ## ESLint flat config example

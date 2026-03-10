@@ -85,7 +85,7 @@ Disable this rule if your project prefers explicit `undefined` initializers for 
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [MDN: `undefined`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined)
 
 ## Adoption resources
 

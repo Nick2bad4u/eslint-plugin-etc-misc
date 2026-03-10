@@ -4,7 +4,10 @@ Require type annotations for class properties without initializers.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets class `PropertyDefinition` nodes where both are true:
+
+- `typeAnnotation` is missing, and
+- `value` is `null` (no initializer).
 
 ## What this rule reports
 
@@ -12,7 +15,7 @@ This rule reports class properties that have no initializer and no type annotati
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Uninitialized properties without annotations leave property type intent unclear.
 
 ## ❌ Incorrect
 
@@ -32,7 +35,10 @@ class C {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration is adding explicit property type annotations for uninitialized
+declarations.
 
 ### Options
 
@@ -41,7 +47,13 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+class User {
+    name = "anonymous";
+    // ✅ valid: initializer provides type
+
+    role;
+    // ❌ reported: no initializer and no annotation
+}
 ```
 
 ## ESLint flat config example
@@ -71,7 +83,7 @@ Disable this rule if implicit `any`-style property declarations are allowed.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript: Classes](https://www.typescriptlang.org/docs/handbook/2/classes.html)
 
 ## Adoption resources
 

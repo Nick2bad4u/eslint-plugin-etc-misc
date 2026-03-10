@@ -4,7 +4,12 @@ Disallow syntax matched by configured AST selectors.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule reports any AST node matched by configured selector entries.
+
+Each entry can be:
+
+- a selector string, or
+- an object with `selector` and optional custom `message`.
 
 ## What this rule reports
 
@@ -12,7 +17,7 @@ This rule reports nodes selected by any configured selector in `selectors`.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+It provides a general escape hatch for enforcing project-specific syntax bans.
 
 ## ❌ Incorrect
 
@@ -51,33 +56,50 @@ with options:
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is deprecated in favor of ESLint core `no-restricted-syntax`.
+
+It reports only and does not provide an autofix.
 
 ### Options
 
 ```ts
-type Options = {
-    selectors?: Array<
-        | string
-        | {
-              message?: string;
-              selector: string;
-          }
-    >;
-};
+type Options = [
+    {
+        selectors?: Array<
+            | string
+            | {
+                  message?: string;
+                  selector: string;
+              }
+        >;
+    },
+];
 ```
+
+### Default configuration
+
+```ts
+[{ selectors: [] }]
+```
+
+With the default empty selector list, this rule does not report anything until
+you configure selectors.
 
 ### Status
 
-- **Lifecycle:** Deprecated and frozen.
-- **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
-- **Use instead:** [`no-restricted-syntax`](https://eslint.org/docs/latest/rules/no-restricted-syntax)
+Use the **Deprecated** section above for lifecycle details.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// config:
+// {
+//   selectors: [
+//     { selector: "CallExpression[callee.name='setTimeout']", message: "Use scheduler API" }
+//   ]
+// }
+setTimeout(() => {}, 1000);
+// ❌ reported with custom message
 ```
 
 ## ESLint flat config example
@@ -110,7 +132,7 @@ Disable this rule if your project does not rely on selector-based syntax restric
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [ESLint core: no-restricted-syntax](https://eslint.org/docs/latest/rules/no-restricted-syntax)
 
 ## Adoption resources
 

@@ -4,40 +4,53 @@ Enforce alphabetical sorting of named export specifiers.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule inspects `ExportNamedDeclaration` nodes that have at least two
+`ExportSpecifier` entries.
+
+Specifiers are sorted alphabetically by exported name.
 
 ## What this rule reports
 
-This rule enforces the documented pattern for `sort-export-specifiers`.
+This rule reports named export declarations whose specifier order is not
+alphabetical.
+
+It includes an autofix that rewrites the specifier segment.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Alphabetical export lists are easier to scan and reduce merge conflict noise.
 
 ## ❌ Incorrect
 
 ```ts
-// Example that violates this rule.
+export { zebra, alpha };
 ```
 
 ## ✅ Correct
 
 ```ts
-// Example that follows this rule.
+export { alpha, zebra };
 ```
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is fixable.
+
+Because the fixer rewrites text in the specifier range, review `--fix` changes
+carefully when using alias exports or complex formatting.
 
 ### Options
 
-This rule supports default behavior unless configured otherwise.
+This rule has no options.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+export { C, A, B };
+// ❌ reported, auto-fixed to A, B, C
+
+export { A, B, C };
+// ✅ valid
 ```
 
 ## ESLint flat config example
@@ -57,7 +70,8 @@ export default [
 
 ## When not to use it
 
-Disable this rule if the enforced convention does not fit your codebase requirements.
+Disable this rule if export ordering is intentionally semantic rather than
+alphabetical.
 
 ## Package documentation
 
@@ -67,7 +81,7 @@ Disable this rule if the enforced convention does not fit your codebase requirem
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [MDN: `export`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export)
 
 ## Adoption resources
 

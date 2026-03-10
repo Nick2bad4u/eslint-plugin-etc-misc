@@ -4,7 +4,10 @@ Disallow TypeScript `const enum` declarations.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule inspects `TSEnumDeclaration` nodes and reports when the declaration is
+marked `const`.
+
+With `allowLocal: true`, non-exported `const enum` declarations are allowed.
 
 ## What this rule reports
 
@@ -12,7 +15,8 @@ This rule reports `const enum` declarations. `const enum` relies on TypeScript-s
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+`const enum` depends on compile-time inlining semantics that can break in mixed
+toolchains and isolated transpilation flows.
 
 ## ❌ Incorrect
 
@@ -34,7 +38,12 @@ enum Status {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration options:
+
+- convert `const enum` to regular `enum`, or
+- replace with `as const` object + union type.
 
 ### Options
 
@@ -53,7 +62,16 @@ When `true`, non-exported `const enum` declarations are allowed.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// config: { allowLocal: true }
+const enum LocalKind {
+    A,
+}
+// ✅ allowed when not exported
+
+export const enum PublicKind {
+    A,
+}
+// ❌ still reported
 ```
 
 ## ESLint flat config example

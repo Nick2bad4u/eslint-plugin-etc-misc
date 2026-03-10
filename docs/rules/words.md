@@ -41,7 +41,11 @@ This rule forwards options and behavior to
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// It should probably maybe work for most inputs.
+// ❌ likely reported by write-good-comments checks
+
+// Handles positive integers and returns false for negative values.
+// ✅ clearer and more precise
 ```
 
 ## ESLint flat config example

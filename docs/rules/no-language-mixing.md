@@ -4,7 +4,10 @@ Disallow mixed-language tokens combining latin and non-latin letters.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule checks string literals and template literal raw segments.
+
+It reports tokens that mix latin letters with non-latin letters in the same
+word-like segment.
 
 ## What this rule reports
 
@@ -12,7 +15,8 @@ This rule reports string and template content where latin and non-latin characte
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Mixed-script tokens can hide confusable text and reduce readability in
+internationalized codebases.
 
 ## ❌ Incorrect
 
@@ -31,7 +35,9 @@ const z = "абв";
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migrate by separating scripts per token or using one script consistently.
 
 ### Options
 
@@ -40,7 +46,11 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const message = `пользователь id42`;
+// ✅ each token is single-script or numeric
+
+const mixed = `пользовательId42`;
+// ❌ reported (mixed script token)
 ```
 
 ## ESLint flat config example

@@ -6,7 +6,11 @@ Disallow usage of symbols tagged with `@internal`.
 
 ⚠️ This rule requires type information to run. Configure type-aware linting (`parserOptions.project` or `projectService`) before enabling it.
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule inspects identifier *usages* and resolves each identifier to a
+TypeScript symbol.
+
+If the resolved symbol has one or more `@internal` JSDoc tags, usage is
+reported (unless ignored via configuration).
 
 ## What this rule reports
 
@@ -14,14 +18,13 @@ APIs marked as `@internal` are implementation details that can change without
 notice. Referencing them from external call sites couples your code to unstable
 contracts and makes upgrades risky.
 
-This rule reports identifier usages whose resolved TypeScript symbol includes one
-or more `@internal` tags.
-
-> ⚠️ This rule requires type information to run.
+This rule reports identifier usages whose resolved TypeScript symbol includes
+one or more `@internal` tags.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+It prevents accidental dependency on unstable internals that are intentionally
+outside a package's supported API surface.
 
 ## ❌ Incorrect
 
@@ -62,7 +65,10 @@ interface InternalType {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+It ignores declaration identifiers and import/export specifier identifiers, and
+focuses on usage sites resolved through TypeScript symbol information.
 
 ### Options
 
@@ -114,7 +120,15 @@ export default [
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+/** @internal Internal helper */
+export declare const __internalThing: string;
+
+const value = __internalThing;
+// ❌ reported
+
+// config: { ignored: { "^__internalThing$": "name" } }
+const ignoredValue = __internalThing;
+// ✅ ignored by configuration
 ```
 
 ## ESLint flat config example

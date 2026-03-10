@@ -99,7 +99,7 @@ Disable this rule if your build tooling intentionally supports self-import patte
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [eslint-plugin-import: `no-self-import`](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-self-import.md)
 
 ## Adoption resources
 

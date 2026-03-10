@@ -4,12 +4,15 @@ Disallow additional exports alongside a default export.
 
 ## Targeted pattern scope
 
-This rule targets modules that contain a `default` export together with at
-least one additional export declaration.
+This rule targets program bodies where both are true:
+
+- a `default` export exists, and
+- the file has more than one top-level statement.
 
 ## What this rule reports
 
-This rule reports files where default and named exports are mixed.
+This rule reports files that contain `export default` plus any additional
+top-level statement (including non-export statements).
 
 ## Why this rule exists
 
@@ -42,7 +45,12 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+export default function main() {}
+const helper = 1;
+// ❌ reported by current implementation (second top-level statement)
+
+export default function main() {}
+// ✅ valid
 ```
 
 ## ESLint flat config example

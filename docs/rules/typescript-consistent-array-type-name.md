@@ -4,15 +4,26 @@ Enforce consistent naming for array-like type aliases.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets `type` aliases whose annotation is array-like:
+
+- `TSArrayType` (`T[]`)
+- `TSTupleType` (`[A, B]`)
+- `TSTypeReference` to `Array<...>`
+
+It then validates the alias identifier against a naming pattern.
 
 ## What this rule reports
 
-This rule reports array-like type aliases whose names do not end in `Array` or `s`.
+This rule reports array-like type aliases whose names do not match:
+
+`^(?:[A-Z][a-z\d]*)+(?:Array|s)$`
+
+In practice, this expects PascalCase names ending in `Array` or `s`.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+It enforces predictable naming for collection-like aliases so usage intent is
+obvious at call sites.
 
 ## ❌ Incorrect
 
@@ -29,7 +40,9 @@ type ItemArray = Array<string>;
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration is typically renaming the type alias and updating references.
 
 ### Options
 
@@ -38,7 +51,11 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+type User = [id: string, name: string];
+// ❌ reported
+
+type Users = [id: string, name: string];
+// ✅ valid
 ```
 
 ## ESLint flat config example
@@ -68,7 +85,7 @@ Disable this rule if your team does not enforce array-type alias naming conventi
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript: Everyday Types](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html)
 
 ## Adoption resources
 

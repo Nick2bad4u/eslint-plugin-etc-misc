@@ -38,7 +38,11 @@ This rule forwards options and behavior to `unicorn/throw-new-error`.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+throw TypeError("invalid");
+// ❌ reported by forwarded unicorn rule
+
+throw new TypeError("invalid");
+// ✅ valid
 ```
 
 ## ESLint flat config example

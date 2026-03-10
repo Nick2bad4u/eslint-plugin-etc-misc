@@ -68,7 +68,7 @@ const partial = {
     [dynamicKey]: 1,
     a: 1,
 };
-// ⚠️ contains a computed key; sorting behavior is intentionally conservative
+// ❌ reported: non-computed initializer keys (`b`, `a`) are still checked
 ```
 
 ## ESLint flat config example
@@ -99,7 +99,7 @@ sections, execution sequence, or business-priority grouping).
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [ESLint: `sort-keys`](https://eslint.org/docs/latest/rules/sort-keys)
 
 ## Adoption resources
 

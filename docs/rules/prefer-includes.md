@@ -40,7 +40,11 @@ This rule forwards options and behavior to `unicorn/prefer-includes`.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const hasName = names.indexOf("alice") > -1;
+// ❌ reported
+
+const hasName2 = names.includes("alice");
+// ✅ valid
 ```
 
 ## ESLint flat config example

@@ -1,22 +1,66 @@
 ---
 name: Bug report
-about: Report a reproducible bug in Uptime Watcher
+about: Report a reproducible bug in eslint-plugin-etc-misc
 title: "[Bug]: "
-labels: [bug]
+labels: [bug, triage]
 assignees: []
 ---
 
-### What happened?
+# Bug report
 
-### Steps to reproduce
-1.
-2.
-3.
+## Summary
 
-### Expected behavior
+<!-- Clear, concise description of the bug. -->
 
-### Environment
+## Reproduction
+
+<!--
+Please provide a minimal reproducible example. Prefer a small code sample
+with a Flat Config snippet.
+-->
+
+### Flat config
+
+```mjs
+// eslint.config.mjs
+```
+
+### Input code
+
+```ts
+// code that triggers the issue
+```
+
+### Command
+
+```bash
+npx eslint .
+```
+
+## Current behavior
+
+Describe what actually happened.
+
+## Expected behavior
+
+Describe what you expected to happen instead.
+
+## Environment
+
 - OS:
-- App version/commit:
+- Node.js version:
+- npm version:
+- TypeScript version:
+- ESLint version:
+- `@typescript-eslint/parser` version:
+- `eslint-plugin-etc-misc` version:
 
-### Logs/screenshots (optional)
+## Additional context
+
+<!-- Logs, stack traces, screenshots, and related links. -->
+
+## Checklist
+
+- [ ] I searched existing issues to avoid duplicates.
+- [ ] I can reproduce this on the latest released version (or on `main`).
+- [ ] I included a minimal reproduction and relevant versions.

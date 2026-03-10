@@ -4,40 +4,63 @@ Prefer enums over string literal comparisons and unions.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+⚠️ This rule requires type information to run. Configure type-aware linting (`parserOptions.project` or `projectService`) before enabling it.
+
+This rule reports three patterns:
+
+- string literal comparisons against enum-like expressions,
+- string literal `return` values from enum-like return contexts,
+- type aliases that are pure unions of multiple string literals.
 
 ## What this rule reports
 
-This rule enforces the documented pattern for `typescript/prefer-enum`.
+This rule reports opportunities to replace string-literal-based state modeling
+with enum members.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Enums centralize allowed values and reduce drift between string literals spread
+across comparisons, returns, and type unions.
 
 ## ❌ Incorrect
 
 ```ts
-// Example that violates this rule.
+type Status = "open" | "closed";
+// ❌ reported (pure string-literal union)
 ```
 
 ## ✅ Correct
 
 ```ts
-// Example that follows this rule.
+enum Status {
+    Open = "open",
+    Closed = "closed",
+}
 ```
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Because it uses type analysis for enum-like checks, ensure parser services are
+enabled in lint configuration.
 
 ### Options
 
-This rule supports default behavior unless configured otherwise.
+This rule has no options.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+enum Status {
+    Open = "open",
+    Closed = "closed",
+}
+
+const getStatus = (): Status => {
+    return "open";
+};
+// ❌ reported (string literal return in enum-like return context)
 ```
 
 ## ESLint flat config example
@@ -57,7 +80,8 @@ export default [
 
 ## When not to use it
 
-Disable this rule if the enforced convention does not fit your codebase requirements.
+Disable this rule if string literal unions are preferred over enums in your
+project's type design.
 
 ## Package documentation
 
@@ -67,7 +91,7 @@ Disable this rule if the enforced convention does not fit your codebase requirem
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript-ESLint: Typed Linting](https://typescript-eslint.io/getting-started/typed-linting)
 
 ## Adoption resources
 

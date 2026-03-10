@@ -4,7 +4,11 @@ Disallow complex inferred declarator types without explicit annotation.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets variable declarators whose identifier has no explicit type
+annotation.
+
+It is intended to catch complex inferred declarators and prompt an explicit
+annotation (or `as const`, where appropriate).
 
 ## What this rule reports
 
@@ -12,7 +16,8 @@ This rule reports variable declarators with complex assertions/inference when no
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Complex inferred declarations can obscure the intended variable contract,
+especially when assertions are involved.
 
 ## ❌ Incorrect
 
@@ -28,7 +33,9 @@ const value: () => number = (() => 1) as (() => number);
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration is usually adding an explicit annotation to the declarator identifier.
 
 ### Options
 
@@ -37,7 +44,21 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const model = {
+    run() {
+        return 1;
+    },
+} as {
+    run(): number;
+};
+// ❌ reported without an explicit declarator annotation
+
+const typedModel: { run(): number } = {
+    run() {
+        return 1;
+    },
+};
+// ✅ valid
 ```
 
 ## ESLint flat config example
@@ -67,7 +88,7 @@ Disable this rule if your project allows complex inferred declarator types witho
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript: Type Inference](https://www.typescriptlang.org/docs/handbook/type-inference.html)
 
 ## Adoption resources
 

@@ -29,6 +29,7 @@
         }
     ],
     "sideEffects": false,
+    "main": "index.js",
     "files": [
         "site-docs"
     ],
@@ -106,5 +107,10 @@
     "engines": {
         "node": ">=20.19.0",
         "npm": ">=11.0.0"
-    }
+    },
+    "os": [
+        "darwin",
+        "linux",
+        "win32"
+    ]
 }

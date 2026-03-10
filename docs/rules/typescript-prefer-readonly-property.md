@@ -4,7 +4,8 @@ Require readonly class and interface properties.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets class properties (`PropertyDefinition`) and interface/type
+property signatures (`TSPropertySignature`) where `readonly !== true`.
 
 ## What this rule reports
 
@@ -12,7 +13,8 @@ This rule reports writable `PropertyDefinition` and `TSPropertySignature` member
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Readonly property declarations make mutation boundaries explicit and reduce
+accidental state changes.
 
 ## ❌ Incorrect
 
@@ -32,7 +34,9 @@ class C {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Use it where immutability is the default design policy.
 
 ### Options
 
@@ -41,7 +45,15 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+interface Settings {
+    mode: "dark" | "light";
+}
+// ❌ reported
+
+interface ReadonlySettings {
+    readonly mode: "dark" | "light";
+}
+// ✅ valid
 ```
 
 ## ESLint flat config example
@@ -71,7 +83,7 @@ Disable this rule if mutable properties are part of your coding conventions.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript: readonly properties](https://www.typescriptlang.org/docs/handbook/interfaces.html#readonly-properties)
 
 ## Adoption resources
 

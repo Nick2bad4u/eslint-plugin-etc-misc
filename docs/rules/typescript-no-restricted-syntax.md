@@ -4,26 +4,37 @@ Disallow syntax using selector rules with optional type-group filters.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule is a TypeScript-prefixed alias of the plugin's
+`no-restricted-syntax` rule.
+
+It reports nodes that match configured AST selectors.
 
 ## What this rule reports
 
-This rule enforces the documented pattern for `typescript/no-restricted-syntax`.
+This rule reports selector matches using either:
+
+- a default message (`Disallowed syntax.`), or
+- a custom per-selector message when configured.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Selector-based restrictions let teams ban precise syntax shapes without writing
+custom rules.
 
 ## ❌ Incorrect
 
 ```ts
-// Example that violates this rule.
+// config: { selectors: ["WithStatement"] }
+with (obj) {
+    doWork();
+}
 ```
 
 ## ✅ Correct
 
 ```ts
-// Example that follows this rule.
+// config: { selectors: ["WithStatement"] }
+doWork();
 ```
 
 ## Deprecated
@@ -35,23 +46,42 @@ Consistent, explicit patterns improve readability, reduce review friction, and p
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is deprecated in favor of
+`@typescript-eslint/no-restricted-syntax`.
+
+It reports only and does not provide an autofix.
 
 ### Options
 
-This rule supports default behavior unless configured otherwise.
+```ts
+type Options = [
+    {
+        selectors?: Array<string | { message?: string; selector: string }>;
+    },
+];
+```
+
+Default:
+
+```json
+{ "selectors": [] }
+```
 
 ### Status
 
-- **Lifecycle:** Deprecated and frozen.
-- **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
-- **Use instead:** [`@typescript-eslint/no-restricted-syntax`](https://typescript-eslint.io/rules/no-restricted-syntax)
+Use the **Deprecated** section above for lifecycle details.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// config
+// {
+//   selectors: [
+//     { selector: "CallExpression[callee.name='eval']", message: "Avoid eval." }
+//   ]
+// }
+eval("2 + 2");
+// ❌ reported with custom message
 ```
 
 ## ESLint flat config example
@@ -71,7 +101,7 @@ export default [
 
 ## When not to use it
 
-Disable this rule if the enforced convention does not fit your codebase requirements.
+Disable this rule if your project does not rely on selector-driven syntax bans.
 
 ## Package documentation
 
@@ -81,7 +111,7 @@ Disable this rule if the enforced convention does not fit your codebase requirem
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [@typescript-eslint/no-restricted-syntax](https://typescript-eslint.io/rules/no-restricted-syntax)
 
 ## Adoption resources
 

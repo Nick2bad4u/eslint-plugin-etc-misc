@@ -4,15 +4,22 @@ Disallow sibling-file imports from the current directory.
 
 ## Targeted pattern scope
 
-This rule checks module source strings in import/export syntax and reports
-sources matching `./*` by default.
+This rule checks module source strings in:
+
+- `import ... from "..."`
+- `export ... from "..."`
+- `export * from "..."`
+- dynamic `import("...")`
+
+It reports sources matching `./*` by default.
 
 It is built on the same glob-based import-pattern engine as
 `disallow-import`.
 
 ## What this rule reports
 
-This rule reports source paths that match `./*` by default.
+This rule reports source paths that match configured `disallow` glob patterns
+and are not exempted by `allow` patterns.
 
 ## Why this rule exists
 
@@ -62,6 +69,9 @@ export { value } from "./value";
 
 export { value } from "../value";
 // ✅ valid
+
+await import("./runtime");
+// ❌ reported
 ```
 
 ## ESLint flat config example

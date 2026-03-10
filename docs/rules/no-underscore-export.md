@@ -52,7 +52,7 @@ This rule has no options.
 ```ts
 const _internal = 1;
 export { _internal };
-// note: this form is not part of the rule's direct selector coverage
+// ✅ currently not reported by this rule's selector coverage
 
 export const _apiToken = "x";
 // ❌ reported

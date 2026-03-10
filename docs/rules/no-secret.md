@@ -43,7 +43,11 @@ This rule forwards options and behavior to
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const password = "p@ssw0rd-12345";
+// ❌ likely reported by entropy/pattern checks
+
+const password = process.env.APP_PASSWORD;
+// ✅ preferred
 ```
 
 ## ESLint flat config example

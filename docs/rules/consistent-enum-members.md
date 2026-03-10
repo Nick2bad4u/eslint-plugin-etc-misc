@@ -13,8 +13,14 @@ It enforces SCREAMING_SNAKE_CASE in both places.
 
 ## What this rule reports
 
-This rule reports enum members that use non-SCREAMING_SNAKE_CASE naming in the
-member name, the string initializer value, or both.
+This rule reports enum members when **neither** of these matches
+SCREAMING_SNAKE_CASE:
+
+- the member identifier name, or
+- the string literal initializer value.
+
+In other words, the current implementation accepts a member if either side is
+already SCREAMING_SNAKE_CASE.
 
 ## Why this rule exists
 
@@ -42,7 +48,7 @@ enum Status {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
 
 ### Options
 
@@ -63,6 +69,12 @@ enum Permission {
     READ_WRITE = "READ_WRITE",
 }
 ```
+
+```ts
+enum Partial {
+    USER_CREATED = "user_created",
+}
+// ✅ currently accepted (name matches SCREAMING_SNAKE_CASE)
 
 ## ESLint flat config example
 

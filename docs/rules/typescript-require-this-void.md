@@ -4,7 +4,8 @@ Require `this: void` on static class methods.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets static class methods whose function expression parameters do
+not start with `this: void`.
 
 ## What this rule reports
 
@@ -12,7 +13,8 @@ This rule reports static class methods that do not declare a `this: void` parame
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+An explicit `this: void` parameter documents that static methods do not depend
+on a `this` context.
 
 ## ❌ Incorrect
 
@@ -32,7 +34,9 @@ class C {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration is adding `this: void` as the first static method parameter.
 
 ### Options
 
@@ -41,7 +45,19 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+class C {
+    static parse(this: C, value: string): C {
+        return new C();
+    }
+}
+// ❌ reported: first parameter is not `this: void`
+
+class D {
+    static parse(this: void, value: string): D {
+        return new D();
+    }
+}
+// ✅ valid
 ```
 
 ## ESLint flat config example
@@ -71,7 +87,7 @@ Disable this rule if your project does not enforce explicit static-method `this`
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript: this parameters](https://www.typescriptlang.org/docs/handbook/2/functions.html#declaring-this-in-a-function)
 
 ## Adoption resources
 

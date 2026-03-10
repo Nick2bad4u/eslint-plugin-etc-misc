@@ -4,26 +4,41 @@ Enforce alphabetical sorting of class members.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule inspects `ClassBody` members and checks alphabetical order of member
+names.
+
+Supported sortable keys:
+
+- identifier keys (`foo`)
+- string literal keys (`"foo"`)
+
+Members with unsupported/computed names are skipped.
 
 ## What this rule reports
 
-This rule enforces the documented pattern for `sort-class-members`.
+This rule reports the first class member that appears out of alphabetical order.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Alphabetical member ordering can reduce merge conflicts and make large classes
+more predictable to scan.
 
 ## ❌ Incorrect
 
 ```ts
-// Example that violates this rule.
+class Example {
+    zebra(): void {}
+    alpha(): void {}
+}
 ```
 
 ## ✅ Correct
 
 ```ts
-// Example that follows this rule.
+class Example {
+    alpha(): void {}
+    zebra(): void {}
+}
 ```
 
 ## Deprecated
@@ -35,23 +50,32 @@ Consistent, explicit patterns improve readability, reduce review friction, and p
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule is deprecated in favor of dedicated sorting plugins.
+
+It reports only and does not provide an autofix.
 
 ### Options
 
-This rule supports default behavior unless configured otherwise.
+This rule has no options.
 
 ### Status
 
-- **Lifecycle:** Deprecated and frozen.
-- **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
-- **Use instead:** [`sort-class-members/sort-class-members`](https://www.npmjs.com/package/eslint-plugin-sort-class-members) or [Perfectionist sorting rules](https://perfectionist.dev/)
+Use the **Deprecated** section above for lifecycle details.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+class Tokens {
+    "a-token" = "#000";
+    "z-token" = "#fff";
+}
+// ✅ valid
+
+class WithComputed {
+    [dynamicKey](): void {}
+    alpha(): void {}
+}
+// computed member names are not directly sortable by this rule
 ```
 
 ## ESLint flat config example
@@ -71,7 +95,8 @@ export default [
 
 ## When not to use it
 
-Disable this rule if the enforced convention does not fit your codebase requirements.
+Disable this rule if class member order is semantic (lifecycle grouping,
+public/private sections) rather than lexical.
 
 ## Package documentation
 
@@ -81,7 +106,8 @@ Disable this rule if the enforced convention does not fit your codebase requirem
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [eslint-plugin-sort-class-members](https://www.npmjs.com/package/eslint-plugin-sort-class-members)
+- [Perfectionist sorting rules](https://perfectionist.dev/)
 
 ## Adoption resources
 

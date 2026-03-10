@@ -4,15 +4,21 @@ Require defining function properties in a single statement.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule currently matches assignment expressions where the left-hand side is
+a member expression with an identifier object (for example `obj.x = ...`).
+
+Although the rule name focuses on function properties, the selector is
+syntactic and does not verify that the identifier is actually a function.
 
 ## What this rule reports
 
-This rule reports assignment expressions that attach properties to functions in separate statements.
+This rule reports assignment expressions where an identifier-based member is on
+the left side (for example `name.prop = value`).
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+The intended style is to define callable values and attached properties together
+in one expression (commonly via `Object.assign`).
 
 ## ❌ Incorrect
 
@@ -29,7 +35,10 @@ const f = Object.assign(() => {}, { x: 1 });
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+If you need stricter semantic behavior (function-only enforcement), supplement
+with additional lint rules or custom checks.
 
 ### Options
 
@@ -38,7 +47,12 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const factory = Object.assign(() => 1, { cache: new Map() });
+// ✅ valid
+
+const obj = {};
+obj.version = 1;
+// ❌ currently reported because selector is syntactic
 ```
 
 ## ESLint flat config example
@@ -68,7 +82,7 @@ Disable this rule if function property assignment across statements is accepted 
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [MDN: Object.assign](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
 
 ## Adoption resources
 

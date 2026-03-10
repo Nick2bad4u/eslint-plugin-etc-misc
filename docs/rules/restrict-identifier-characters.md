@@ -4,7 +4,13 @@ Require identifiers to contain only english characters, digits, underscore, or d
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule checks all identifier names and reports names containing characters
+outside this allowed set:
+
+- ASCII letters (`A-Z`, `a-z`)
+- digits (`0-9`)
+- underscore (`_`)
+- dollar sign (`$`)
 
 ## What this rule reports
 
@@ -12,7 +18,8 @@ This rule reports identifiers that include characters outside `$`, latin letters
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+It enforces ASCII-only identifier naming for repositories that prioritize
+uniform tooling behavior and readability across locales.
 
 ## ❌ Incorrect
 
@@ -28,7 +35,9 @@ const $x1 = 2;
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration usually involves renaming identifiers and adjusting references.
 
 ### Options
 
@@ -37,7 +46,11 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+function приветствие(): void {}
+// ❌ reported
+
+function greetingMessage(): void {}
+// ✅ valid
 ```
 
 ## ESLint flat config example

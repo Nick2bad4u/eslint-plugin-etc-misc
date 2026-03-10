@@ -4,7 +4,15 @@ Require consistent kebab-case Symbol descriptions.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule inspects `Symbol("...")` calls where the description argument is a
+string literal.
+
+Descriptions must match this kebab-style character set:
+
+- lowercase letters (`a-z`)
+- digits (`0-9`)
+- hyphen (`-`)
+- double underscore separator (`__`)
 
 ## What this rule reports
 
@@ -12,12 +20,14 @@ This rule reports `Symbol(...)` descriptions that are not lower-case kebab-case 
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Consistent symbol descriptions improve debugging output and cross-module symbol
+naming hygiene.
 
 ## ❌ Incorrect
 
 ```ts
 const x = Symbol("PascalCase");
+const y = Symbol("contains spaces");
 ```
 
 ## ✅ Correct
@@ -28,7 +38,9 @@ const x = Symbol("kebab-case__kebab-case");
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migrate by renaming descriptions to lowercase kebab-style tokens.
 
 ### Options
 
@@ -37,7 +49,11 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const id = Symbol("cache-key__v2");
+// ✅ valid
+
+const bad = Symbol("Cache_Key");
+// ❌ reported
 ```
 
 ## ESLint flat config example
@@ -68,7 +84,6 @@ Disable this rule if your codebase intentionally allows other naming styles for 
 ## Further reading
 
 - [MDN: `Symbol()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Symbol/Symbol)
-- [MDN: Template literals](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Template_literals)
 
 ## Adoption resources
 

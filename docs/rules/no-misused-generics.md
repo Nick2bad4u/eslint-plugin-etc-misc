@@ -4,6 +4,8 @@ Disallow generic type parameters that cannot be inferred or that do not enforce 
 
 ## Targeted pattern scope
 
+⚠️ This rule requires type information to run. Configure type-aware linting (`parserOptions.project` or `projectService`) before enabling it.
+
 This rule checks TypeScript signature declarations that declare generic type parameters, including:
 
 - function declarations and expressions,
@@ -56,7 +58,15 @@ When this rule reports `canReplace`, replacing the type parameter with `unknown`
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+function wrap<T extends string>(value: T): void {
+    console.log(value);
+}
+// ❌ reported with `canReplace`: `T` can be replaced with `string`
+
+function pair<T>(left: T, right: T): [T, T] {
+    return [left, right];
+}
+// ✅ valid: `T` meaningfully relates parameters and return type
 ```
 
 ## ESLint flat config example

@@ -72,9 +72,21 @@ the initial backlog is resolved.
 ```ts
 type Kind = "arrow-function" | "class" | "function" | "method" | "type";
 
-type Options = {
-    kinds?: Kind[];
-};
+type Options = [
+    {
+        kinds?: Kind[];
+    },
+];
+```
+
+### Default configuration
+
+```ts
+[
+    {
+        kinds: ["arrow-function", "class", "function", "method", "type"],
+    },
+]
 ```
 
 ### Status

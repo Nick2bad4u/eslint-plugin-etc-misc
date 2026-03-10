@@ -4,7 +4,12 @@ Disallow complex inferred return types for arrow functions.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets arrow functions with no explicit return type annotation when
+their returned expression is a type assertion around a complex expression.
+
+Specifically, it matches asserted return expressions whose asserted value is a
+function expression, arrow function expression, object expression, or class
+expression.
 
 ## What this rule reports
 
@@ -12,7 +17,10 @@ This rule reports arrow functions with complex asserted return expressions when 
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Complex asserted return expressions can hide the intended API shape.
+
+An explicit return annotation makes the contract visible at the function
+boundary.
 
 ## ❌ Incorrect
 
@@ -28,7 +36,10 @@ const create = (): () => number => (() => 1);
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration is typically adding an explicit return type annotation to the arrow
+function.
 
 ### Options
 
@@ -37,7 +48,11 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const create = () => ({ run() {} } as { run(): void });
+// ❌ reported: complex asserted return expression and no return annotation
+
+const createTyped = (): { run(): void } => ({ run() {} });
+// ✅ valid
 ```
 
 ## ESLint flat config example
@@ -67,7 +82,7 @@ Disable this rule if your team allows complex inferred return types without expl
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript: Functions](https://www.typescriptlang.org/docs/handbook/2/functions.html)
 
 ## Adoption resources
 

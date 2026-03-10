@@ -4,7 +4,16 @@ Disallow `@internal` APIs that are not underscore-prefixed.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule checks identifier names for declarations/signatures such as:
+
+- class/function/type/interface/enum declarations,
+- variable declarators,
+- class methods/properties,
+- interface method/property signatures,
+- enum members.
+
+It reports names that do not start with `_` when `@internal` is present in a
+leading comment for the node (or its export declaration wrapper).
 
 ## What this rule reports
 
@@ -14,7 +23,8 @@ The convention makes internal-only APIs visually obvious and helps prevent accid
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+It enforces a consistent signal that internal-only APIs are not part of the
+public contract.
 
 ## ❌ Incorrect
 
@@ -46,7 +56,10 @@ export interface Thing {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration is typically renaming internal declarations to use an underscore
+prefix.
 
 ### Options
 
@@ -55,7 +68,13 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+/** @internal */
+export const token = "x";
+// ❌ reported
+
+/** @internal */
+export const _token = "x";
+// ✅ valid
 ```
 
 ## ESLint flat config example

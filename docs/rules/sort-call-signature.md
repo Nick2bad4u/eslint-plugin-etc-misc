@@ -4,7 +4,8 @@ Require call signatures to be the first member in interfaces.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets interface call signatures that are not the first member in a
+`TSInterfaceBody`.
 
 ## What this rule reports
 
@@ -12,7 +13,8 @@ This rule reports interface call signatures when they are not the first member i
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Placing call signatures first gives function-like interfaces a consistent,
+discoverable shape.
 
 ## ❌ Incorrect
 
@@ -34,7 +36,10 @@ interface I {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration is mechanical: move call signatures above other members in each
+affected interface.
 
 ### Options
 
@@ -43,7 +48,19 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+interface Factory {
+    new (): FactoryInstance;
+    (): FactoryInstance;
+    version: string;
+}
+// ❌ call signature is not first
+
+interface FactoryFixed {
+    (): FactoryInstance;
+    new (): FactoryInstance;
+    version: string;
+}
+// ✅ valid
 ```
 
 ## ESLint flat config example

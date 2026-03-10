@@ -4,7 +4,12 @@ Prefer reusable alias names for array and tuple type aliases.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets type alias identifiers when the alias annotation is:
+
+- `TSArrayType` (`T[]`), or
+- `TSTupleType` (`[A, B]`).
+
+The alias name must match a PascalCase pattern ending in `Array` or `s`.
 
 ## What this rule reports
 
@@ -12,7 +17,8 @@ This rule reports array/tuple type aliases that do not follow preferred reusable
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Collection-shaped aliases become easier to recognize and search when naming is
+consistent.
 
 ## ❌ Incorrect
 
@@ -28,7 +34,9 @@ type Items = string[];
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Migration is typically renaming the alias and updating references.
 
 ### Options
 
@@ -37,7 +45,11 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+type Pair = [string, string];
+// ❌ reported
+
+type Pairs = [string, string];
+// ✅ valid
 ```
 
 ## ESLint flat config example
@@ -67,7 +79,7 @@ Disable this rule if your project does not standardize alias naming for array an
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript: Tuple Types](https://www.typescriptlang.org/docs/handbook/2/objects.html#tuple-types)
 
 ## Adoption resources
 

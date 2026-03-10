@@ -96,7 +96,7 @@ as desired.
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [ESLint: `no-multiple-empty-lines`](https://eslint.org/docs/latest/rules/no-multiple-empty-lines)
 
 ## Adoption resources
 

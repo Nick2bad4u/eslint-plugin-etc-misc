@@ -6,7 +6,13 @@ This rule helps keep type parameter names self-documenting and easier to read in
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+This rule targets type parameter identifiers in generic declarations.
+
+It reports:
+
+- single-character names (for example `T`, `K`, `U`), and
+- names with two or more characters that do not start with configured `prefix`
+(when `prefix` is set).
 
 ## What this rule reports
 
@@ -37,11 +43,26 @@ function identity<ValueType>(value: ValueType): ValueType {
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Adopt in warning mode first, then rename generic parameters to descriptive names
+in touched code paths.
 
 ### Options
 
-This rule accepts an optional object with the fields described below.
+```ts
+type Options = [
+    {
+        prefix?: string;
+    }?,
+];
+```
+
+### Default configuration
+
+```ts
+[{}]
+```
 
 ### `prefix`
 
@@ -52,15 +73,22 @@ When configured, all type parameter names longer than one character must start w
 Example configuration:
 
 ```ts
-{
-    "etc-misc/no-t": ["error", { "prefix": "Type" }]
-}
+"etc-misc/no-t": ["error", { prefix: "Type" }];
 ```
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+// config: { prefix: "Type" }
+function map<TypeInput, TypeOutput>(value: TypeInput): TypeOutput {
+    return value as unknown as TypeOutput;
+}
+// ✅ valid
+
+function map<Input, Output>(value: Input): Output {
+    return value as unknown as Output;
+}
+// ❌ reported because names do not start with "Type"
 ```
 
 ## ESLint flat config example

@@ -4,40 +4,57 @@ Disallow assignments to targets with readonly properties.
 
 ## Targeted pattern scope
 
-This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+⚠️ This rule requires type information to run. Configure type-aware linting (`parserOptions.project` or `projectService`) before enabling it.
+
+This rule is a TypeScript-prefixed alias of
+`typescript/no-unsafe-object-assign`.
+
+It reports `Object.assign(...)` calls where the target type has readonly
+properties.
 
 ## What this rule reports
 
-This rule enforces the documented pattern for `typescript/no-unsafe-object-assignment`.
+This rule reports `Object.assign` calls that attempt to mutate readonly-typed
+targets.
 
 ## Why this rule exists
 
-Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+Mutating readonly-shaped targets through `Object.assign` bypasses the intent of
+readonly contracts and can hide unsafe state changes.
 
 ## ❌ Incorrect
 
 ```ts
-// Example that violates this rule.
+type Target = { readonly x: number };
+const target: Target = { x: 1 };
+Object.assign(target, { x: 2 });
 ```
 
 ## ✅ Correct
 
 ```ts
-// Example that follows this rule.
+type Target = { x: number };
+const target: Target = { x: 1 };
+Object.assign(target, { x: 2 });
 ```
 
 ## Behavior and migration notes
 
-Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+This rule reports only and does not provide an autofix.
+
+Use immutable update patterns or non-readonly target types when mutation is
+intentional.
 
 ### Options
 
-This rule supports default behavior unless configured otherwise.
+This rule has no options.
 
 ## Additional examples
 
 ```ts
-// Add project-specific examples here when edge cases matter.
+const readonlyTarget: Readonly<{ value: number }> = { value: 1 };
+Object.assign(readonlyTarget, { value: 2 });
+// ❌ reported
 ```
 
 ## ESLint flat config example
@@ -57,7 +74,8 @@ export default [
 
 ## When not to use it
 
-Disable this rule if the enforced convention does not fit your codebase requirements.
+Disable this rule if your project intentionally permits mutating readonly-typed
+targets via `Object.assign`.
 
 ## Package documentation
 
@@ -67,7 +85,7 @@ Disable this rule if the enforced convention does not fit your codebase requirem
 
 ## Further reading
 
-- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+- [TypeScript-ESLint: Typed Linting](https://typescript-eslint.io/getting-started/typed-linting)
 
 ## Adoption resources
 
