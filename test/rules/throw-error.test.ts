@@ -27,6 +27,16 @@ ruleTester.run("throw-error", getThrowErrorRuleFromPlugin(), {
                 {
                     data: { usage: "Throwing" },
                     messageId: "forbidden",
+                    suggestions: [
+                        {
+                            messageId: "suggestWrapInError",
+                            output: [
+                                "const fail = (): never => {",
+                                '    throw new Error("kaboom");',
+                                "};",
+                            ].join("\n"),
+                        },
+                    ],
                 },
             ],
         },
@@ -36,6 +46,12 @@ ruleTester.run("throw-error", getThrowErrorRuleFromPlugin(), {
                 {
                     data: { usage: "Rejecting with" },
                     messageId: "forbidden",
+                    suggestions: [
+                        {
+                            messageId: "suggestWrapInError",
+                            output: 'const result = Promise.reject(new Error("kaboom"));',
+                        },
+                    ],
                 },
             ],
         },
@@ -45,6 +61,12 @@ ruleTester.run("throw-error", getThrowErrorRuleFromPlugin(), {
                 {
                     data: { usage: "Rejecting with" },
                     messageId: "forbidden",
+                    suggestions: [
+                        {
+                            messageId: "suggestWrapInError",
+                            output: 'const result = new Promise((resolve, reject) => reject(new Error("kaboom")));',
+                        },
+                    ],
                 },
             ],
         },
@@ -58,6 +80,16 @@ ruleTester.run("throw-error", getThrowErrorRuleFromPlugin(), {
                 {
                     data: { usage: "Rejecting with" },
                     messageId: "forbidden",
+                    suggestions: [
+                        {
+                            messageId: "suggestWrapInError",
+                            output: [
+                                "const result = new Promise(function (resolve, reject) {",
+                                '    reject(new Error("kaboom"));',
+                                "});",
+                            ].join("\n"),
+                        },
+                    ],
                 },
             ],
         },

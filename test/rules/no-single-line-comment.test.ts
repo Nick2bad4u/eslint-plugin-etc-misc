@@ -13,6 +13,15 @@ const fixturePath = "test/fixtures/internal/no-single-line-comment.fixture.ts";
 
 const readFixture = (): string => readFileSync(fixturePath, "utf8");
 
+const fixtureWithRationaleAsBlock = (): string =>
+    readFixture().replace("// rationale", "/* rationale */");
+
+const fixtureWithNotDirectiveAsBlock = (): string =>
+    readFixture().replace("// notDirective", "/* notDirective */");
+
+const fixtureWithNonDirectiveCommentsAsBlock = (): string =>
+    fixtureWithNotDirectiveAsBlock().replace("// rationale", "/* rationale */");
+
 const parseFixtureProgram = (): TSESTree.Program =>
     parser.parseForESLint(readFixture(), {
         comment: true,
@@ -108,7 +117,21 @@ ruleTester.run(
         invalid: [
             {
                 code: ["// explanation", "const value = 1;"].join("\n"),
-                errors: [{ messageId: "forbidden" }],
+                errors: [
+                    {
+                        messageId: "forbidden",
+                        suggestions: [
+                            {
+                                messageId: "suggestConvertToBlock",
+                                output: [
+                                    "/* explanation */",
+                                    "const value = 1;",
+                                ].join("\n"),
+                            },
+                        ],
+                    },
+                ],
+                output: ["/* explanation */", "const value = 1;"].join("\n"),
             },
             {
                 code: [
@@ -121,16 +144,57 @@ ruleTester.run(
             {
                 code: readFixture(),
                 errors: [
-                    { messageId: "forbidden" },
-                    { messageId: "forbidden" },
+                    {
+                        messageId: "forbidden",
+                        suggestions: [
+                            {
+                                messageId: "suggestConvertToBlock",
+                                output: fixtureWithRationaleAsBlock(),
+                            },
+                        ],
+                    },
+                    {
+                        messageId: "forbidden",
+                        suggestions: [
+                            {
+                                messageId: "suggestConvertToBlock",
+                                output: fixtureWithNotDirectiveAsBlock(),
+                            },
+                        ],
+                    },
                 ],
+                output: fixtureWithNonDirectiveCommentsAsBlock(),
             },
             {
                 code: readFixture(),
-                errors: Array.from({ length: 4 }, () => ({
-                    messageId: "forbidden",
-                })),
+                errors: [
+                    { messageId: "forbidden" },
+                    { messageId: "forbidden" },
+                    {
+                        messageId: "forbidden",
+                        suggestions: [
+                            {
+                                messageId: "suggestConvertToBlock",
+                                output: fixtureWithRationaleAsBlock(),
+                            },
+                        ],
+                    },
+                    {
+                        messageId: "forbidden",
+                        suggestions: [
+                            {
+                                messageId: "suggestConvertToBlock",
+                                output: fixtureWithNotDirectiveAsBlock(),
+                            },
+                        ],
+                    },
+                ],
                 options: [{ allowDirectiveComments: false }],
+                output: fixtureWithNonDirectiveCommentsAsBlock(),
+            },
+            {
+                code: ["// text */ tricky", "const value = 1;"].join("\n"),
+                errors: [{ messageId: "forbidden" }],
             },
         ],
         valid: [

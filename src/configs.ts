@@ -17,7 +17,7 @@ type PresetWithPlugin<TRules extends Readonly<Record<string, RuleSeverity>>> = {
     readonly rules: TRules;
 };
 
-type RuleSeverity = "error";
+type RuleSeverity = "error" | "warn";
 
 const pluginReference: PluginReference = {
     meta: pluginMeta,

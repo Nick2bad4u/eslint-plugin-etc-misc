@@ -164,7 +164,9 @@ describe("plugin.mjs entrypoint", () => {
             fc.property(
                 fc.constantFrom(...allConfigRuleEntries),
                 ([qualifiedRuleName, severity]) => {
-                    expect(severity).toBe("error");
+                    expect(
+                        severity === "error" || severity === "warn"
+                    ).toBeTruthy();
                     expect(
                         qualifiedRuleName.startsWith("etc-misc/")
                     ).toBeTruthy();
@@ -173,7 +175,27 @@ describe("plugin.mjs entrypoint", () => {
                         "etc-misc/".length
                     );
 
-                    expect(plugin.rules[shortRuleName]).toBeDefined();
+                    const ruleModule = plugin.rules[shortRuleName];
+
+                    expect(ruleModule).toBeDefined();
+
+                    if (ruleModule === undefined) {
+                        throw new TypeError(
+                            `Expected exported rule for ${qualifiedRuleName}.`
+                        );
+                    }
+
+                    const expectedSeverity = (() => {
+                        if (ruleModule.meta.deprecated === false) {
+                            return ruleModule.meta.type === "problem"
+                                ? "error"
+                                : "warn";
+                        }
+
+                        return "warn";
+                    })();
+
+                    expect(severity).toBe(expectedSeverity);
                 }
             )
         );

@@ -3,14 +3,30 @@
 import { rules as pluginRules } from "../rules.js";
 
 type AllConfig = {
-    readonly rules: Readonly<Record<string, "error">>;
+    readonly rules: Readonly<Record<string, RuleSeverity>>;
 };
 
-const allRuleEntries = Object.keys(pluginRules).map(
-    (ruleName) => [`etc-misc/${ruleName}`, "error"] as const
+type RuleSeverity = "error" | "warn";
+
+const getAllPresetSeverity = (
+    ruleModule: Readonly<(typeof pluginRules)[string]>
+): RuleSeverity => {
+    if (ruleModule.meta.deprecated !== false) {
+        return "warn";
+    }
+
+    return ruleModule.meta.type === "problem" ? "error" : "warn";
+};
+
+const allRuleEntries = Object.entries(pluginRules).map(
+    ([ruleName, ruleModule]) =>
+        [`etc-misc/${ruleName}`, getAllPresetSeverity(ruleModule)] as const
 );
 
-const allRules = Object.fromEntries(allRuleEntries) as Record<string, "error">;
+const allRules = Object.fromEntries(allRuleEntries) as Record<
+    string,
+    RuleSeverity
+>;
 
 /**
  * Flat config preset enabling every available plugin rule.

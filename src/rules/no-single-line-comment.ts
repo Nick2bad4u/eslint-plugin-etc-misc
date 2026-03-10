@@ -1,6 +1,8 @@
+import type { TSESLint } from "@typescript-eslint/utils";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
-type MessageIds = "forbidden";
+type MessageIds = "forbidden" | "suggestConvertToBlock";
 
 type Options = readonly [
     Readonly<{
@@ -13,6 +15,18 @@ const directiveCommentPattern =
 
 const isDirectiveComment = (commentText: string): boolean =>
     directiveCommentPattern.test(commentText.trimStart());
+
+const createConvertToBlockSuggestionFix = (
+    commentValue: string,
+    commentRange: readonly [number, number]
+): TSESLint.ReportFixFunction | undefined => {
+    if (commentValue.includes("*/")) {
+        return undefined;
+    }
+
+    return (fixer) =>
+        fixer.replaceTextRange(commentRange, `/*${commentValue} */`);
+};
 
 /**
  * Disallow single-line comments except optionally allowed directive comments.
@@ -38,9 +52,32 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         continue;
                     }
 
+                    const isDirective = isDirectiveComment(comment.value);
+                    const suggestionFix = isDirective
+                        ? undefined
+                        : createConvertToBlockSuggestionFix(
+                              comment.value,
+                              comment.range
+                          );
+
                     context.report({
+                        ...(suggestionFix === undefined
+                            ? {}
+                            : {
+                                  fix: suggestionFix,
+                              }),
                         loc: comment.loc,
                         messageId: "forbidden",
+                        ...(suggestionFix === undefined
+                            ? {}
+                            : {
+                                  suggest: [
+                                      {
+                                          fix: suggestionFix,
+                                          messageId: "suggestConvertToBlock",
+                                      },
+                                  ],
+                              }),
                     });
                 }
             },
@@ -57,10 +94,13 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-single-line-comment",
         },
-        hasSuggestions: false,
+        fixable: "code",
+        hasSuggestions: true,
         messages: {
             forbidden:
                 "Single-line comments are not allowed; use block comments instead.",
+            suggestConvertToBlock:
+                "Convert this single-line comment to a block comment.",
         },
         schema: [
             {

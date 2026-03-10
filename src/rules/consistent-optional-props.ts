@@ -15,20 +15,24 @@ const buildOptionalUnionFixText = (
     sourceCode: Readonly<TSESLint.SourceCode>,
     unionType: Readonly<es.TSUnionType>
 ): string | undefined => {
-    const nonUndefinedMemberTypes = unionType.types.filter(
-        (typeNode) => typeNode.type !== "TSUndefinedKeyword"
-    );
+    const nonUndefinedTypeTexts: string[] = [];
+
+    for (const typeNode of unionType.types) {
+        if (typeNode.type === "TSUndefinedKeyword") {
+            continue;
+        }
+
+        nonUndefinedTypeTexts.push(sourceCode.getText(typeNode));
+    }
 
     if (
-        nonUndefinedMemberTypes.length === 0 ||
-        nonUndefinedMemberTypes.length === unionType.types.length
+        nonUndefinedTypeTexts.length === 0 ||
+        nonUndefinedTypeTexts.length === unionType.types.length
     ) {
         return undefined;
     }
 
-    return nonUndefinedMemberTypes
-        .map((typeNode) => sourceCode.getText(typeNode))
-        .join(" | ");
+    return nonUndefinedTypeTexts.join(" | ");
 };
 
 /**

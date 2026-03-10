@@ -7,12 +7,16 @@ import {
     isTypeAnyType,
     isTypeUnknownType,
 } from "@typescript-eslint/type-utils";
-import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
+import {
+    type TSESTree as es,
+    ESLintUtils,
+    type TSESLint,
+} from "@typescript-eslint/utils";
 import * as tsutils from "tsutils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
-type MessageIds = "forbidden";
+type MessageIds = "forbidden" | "suggestWrapInError";
 
 type Options = readonly [];
 
@@ -47,6 +51,18 @@ const couldBePromiseConstructorType = (
 const isPromiseIdentifier = (node: Readonly<es.Expression>): boolean =>
     node.type === "Identifier" && node.name === "Promise";
 
+const createWrapLiteralInErrorSuggestionFix = (
+    sourceCode: Readonly<TSESLint.SourceCode>,
+    node: Readonly<es.Node>
+): TSESLint.ReportFixFunction | undefined => {
+    if (node.type !== "Literal") {
+        return undefined;
+    }
+
+    return (fixer) =>
+        fixer.replaceText(node, `new Error(${sourceCode.getText(node)})`);
+};
+
 /**
  * Disallow throwing or rejecting values that are not Error-like.
  */
@@ -56,6 +72,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 >({
     create: (context) => {
         const parserServices = ESLintUtils.getParserServices(context);
+        const sourceCode = context.sourceCode;
         const { program } = parserServices;
 
         const reportIfNonErrorLike = (
@@ -68,10 +85,25 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 return;
             }
 
+            const suggestionFix = createWrapLiteralInErrorSuggestionFix(
+                sourceCode,
+                node
+            );
+
             context.report({
                 data: { usage },
                 messageId: "forbidden",
                 node,
+                ...(suggestionFix === undefined
+                    ? {}
+                    : {
+                          suggest: [
+                              {
+                                  fix: suggestionFix,
+                                  messageId: "suggestWrapInError",
+                              },
+                          ],
+                      }),
             });
         };
 
@@ -164,9 +196,11 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             requiresTypeChecking: true,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/throw-error",
         },
-        hasSuggestions: false,
+        hasSuggestions: true,
         messages: {
             forbidden: "{{usage}} non-`Error` values is forbidden.",
+            suggestWrapInError:
+                "Wrap this value in an Error constructor before throwing or rejecting.",
         },
         schema: [],
         type: "problem",

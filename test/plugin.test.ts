@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
 
 import plugin from "../src/plugin";
 
@@ -35,11 +35,44 @@ const deprecatedRuleIds = [
 ] as const;
 
 const recommendedRuleIds = [
+    "consistent-optional-props",
     "no-assign-mutated-array",
+    "no-const-enum",
     "no-implicit-any-catch",
     "no-internal",
     "no-t",
+    "no-unnecessary-as-const",
+    "no-unnecessary-break",
+    "no-unnecessary-initialization",
+    "no-unnecessary-template-literal",
+    "throw-error",
+    "typescript/no-boolean-literal-type",
+    "typescript/prefer-readonly-array",
+    "typescript/prefer-readonly-map",
+    "typescript/prefer-readonly-property",
+    "typescript/prefer-readonly-set",
+    "typescript/require-this-void",
 ] as const;
+
+const recommendedRuleLevels = {
+    "etc-misc/consistent-optional-props": "warn",
+    "etc-misc/no-assign-mutated-array": "error",
+    "etc-misc/no-const-enum": "warn",
+    "etc-misc/no-implicit-any-catch": "error",
+    "etc-misc/no-internal": "error",
+    "etc-misc/no-t": "error",
+    "etc-misc/no-unnecessary-as-const": "warn",
+    "etc-misc/no-unnecessary-break": "warn",
+    "etc-misc/no-unnecessary-initialization": "warn",
+    "etc-misc/no-unnecessary-template-literal": "warn",
+    "etc-misc/throw-error": "error",
+    "etc-misc/typescript/no-boolean-literal-type": "error",
+    "etc-misc/typescript/prefer-readonly-array": "warn",
+    "etc-misc/typescript/prefer-readonly-map": "warn",
+    "etc-misc/typescript/prefer-readonly-property": "warn",
+    "etc-misc/typescript/prefer-readonly-set": "warn",
+    "etc-misc/typescript/require-this-void": "warn",
+} as const satisfies Readonly<Record<`etc-misc/${string}`, "error" | "warn">>;
 
 const hasRuleDeprecationInfo = (
     value: unknown
@@ -47,9 +80,9 @@ const hasRuleDeprecationInfo = (
     typeof value === "object" && value !== null && "availableUntil" in value;
 
 type RuleDocsMetadata = Readonly<{
-    deprecated?: boolean;
-    frozen?: boolean;
-    recommended?: boolean;
+    deprecated: boolean;
+    frozen: boolean;
+    recommended: boolean;
 }>;
 
 describe("plugin export", () => {
@@ -194,18 +227,18 @@ describe("plugin export", () => {
         expect(plugin.rules["underscore-internal"]).toBeDefined();
         expect(plugin.rules["words"]).toBeDefined();
         expect(
-            plugin.configs.recommended.rules["etc-misc/no-assign-mutated-array"]
-        ).toBe("error");
-        expect(
             "etc-misc/no-deprecated" in plugin.configs.recommended.rules
         ).toBeFalsy();
-        expect(
-            plugin.configs.recommended.rules["etc-misc/no-implicit-any-catch"]
-        ).toBe("error");
-        expect(plugin.configs.recommended.rules["etc-misc/no-internal"]).toBe(
-            "error"
-        );
-        expect(plugin.configs.recommended.rules["etc-misc/no-t"]).toBe("error");
+
+        const recommendedRuleLevelKeys = Object.keys(
+            recommendedRuleLevels
+        ) as readonly (keyof typeof recommendedRuleLevels)[];
+
+        for (const ruleName of recommendedRuleLevelKeys) {
+            const level = recommendedRuleLevels[ruleName];
+
+            expect(plugin.configs.recommended.rules[ruleName]).toBe(level);
+        }
 
         for (const deprecatedRuleId of deprecatedRuleIds) {
             const rule = plugin.rules[deprecatedRuleId];
@@ -231,20 +264,26 @@ describe("plugin export", () => {
         for (const [ruleId, rule] of Object.entries(plugin.rules)) {
             const docs = rule.meta?.docs as RuleDocsMetadata | undefined;
 
-            expect(typeof docs?.deprecated).toBe("boolean");
-            expect(typeof docs?.frozen).toBe("boolean");
-            expect(typeof docs?.recommended).toBe("boolean");
+            expect(docs).toBeDefined();
 
-            expect(docs?.deprecated).toBe(deprecatedRuleIdSet.has(ruleId));
-            expect(docs?.frozen).toBe(deprecatedRuleIdSet.has(ruleId));
-            expect(docs?.recommended).toBe(recommendedRuleIdSet.has(ruleId));
+            if (docs === undefined) {
+                throw new Error(`Expected docs metadata for rule ${ruleId}.`);
+            }
+
+            expectTypeOf(docs.deprecated).toBeBoolean();
+            expectTypeOf(docs.frozen).toBeBoolean();
+            expectTypeOf(docs.recommended).toBeBoolean();
+
+            expect(docs.deprecated).toBe(deprecatedRuleIdSet.has(ruleId));
+            expect(docs.frozen).toBe(deprecatedRuleIdSet.has(ruleId));
+            expect(docs.recommended).toBe(recommendedRuleIdSet.has(ruleId));
 
             if (deprecatedRuleIdSet.has(ruleId)) {
-                expect(hasRuleDeprecationInfo(rule.meta?.deprecated)).toBe(
-                    true
-                );
+                expect(
+                    hasRuleDeprecationInfo(rule.meta?.deprecated)
+                ).toBeTruthy();
             } else {
-                expect(rule.meta?.deprecated).toBe(false);
+                expect(rule.meta?.deprecated).toBeFalsy();
             }
         }
     });

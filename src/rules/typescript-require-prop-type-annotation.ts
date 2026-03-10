@@ -22,13 +22,13 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             }
 
             const canProvideSafeSuggestion =
-                node.computed !== true &&
+                !node.computed &&
                 node.key.type === "Identifier" &&
-                node.optional !== true &&
-                node.definite !== true;
+                !node.optional &&
+                !node.definite;
 
             const fix =
-                canProvideSafeSuggestion === true
+                canProvideSafeSuggestion
                     ? (fixer: Readonly<TSESLint.RuleFixer>): TSESLint.RuleFix =>
                           fixer.insertTextAfter(node.key, ": unknown")
                     : undefined;

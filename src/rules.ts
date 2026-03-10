@@ -107,18 +107,18 @@ import unusedInternalProperties from "./rules/unused-internal-properties.js";
 import uppercaseIife from "./rules/uppercase-iife.js";
 import words from "./rules/words.js";
 
-type RuleDocsMetadata = Readonly<{
-    catalogId?: string;
-    catalogIndex?: number;
-    deprecated?: boolean;
-    description?: string;
-    frozen?: boolean;
-    recommended?: boolean;
-    requiresTypeChecking?: boolean;
-    ruleName?: string;
-    suggestion?: boolean;
-    url?: string;
-}>;
+type RuleDocsMetadata = {
+    readonly catalogId?: string;
+    readonly catalogIndex?: number;
+    readonly deprecated?: boolean;
+    readonly description?: string;
+    readonly frozen?: boolean;
+    readonly recommended?: boolean;
+    readonly requiresTypeChecking?: boolean;
+    readonly ruleName?: string;
+    readonly suggestion?: boolean;
+    readonly url?: string;
+};
 
 type RuleModule = TSESLint.RuleModule<string, readonly unknown[]>;
 
@@ -137,10 +137,23 @@ const rulesWithRequiredTypeChecking = new Set<string>([
 ]);
 
 const recommendedRuleNames = new Set<string>([
+    "consistent-optional-props",
     "no-assign-mutated-array",
+    "no-const-enum",
     "no-implicit-any-catch",
     "no-internal",
     "no-t",
+    "no-unnecessary-as-const",
+    "no-unnecessary-break",
+    "no-unnecessary-initialization",
+    "no-unnecessary-template-literal",
+    "throw-error",
+    "typescript/no-boolean-literal-type",
+    "typescript/prefer-readonly-array",
+    "typescript/prefer-readonly-map",
+    "typescript/prefer-readonly-property",
+    "typescript/prefer-readonly-set",
+    "typescript/require-this-void",
 ]);
 
 /**

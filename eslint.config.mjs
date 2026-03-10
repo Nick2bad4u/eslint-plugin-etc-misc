@@ -110,9 +110,6 @@ const jsonSchemaValidatorRules = enableJsonSchemaValidation
     ? { "json-schema-validator/no-invalid": "error" }
     : {};
 
-const enableLocalEtcMiscDogfooding =
-    globalThis.process.env["ENABLE_LOCAL_ETC_MISC_DOGFOODING"] === "1";
-
 const canonicalPlugin = fixupPluginRules(pluginCanonical);
 // @ts-expect-error -- Plugin needs update for Eslint v10
 const noExplicitTypeExportsPlugin = fixupPluginRules(noExplicitTypeExports);
@@ -1451,17 +1448,17 @@ export default defineConfig([
     {
         files: [
             "src/**/*.{ts,tsx,mts,cts}",
+            ``,
             //    "test/**/*.{ts,tsx,mts,cts}"
         ],
         name: "Local etc-misc plugin manual dogfooding rules",
-        plugins: enableLocalEtcMiscDogfooding
-            ? {
-                  "etc-misc": etcmisc,
-              }
-            : {},
-        rules: enableLocalEtcMiscDogfooding
-            ? { ...etcmisc.configs.all.rules }
-            : {},
+        plugins: {
+            "etc-misc": etcmisc,
+        },
+        rules: {
+            // ...etcmisc.configs.all.rules,
+            ...etcmisc.configs.recommended.rules,
+        },
     },
     // #endregion
     // #region 🧪 Internal Tooling
