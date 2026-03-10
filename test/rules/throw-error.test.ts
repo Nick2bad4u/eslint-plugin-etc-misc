@@ -1,7 +1,21 @@
-import rule from "../../src/rules/throw-error";
+import plugin from "../../src/plugin";
 import { ruleTester } from "../_internal/ruleTester";
 
-ruleTester.run("throw-error", rule, {
+const getThrowErrorRuleFromPlugin = (): NonNullable<
+    (typeof plugin.rules)["throw-error"]
+> => {
+    const ruleModule = plugin.rules["throw-error"];
+
+    if (ruleModule === undefined) {
+        throw new TypeError(
+            "Rule 'throw-error' was not found in plugin export."
+        );
+    }
+
+    return ruleModule;
+};
+
+ruleTester.run("throw-error", getThrowErrorRuleFromPlugin(), {
     invalid: [
         {
             code: [
@@ -27,6 +41,19 @@ ruleTester.run("throw-error", rule, {
         },
         {
             code: 'const result = new Promise((resolve, reject) => reject("kaboom"));',
+            errors: [
+                {
+                    data: { usage: "Rejecting with" },
+                    messageId: "forbidden",
+                },
+            ],
+        },
+        {
+            code: [
+                "const result = new Promise(function (resolve, reject) {",
+                '    reject("kaboom");',
+                "});",
+            ].join("\n"),
             errors: [
                 {
                     data: { usage: "Rejecting with" },
@@ -88,7 +115,43 @@ ruleTester.run("throw-error", rule, {
             code: 'const result = Promise.reject(new Error("kaboom"));',
         },
         {
+            code: "const result = Promise.reject();",
+        },
+        {
             code: 'const result = new Promise((resolve, reject) => reject(new Error("kaboom")));',
+        },
+        {
+            code: [
+                "const result = new Promise((resolve, ...restReject) => {",
+                "    void resolve;",
+                "    void restReject;",
+                "});",
+                "",
+                "void result;",
+            ].join("\n"),
+        },
+        {
+            code: [
+                "const result = new Promise((resolve, reject) => {",
+                "    const alias = reject;",
+                '    alias("kaboom");',
+                "});",
+            ].join("\n"),
+        },
+        {
+            code: [
+                "class BaseClass {",
+                "    reject(value: unknown): void {",
+                "        void value;",
+                "    }",
+                "}",
+                "",
+                "class ChildClass extends BaseClass {",
+                "    run(): void {",
+                '        super.reject("kaboom");',
+                "    }",
+                "}",
+            ].join("\n"),
         },
         {
             code: [

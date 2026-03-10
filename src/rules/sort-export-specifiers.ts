@@ -16,6 +16,7 @@ const toName = (specifier: Readonly<es.ExportSpecifier>): string =>
 const buildFix = (
     fixer: TSESLint.RuleFixer,
     node: Readonly<es.ExportNamedDeclaration>,
+    sourceCode: Readonly<TSESLint.SourceCode>,
     sorted: readonly es.ExportSpecifier[]
 ): TSESLint.RuleFix =>
     fixer.replaceTextRange(
@@ -25,13 +26,7 @@ const buildFix = (
             node.specifiers[node.specifiers.length - 1]?.range[1] ??
                 node.range[1],
         ],
-        sorted
-            .map((specifier) =>
-                specifier.exported.type === "Identifier"
-                    ? specifier.exported.name
-                    : `"${specifier.exported.value}"`
-            )
-            .join(", ")
+        sorted.map((specifier) => sourceCode.getText(specifier)).join(", ")
     );
 
 /**
@@ -67,7 +62,8 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             }
 
             context.report({
-                fix: (fixer) => buildFix(fixer, node, sorted),
+                fix: (fixer) =>
+                    buildFix(fixer, node, context.sourceCode, sorted),
                 messageId: "incorrectSortingOrder",
                 node,
             });

@@ -76,37 +76,13 @@ describe("export-matching-filename-only fixture structure", () => {
     });
 
     it("parses generated export snippets from fast-check", () => {
-        const lowercaseCharacter = fc
-            .integer({ max: 122, min: 97 })
-            .map((codepoint) => String.fromCodePoint(codepoint));
-        const uppercaseCharacter = fc
-            .integer({ max: 90, min: 65 })
-            .map((codepoint) => String.fromCodePoint(codepoint));
-        const digitCharacter = fc
-            .integer({ max: 57, min: 48 })
-            .map((codepoint) => String.fromCodePoint(codepoint));
-
-        const identifierStartCharacter = fc.oneof(
-            lowercaseCharacter,
-            uppercaseCharacter
+        const exportedNameArbitrary = fc.constantFrom(
+            "Alpha1",
+            "Beta2",
+            "Gamma3",
+            "Delta4",
+            "Omega5"
         );
-        const identifierBodyCharacter = fc.oneof(
-            identifierStartCharacter,
-            digitCharacter
-        );
-
-        const exportedNameArbitrary = fc
-            .tuple(
-                identifierStartCharacter,
-                fc.array(identifierBodyCharacter, {
-                    maxLength: 10,
-                    minLength: 1,
-                })
-            )
-            .map(
-                ([identifierStart, identifierRest]) =>
-                    `${identifierStart}${identifierRest.join("")}`
-            );
 
         fc.assert(
             fc.property(

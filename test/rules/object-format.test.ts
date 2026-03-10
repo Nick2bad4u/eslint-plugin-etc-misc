@@ -16,20 +16,24 @@ const readFixture = (): string => readFileSync(fixturePath, "utf8");
 const isTSESTreeNode = (value: unknown): value is TSESTree.Node =>
     typeof value === "object" && value !== null && "type" in value;
 
-const pushChildNodes = (value: unknown, stack: TSESTree.Node[]): void => {
+const toChildNodes = (value: unknown): readonly TSESTree.Node[] => {
     if (Array.isArray(value)) {
+        const nodes: TSESTree.Node[] = [];
+
         for (const item of value) {
             if (isTSESTreeNode(item)) {
-                stack.push(item);
+                nodes.push(item);
             }
         }
 
-        return;
+        return nodes;
     }
 
     if (isTSESTreeNode(value)) {
-        stack.push(value);
+        return [value];
     }
+
+    return [];
 };
 
 const collectObjectExpressions = (
@@ -48,7 +52,7 @@ const collectObjectExpressions = (
 
             for (const value of Object.values(node)) {
                 if (value !== null && value !== undefined) {
-                    pushChildNodes(value, stack);
+                    stack.push(...toChildNodes(value));
                 }
             }
         }
