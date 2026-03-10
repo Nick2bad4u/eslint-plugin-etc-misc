@@ -31,6 +31,12 @@ Object.hasOwn(record, "id");
 This rule forwards options and behavior to ESLint core
 `prefer-object-has-own`.
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -60,3 +66,8 @@ cannot polyfill it.
 ## Further reading
 
 - [ESLint: `prefer-object-has-own`](https://eslint.org/docs/latest/rules/prefer-object-has-own)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

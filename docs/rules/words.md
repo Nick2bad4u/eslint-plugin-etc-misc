@@ -38,6 +38,12 @@ This rule forwards options and behavior to
 - **Available until:** `v2.0.0`
 - **Use instead:** [`write-good-comments/write-good-comments`](https://github.com/kantord/eslint-plugin-write-good-comments)
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -66,3 +72,8 @@ Disable this rule if your team does not want prose-quality checks for comments.
 ## Further reading
 
 - [eslint-plugin-write-good-comments](https://github.com/kantord/eslint-plugin-write-good-comments)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

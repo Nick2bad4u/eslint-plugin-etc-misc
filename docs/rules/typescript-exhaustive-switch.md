@@ -2,18 +2,19 @@
 
 Require a default branch in switch statements with multiple cases.
 
-## Status
+## Targeted pattern scope
 
-- **Lifecycle:** Deprecated and frozen.
-- **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
-- **Use instead:** [`@typescript-eslint/switch-exhaustiveness-check`](https://typescript-eslint.io/rules/switch-exhaustiveness-check)
+This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
 
-## Rule Details
+## What this rule reports
 
 This rule reports non-trivial switch statements that have no `default` case.
 
-### ❌ Incorrect
+## Why this rule exists
+
+Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+
+## ❌ Incorrect
 
 ```ts
 switch (x) {
@@ -24,7 +25,7 @@ switch (x) {
 }
 ```
 
-### ✅ Correct
+## ✅ Correct
 
 ```ts
 switch (x) {
@@ -35,9 +36,33 @@ switch (x) {
 }
 ```
 
-## Options
+## Deprecated
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`@typescript-eslint/switch-exhaustiveness-check`](https://typescript-eslint.io/rules/switch-exhaustiveness-check)
+
+## Behavior and migration notes
+
+Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+
+### Options
 
 This rule has no options.
+
+### Status
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`@typescript-eslint/switch-exhaustiveness-check`](https://typescript-eslint.io/rules/switch-exhaustiveness-check)
+
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
 
 ## ESLint flat config example
 
@@ -54,12 +79,21 @@ export default [
 ];
 ```
 
-## When Not To Use It
+## When not to use it
 
 Disable this rule if you intentionally omit `default` cases.
+
+## Package documentation
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
 > **Rule catalog ID:** R084
 
 ## Further reading
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

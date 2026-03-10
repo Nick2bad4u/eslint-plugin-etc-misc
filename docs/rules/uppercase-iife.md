@@ -36,6 +36,12 @@ This rule forwards options and behavior to `unicorn/no-unreadable-iife`.
 - **Available until:** `v2.0.0`
 - **Use instead:** [`unicorn/no-unreadable-iife`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-unreadable-iife.md)
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -65,3 +71,8 @@ for historical consistency.
 ## Further reading
 
 - [unicorn: `no-unreadable-iife`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-unreadable-iife.md)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

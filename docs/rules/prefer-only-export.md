@@ -39,6 +39,12 @@ export const y = 2;
 
 This rule has no options.
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -68,3 +74,8 @@ Disable this rule if combining default and named exports is allowed in your modu
 
 - [MDN: `export` statement](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export)
 - [TypeScript Handbook: Modules](https://www.typescriptlang.org/docs/handbook/modules/introduction.html)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

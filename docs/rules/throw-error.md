@@ -61,6 +61,12 @@ new Promise((resolve, reject) => reject(new Error("kaboom")));
 
 This rule has no options.
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -91,3 +97,8 @@ Disable this rule if your codebase intentionally uses non-`Error` throw/reject v
 - [MDN: throw](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/throw)
 - [MDN: Error](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error)
 - [MDN: Promise.reject()](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise/reject)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

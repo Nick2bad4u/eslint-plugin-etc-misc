@@ -39,6 +39,12 @@ switch (status) {
 
 This rule forwards options and behavior to ESLint core `default-case`.
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -68,3 +74,8 @@ checks and intentionally avoid `default` branches.
 ## Further reading
 
 - [ESLint: `default-case`](https://eslint.org/docs/latest/rules/default-case)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

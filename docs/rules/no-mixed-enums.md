@@ -44,6 +44,12 @@ This rule forwards options and behavior to
 - **Available until:** `v2.0.0`
 - **Use instead:** [`@typescript-eslint/no-mixed-enums`](https://typescript-eslint.io/rules/no-mixed-enums)
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -73,3 +79,8 @@ wire formats.
 ## Further reading
 
 - [typescript-eslint: `no-mixed-enums`](https://typescript-eslint.io/rules/no-mixed-enums)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

@@ -36,6 +36,12 @@ This rule forwards options and behavior to `@typescript-eslint/array-type`.
 - **Available until:** `v2.0.0`
 - **Use instead:** [`@typescript-eslint/array-type`](https://typescript-eslint.io/rules/array-type)
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -64,3 +70,8 @@ Disable this rule if your project intentionally allows mixed array type styles.
 ## Further reading
 
 - [typescript-eslint: `array-type`](https://typescript-eslint.io/rules/array-type)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

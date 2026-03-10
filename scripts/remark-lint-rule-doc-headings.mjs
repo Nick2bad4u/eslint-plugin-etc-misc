@@ -48,9 +48,23 @@ const headingOrderIndex = new Map(
     canonicalHeadingOrder.map((heading, index) => [heading, index])
 );
 
-const helperDocPathPattern = /(^|\/)docs\/rules\/prefer-[^/]+\.md$/u;
+const helperDocPathPattern =
+    /(^|\/)docs\/rules\/(?!overview\.md$|getting-started\.md$|presets\/)[^/]+\.md$/u;
 const typeFestDocPathPattern = /(^|\/)docs\/rules\/prefer-type-fest-/u;
 const tsExtrasDocPathPattern = /(^|\/)docs\/rules\/prefer-ts-extras-/u;
+
+/**
+ * @param {string} fileRuleId
+ *
+ * @returns {readonly string[]}
+ */
+const getExpectedH1Titles = (fileRuleId) => {
+    if (fileRuleId.startsWith("typescript-")) {
+        return [fileRuleId, `typescript/${fileRuleId.slice(11)}`];
+    }
+
+    return [fileRuleId];
+};
 
 /**
  * @param {string} path
@@ -181,10 +195,11 @@ export default function remarkLintRuleDocHeadings() {
 
         if (h1Headings.length === 1 && typeof expectedRuleTitle === "string") {
             const actualTitle = getNodeText(h1Headings[0]).trim();
+            const expectedH1Titles = getExpectedH1Titles(expectedRuleTitle);
 
-            if (actualTitle !== expectedRuleTitle) {
+            if (!expectedH1Titles.includes(actualTitle)) {
                 file.message(
-                    `H1 heading must match the file rule id \`${expectedRuleTitle}\`.`,
+                    `H1 heading must match one of: ${expectedH1Titles.map((title) => `\`${title}\``).join(", ")}.`,
                     h1Headings[0],
                     "remark-lint:rule-doc-headings:h1-title"
                 );

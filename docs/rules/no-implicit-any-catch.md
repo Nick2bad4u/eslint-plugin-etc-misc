@@ -2,7 +2,13 @@
 
 Require explicit error parameter typing in Promise rejection callbacks.
 
-## Rule Details
+## Targeted pattern scope
+
+⚠️ This rule requires type information to run. Configure type-aware linting (`parserOptions.project` or `projectService`) before enabling it.
+
+This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+
+## What this rule reports
 
 Promise rejection callbacks often default the error parameter to implicit `any`.
 That weakens type safety and makes unsafe property access easy to miss.
@@ -19,7 +25,11 @@ By default:
 
 > ⚠️ This rule requires type information to run.
 
-### ❌ Incorrect
+## Why this rule exists
+
+Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+
+## ❌ Incorrect
 
 ```ts
 Promise.reject(new Error("Boom")).catch((error) => {
@@ -33,7 +43,7 @@ Promise.reject(new Error("Boom")).catch((error: any) => {
 });
 ```
 
-### ✅ Correct
+## ✅ Correct
 
 ```ts
 Promise.reject(new Error("Boom")).catch((error: unknown) => {
@@ -43,7 +53,11 @@ Promise.reject(new Error("Boom")).catch((error: unknown) => {
 });
 ```
 
-## Options
+## Behavior and migration notes
+
+Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+
+### Options
 
 ```ts
 type Options = [
@@ -82,14 +96,44 @@ export default [
 ];
 ```
 
-## When Not To Use It
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
+## ESLint flat config example
+
+```ts
+import etcMisc from "eslint-plugin-etc-misc";
+
+export default [
+    {
+        plugins: { "etc-misc": etcMisc },
+        rules: {
+            "etc-misc/no-implicit-any-catch": "error",
+        },
+    },
+];
+```
+
+## When not to use it
 
 Disable this rule if your codebase intentionally relies on broad rejection
 parameter typing and you do not want to enforce explicit `unknown` handling.
 
+## Package documentation
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+
 > **Rule catalog ID:** R026
 
-## Further Reading
+## Further reading
 
 - [TypeScript-ESLint: no-implicit-any-catch](https://typescript-eslint.io/rules/no-implicit-any-catch/)
 - [Catching Unknowns](https://ncjamieson.com/catching-unknowns/)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

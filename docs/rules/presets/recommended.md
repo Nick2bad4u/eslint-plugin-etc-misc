@@ -22,10 +22,10 @@ export default [etcMisc.configs.recommended];
 
 ## Rules in this preset
 
-- `etc-misc/no-assign-mutated-array`
-- `etc-misc/no-implicit-any-catch`
-- `etc-misc/no-internal`
-- `etc-misc/no-t`
+- [`etc-misc/no-assign-mutated-array`](../no-assign-mutated-array.md) (R016)
+- [`etc-misc/no-implicit-any-catch`](../no-implicit-any-catch.md) (R026)
+- [`etc-misc/no-internal`](../no-internal.md) (R028)
+- [`etc-misc/no-t`](../no-t.md) (R043)
 
 ## Adoption guidance
 

@@ -53,6 +53,12 @@ This rule has no options.
 
 When this rule reports `canReplace`, replacing the type parameter with `unknown` (or with the explicit constraint) usually preserves intent while reducing generic noise.
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -82,3 +88,8 @@ Disable this rule if your project intentionally keeps explicit, documentation-on
 
 - [The Golden Rule of Generics](https://effectivetypescript.com/2020/08/12/generics-golden-rule/)
 - [TypeScript Handbook: Generics](https://www.typescriptlang.org/docs/handbook/2/generics.html)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

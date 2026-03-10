@@ -45,6 +45,12 @@ This rule forwards options to
 - **Available until:** `v2.0.0`
 - **Use instead:** [`@typescript-eslint/no-unnecessary-type-parameters`](https://typescript-eslint.io/rules/no-unnecessary-type-parameters)
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -74,3 +80,8 @@ parameters for generated declarations or staged migrations.
 ## Further reading
 
 - [typescript-eslint: `no-unnecessary-type-parameters`](https://typescript-eslint.io/rules/no-unnecessary-type-parameters)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

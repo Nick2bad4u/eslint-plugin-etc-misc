@@ -24,48 +24,48 @@
 /* You can override the default Infima variables here. */
 
 :root {
-    --ifm-color-primary: #4f46e5;
-    --ifm-color-primary-dark: #4338ca;
-    --ifm-color-primary-darker: #3730a3;
-    --ifm-color-primary-darkest: #312e81;
-    --ifm-color-primary-light: #6366f1;
-    --ifm-color-primary-lighter: #818cf8;
-    --ifm-color-primary-lightest: #a5b4fc;
+    --ifm-color-primary: #8d0ce8;
+    --ifm-color-primary-dark: #8409e4;
+    --ifm-color-primary-darker: #6f06cd;
+    --ifm-color-primary-darkest: #3704a6;
+    --ifm-color-primary-light: #a63cf2;
+    --ifm-color-primary-lighter: #bf77f7;
+    --ifm-color-primary-lightest: #eac3fc;
     --ifm-code-font-size: 95%;
     --sb-accent-overview: #22c55e;
     --sb-accent-started: #0ea5e9;
     --sb-accent-developer: #8b5cf6;
-    --sb-accent-rules: #f97316;
-    --sb-accent-presets: #eab308;
+    --sb-accent-rules: #8d0ce8;
+    --sb-accent-presets: #bf77f7;
     --sb-accent-api-overview: #6366f1;
     --sb-accent-api-types: #14b8a6;
     --sb-accent-api-runtime: #f43f5e;
     --sb-accent-dev-charts: #38bdf8;
     --sb-accent-adr: #f59e0b;
-    --sb-accent-rules-core: #22c55e;
-    --sb-accent-rules-typescript: #a855f7;
+    --sb-accent-rules-core: #8d0ce8;
+    --sb-accent-rules-typescript: #a63cf2;
 }
 
 [data-theme="dark"] {
-    --ifm-color-primary: #818cf8;
-    --ifm-color-primary-dark: #6366f1;
-    --ifm-color-primary-darker: #4f46e5;
-    --ifm-color-primary-darkest: #4338ca;
-    --ifm-color-primary-light: #a5b4fc;
-    --ifm-color-primary-lighter: #c7d2fe;
-    --ifm-color-primary-lightest: #e0e7ff;
+    --ifm-color-primary: #bf77f7;
+    --ifm-color-primary-dark: #a63cf2;
+    --ifm-color-primary-darker: #8d0ce8;
+    --ifm-color-primary-darkest: #6f06cd;
+    --ifm-color-primary-light: #d3a1fa;
+    --ifm-color-primary-lighter: #eac3fc;
+    --ifm-color-primary-lightest: #f4d4fd;
     --sb-accent-overview: #4ade80;
     --sb-accent-started: #38bdf8;
     --sb-accent-developer: #c084fc;
-    --sb-accent-rules: #fb923c;
-    --sb-accent-presets: #facc15;
+    --sb-accent-rules: #bf77f7;
+    --sb-accent-presets: #d3a1fa;
     --sb-accent-api-overview: #a5b4fc;
     --sb-accent-api-types: #2dd4bf;
     --sb-accent-api-runtime: #fb7185;
     --sb-accent-dev-charts: #7dd3fc;
     --sb-accent-adr: #fbbf24;
-    --sb-accent-rules-core: #4ade80;
-    --sb-accent-rules-typescript: #c084fc;
+    --sb-accent-rules-core: #bf77f7;
+    --sb-accent-rules-typescript: #d3a1fa;
 }
 
 .theme-doc-sidebar-item-link-level-1 {
@@ -193,15 +193,15 @@
 
 .sb-cat-rules > .menu__list-item-collapsible .menu__link::before {
     content: "📏";
-    background-color: rgb(249 115 22 / 12%);
-    border: 1px solid rgb(249 115 22 / 40%);
+    background-color: rgb(141 12 232 / 12%);
+    border: 1px solid rgb(141 12 232 / 40%);
     color: var(--sb-accent-rules);
 }
 
 .sb-cat-presets > .menu__list-item-collapsible .menu__link::before {
     content: "🎛";
-    background-color: rgb(234 179 8 / 14%);
-    border: 1px solid rgb(234 179 8 / 40%);
+    background-color: rgb(191 119 247 / 14%);
+    border: 1px solid rgb(191 119 247 / 40%);
     color: var(--sb-accent-presets);
 }
 
@@ -211,8 +211,8 @@
 
 .sb-cat-rules-core > .menu__list-item-collapsible .menu__link::before {
     content: "🧱";
-    background-color: rgb(34 197 94 / 12%);
-    border: 1px solid rgb(34 197 94 / 40%);
+    background-color: rgb(141 12 232 / 12%);
+    border: 1px solid rgb(141 12 232 / 40%);
     color: var(--sb-accent-rules-core);
 }
 
@@ -222,8 +222,8 @@
 
 .sb-cat-rules-typescript > .menu__list-item-collapsible .menu__link::before {
     content: "TS";
-    background-color: rgb(168 85 247 / 12%);
-    border: 1px solid rgb(168 85 247 / 40%);
+    background-color: rgb(166 60 242 / 12%);
+    border: 1px solid rgb(166 60 242 / 40%);
     color: var(--sb-accent-rules-typescript);
 }
 
@@ -263,25 +263,25 @@
 .sb-cat-rules:not(.menu__list-item--collapsed)
     > .menu__list-item-collapsible
     .menu__link {
-    box-shadow: inset 0 0 0 1px rgb(249 115 22 / 28%);
+    box-shadow: inset 0 0 0 1px rgb(141 12 232 / 28%);
 }
 
 .sb-cat-presets:not(.menu__list-item--collapsed)
     > .menu__list-item-collapsible
     .menu__link {
-    box-shadow: inset 0 0 0 1px rgb(234 179 8 / 25%);
+    box-shadow: inset 0 0 0 1px rgb(191 119 247 / 25%);
 }
 
 .sb-cat-rules-core:not(.menu__list-item--collapsed)
     > .menu__list-item-collapsible
     .menu__link {
-    box-shadow: inset 0 0 0 1px rgb(34 197 94 / 25%);
+    box-shadow: inset 0 0 0 1px rgb(141 12 232 / 25%);
 }
 
 .sb-cat-rules-typescript:not(.menu__list-item--collapsed)
     > .menu__list-item-collapsible
     .menu__link {
-    box-shadow: inset 0 0 0 1px rgb(168 85 247 / 25%);
+    box-shadow: inset 0 0 0 1px rgb(166 60 242 / 25%);
 }
 
 .sb-cat-api-types:not(.menu__list-item--collapsed)
@@ -307,7 +307,7 @@
 }
 
 .sb-cat-rules .theme-doc-sidebar-item-link-level-2 > .menu__link {
-    border-inline-start: 2px solid rgb(249 115 22 / 45%);
+    border-inline-start: 2px solid rgb(141 12 232 / 45%);
 }
 
 .sb-cat-rules-core .theme-doc-sidebar-item-link-level-3 > .menu__link,
@@ -315,7 +315,7 @@
     border-inline-start: 3px solid transparent;
     display: flex;
     align-items: baseline;
-    gap: 0.46rem;
+    gap: 0.44rem;
     padding-inline-start: calc(var(--ifm-menu-link-padding-horizontal) - 3px);
 }
 
@@ -329,86 +329,99 @@
     > .menu__link::before {
     content: counter(sidebar-rule-number, decimal-leading-zero);
     counter-increment: sidebar-rule-number;
-    color: rgb(186 230 253 / 96%);
+    color: var(--ifm-color-primary-darkest);
+    flex: 0 0 auto;
     font-size: 0.75rem;
     font-variant-numeric: tabular-nums;
     font-weight: 700;
-    inline-size: 1.45rem;
-    text-align: end;
+    letter-spacing: 0.04em;
+    min-inline-size: 2.15ch;
+    opacity: 0.82;
+}
+
+[data-theme="dark"]
+    .sb-cat-rules-core
+    .theme-doc-sidebar-item-link-level-3
+    > .menu__link::before,
+[data-theme="dark"]
+    .sb-cat-rules-typescript
+    .theme-doc-sidebar-item-link-level-3
+    > .menu__link::before {
+    color: var(--ifm-color-primary-lighter);
 }
 
 /* core rule palette */
 .sb-cat-rules-core
     .theme-doc-sidebar-item-link-level-3:nth-child(6n + 1)
     > .menu__link {
-    border-inline-start-color: #22c55e;
+    border-inline-start-color: #8d0ce8;
 }
 
 .sb-cat-rules-core
     .theme-doc-sidebar-item-link-level-3:nth-child(6n + 2)
     > .menu__link {
-    border-inline-start-color: #14b8a6;
+    border-inline-start-color: #8409e4;
 }
 
 .sb-cat-rules-core
     .theme-doc-sidebar-item-link-level-3:nth-child(6n + 3)
     > .menu__link {
-    border-inline-start-color: #06b6d4;
+    border-inline-start-color: #6f06cd;
 }
 
 .sb-cat-rules-core
     .theme-doc-sidebar-item-link-level-3:nth-child(6n + 4)
     > .menu__link {
-    border-inline-start-color: #0ea5e9;
+    border-inline-start-color: #a63cf2;
 }
 
 .sb-cat-rules-core
     .theme-doc-sidebar-item-link-level-3:nth-child(6n + 5)
     > .menu__link {
-    border-inline-start-color: #84cc16;
+    border-inline-start-color: #bf77f7;
 }
 
 .sb-cat-rules-core
     .theme-doc-sidebar-item-link-level-3:nth-child(6n)
     > .menu__link {
-    border-inline-start-color: #10b981;
+    border-inline-start-color: #d098f0;
 }
 
 /* TypeScript rule palette */
 .sb-cat-rules-typescript
     .theme-doc-sidebar-item-link-level-3:nth-child(6n + 1)
     > .menu__link {
-    border-inline-start-color: #a855f7;
+    border-inline-start-color: #7b19db;
 }
 
 .sb-cat-rules-typescript
     .theme-doc-sidebar-item-link-level-3:nth-child(6n + 2)
     > .menu__link {
-    border-inline-start-color: #8b5cf6;
+    border-inline-start-color: #9530ec;
 }
 
 .sb-cat-rules-typescript
     .theme-doc-sidebar-item-link-level-3:nth-child(6n + 3)
     > .menu__link {
-    border-inline-start-color: #7c3aed;
+    border-inline-start-color: #b14ff4;
 }
 
 .sb-cat-rules-typescript
     .theme-doc-sidebar-item-link-level-3:nth-child(6n + 4)
     > .menu__link {
-    border-inline-start-color: #d946ef;
+    border-inline-start-color: #c575f8;
 }
 
 .sb-cat-rules-typescript
     .theme-doc-sidebar-item-link-level-3:nth-child(6n + 5)
     > .menu__link {
-    border-inline-start-color: #ec4899;
+    border-inline-start-color: #d69cfb;
 }
 
 .sb-cat-rules-typescript
     .theme-doc-sidebar-item-link-level-3:nth-child(6n)
     > .menu__link {
-    border-inline-start-color: #c026d3;
+    border-inline-start-color: #eac3fc;
 }
 
 .sb-cat-developer-adr .theme-doc-sidebar-item-link-level-3 > .menu__link,

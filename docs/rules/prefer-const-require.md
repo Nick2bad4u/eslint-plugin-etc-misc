@@ -43,6 +43,12 @@ This rule has no options.
 When adopting this rule, extract inline `require(...)` calls into top-level or
 nearest-scope `const` bindings with descriptive names.
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -73,3 +79,8 @@ patterns (for example, lazy loading inside specific runtime branches).
 
 - [Node.js: CommonJS modules](https://nodejs.org/api/modules.html)
 - [TypeScript Handbook: Modules](https://www.typescriptlang.org/docs/handbook/modules/introduction.html)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

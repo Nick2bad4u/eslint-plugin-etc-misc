@@ -50,6 +50,12 @@ Default:
 When `allowDirectiveComments` is `true`, comments such as
 `// eslint-disable-next-line ...` and `// @ts-expect-error` are allowed.
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -80,3 +86,8 @@ notes.
 
 - [ESLint comment directives](https://eslint.org/docs/latest/use/configure/rules#using-configuration-comments)
 - [TypeScript: `@ts-expect-error`](https://www.typescriptlang.org/tsconfig#suppressExcessPropertyErrors)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

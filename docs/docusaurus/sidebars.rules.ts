@@ -2,7 +2,7 @@
  * @packageDocumentation
  * Dynamic sidebar generation for plugin rule documentation sections.
  */
-import { readdirSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -11,13 +11,24 @@ import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
 /** Minimal document item shape used by generated rule categories. */
 type SidebarDocItem = {
     readonly id: string;
+    readonly label?: string;
     readonly type: "doc";
 };
+
+type RuleCatalogMapEntry = Readonly<{
+    catalogId: string;
+    docId: string;
+    ruleName: string;
+}>;
 
 /** Directory containing this sidebar module. */
 const sidebarDirectoryPath = dirname(fileURLToPath(import.meta.url));
 /** Directory containing generated rule docs consumed by the sidebar. */
 const rulesDocsDirectoryPath = join(sidebarDirectoryPath, "..", "rules");
+const ruleCatalogMapFilePath = join(
+    rulesDocsDirectoryPath,
+    "rule-catalog-map.json"
+);
 /** Directory containing plugin rule source files. */
 const sourceRulesDirectoryPath = join(
     sidebarDirectoryPath,
@@ -29,6 +40,14 @@ const sourceRulesDirectoryPath = join(
 
 /** Docs that are part of the rules docs plugin but are not individual rule docs. */
 const nonRuleDocIds = new Set(["overview", "getting-started"]);
+
+const ruleCatalogMap = JSON.parse(
+    readFileSync(ruleCatalogMapFilePath, "utf8")
+) as readonly RuleCatalogMapEntry[];
+
+const ruleCatalogByDocId = new Map(
+    ruleCatalogMap.map((entry) => [entry.docId, entry])
+);
 
 /** Check whether a directory entry name is a markdown file. */
 const isMarkdownFile = (fileName: string): boolean => fileName.endsWith(".md");
@@ -148,6 +167,15 @@ if (missingRuleDocIds.length > 0 || staleRuleDocIds.length > 0) {
 const createRuleItems = (ruleDocIds: readonly string[]): SidebarDocItem[] =>
     ruleDocIds.map((ruleDocId) => ({
         id: ruleDocId,
+        label: (() => {
+            const entry = ruleCatalogByDocId.get(ruleDocId);
+
+            if (!entry) {
+                return ruleDocId;
+            }
+
+            return `${entry.catalogId} · ${entry.ruleName}`;
+        })(),
         type: "doc",
     }));
 

@@ -2,11 +2,19 @@
 
 Disallow import/export sources by configured glob patterns.
 
-## Rule Details
+## Targeted pattern scope
+
+This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+
+## What this rule reports
 
 This rule matches import and export source values against `disallow` globs, with optional `allow` exceptions.
 
-### ❌ Incorrect
+## Why this rule exists
+
+Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+
+## ❌ Incorrect
 
 ```ts
 import value from "../source";
@@ -18,7 +26,7 @@ with options:
 { disallow: ["../**"] }
 ```
 
-### ✅ Correct
+## ✅ Correct
 
 ```ts
 import value from "../source";
@@ -30,13 +38,23 @@ with options:
 { disallow: ["../**"], allow: ["../source"] }
 ```
 
-## Options
+## Behavior and migration notes
+
+Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+
+### Options
 
 ```ts
 type Options = {
     allow?: string[];
     disallow?: string[];
 };
+```
+
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
 ```
 
 ## ESLint flat config example
@@ -54,12 +72,21 @@ export default [
 ];
 ```
 
-## When Not To Use It
+## When not to use it
 
 Disable this rule if your project does not enforce import path restrictions.
+
+## Package documentation
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
 > **Rule catalog ID:** R012
 
 ## Further reading
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

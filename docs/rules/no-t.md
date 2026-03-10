@@ -4,6 +4,10 @@ Disallow single-character generic type parameter names.
 
 This rule helps keep type parameter names self-documenting and easier to read in larger codebases.
 
+## Targeted pattern scope
+
+This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+
 ## What this rule reports
 
 - Generic type parameters with a single-character name (for example `T`, `U`, `K`).
@@ -31,7 +35,13 @@ function identity<ValueType>(value: ValueType): ValueType {
 }
 ```
 
-## Options
+## Behavior and migration notes
+
+Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+
+### Options
+
+This rule accepts an optional object with the fields described below.
 
 ### `prefix`
 
@@ -45,6 +55,12 @@ Example configuration:
 {
     "etc-misc/no-t": ["error", { "prefix": "Type" }]
 }
+```
+
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
 ```
 
 ## ESLint flat config example
@@ -77,3 +93,8 @@ algorithm-heavy APIs).
 ## Further reading
 
 - [TypeScript Handbook: Generics](https://www.typescriptlang.org/docs/handbook/2/generics.html)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

@@ -13,20 +13,20 @@
     background:
         radial-gradient(
             circle at 86% 12%,
-            rgb(244 114 182 / 28%),
+            rgb(217 70 239 / 34%),
             transparent 40%
         ),
         radial-gradient(
             circle at 16% 90%,
-            rgb(34 211 238 / 30%),
+            rgb(129 140 248 / 32%),
             transparent 45%
         ),
         linear-gradient(
             134deg,
-            #312e81 0%,
-            #4338ca 38%,
-            #3b82f6 72%,
-            #22d3ee 100%
+            #2a1457 0%,
+            #4c1d95 36%,
+            #7e22ce 68%,
+            #d946ef 100%
         );
     border-block-end: 1px solid rgb(255 255 255 / 18%);
     color: #ffffff;
@@ -94,8 +94,8 @@
     border: 1px solid rgb(255 255 255 / 34%);
     border-radius: 999rem;
     margin: 0 0 0.75rem;
-    background: rgb(15 23 42 / 28%);
-    color: rgb(224 231 255);
+    background: rgb(46 26 77 / 42%);
+    color: rgb(244 232 255);
     font-size: 0.79rem;
     font-weight: 700;
     letter-spacing: 0.07em;
@@ -122,10 +122,10 @@
     align-items: center;
     justify-content: center;
     padding: 0.1rem 0.62rem;
-    border: 1px solid rgb(255 255 255 / 46%);
+    border: 1px solid rgb(244 232 255 / 58%);
     border-radius: 0.52rem;
     backdrop-filter: blur(5px);
-    background: rgb(15 23 42 / 28%);
+    background: rgb(62 28 109 / 40%);
     color: #f8fafc;
     font-weight: 700;
     gap: 0.22rem;
@@ -217,8 +217,8 @@
     margin: 0;
     backdrop-filter: blur(10px);
     background:
-        linear-gradient(155deg, rgb(15 23 42 / 45%), rgb(15 23 42 / 22%)),
-        rgb(30 41 59 / 28%);
+        linear-gradient(155deg, rgb(58 18 104 / 58%), rgb(58 18 104 / 28%)),
+        rgb(91 33 182 / 32%);
     box-shadow:
         0 20px 30px -26px rgb(15 23 42 / 85%),
         inset 0 1px 0 rgb(255 255 255 / 15%);
@@ -285,7 +285,7 @@
     border: 1px solid rgb(255 255 255 / 24%);
     border-radius: 0.8rem;
     backdrop-filter: blur(8px);
-    background: rgb(15 23 42 / 26%);
+    background: rgb(67 25 121 / 30%);
     gap: 0.22rem;
     min-block-size: 6.1rem;
 }

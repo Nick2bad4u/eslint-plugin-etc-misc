@@ -42,6 +42,12 @@ This rule forwards options to `@typescript-eslint/no-base-to-string`.
 - **Available until:** `v2.0.0`
 - **Use instead:** [`@typescript-eslint/no-base-to-string`](https://typescript-eslint.io/rules/no-base-to-string)
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -71,3 +77,8 @@ stringification and that behavior is covered by runtime tests.
 ## Further reading
 
 - [typescript-eslint: `no-base-to-string`](https://typescript-eslint.io/rules/no-base-to-string)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

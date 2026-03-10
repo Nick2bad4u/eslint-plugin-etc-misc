@@ -40,6 +40,12 @@ This rule forwards options and behavior to
 - **Use instead:** [`no-secrets/no-secrets`](https://github.com/nickdeis/eslint-plugin-no-secrets)
 - **Additional recommendation:** Prefer dedicated scanners such as [Secretlint](https://github.com/secretlint/secretlint) or [detect-secrets](https://github.com/Yelp/detect-secrets).
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -69,3 +75,8 @@ are unavoidable.
 ## Further reading
 
 - [eslint-plugin-no-secrets](https://github.com/nickdeis/eslint-plugin-no-secrets)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

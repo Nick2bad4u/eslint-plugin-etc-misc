@@ -2,11 +2,19 @@
 
 Disallow negated conditions.
 
-## Rule Details
+## Targeted pattern scope
+
+This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+
+## What this rule reports
 
 This rule reports selected negated patterns in conditions and top-level logical expressions, including `!foo` and `foo !== bar` forms.
 
-### ❌ Incorrect
+## Why this rule exists
+
+Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+
+## ❌ Incorrect
 
 ```ts
 if (!x && y) {}
@@ -14,7 +22,7 @@ if (x !== 1 && y) {}
 const value = !x || y;
 ```
 
-### ✅ Correct
+## ✅ Correct
 
 ```ts
 if (x && y) {}
@@ -22,9 +30,19 @@ if (x === 1 && y) {}
 const value = x && y;
 ```
 
-## Options
+## Behavior and migration notes
+
+Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+
+### Options
 
 This rule has no options.
+
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
 
 ## ESLint flat config example
 
@@ -41,12 +59,21 @@ export default [
 ];
 ```
 
-## When Not To Use It
+## When not to use it
 
 Disable this rule if your codebase intentionally allows negated condition forms.
+
+## Package documentation
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
 > **Rule catalog ID:** R033
 
 ## Further reading
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

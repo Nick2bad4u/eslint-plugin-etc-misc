@@ -47,6 +47,12 @@ operator:
 - `>` → `<`
 - `>=` → `<=`
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -77,3 +83,8 @@ readability and does not want operand-swapping autofixes.
 
 - [MDN: Less than (`<`)](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Less_than)
 - [MDN: Greater than (`>`)](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/Greater_than)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

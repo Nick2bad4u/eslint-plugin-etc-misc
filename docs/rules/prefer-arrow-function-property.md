@@ -52,6 +52,12 @@ When migrating, convert method shorthand and function-expression properties to
 arrow-function properties where `this` is not used. If a function intentionally
 uses method-style `this`, keep it as a method and annotate `this` explicitly.
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -82,3 +88,8 @@ object APIs or relies on method-style `this` semantics.
 
 - [MDN: Arrow function expressions](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
 - [TypeScript: `this` parameters](https://www.typescriptlang.org/docs/handbook/2/functions.html#declaring-this-in-a-function)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

@@ -1,723 +1,723 @@
 [
-    {
-        "catalogId": "R001",
-        "catalogIndex": 1,
-        "docId": "array-type",
-        "isTypeScriptRule": false,
-        "ruleName": "array-type"
-    },
-    {
-        "catalogId": "R002",
-        "catalogIndex": 2,
-        "docId": "class-match-filename",
-        "isTypeScriptRule": false,
-        "ruleName": "class-match-filename"
-    },
-    {
-        "catalogId": "R003",
-        "catalogIndex": 3,
-        "docId": "comment-spacing",
-        "isTypeScriptRule": false,
-        "ruleName": "comment-spacing"
-    },
-    {
-        "catalogId": "R004",
-        "catalogIndex": 4,
-        "docId": "consistent-empty-lines",
-        "isTypeScriptRule": false,
-        "ruleName": "consistent-empty-lines"
-    },
-    {
-        "catalogId": "R005",
-        "catalogIndex": 5,
-        "docId": "consistent-enum-members",
-        "isTypeScriptRule": false,
-        "ruleName": "consistent-enum-members"
-    },
-    {
-        "catalogId": "R006",
-        "catalogIndex": 6,
-        "docId": "consistent-filename",
-        "isTypeScriptRule": false,
-        "ruleName": "consistent-filename"
-    },
-    {
-        "catalogId": "R007",
-        "catalogIndex": 7,
-        "docId": "consistent-import",
-        "isTypeScriptRule": false,
-        "ruleName": "consistent-import"
-    },
-    {
-        "catalogId": "R008",
-        "catalogIndex": 8,
-        "docId": "consistent-optional-props",
-        "isTypeScriptRule": false,
-        "ruleName": "consistent-optional-props"
-    },
-    {
-        "catalogId": "R009",
-        "catalogIndex": 9,
-        "docId": "consistent-source-extension",
-        "isTypeScriptRule": false,
-        "ruleName": "consistent-source-extension"
-    },
-    {
-        "catalogId": "R010",
-        "catalogIndex": 10,
-        "docId": "consistent-symbol-description",
-        "isTypeScriptRule": false,
-        "ruleName": "consistent-symbol-description"
-    },
-    {
-        "catalogId": "R011",
-        "catalogIndex": 11,
-        "docId": "default-case",
-        "isTypeScriptRule": false,
-        "ruleName": "default-case"
-    },
-    {
-        "catalogId": "R012",
-        "catalogIndex": 12,
-        "docId": "disallow-import",
-        "isTypeScriptRule": false,
-        "ruleName": "disallow-import"
-    },
-    {
-        "catalogId": "R013",
-        "catalogIndex": 13,
-        "docId": "export-matching-filename-only",
-        "isTypeScriptRule": false,
-        "ruleName": "export-matching-filename-only"
-    },
-    {
-        "catalogId": "R014",
-        "catalogIndex": 14,
-        "docId": "match-filename",
-        "isTypeScriptRule": false,
-        "ruleName": "match-filename"
-    },
-    {
-        "catalogId": "R015",
-        "catalogIndex": 15,
-        "docId": "max-identifier-blocks",
-        "isTypeScriptRule": false,
-        "ruleName": "max-identifier-blocks"
-    },
-    {
-        "catalogId": "R016",
-        "catalogIndex": 16,
-        "docId": "no-assign-mutated-array",
-        "isTypeScriptRule": false,
-        "ruleName": "no-assign-mutated-array"
-    },
-    {
-        "catalogId": "R017",
-        "catalogIndex": 17,
-        "docId": "no-at-sign-import",
-        "isTypeScriptRule": false,
-        "ruleName": "no-at-sign-import"
-    },
-    {
-        "catalogId": "R018",
-        "catalogIndex": 18,
-        "docId": "no-at-sign-internal-import",
-        "isTypeScriptRule": false,
-        "ruleName": "no-at-sign-internal-import"
-    },
-    {
-        "catalogId": "R019",
-        "catalogIndex": 19,
-        "docId": "no-chain-coalescence-mixture",
-        "isTypeScriptRule": false,
-        "ruleName": "no-chain-coalescence-mixture"
-    },
-    {
-        "catalogId": "R020",
-        "catalogIndex": 20,
-        "docId": "no-commented-out-code",
-        "isTypeScriptRule": false,
-        "ruleName": "no-commented-out-code"
-    },
-    {
-        "catalogId": "R021",
-        "catalogIndex": 21,
-        "docId": "no-const-enum",
-        "isTypeScriptRule": false,
-        "ruleName": "no-const-enum"
-    },
-    {
-        "catalogId": "R022",
-        "catalogIndex": 22,
-        "docId": "no-deprecated",
-        "isTypeScriptRule": false,
-        "ruleName": "no-deprecated"
-    },
-    {
-        "catalogId": "R023",
-        "catalogIndex": 23,
-        "docId": "no-enum",
-        "isTypeScriptRule": false,
-        "ruleName": "no-enum"
-    },
-    {
-        "catalogId": "R024",
-        "catalogIndex": 24,
-        "docId": "no-expression-empty-lines",
-        "isTypeScriptRule": false,
-        "ruleName": "no-expression-empty-lines"
-    },
-    {
-        "catalogId": "R025",
-        "catalogIndex": 25,
-        "docId": "no-foreach",
-        "isTypeScriptRule": false,
-        "ruleName": "no-foreach"
-    },
-    {
-        "catalogId": "R026",
-        "catalogIndex": 26,
-        "docId": "no-implicit-any-catch",
-        "isTypeScriptRule": false,
-        "ruleName": "no-implicit-any-catch"
-    },
-    {
-        "catalogId": "R027",
-        "catalogIndex": 27,
-        "docId": "no-index-import",
-        "isTypeScriptRule": false,
-        "ruleName": "no-index-import"
-    },
-    {
-        "catalogId": "R028",
-        "catalogIndex": 28,
-        "docId": "no-internal",
-        "isTypeScriptRule": false,
-        "ruleName": "no-internal"
-    },
-    {
-        "catalogId": "R029",
-        "catalogIndex": 29,
-        "docId": "no-internal-modules",
-        "isTypeScriptRule": false,
-        "ruleName": "no-internal-modules"
-    },
-    {
-        "catalogId": "R030",
-        "catalogIndex": 30,
-        "docId": "no-language-mixing",
-        "isTypeScriptRule": false,
-        "ruleName": "no-language-mixing"
-    },
-    {
-        "catalogId": "R031",
-        "catalogIndex": 31,
-        "docId": "no-misused-generics",
-        "isTypeScriptRule": false,
-        "ruleName": "no-misused-generics"
-    },
-    {
-        "catalogId": "R032",
-        "catalogIndex": 32,
-        "docId": "no-mixed-enums",
-        "isTypeScriptRule": false,
-        "ruleName": "no-mixed-enums"
-    },
-    {
-        "catalogId": "R033",
-        "catalogIndex": 33,
-        "docId": "no-negated-conditions",
-        "isTypeScriptRule": false,
-        "ruleName": "no-negated-conditions"
-    },
-    {
-        "catalogId": "R034",
-        "catalogIndex": 34,
-        "docId": "no-nodejs-modules",
-        "isTypeScriptRule": false,
-        "ruleName": "no-nodejs-modules"
-    },
-    {
-        "catalogId": "R035",
-        "catalogIndex": 35,
-        "docId": "no-param-reassign",
-        "isTypeScriptRule": false,
-        "ruleName": "no-param-reassign"
-    },
-    {
-        "catalogId": "R036",
-        "catalogIndex": 36,
-        "docId": "no-relative-parent-import",
-        "isTypeScriptRule": false,
-        "ruleName": "no-relative-parent-import"
-    },
-    {
-        "catalogId": "R037",
-        "catalogIndex": 37,
-        "docId": "no-restricted-syntax",
-        "isTypeScriptRule": false,
-        "ruleName": "no-restricted-syntax"
-    },
-    {
-        "catalogId": "R038",
-        "catalogIndex": 38,
-        "docId": "no-secret",
-        "isTypeScriptRule": false,
-        "ruleName": "no-secret"
-    },
-    {
-        "catalogId": "R039",
-        "catalogIndex": 39,
-        "docId": "no-self-import",
-        "isTypeScriptRule": false,
-        "ruleName": "no-self-import"
-    },
-    {
-        "catalogId": "R040",
-        "catalogIndex": 40,
-        "docId": "no-shadow",
-        "isTypeScriptRule": false,
-        "ruleName": "no-shadow"
-    },
-    {
-        "catalogId": "R041",
-        "catalogIndex": 41,
-        "docId": "no-sibling-import",
-        "isTypeScriptRule": false,
-        "ruleName": "no-sibling-import"
-    },
-    {
-        "catalogId": "R042",
-        "catalogIndex": 42,
-        "docId": "no-single-line-comment",
-        "isTypeScriptRule": false,
-        "ruleName": "no-single-line-comment"
-    },
-    {
-        "catalogId": "R043",
-        "catalogIndex": 43,
-        "docId": "no-t",
-        "isTypeScriptRule": false,
-        "ruleName": "no-t"
-    },
-    {
-        "catalogId": "R044",
-        "catalogIndex": 44,
-        "docId": "no-underscore-export",
-        "isTypeScriptRule": false,
-        "ruleName": "no-underscore-export"
-    },
-    {
-        "catalogId": "R045",
-        "catalogIndex": 45,
-        "docId": "no-unnecessary-as-const",
-        "isTypeScriptRule": false,
-        "ruleName": "no-unnecessary-as-const"
-    },
-    {
-        "catalogId": "R046",
-        "catalogIndex": 46,
-        "docId": "no-unnecessary-break",
-        "isTypeScriptRule": false,
-        "ruleName": "no-unnecessary-break"
-    },
-    {
-        "catalogId": "R047",
-        "catalogIndex": 47,
-        "docId": "no-unnecessary-initialization",
-        "isTypeScriptRule": false,
-        "ruleName": "no-unnecessary-initialization"
-    },
-    {
-        "catalogId": "R048",
-        "catalogIndex": 48,
-        "docId": "no-unnecessary-template-literal",
-        "isTypeScriptRule": false,
-        "ruleName": "no-unnecessary-template-literal"
-    },
-    {
-        "catalogId": "R049",
-        "catalogIndex": 49,
-        "docId": "no-unused-disable",
-        "isTypeScriptRule": false,
-        "ruleName": "no-unused-disable"
-    },
-    {
-        "catalogId": "R050",
-        "catalogIndex": 50,
-        "docId": "no-useless-generics",
-        "isTypeScriptRule": false,
-        "ruleName": "no-useless-generics"
-    },
-    {
-        "catalogId": "R051",
-        "catalogIndex": 51,
-        "docId": "no-value-tostring",
-        "isTypeScriptRule": false,
-        "ruleName": "no-value-tostring"
-    },
-    {
-        "catalogId": "R052",
-        "catalogIndex": 52,
-        "docId": "no-writeonly",
-        "isTypeScriptRule": false,
-        "ruleName": "no-writeonly"
-    },
-    {
-        "catalogId": "R053",
-        "catalogIndex": 53,
-        "docId": "object-format",
-        "isTypeScriptRule": false,
-        "ruleName": "object-format"
-    },
-    {
-        "catalogId": "R054",
-        "catalogIndex": 54,
-        "docId": "only-export-name",
-        "isTypeScriptRule": false,
-        "ruleName": "only-export-name"
-    },
-    {
-        "catalogId": "R055",
-        "catalogIndex": 55,
-        "docId": "prefer-arrow-function-property",
-        "isTypeScriptRule": false,
-        "ruleName": "prefer-arrow-function-property"
-    },
-    {
-        "catalogId": "R056",
-        "catalogIndex": 56,
-        "docId": "prefer-const-require",
-        "isTypeScriptRule": false,
-        "ruleName": "prefer-const-require"
-    },
-    {
-        "catalogId": "R057",
-        "catalogIndex": 57,
-        "docId": "prefer-includes",
-        "isTypeScriptRule": false,
-        "ruleName": "prefer-includes"
-    },
-    {
-        "catalogId": "R058",
-        "catalogIndex": 58,
-        "docId": "prefer-interface",
-        "isTypeScriptRule": false,
-        "ruleName": "prefer-interface"
-    },
-    {
-        "catalogId": "R059",
-        "catalogIndex": 59,
-        "docId": "prefer-less-than",
-        "isTypeScriptRule": false,
-        "ruleName": "prefer-less-than"
-    },
-    {
-        "catalogId": "R060",
-        "catalogIndex": 60,
-        "docId": "prefer-object-has-own",
-        "isTypeScriptRule": false,
-        "ruleName": "prefer-object-has-own"
-    },
-    {
-        "catalogId": "R061",
-        "catalogIndex": 61,
-        "docId": "prefer-only-export",
-        "isTypeScriptRule": false,
-        "ruleName": "prefer-only-export"
-    },
-    {
-        "catalogId": "R062",
-        "catalogIndex": 62,
-        "docId": "require-jsdoc",
-        "isTypeScriptRule": false,
-        "ruleName": "require-jsdoc"
-    },
-    {
-        "catalogId": "R063",
-        "catalogIndex": 63,
-        "docId": "require-syntax",
-        "isTypeScriptRule": false,
-        "ruleName": "require-syntax"
-    },
-    {
-        "catalogId": "R064",
-        "catalogIndex": 64,
-        "docId": "restrict-identifier-characters",
-        "isTypeScriptRule": false,
-        "ruleName": "restrict-identifier-characters"
-    },
-    {
-        "catalogId": "R065",
-        "catalogIndex": 65,
-        "docId": "sort-array",
-        "isTypeScriptRule": false,
-        "ruleName": "sort-array"
-    },
-    {
-        "catalogId": "R066",
-        "catalogIndex": 66,
-        "docId": "sort-call-signature",
-        "isTypeScriptRule": false,
-        "ruleName": "sort-call-signature"
-    },
-    {
-        "catalogId": "R067",
-        "catalogIndex": 67,
-        "docId": "sort-class-members",
-        "isTypeScriptRule": false,
-        "ruleName": "sort-class-members"
-    },
-    {
-        "catalogId": "R068",
-        "catalogIndex": 68,
-        "docId": "sort-construct-signature",
-        "isTypeScriptRule": false,
-        "ruleName": "sort-construct-signature"
-    },
-    {
-        "catalogId": "R069",
-        "catalogIndex": 69,
-        "docId": "sort-export-specifiers",
-        "isTypeScriptRule": false,
-        "ruleName": "sort-export-specifiers"
-    },
-    {
-        "catalogId": "R070",
-        "catalogIndex": 70,
-        "docId": "sort-keys",
-        "isTypeScriptRule": false,
-        "ruleName": "sort-keys"
-    },
-    {
-        "catalogId": "R071",
-        "catalogIndex": 71,
-        "docId": "sort-top-comments",
-        "isTypeScriptRule": false,
-        "ruleName": "sort-top-comments"
-    },
-    {
-        "catalogId": "R072",
-        "catalogIndex": 72,
-        "docId": "switch-case-spacing",
-        "isTypeScriptRule": false,
-        "ruleName": "switch-case-spacing"
-    },
-    {
-        "catalogId": "R073",
-        "catalogIndex": 73,
-        "docId": "template-literal-format",
-        "isTypeScriptRule": false,
-        "ruleName": "template-literal-format"
-    },
-    {
-        "catalogId": "R074",
-        "catalogIndex": 74,
-        "docId": "throw-error",
-        "isTypeScriptRule": false,
-        "ruleName": "throw-error"
-    },
-    {
-        "catalogId": "R075",
-        "catalogIndex": 75,
-        "docId": "throw-new-error",
-        "isTypeScriptRule": false,
-        "ruleName": "throw-new-error"
-    },
-    {
-        "catalogId": "R076",
-        "catalogIndex": 76,
-        "docId": "underscore-internal",
-        "isTypeScriptRule": false,
-        "ruleName": "underscore-internal"
-    },
-    {
-        "catalogId": "R077",
-        "catalogIndex": 77,
-        "docId": "unused-internal-properties",
-        "isTypeScriptRule": false,
-        "ruleName": "unused-internal-properties"
-    },
-    {
-        "catalogId": "R078",
-        "catalogIndex": 78,
-        "docId": "uppercase-iife",
-        "isTypeScriptRule": false,
-        "ruleName": "uppercase-iife"
-    },
-    {
-        "catalogId": "R079",
-        "catalogIndex": 79,
-        "docId": "words",
-        "isTypeScriptRule": false,
-        "ruleName": "words"
-    },
-    {
-        "catalogId": "R080",
-        "catalogIndex": 80,
-        "docId": "typescript-array-callback-return-type",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/array-callback-return-type"
-    },
-    {
-        "catalogId": "R081",
-        "catalogIndex": 81,
-        "docId": "typescript-class-methods-use-this",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/class-methods-use-this"
-    },
-    {
-        "catalogId": "R082",
-        "catalogIndex": 82,
-        "docId": "typescript-consistent-array-type-name",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/consistent-array-type-name"
-    },
-    {
-        "catalogId": "R083",
-        "catalogIndex": 83,
-        "docId": "typescript-define-function-in-one-statement",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/define-function-in-one-statement"
-    },
-    {
-        "catalogId": "R084",
-        "catalogIndex": 84,
-        "docId": "typescript-exhaustive-switch",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/exhaustive-switch"
-    },
-    {
-        "catalogId": "R085",
-        "catalogIndex": 85,
-        "docId": "typescript-no-boolean-literal-type",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/no-boolean-literal-type"
-    },
-    {
-        "catalogId": "R086",
-        "catalogIndex": 86,
-        "docId": "typescript-no-complex-declarator-type",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/no-complex-declarator-type"
-    },
-    {
-        "catalogId": "R087",
-        "catalogIndex": 87,
-        "docId": "typescript-no-complex-return-type",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/no-complex-return-type"
-    },
-    {
-        "catalogId": "R088",
-        "catalogIndex": 88,
-        "docId": "typescript-no-empty-interfaces",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/no-empty-interfaces"
-    },
-    {
-        "catalogId": "R089",
-        "catalogIndex": 89,
-        "docId": "typescript-no-inferrable-types",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/no-inferrable-types"
-    },
-    {
-        "catalogId": "R090",
-        "catalogIndex": 90,
-        "docId": "typescript-no-multi-type-tuples",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/no-multi-type-tuples"
-    },
-    {
-        "catalogId": "R091",
-        "catalogIndex": 91,
-        "docId": "typescript-no-never",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/no-never"
-    },
-    {
-        "catalogId": "R092",
-        "catalogIndex": 92,
-        "docId": "typescript-no-restricted-syntax",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/no-restricted-syntax"
-    },
-    {
-        "catalogId": "R093",
-        "catalogIndex": 93,
-        "docId": "typescript-no-unsafe-object-assign",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/no-unsafe-object-assign"
-    },
-    {
-        "catalogId": "R094",
-        "catalogIndex": 94,
-        "docId": "typescript-no-unsafe-object-assignment",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/no-unsafe-object-assignment"
-    },
-    {
-        "catalogId": "R095",
-        "catalogIndex": 95,
-        "docId": "typescript-prefer-array-type-alias",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/prefer-array-type-alias"
-    },
-    {
-        "catalogId": "R096",
-        "catalogIndex": 96,
-        "docId": "typescript-prefer-class-method",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/prefer-class-method"
-    },
-    {
-        "catalogId": "R097",
-        "catalogIndex": 97,
-        "docId": "typescript-prefer-enum",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/prefer-enum"
-    },
-    {
-        "catalogId": "R098",
-        "catalogIndex": 98,
-        "docId": "typescript-prefer-readonly-array",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/prefer-readonly-array"
-    },
-    {
-        "catalogId": "R099",
-        "catalogIndex": 99,
-        "docId": "typescript-prefer-readonly-map",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/prefer-readonly-map"
-    },
-    {
-        "catalogId": "R100",
-        "catalogIndex": 100,
-        "docId": "typescript-prefer-readonly-property",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/prefer-readonly-property"
-    },
-    {
-        "catalogId": "R101",
-        "catalogIndex": 101,
-        "docId": "typescript-prefer-readonly-set",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/prefer-readonly-set"
-    },
-    {
-        "catalogId": "R102",
-        "catalogIndex": 102,
-        "docId": "typescript-require-prop-type-annotation",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/require-prop-type-annotation"
-    },
-    {
-        "catalogId": "R103",
-        "catalogIndex": 103,
-        "docId": "typescript-require-this-void",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/require-this-void"
-    }
+  {
+    "catalogId": "R001",
+    "catalogIndex": 1,
+    "docId": "array-type",
+    "isTypeScriptRule": false,
+    "ruleName": "array-type"
+  },
+  {
+    "catalogId": "R002",
+    "catalogIndex": 2,
+    "docId": "class-match-filename",
+    "isTypeScriptRule": false,
+    "ruleName": "class-match-filename"
+  },
+  {
+    "catalogId": "R003",
+    "catalogIndex": 3,
+    "docId": "comment-spacing",
+    "isTypeScriptRule": false,
+    "ruleName": "comment-spacing"
+  },
+  {
+    "catalogId": "R004",
+    "catalogIndex": 4,
+    "docId": "consistent-empty-lines",
+    "isTypeScriptRule": false,
+    "ruleName": "consistent-empty-lines"
+  },
+  {
+    "catalogId": "R005",
+    "catalogIndex": 5,
+    "docId": "consistent-enum-members",
+    "isTypeScriptRule": false,
+    "ruleName": "consistent-enum-members"
+  },
+  {
+    "catalogId": "R006",
+    "catalogIndex": 6,
+    "docId": "consistent-filename",
+    "isTypeScriptRule": false,
+    "ruleName": "consistent-filename"
+  },
+  {
+    "catalogId": "R007",
+    "catalogIndex": 7,
+    "docId": "consistent-import",
+    "isTypeScriptRule": false,
+    "ruleName": "consistent-import"
+  },
+  {
+    "catalogId": "R008",
+    "catalogIndex": 8,
+    "docId": "consistent-optional-props",
+    "isTypeScriptRule": false,
+    "ruleName": "consistent-optional-props"
+  },
+  {
+    "catalogId": "R009",
+    "catalogIndex": 9,
+    "docId": "consistent-source-extension",
+    "isTypeScriptRule": false,
+    "ruleName": "consistent-source-extension"
+  },
+  {
+    "catalogId": "R010",
+    "catalogIndex": 10,
+    "docId": "consistent-symbol-description",
+    "isTypeScriptRule": false,
+    "ruleName": "consistent-symbol-description"
+  },
+  {
+    "catalogId": "R011",
+    "catalogIndex": 11,
+    "docId": "default-case",
+    "isTypeScriptRule": false,
+    "ruleName": "default-case"
+  },
+  {
+    "catalogId": "R012",
+    "catalogIndex": 12,
+    "docId": "disallow-import",
+    "isTypeScriptRule": false,
+    "ruleName": "disallow-import"
+  },
+  {
+    "catalogId": "R013",
+    "catalogIndex": 13,
+    "docId": "export-matching-filename-only",
+    "isTypeScriptRule": false,
+    "ruleName": "export-matching-filename-only"
+  },
+  {
+    "catalogId": "R014",
+    "catalogIndex": 14,
+    "docId": "match-filename",
+    "isTypeScriptRule": false,
+    "ruleName": "match-filename"
+  },
+  {
+    "catalogId": "R015",
+    "catalogIndex": 15,
+    "docId": "max-identifier-blocks",
+    "isTypeScriptRule": false,
+    "ruleName": "max-identifier-blocks"
+  },
+  {
+    "catalogId": "R016",
+    "catalogIndex": 16,
+    "docId": "no-assign-mutated-array",
+    "isTypeScriptRule": false,
+    "ruleName": "no-assign-mutated-array"
+  },
+  {
+    "catalogId": "R017",
+    "catalogIndex": 17,
+    "docId": "no-at-sign-import",
+    "isTypeScriptRule": false,
+    "ruleName": "no-at-sign-import"
+  },
+  {
+    "catalogId": "R018",
+    "catalogIndex": 18,
+    "docId": "no-at-sign-internal-import",
+    "isTypeScriptRule": false,
+    "ruleName": "no-at-sign-internal-import"
+  },
+  {
+    "catalogId": "R019",
+    "catalogIndex": 19,
+    "docId": "no-chain-coalescence-mixture",
+    "isTypeScriptRule": false,
+    "ruleName": "no-chain-coalescence-mixture"
+  },
+  {
+    "catalogId": "R020",
+    "catalogIndex": 20,
+    "docId": "no-commented-out-code",
+    "isTypeScriptRule": false,
+    "ruleName": "no-commented-out-code"
+  },
+  {
+    "catalogId": "R021",
+    "catalogIndex": 21,
+    "docId": "no-const-enum",
+    "isTypeScriptRule": false,
+    "ruleName": "no-const-enum"
+  },
+  {
+    "catalogId": "R022",
+    "catalogIndex": 22,
+    "docId": "no-deprecated",
+    "isTypeScriptRule": false,
+    "ruleName": "no-deprecated"
+  },
+  {
+    "catalogId": "R023",
+    "catalogIndex": 23,
+    "docId": "no-enum",
+    "isTypeScriptRule": false,
+    "ruleName": "no-enum"
+  },
+  {
+    "catalogId": "R024",
+    "catalogIndex": 24,
+    "docId": "no-expression-empty-lines",
+    "isTypeScriptRule": false,
+    "ruleName": "no-expression-empty-lines"
+  },
+  {
+    "catalogId": "R025",
+    "catalogIndex": 25,
+    "docId": "no-foreach",
+    "isTypeScriptRule": false,
+    "ruleName": "no-foreach"
+  },
+  {
+    "catalogId": "R026",
+    "catalogIndex": 26,
+    "docId": "no-implicit-any-catch",
+    "isTypeScriptRule": false,
+    "ruleName": "no-implicit-any-catch"
+  },
+  {
+    "catalogId": "R027",
+    "catalogIndex": 27,
+    "docId": "no-index-import",
+    "isTypeScriptRule": false,
+    "ruleName": "no-index-import"
+  },
+  {
+    "catalogId": "R028",
+    "catalogIndex": 28,
+    "docId": "no-internal",
+    "isTypeScriptRule": false,
+    "ruleName": "no-internal"
+  },
+  {
+    "catalogId": "R029",
+    "catalogIndex": 29,
+    "docId": "no-internal-modules",
+    "isTypeScriptRule": false,
+    "ruleName": "no-internal-modules"
+  },
+  {
+    "catalogId": "R030",
+    "catalogIndex": 30,
+    "docId": "no-language-mixing",
+    "isTypeScriptRule": false,
+    "ruleName": "no-language-mixing"
+  },
+  {
+    "catalogId": "R031",
+    "catalogIndex": 31,
+    "docId": "no-misused-generics",
+    "isTypeScriptRule": false,
+    "ruleName": "no-misused-generics"
+  },
+  {
+    "catalogId": "R032",
+    "catalogIndex": 32,
+    "docId": "no-mixed-enums",
+    "isTypeScriptRule": false,
+    "ruleName": "no-mixed-enums"
+  },
+  {
+    "catalogId": "R033",
+    "catalogIndex": 33,
+    "docId": "no-negated-conditions",
+    "isTypeScriptRule": false,
+    "ruleName": "no-negated-conditions"
+  },
+  {
+    "catalogId": "R034",
+    "catalogIndex": 34,
+    "docId": "no-nodejs-modules",
+    "isTypeScriptRule": false,
+    "ruleName": "no-nodejs-modules"
+  },
+  {
+    "catalogId": "R035",
+    "catalogIndex": 35,
+    "docId": "no-param-reassign",
+    "isTypeScriptRule": false,
+    "ruleName": "no-param-reassign"
+  },
+  {
+    "catalogId": "R036",
+    "catalogIndex": 36,
+    "docId": "no-relative-parent-import",
+    "isTypeScriptRule": false,
+    "ruleName": "no-relative-parent-import"
+  },
+  {
+    "catalogId": "R037",
+    "catalogIndex": 37,
+    "docId": "no-restricted-syntax",
+    "isTypeScriptRule": false,
+    "ruleName": "no-restricted-syntax"
+  },
+  {
+    "catalogId": "R038",
+    "catalogIndex": 38,
+    "docId": "no-secret",
+    "isTypeScriptRule": false,
+    "ruleName": "no-secret"
+  },
+  {
+    "catalogId": "R039",
+    "catalogIndex": 39,
+    "docId": "no-self-import",
+    "isTypeScriptRule": false,
+    "ruleName": "no-self-import"
+  },
+  {
+    "catalogId": "R040",
+    "catalogIndex": 40,
+    "docId": "no-shadow",
+    "isTypeScriptRule": false,
+    "ruleName": "no-shadow"
+  },
+  {
+    "catalogId": "R041",
+    "catalogIndex": 41,
+    "docId": "no-sibling-import",
+    "isTypeScriptRule": false,
+    "ruleName": "no-sibling-import"
+  },
+  {
+    "catalogId": "R042",
+    "catalogIndex": 42,
+    "docId": "no-single-line-comment",
+    "isTypeScriptRule": false,
+    "ruleName": "no-single-line-comment"
+  },
+  {
+    "catalogId": "R043",
+    "catalogIndex": 43,
+    "docId": "no-t",
+    "isTypeScriptRule": false,
+    "ruleName": "no-t"
+  },
+  {
+    "catalogId": "R044",
+    "catalogIndex": 44,
+    "docId": "no-underscore-export",
+    "isTypeScriptRule": false,
+    "ruleName": "no-underscore-export"
+  },
+  {
+    "catalogId": "R045",
+    "catalogIndex": 45,
+    "docId": "no-unnecessary-as-const",
+    "isTypeScriptRule": false,
+    "ruleName": "no-unnecessary-as-const"
+  },
+  {
+    "catalogId": "R046",
+    "catalogIndex": 46,
+    "docId": "no-unnecessary-break",
+    "isTypeScriptRule": false,
+    "ruleName": "no-unnecessary-break"
+  },
+  {
+    "catalogId": "R047",
+    "catalogIndex": 47,
+    "docId": "no-unnecessary-initialization",
+    "isTypeScriptRule": false,
+    "ruleName": "no-unnecessary-initialization"
+  },
+  {
+    "catalogId": "R048",
+    "catalogIndex": 48,
+    "docId": "no-unnecessary-template-literal",
+    "isTypeScriptRule": false,
+    "ruleName": "no-unnecessary-template-literal"
+  },
+  {
+    "catalogId": "R049",
+    "catalogIndex": 49,
+    "docId": "no-unused-disable",
+    "isTypeScriptRule": false,
+    "ruleName": "no-unused-disable"
+  },
+  {
+    "catalogId": "R050",
+    "catalogIndex": 50,
+    "docId": "no-useless-generics",
+    "isTypeScriptRule": false,
+    "ruleName": "no-useless-generics"
+  },
+  {
+    "catalogId": "R051",
+    "catalogIndex": 51,
+    "docId": "no-value-tostring",
+    "isTypeScriptRule": false,
+    "ruleName": "no-value-tostring"
+  },
+  {
+    "catalogId": "R052",
+    "catalogIndex": 52,
+    "docId": "no-writeonly",
+    "isTypeScriptRule": false,
+    "ruleName": "no-writeonly"
+  },
+  {
+    "catalogId": "R053",
+    "catalogIndex": 53,
+    "docId": "object-format",
+    "isTypeScriptRule": false,
+    "ruleName": "object-format"
+  },
+  {
+    "catalogId": "R054",
+    "catalogIndex": 54,
+    "docId": "only-export-name",
+    "isTypeScriptRule": false,
+    "ruleName": "only-export-name"
+  },
+  {
+    "catalogId": "R055",
+    "catalogIndex": 55,
+    "docId": "prefer-arrow-function-property",
+    "isTypeScriptRule": false,
+    "ruleName": "prefer-arrow-function-property"
+  },
+  {
+    "catalogId": "R056",
+    "catalogIndex": 56,
+    "docId": "prefer-const-require",
+    "isTypeScriptRule": false,
+    "ruleName": "prefer-const-require"
+  },
+  {
+    "catalogId": "R057",
+    "catalogIndex": 57,
+    "docId": "prefer-includes",
+    "isTypeScriptRule": false,
+    "ruleName": "prefer-includes"
+  },
+  {
+    "catalogId": "R058",
+    "catalogIndex": 58,
+    "docId": "prefer-interface",
+    "isTypeScriptRule": false,
+    "ruleName": "prefer-interface"
+  },
+  {
+    "catalogId": "R059",
+    "catalogIndex": 59,
+    "docId": "prefer-less-than",
+    "isTypeScriptRule": false,
+    "ruleName": "prefer-less-than"
+  },
+  {
+    "catalogId": "R060",
+    "catalogIndex": 60,
+    "docId": "prefer-object-has-own",
+    "isTypeScriptRule": false,
+    "ruleName": "prefer-object-has-own"
+  },
+  {
+    "catalogId": "R061",
+    "catalogIndex": 61,
+    "docId": "prefer-only-export",
+    "isTypeScriptRule": false,
+    "ruleName": "prefer-only-export"
+  },
+  {
+    "catalogId": "R062",
+    "catalogIndex": 62,
+    "docId": "require-jsdoc",
+    "isTypeScriptRule": false,
+    "ruleName": "require-jsdoc"
+  },
+  {
+    "catalogId": "R063",
+    "catalogIndex": 63,
+    "docId": "require-syntax",
+    "isTypeScriptRule": false,
+    "ruleName": "require-syntax"
+  },
+  {
+    "catalogId": "R064",
+    "catalogIndex": 64,
+    "docId": "restrict-identifier-characters",
+    "isTypeScriptRule": false,
+    "ruleName": "restrict-identifier-characters"
+  },
+  {
+    "catalogId": "R065",
+    "catalogIndex": 65,
+    "docId": "sort-array",
+    "isTypeScriptRule": false,
+    "ruleName": "sort-array"
+  },
+  {
+    "catalogId": "R066",
+    "catalogIndex": 66,
+    "docId": "sort-call-signature",
+    "isTypeScriptRule": false,
+    "ruleName": "sort-call-signature"
+  },
+  {
+    "catalogId": "R067",
+    "catalogIndex": 67,
+    "docId": "sort-class-members",
+    "isTypeScriptRule": false,
+    "ruleName": "sort-class-members"
+  },
+  {
+    "catalogId": "R068",
+    "catalogIndex": 68,
+    "docId": "sort-construct-signature",
+    "isTypeScriptRule": false,
+    "ruleName": "sort-construct-signature"
+  },
+  {
+    "catalogId": "R069",
+    "catalogIndex": 69,
+    "docId": "sort-export-specifiers",
+    "isTypeScriptRule": false,
+    "ruleName": "sort-export-specifiers"
+  },
+  {
+    "catalogId": "R070",
+    "catalogIndex": 70,
+    "docId": "sort-keys",
+    "isTypeScriptRule": false,
+    "ruleName": "sort-keys"
+  },
+  {
+    "catalogId": "R071",
+    "catalogIndex": 71,
+    "docId": "sort-top-comments",
+    "isTypeScriptRule": false,
+    "ruleName": "sort-top-comments"
+  },
+  {
+    "catalogId": "R072",
+    "catalogIndex": 72,
+    "docId": "switch-case-spacing",
+    "isTypeScriptRule": false,
+    "ruleName": "switch-case-spacing"
+  },
+  {
+    "catalogId": "R073",
+    "catalogIndex": 73,
+    "docId": "template-literal-format",
+    "isTypeScriptRule": false,
+    "ruleName": "template-literal-format"
+  },
+  {
+    "catalogId": "R074",
+    "catalogIndex": 74,
+    "docId": "throw-error",
+    "isTypeScriptRule": false,
+    "ruleName": "throw-error"
+  },
+  {
+    "catalogId": "R075",
+    "catalogIndex": 75,
+    "docId": "throw-new-error",
+    "isTypeScriptRule": false,
+    "ruleName": "throw-new-error"
+  },
+  {
+    "catalogId": "R076",
+    "catalogIndex": 76,
+    "docId": "underscore-internal",
+    "isTypeScriptRule": false,
+    "ruleName": "underscore-internal"
+  },
+  {
+    "catalogId": "R077",
+    "catalogIndex": 77,
+    "docId": "unused-internal-properties",
+    "isTypeScriptRule": false,
+    "ruleName": "unused-internal-properties"
+  },
+  {
+    "catalogId": "R078",
+    "catalogIndex": 78,
+    "docId": "uppercase-iife",
+    "isTypeScriptRule": false,
+    "ruleName": "uppercase-iife"
+  },
+  {
+    "catalogId": "R079",
+    "catalogIndex": 79,
+    "docId": "words",
+    "isTypeScriptRule": false,
+    "ruleName": "words"
+  },
+  {
+    "catalogId": "R080",
+    "catalogIndex": 80,
+    "docId": "typescript-array-callback-return-type",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/array-callback-return-type"
+  },
+  {
+    "catalogId": "R081",
+    "catalogIndex": 81,
+    "docId": "typescript-class-methods-use-this",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/class-methods-use-this"
+  },
+  {
+    "catalogId": "R082",
+    "catalogIndex": 82,
+    "docId": "typescript-consistent-array-type-name",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/consistent-array-type-name"
+  },
+  {
+    "catalogId": "R083",
+    "catalogIndex": 83,
+    "docId": "typescript-define-function-in-one-statement",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/define-function-in-one-statement"
+  },
+  {
+    "catalogId": "R084",
+    "catalogIndex": 84,
+    "docId": "typescript-exhaustive-switch",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/exhaustive-switch"
+  },
+  {
+    "catalogId": "R085",
+    "catalogIndex": 85,
+    "docId": "typescript-no-boolean-literal-type",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/no-boolean-literal-type"
+  },
+  {
+    "catalogId": "R086",
+    "catalogIndex": 86,
+    "docId": "typescript-no-complex-declarator-type",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/no-complex-declarator-type"
+  },
+  {
+    "catalogId": "R087",
+    "catalogIndex": 87,
+    "docId": "typescript-no-complex-return-type",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/no-complex-return-type"
+  },
+  {
+    "catalogId": "R088",
+    "catalogIndex": 88,
+    "docId": "typescript-no-empty-interfaces",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/no-empty-interfaces"
+  },
+  {
+    "catalogId": "R089",
+    "catalogIndex": 89,
+    "docId": "typescript-no-inferrable-types",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/no-inferrable-types"
+  },
+  {
+    "catalogId": "R090",
+    "catalogIndex": 90,
+    "docId": "typescript-no-multi-type-tuples",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/no-multi-type-tuples"
+  },
+  {
+    "catalogId": "R091",
+    "catalogIndex": 91,
+    "docId": "typescript-no-never",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/no-never"
+  },
+  {
+    "catalogId": "R092",
+    "catalogIndex": 92,
+    "docId": "typescript-no-restricted-syntax",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/no-restricted-syntax"
+  },
+  {
+    "catalogId": "R093",
+    "catalogIndex": 93,
+    "docId": "typescript-no-unsafe-object-assign",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/no-unsafe-object-assign"
+  },
+  {
+    "catalogId": "R094",
+    "catalogIndex": 94,
+    "docId": "typescript-no-unsafe-object-assignment",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/no-unsafe-object-assignment"
+  },
+  {
+    "catalogId": "R095",
+    "catalogIndex": 95,
+    "docId": "typescript-prefer-array-type-alias",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/prefer-array-type-alias"
+  },
+  {
+    "catalogId": "R096",
+    "catalogIndex": 96,
+    "docId": "typescript-prefer-class-method",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/prefer-class-method"
+  },
+  {
+    "catalogId": "R097",
+    "catalogIndex": 97,
+    "docId": "typescript-prefer-enum",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/prefer-enum"
+  },
+  {
+    "catalogId": "R098",
+    "catalogIndex": 98,
+    "docId": "typescript-prefer-readonly-array",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/prefer-readonly-array"
+  },
+  {
+    "catalogId": "R099",
+    "catalogIndex": 99,
+    "docId": "typescript-prefer-readonly-map",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/prefer-readonly-map"
+  },
+  {
+    "catalogId": "R100",
+    "catalogIndex": 100,
+    "docId": "typescript-prefer-readonly-property",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/prefer-readonly-property"
+  },
+  {
+    "catalogId": "R101",
+    "catalogIndex": 101,
+    "docId": "typescript-prefer-readonly-set",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/prefer-readonly-set"
+  },
+  {
+    "catalogId": "R102",
+    "catalogIndex": 102,
+    "docId": "typescript-require-prop-type-annotation",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/require-prop-type-annotation"
+  },
+  {
+    "catalogId": "R103",
+    "catalogIndex": 103,
+    "docId": "typescript-require-this-void",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/require-this-void"
+  }
 ]

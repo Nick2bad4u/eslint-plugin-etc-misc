@@ -37,6 +37,12 @@ This rule forwards options and behavior to `unicorn/prefer-includes`.
 - **Available until:** `v2.0.0`
 - **Use instead:** [`unicorn/prefer-includes`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-includes.md)
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -66,3 +72,8 @@ cannot be polyfilled safely.
 ## Further reading
 
 - [unicorn: `prefer-includes`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-includes.md)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

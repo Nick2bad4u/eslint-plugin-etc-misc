@@ -40,6 +40,12 @@ This rule forwards options and behavior to
 - **Available until:** `v2.0.0`
 - **Use instead:** [`@eslint-community/eslint-comments/no-unused-disable`](https://eslint-community.github.io/eslint-plugin-eslint-comments/rules/no-unused-disable.html)
 
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
 ## ESLint flat config example
 
 ```ts
@@ -69,3 +75,8 @@ placeholder disables are explicitly managed.
 ## Further reading
 
 - [eslint-comments: `no-unused-disable`](https://eslint-community.github.io/eslint-plugin-eslint-comments/rules/no-unused-disable.html)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

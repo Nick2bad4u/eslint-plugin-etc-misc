@@ -2,7 +2,13 @@
 
 Disallow usage of symbols tagged with `@internal`.
 
-## Rule Details
+## Targeted pattern scope
+
+⚠️ This rule requires type information to run. Configure type-aware linting (`parserOptions.project` or `projectService`) before enabling it.
+
+This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
+
+## What this rule reports
 
 APIs marked as `@internal` are implementation details that can change without
 notice. Referencing them from external call sites couples your code to unstable
@@ -13,7 +19,11 @@ or more `@internal` tags.
 
 > ⚠️ This rule requires type information to run.
 
-### ❌ Incorrect
+## Why this rule exists
+
+Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+
+## ❌ Incorrect
 
 ```ts
 /** @internal */
@@ -31,7 +41,7 @@ declare function internalFunction(): void;
 internalFunction();
 ```
 
-### ✅ Correct
+## ✅ Correct
 
 ```ts
 interface PublicType {
@@ -50,7 +60,11 @@ interface InternalType {
 // Declaration is allowed. Only usage is reported.
 ```
 
-## Options
+## Behavior and migration notes
+
+Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+
+### Options
 
 ```ts
 type Options = [
@@ -97,14 +111,44 @@ export default [
 ];
 ```
 
-## When Not To Use It
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
+```
+
+## ESLint flat config example
+
+```ts
+import etcMisc from "eslint-plugin-etc-misc";
+
+export default [
+    {
+        plugins: { "etc-misc": etcMisc },
+        rules: {
+            "etc-misc/no-internal": "error",
+        },
+    },
+];
+```
+
+## When not to use it
 
 Disable this rule if your project intentionally consumes internal contracts and
 accepts the maintenance risk from those unstable dependencies.
 
+## Package documentation
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+
 > **Rule catalog ID:** R028
 
-## Further Reading
+## Further reading
 
 - [TypeScript-ESLint: Typed Linting](https://typescript-eslint.io/getting-started/typed-linting)
 - [TSDoc: `@internal`](https://tsdoc.org/pages/tags/internal/)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

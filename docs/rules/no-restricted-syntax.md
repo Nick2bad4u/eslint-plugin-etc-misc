@@ -2,18 +2,19 @@
 
 Disallow syntax matched by configured AST selectors.
 
-## Status
+## Targeted pattern scope
 
-- **Lifecycle:** Deprecated and frozen.
-- **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
-- **Use instead:** [`no-restricted-syntax`](https://eslint.org/docs/latest/rules/no-restricted-syntax)
+This rule targets the syntax patterns and AST nodes associated with this rule’s focused convention.
 
-## Rule Details
+## What this rule reports
 
 This rule reports nodes selected by any configured selector in `selectors`.
 
-### ❌ Incorrect
+## Why this rule exists
+
+Consistent, explicit patterns improve readability, reduce review friction, and prevent subtle maintenance issues.
+
+## ❌ Incorrect
 
 ```ts
 if (x) {
@@ -27,7 +28,7 @@ with options:
 { selectors: ["IfStatement"] }
 ```
 
-### ✅ Correct
+## ✅ Correct
 
 ```ts
 for (;;) {
@@ -41,7 +42,18 @@ with options:
 { selectors: ["IfStatement"] }
 ```
 
-## Options
+## Deprecated
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`no-restricted-syntax`](https://eslint.org/docs/latest/rules/no-restricted-syntax)
+
+## Behavior and migration notes
+
+Review this rule in your codebase with `--fix-dry-run` first, then roll out with autofix in controlled batches.
+
+### Options
 
 ```ts
 type Options = {
@@ -53,6 +65,19 @@ type Options = {
           }
     >;
 };
+```
+
+### Status
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.0.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`no-restricted-syntax`](https://eslint.org/docs/latest/rules/no-restricted-syntax)
+
+## Additional examples
+
+```ts
+// Add project-specific examples here when edge cases matter.
 ```
 
 ## ESLint flat config example
@@ -73,12 +98,21 @@ export default [
 ];
 ```
 
-## When Not To Use It
+## When not to use it
 
 Disable this rule if your project does not rely on selector-based syntax restrictions.
+
+## Package documentation
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
 > **Rule catalog ID:** R037
 
 ## Further reading
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.
