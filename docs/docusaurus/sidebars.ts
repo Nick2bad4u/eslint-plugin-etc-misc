@@ -54,6 +54,12 @@ const sidebars: SidebarsConfig = {
             },
             items: [
                 {
+                    className: "sb-doc-releasing",
+                    id: "releasing",
+                    label: "🚢 Releasing",
+                    type: "doc",
+                },
+                {
                     className: "sb-doc-api-overview",
                     id: "developer/api/index",
                     label: "📘 API Overview",

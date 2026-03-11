@@ -61,14 +61,35 @@ import { fileURLToPath, pathToFileURL } from "node:url";
  * }>} ReadmePlugin
  */
 
-/** @typedef {keyof typeof presetIconByName} PresetName */
+/** @typedef {keyof typeof presetMetadataByName} PresetName */
 
 /** @typedef {Readonly<Record<PresetName, Set<string>>>} PresetRuleNamesByPreset */
 
-/** @type {Readonly<Record<string, string>>} */
-const presetIconByName = {
-    recommended: "🟡",
-    all: "🟣",
+/**
+ * @type {Readonly<
+ *     Record<
+ *         string,
+ *         Readonly<{
+ *             configKey: string;
+ *             docsUrl: string;
+ *             icon: string;
+ *         }>
+ *     >
+ * >}
+ */
+const presetMetadataByName = {
+    recommended: {
+        configKey: "etcMisc.configs.recommended",
+        docsUrl:
+            "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/recommended",
+        icon: "🟡",
+    },
+    all: {
+        configKey: "etcMisc.configs.all",
+        docsUrl:
+            "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/all",
+        icon: "🟣",
+    },
 };
 
 const presetOrder = ["recommended", "all"];
@@ -177,7 +198,9 @@ const getPresetIndicator = (ruleName, presetRuleNamesByPreset) => {
 
     for (const presetName of presetOrder) {
         if (presetRuleNamesByPreset[presetName].has(ruleName)) {
-            icons.push(presetIconByName[presetName]);
+            const presetMetadata = presetMetadataByName[presetName];
+
+            icons.push(`[${presetMetadata.icon}](${presetMetadata.docsUrl})`);
         }
     }
 
@@ -311,6 +334,12 @@ export const generateReadmeRulesSectionFromRules = (
         toRuleTableRow(entry, presetRuleNamesByPreset)
     );
 
+    const presetLegendLines = presetOrder.map((presetName) => {
+        const presetMetadata = presetMetadataByName[presetName];
+
+        return `  - [${presetMetadata.icon}](${presetMetadata.docsUrl}) — [\`${presetMetadata.configKey}\`](${presetMetadata.docsUrl})`;
+    });
+
     return [
         "## Rules",
         "",
@@ -318,7 +347,8 @@ export const generateReadmeRulesSectionFromRules = (
         "  - `🔧` = autofixable",
         "  - `💡` = suggestions available",
         "  - `—` = report only",
-        "- `Preset key` legend: `🟡 recommended` · `🟣 all`",
+        "- `Preset key` legend:",
+        ...presetLegendLines,
         "- `Deprecated` legend: `⚠️` = deprecated",
         "",
         "| Rule | Fix | Preset key | Deprecated | Recommended replacement |",
