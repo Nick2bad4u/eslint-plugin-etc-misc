@@ -6,7 +6,7 @@ type MessageIds = "forbidden" | "suggestConvertToBlock";
 
 type Options = readonly [
     Readonly<{
-        allowDirectiveComments?: boolean;
+        readonly allowDirectiveComments?: boolean;
     }>?,
 ];
 

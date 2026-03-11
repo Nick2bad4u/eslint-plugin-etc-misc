@@ -6,7 +6,7 @@ type MessageIds = "inconsistent";
 
 type Options = readonly [
     Readonly<{
-        maxProperties?: number;
+        readonly maxProperties?: number;
     }>,
 ];
 

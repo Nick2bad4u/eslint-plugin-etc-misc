@@ -2,20 +2,20 @@
  * Global rule catalog indexed by rule name and documentation id.
  */
 type RuleCatalog = Readonly<{
-    byDocId: Readonly<Record<string, RuleCatalogEntry>>;
-    byRuleName: Readonly<Record<string, RuleCatalogEntry>>;
-    ordered: readonly RuleCatalogEntry[];
+    readonly byDocId: Readonly<Record<string, RuleCatalogEntry>>;
+    readonly byRuleName: Readonly<Record<string, RuleCatalogEntry>>;
+    readonly ordered: readonly RuleCatalogEntry[];
 }>;
 
 /**
  * Single rule entry in the global catalog.
  */
 type RuleCatalogEntry = Readonly<{
-    catalogId: string;
-    catalogIndex: number;
-    docId: string;
-    isTypeScriptRule: boolean;
-    ruleName: string;
+    readonly catalogId: string;
+    readonly catalogIndex: number;
+    readonly docId: string;
+    readonly isTypeScriptRule: boolean;
+    readonly ruleName: string;
 }>;
 
 const toCatalogNumericPart = (catalogIndex: number): string =>
@@ -55,9 +55,9 @@ export const compareRuleNamesForCatalog = (
  */
 export const buildRuleCatalog = (ruleNames: readonly string[]): RuleCatalog => {
     const sortedRuleNames = ruleNames.toSorted(compareRuleNamesForCatalog);
-    const ordered: RuleCatalogEntry[] = [];
-    const byRuleName: Record<string, RuleCatalogEntry> = {};
-    const byDocId: Record<string, RuleCatalogEntry> = {};
+    let ordered: readonly RuleCatalogEntry[] = [];
+    let byRuleName: Readonly<Record<string, RuleCatalogEntry>> = {};
+    let byDocId: Readonly<Record<string, RuleCatalogEntry>> = {};
 
     for (const [zeroBasedIndex, ruleName] of sortedRuleNames.entries()) {
         const catalogIndex = zeroBasedIndex + 1;
@@ -70,9 +70,9 @@ export const buildRuleCatalog = (ruleNames: readonly string[]): RuleCatalog => {
             ruleName,
         };
 
-        ordered.push(entry);
-        byRuleName[ruleName] = entry;
-        byDocId[docId] = entry;
+        ordered = [...ordered, entry];
+        byRuleName = { ...byRuleName, [ruleName]: entry };
+        byDocId = { ...byDocId, [docId]: entry };
     }
 
     return {

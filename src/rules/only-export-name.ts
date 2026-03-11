@@ -6,7 +6,7 @@ type MessageIds = "forbidden";
 
 type Options = readonly [
     Readonly<{
-        names?: readonly string[];
+        readonly names?: readonly string[];
     }>,
 ];
 
@@ -41,11 +41,11 @@ const getExportedNames = (
     }
 
     if (declaration.type === "VariableDeclaration") {
-        const names: string[] = [];
+        let names: readonly string[] = [];
 
         for (const declarator of declaration.declarations) {
             if (declarator.id.type === "Identifier") {
-                names.push(declarator.id.name);
+                names = [...names, declarator.id.name];
             }
         }
 

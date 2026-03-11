@@ -10,7 +10,7 @@ type MessageIds = "customMessage" | "missing";
 
 type Options = readonly [
     Readonly<{
-        selectors?: readonly SyntaxSelectorOption[];
+        readonly selectors?: readonly SyntaxSelectorOption[];
     }>,
 ];
 
@@ -27,15 +27,17 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         );
         const counters = entries.map(() => 0);
 
-        const selectorListeners: Record<
-            string,
-            (node: Readonly<es.Node>) => void
+        let selectorListeners: Readonly<
+            Record<string, (node: Readonly<es.Node>) => void>
         > = {};
 
         for (const [index, entry] of entries.entries()) {
-            selectorListeners[entry.selector] = (): void => {
-                const count = counters[index] ?? 0;
-                counters[index] = count + 1;
+            selectorListeners = {
+                ...selectorListeners,
+                [entry.selector]: (): void => {
+                    const count = counters[index] ?? 0;
+                    counters[index] = count + 1;
+                },
             };
         }
 

@@ -10,8 +10,7 @@ ruleTester.run("typescript-require-readonly-record-return-type", rule, {
                     messageId: "forbidden",
                     suggestions: [
                         {
-                            messageId:
-                                "suggestRequireReadonlyRecordReturnType",
+                            messageId: "suggestRequireReadonlyRecordReturnType",
                             output: "function buildRecord(): Readonly<Record<string, number>> { return {}; }",
                         },
                     ],
@@ -26,8 +25,7 @@ ruleTester.run("typescript-require-readonly-record-return-type", rule, {
                     messageId: "forbidden",
                     suggestions: [
                         {
-                            messageId:
-                                "suggestRequireReadonlyRecordReturnType",
+                            messageId: "suggestRequireReadonlyRecordReturnType",
                             output: "type Resolver = () => Readonly<Record<string, string>> | null;",
                         },
                     ],
@@ -42,8 +40,7 @@ ruleTester.run("typescript-require-readonly-record-return-type", rule, {
                     messageId: "forbidden",
                     suggestions: [
                         {
-                            messageId:
-                                "suggestRequireReadonlyRecordReturnType",
+                            messageId: "suggestRequireReadonlyRecordReturnType",
                             output: "interface API { lookup(): Readonly<Record<string, string>>; }",
                         },
                     ],

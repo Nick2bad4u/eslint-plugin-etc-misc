@@ -9,11 +9,11 @@ type MessageIds = "mismatch";
 
 type Options = readonly [
     Readonly<{
-        format?: Casing;
-        match?: boolean;
-        prefix?: string;
-        selector?: readonly string[] | string;
-        suffix?: string;
+        readonly format?: Casing;
+        readonly match?: boolean;
+        readonly prefix?: string;
+        readonly selector?: readonly string[] | string;
+        readonly suffix?: string;
     }>,
 ];
 
@@ -47,35 +47,40 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 >({
     create: (context, [options]) => {
         const selectorList = normalizeSelector(options.selector);
-        const listeners: Record<string, (node: Readonly<es.Node>) => void> = {};
+        let listeners: Readonly<
+            Record<string, (node: Readonly<es.Node>) => void>
+        > = {};
 
         for (const selector of selectorList) {
-            listeners[selector] = (node: Readonly<es.Node>): void => {
-                if (
-                    context.filename === "<input>" ||
-                    node.type !== "Identifier"
-                ) {
-                    return;
-                }
+            listeners = {
+                ...listeners,
+                [selector]: (node: Readonly<es.Node>): void => {
+                    if (
+                        context.filename === "<input>" ||
+                        node.type !== "Identifier"
+                    ) {
+                        return;
+                    }
 
-                const stem = filenameStem(resolve(context.filename));
-                const expected = `${options.prefix ?? ""}${toCasing(
-                    node.name,
-                    options.format ?? "kebab-case"
-                )}${options.suffix ?? ""}`;
-                const matches = stem === expected;
+                    const stem = filenameStem(resolve(context.filename));
+                    const expected = `${options.prefix ?? ""}${toCasing(
+                        node.name,
+                        options.format ?? "kebab-case"
+                    )}${options.suffix ?? ""}`;
+                    const matches = stem === expected;
 
-                if ((options.match ?? true) ? matches : !matches) {
-                    return;
-                }
+                    if ((options.match ?? true) ? matches : !matches) {
+                        return;
+                    }
 
-                context.report({
-                    data: {
-                        expected,
-                    },
-                    messageId: "mismatch",
-                    node,
-                });
+                    context.report({
+                        data: {
+                            expected,
+                        },
+                        messageId: "mismatch",
+                        node,
+                    });
+                },
             };
         }
 

@@ -9,7 +9,7 @@ type MessageIds = "inconsistent";
 
 type Options = readonly [
     Readonly<{
-        format?: Casing;
+        readonly format?: Casing;
     }>,
 ];
 

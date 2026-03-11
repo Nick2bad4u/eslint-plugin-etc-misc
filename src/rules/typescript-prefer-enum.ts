@@ -100,7 +100,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     | es.ArrowFunctionExpression
                     | es.FunctionDeclaration
                     | es.FunctionExpression
-                    | undefined = undefined;
+                    | null = null;
                 for (const ancestor of context.sourceCode.getAncestors(node)) {
                     if (
                         ancestor.type === "ArrowFunctionExpression" ||
@@ -110,7 +110,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         functionNode = ancestor;
                     }
                 }
-                if (functionNode === undefined) {
+                if (functionNode === null) {
                     return;
                 }
 

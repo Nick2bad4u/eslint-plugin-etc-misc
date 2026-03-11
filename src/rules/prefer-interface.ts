@@ -15,8 +15,8 @@ type MessageIds = "forbidden" | "suggest";
 type Options = readonly [RuleOptions?];
 
 type RuleOptions = Readonly<{
-    allowIntersection?: boolean;
-    allowLocal?: boolean;
+    readonly allowIntersection?: boolean;
+    readonly allowLocal?: boolean;
 }>;
 
 const defaultOptions: Options = [{}];
@@ -109,17 +109,17 @@ const canSafelyConvertIntersection = (
           readonly literals: readonly Readonly<es.TSTypeLiteral>[];
           readonly references: readonly Readonly<es.TSTypeReference>[];
       } => {
-    const literals: es.TSTypeLiteral[] = [];
-    const references: es.TSTypeReference[] = [];
+    let literals: readonly es.TSTypeLiteral[] = [];
+    let references: readonly es.TSTypeReference[] = [];
 
     for (const intersectionMember of intersectionTypeNode.types) {
         if (intersectionMember.type === "TSTypeLiteral") {
-            literals.push(intersectionMember);
+            literals = [...literals, intersectionMember];
             continue;
         }
 
         if (intersectionMember.type === "TSTypeReference") {
-            references.push(intersectionMember);
+            references = [...references, intersectionMember];
             continue;
         }
 

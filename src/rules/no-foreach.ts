@@ -28,7 +28,7 @@ const defaultTypes: readonly string[] = [
 
 const getConfiguredTypeNames = (
     configuredTypes: readonly string[]
-): Set<string> => {
+): ReadonlySet<string> => {
     const typeNames = new Set<string>();
 
     for (const configuredType of configuredTypes) {
@@ -44,7 +44,7 @@ const getConfiguredTypeNames = (
 const matchesConfiguredCollectionType = (
     typeChecker: Readonly<ts.TypeChecker>,
     type: Readonly<ts.Type>,
-    configuredTypeNames: Set<string>
+    configuredTypeNames: ReadonlySet<string>
 ): boolean => {
     if (configuredTypeNames.has("Array")) {
         const apparentType = typeChecker.getApparentType(type);
@@ -58,7 +58,12 @@ const matchesConfiguredCollectionType = (
         }
     }
 
-    return containsAllTypesByName(type, false, configuredTypeNames, true);
+    return containsAllTypesByName(
+        type,
+        false,
+        new Set(configuredTypeNames),
+        true
+    );
 };
 
 /**

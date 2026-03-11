@@ -14,15 +14,16 @@ const isNode = (value: unknown): value is Readonly<es.Node> =>
     typeof value === "object" && value !== null && "type" in value;
 
 const containsThisExpression = (root: Readonly<es.Node>): boolean => {
-    const stack: es.Node[] = [root];
+    let stack: readonly es.Node[] = [root];
     const enqueue = (value: unknown): void => {
         if (isNode(value)) {
-            stack.push(value);
+            stack = [...stack, value];
         }
     };
 
     while (stack.length > 0) {
-        const node = stack.pop();
+        const node = stack.at(-1);
+        stack = stack.slice(0, -1);
         if (node === undefined) {
             continue;
         }

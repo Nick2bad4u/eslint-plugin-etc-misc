@@ -55,7 +55,7 @@ const isInFirstFunctionExpressionStatement = (
         | es.ArrowFunctionExpression
         | es.FunctionDeclaration
         | es.FunctionExpression
-        | undefined = undefined;
+        | null = null;
 
     for (let index = ancestors.length - 1; index >= 0; index -= 1) {
         const ancestor = ancestors[index];

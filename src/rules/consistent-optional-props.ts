@@ -15,14 +15,17 @@ const buildOptionalUnionFixText = (
     sourceCode: Readonly<TSESLint.SourceCode>,
     unionType: Readonly<es.TSUnionType>
 ): string | undefined => {
-    const nonUndefinedTypeTexts: string[] = [];
+    let nonUndefinedTypeTexts: readonly string[] = [];
 
     for (const typeNode of unionType.types) {
         if (typeNode.type === "TSUndefinedKeyword") {
             continue;
         }
 
-        nonUndefinedTypeTexts.push(sourceCode.getText(typeNode));
+        nonUndefinedTypeTexts = [
+            ...nonUndefinedTypeTexts,
+            sourceCode.getText(typeNode),
+        ];
     }
 
     if (
@@ -55,17 +58,16 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     sourceCode,
                     node
                 );
+                if (fixedTypeText === undefined) {
+                    return;
+                }
 
-                const fix =
-                    fixedTypeText === undefined
-                        ? undefined
-                        : (
-                              fixer: Readonly<TSESLint.RuleFixer>
-                          ): TSESLint.RuleFix =>
-                              fixer.replaceText(node, fixedTypeText);
+                const fix = (
+                    fixer: Readonly<TSESLint.RuleFixer>
+                ): TSESLint.RuleFix => fixer.replaceText(node, fixedTypeText);
 
                 context.report({
-                    ...(fix === undefined ? {} : { fix }),
+                    fix,
                     messageId: "forbidden",
                     node,
                 });

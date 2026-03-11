@@ -20,8 +20,8 @@ const readFixtureWithExpectedFixes = (): string =>
             "const unsortedIdentifiers = { a: 2, b: 1 };"
         )
         .replace(
-            'const unsortedLiteralKeys = { "zeta": 1, "alpha": 2 };',
-            'const unsortedLiteralKeys = { "alpha": 2, "zeta": 1 };'
+            "const unsortedLiteralKeys = { zeta: 1, alpha: 2 };",
+            "const unsortedLiteralKeys = { alpha: 2, zeta: 1 };"
         )
         .replace(
             "const withComputedStillUnsorted = { [dynamicKey]: 0, b: 2, a: 1 };",
@@ -93,7 +93,7 @@ const getSortKeysRuleFromPlugin = (): NonNullable<
 };
 
 describe("sort-keys fixture structure", () => {
-    it("contains literal, computed, spread, and numeric-key object properties", () => {
+    it("contains identifier, computed, spread, and numeric-key object properties", () => {
         const objects = collectObjectExpressions(parseFixtureProgram());
 
         expect(
@@ -101,8 +101,7 @@ describe("sort-keys fixture structure", () => {
                 objectExpression.properties.some(
                     (property) =>
                         property.type === AST_NODE_TYPES.Property &&
-                        property.key.type === AST_NODE_TYPES.Literal &&
-                        typeof property.key.value === "string"
+                        property.key.type === AST_NODE_TYPES.Identifier
                 )
             )
         ).toBeTruthy();

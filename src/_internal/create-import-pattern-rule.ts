@@ -47,7 +47,7 @@ const createImportVisitors = (
         >["create"]
     >[0],
     defaultDisallowPatterns: readonly string[]
-): Record<string, (node: Readonly<es.Node>) => void> => ({
+): Readonly<Record<string, (node: Readonly<es.Node>) => void>> => ({
     "ImportDeclaration, ExportNamedDeclaration[source], ExportAllDeclaration, ImportExpression":
         (node: Readonly<es.Node>): void => {
             const sourceText = getImportSourceFromNode(node);

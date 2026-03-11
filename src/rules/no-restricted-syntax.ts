@@ -13,7 +13,7 @@ type MessageIds = "customMessage" | "forbidden";
 
 type Options = readonly [
     Readonly<{
-        selectors?: readonly SyntaxSelectorOption[];
+        readonly selectors?: readonly SyntaxSelectorOption[];
     }>,
 ];
 

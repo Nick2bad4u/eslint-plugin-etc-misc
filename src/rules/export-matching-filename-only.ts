@@ -9,7 +9,7 @@ type MessageIds = "onlyExport";
 
 type Options = readonly [
     Readonly<{
-        format?: Casing;
+        readonly format?: Casing;
     }>,
 ];
 
@@ -47,22 +47,28 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     MessageIds
 >({
     create: (context, [options]) => {
-        const exports: { name: string; node: es.Node }[] = [];
+        let exports: readonly {
+            readonly name: string;
+            readonly node: es.Node;
+        }[] = [];
 
         return {
             ExportDefaultDeclaration: (
                 node: Readonly<es.ExportDefaultDeclaration>
             ): void => {
-                exports.push({
-                    name: "default",
-                    node,
-                });
+                exports = [
+                    ...exports,
+                    {
+                        name: "default",
+                        node,
+                    },
+                ];
             },
             ExportNamedDeclaration: (
                 node: Readonly<es.ExportNamedDeclaration>
             ): void => {
                 for (const name of exportedNamesFromDeclaration(node)) {
-                    exports.push({ name, node });
+                    exports = [...exports, { name, node }];
                 }
             },
             "Program:exit": (): void => {

@@ -3,13 +3,13 @@ import type { TSESTree as es } from "@typescript-eslint/utils";
 import { ruleCreator } from "./rule-creator.js";
 
 type CreateSelectorRuleInput = Readonly<{
-    description: string;
-    message: string;
-    messageId: string;
-    name: string;
-    selector: string;
-    type: "problem" | "suggestion";
-    url: string;
+    readonly description: string;
+    readonly message: string;
+    readonly messageId: string;
+    readonly name: string;
+    readonly selector: string;
+    readonly type: "problem" | "suggestion";
+    readonly url: string;
 }>;
 
 type Options = readonly [];

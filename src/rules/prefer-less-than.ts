@@ -63,7 +63,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
         }),
         defaultOptions: [],
         meta: {
-        deprecated: false,
+            deprecated: false,
             docs: {
                 deprecated: false,
                 description: "disallow greater-than comparisons.",

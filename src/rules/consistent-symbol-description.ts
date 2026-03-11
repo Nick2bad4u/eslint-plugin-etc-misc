@@ -6,7 +6,8 @@ type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-const disallowedSelector = String.raw`CallExpression[callee.name='Symbol'] > Literal:not([value=/^(?:[\d\-a-z]|__)+$/u])`;
+// eslint-disable-next-line etc-misc/no-unnecessary-template-literal -- Keep String.raw to preserve backslashes required by AST selector regex parsing.
+const disallowedSelector = String.raw`CallExpression[callee.name='Symbol'] > Literal:not([value=/^(?:[\da-z-]|__)+$/u])`;
 
 /**
  * Require `Symbol` descriptions to use kebab-case style.

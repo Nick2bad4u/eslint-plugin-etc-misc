@@ -10,7 +10,7 @@ type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-const disallowedSelector = String.raw`Literal.source[value=/\.(?:js|json|ts)$/u]`;
+const disallowedSelector = "Literal.source[value=/.(?:js|json|ts)$/u]";
 
 /**
  * Disallow explicit `.js`, `.json`, and `.ts` source extensions in

@@ -12,7 +12,7 @@ type MessageIds = "missing";
 
 type Options = readonly [
     Readonly<{
-        kinds?: readonly JSDocKind[];
+        readonly kinds?: readonly JSDocKind[];
     }>,
 ];
 

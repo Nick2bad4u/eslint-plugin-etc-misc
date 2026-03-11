@@ -13,16 +13,30 @@ const fixturePath = "test/fixtures/internal/sort-array.fixture.ts";
 
 const readFixture = (): string => readFileSync(fixturePath, "utf8");
 
-const readFixtureWithExpectedFixes = (): string =>
-    readFixture()
+const readFixtureWithExpectedFixes = (): string => {
+    const fixture = readFixture();
+    const newline = fixture.includes("\r\n") ? "\r\n" : "\n";
+
+    return fixture
         .replace(
             "const numbersNeedSorting = [2, 1];",
             "const numbersNeedSorting = [1, 2];"
         )
         .replace(
-            'const stringsNeedSorting = ["b", "a", "c"];',
-            'const stringsNeedSorting = ["a", "b", "c"];'
+            [
+                "const stringsNeedSorting = [",
+                '    "b",',
+                '    "a",',
+                '    "c",',
+                "];",
+            ].join(newline),
+            [
+                "const stringsNeedSorting = [",
+                '    "a", "b", "c",',
+                "];",
+            ].join(newline)
         );
+};
 
 const parseFixtureProgram = (): TSESTree.Program =>
     parser.parseForESLint(readFixture(), {

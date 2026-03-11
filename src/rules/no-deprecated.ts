@@ -24,7 +24,7 @@ type MessageIds = "forbidden" | "forbiddenWithComment" | "invalidIgnorePattern";
 
 type Options = readonly [
     {
-        ignored?: Record<string, IgnoreMode>;
+        readonly ignored?: Readonly<Record<string, IgnoreMode>>;
     }?,
 ];
 

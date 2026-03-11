@@ -27,11 +27,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 !node.optional &&
                 !node.definite;
 
-            const fix =
-                canProvideSafeSuggestion
-                    ? (fixer: Readonly<TSESLint.RuleFixer>): TSESLint.RuleFix =>
-                          fixer.insertTextAfter(node.key, ": unknown")
-                    : undefined;
+            const fix = canProvideSafeSuggestion
+                ? (fixer: Readonly<TSESLint.RuleFixer>): TSESLint.RuleFix =>
+                      fixer.insertTextAfter(node.key, ": unknown")
+                : undefined;
 
             context.report({
                 messageId: "forbidden",

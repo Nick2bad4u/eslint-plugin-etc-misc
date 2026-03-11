@@ -23,9 +23,9 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
     ruleCreator<readonly [], MessageIds>({
         create: (context) => {
             const hasInternalTag = (node: Readonly<es.Node>): boolean => {
-                const commentTargets: es.Node[] = [node];
+                let commentTargets: readonly es.Node[] = [node];
                 if (isExportDeclaration(node.parent)) {
-                    commentTargets.push(node.parent);
+                    commentTargets = [...commentTargets, node.parent];
                 }
 
                 return commentTargets.some((commentTarget) =>
@@ -152,7 +152,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
         },
         defaultOptions: [],
         meta: {
-        deprecated: false,
+            deprecated: false,
             docs: {
                 deprecated: false,
                 description:

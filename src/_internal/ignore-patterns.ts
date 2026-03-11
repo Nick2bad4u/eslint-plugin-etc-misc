@@ -2,8 +2,8 @@
  * Compiled ignore-pattern result grouped by mode with invalid entries tracked.
  */
 export type CompiledIgnorePatterns = Readonly<{
-    invalidPatterns: readonly string[];
-    patterns: IgnorePatternBuckets;
+    readonly invalidPatterns: readonly string[];
+    readonly patterns: IgnorePatternBuckets;
 }>;
 
 /**
@@ -15,8 +15,8 @@ export type IgnoreMode = "name" | "path";
  * Compiled regex buckets for name- and path-based ignores.
  */
 export type IgnorePatternBuckets = Readonly<{
-    name: readonly RegExp[];
-    path: readonly RegExp[];
+    readonly name: readonly RegExp[];
+    readonly path: readonly RegExp[];
 }>;
 
 /* eslint-disable security/detect-non-literal-regexp -- Rule options intentionally accept user-provided regex strings. */
@@ -29,20 +29,20 @@ export type IgnorePatternBuckets = Readonly<{
 export const compileIgnorePatterns = (
     ignored: Readonly<Record<string, IgnoreMode>>
 ): CompiledIgnorePatterns => {
-    const namePatterns: RegExp[] = [];
-    const pathPatterns: RegExp[] = [];
-    const invalidPatterns: string[] = [];
+    let namePatterns: readonly RegExp[] = [];
+    let pathPatterns: readonly RegExp[] = [];
+    let invalidPatterns: readonly string[] = [];
 
     for (const [pattern, mode] of Object.entries(ignored)) {
         try {
             const regularExpression = new RegExp(pattern, "u");
             if (mode === "name") {
-                namePatterns.push(regularExpression);
+                namePatterns = [...namePatterns, regularExpression];
             } else {
-                pathPatterns.push(regularExpression);
+                pathPatterns = [...pathPatterns, regularExpression];
             }
         } catch {
-            invalidPatterns.push(pattern);
+            invalidPatterns = [...invalidPatterns, pattern];
         }
     }
 

@@ -4,8 +4,8 @@ import type { TSESTree as es } from "@typescript-eslint/utils";
  * Normalized selector entry used by syntax-based rules.
  */
 export type SyntaxSelectorEntry = Readonly<{
-    message?: string;
-    selector: string;
+    readonly message?: string;
+    readonly selector: string;
 }>;
 
 /**
@@ -13,15 +13,17 @@ export type SyntaxSelectorEntry = Readonly<{
  */
 export type SyntaxSelectorOption =
     | Readonly<{
-          message?: string;
-          selector: string;
+          readonly message?: string;
+          readonly selector: string;
       }>
     | string;
 
 const isSelectorObject = (
     value: SyntaxSelectorOption
-): value is Readonly<{ message?: string; selector: string }> =>
-    typeof value === "object" && value !== null && "selector" in value;
+): value is Readonly<{
+    readonly message?: string;
+    readonly selector: string;
+}> => typeof value === "object" && value !== null && "selector" in value;
 
 /**
  * Normalize a selector option into a selector entry object.

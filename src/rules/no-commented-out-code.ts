@@ -9,38 +9,41 @@ import {
 } from "../_internal/rule-deprecation.js";
 
 type CommentBlock = Readonly<{
-    content: string;
-    loc: es.SourceLocation;
+    readonly content: string;
+    readonly loc: es.SourceLocation;
 }>;
 
 type MessageIds = "forbidden";
 
-type ParseCache = Map<string, es.Program | null>;
-
 const parserOptions: Readonly<{
-    ecmaVersion: "latest";
-    sourceType: "module";
+    readonly ecmaVersion: "latest";
+    readonly sourceType: "module";
 }> = {
     ecmaVersion: "latest",
     sourceType: "module",
 };
 
 const parseCommentProgram = (
-    cache: ParseCache,
+    cache: ReadonlyMap<string, es.Program | null>,
     content: string
-): es.Program | undefined => {
+): readonly [
+    ReadonlyMap<string, es.Program | null>,
+    es.Program | undefined,
+] => {
     const cached = cache.get(content);
     if (cached !== undefined) {
-        return cached ?? undefined;
+        return [cache, cached ?? undefined];
     }
 
     try {
         const parsed = parser.parse(content, parserOptions);
-        cache.set(content, parsed);
-        return parsed;
+        const nextCache = new Map(cache);
+        nextCache.set(content, parsed);
+        return [nextCache, parsed];
     } catch {
-        cache.set(content, null);
-        return undefined;
+        const nextCache = new Map(cache);
+        nextCache.set(content, null);
+        return [nextCache, undefined];
     }
 };
 
@@ -74,16 +77,19 @@ const toLocCopy = (loc: Readonly<es.SourceLocation>): es.SourceLocation => ({
 const toCommentBlocks = (
     comments: readonly Readonly<es.Comment>[]
 ): readonly CommentBlock[] => {
-    const blocks: CommentBlock[] = [];
-    let previousLineComment: es.LineComment | undefined = undefined;
+    let blocks: readonly CommentBlock[] = [];
+    let previousLineComment: es.LineComment | null = null;
 
     for (const comment of comments) {
         if (comment.type === "Block") {
-            blocks.push({
-                content: normalizeBlockCommentContent(comment.value),
-                loc: toLocCopy(comment.loc),
-            });
-            previousLineComment = undefined;
+            blocks = [
+                ...blocks,
+                {
+                    content: normalizeBlockCommentContent(comment.value),
+                    loc: toLocCopy(comment.loc),
+                },
+            ];
+            previousLineComment = null;
             continue;
         }
 
@@ -94,20 +100,26 @@ const toCommentBlocks = (
         const previousBlock =
             previousBlockIndex >= 0 ? blocks[previousBlockIndex] : undefined;
 
-        if (previousBlock === undefined) {
-            blocks.push({
-                content: comment.value,
-                loc: toLocCopy(comment.loc),
-            });
-        } else {
-            blocks[previousBlockIndex] = {
-                content: `${previousBlock.content}\n${comment.value}`,
-                loc: {
-                    end: comment.loc.end,
-                    start: previousBlock.loc.start,
-                },
-            };
-        }
+        blocks =
+            previousBlock === undefined
+                ? [
+                      ...blocks,
+                      {
+                          content: comment.value,
+                          loc: toLocCopy(comment.loc),
+                      },
+                  ]
+                : [
+                      ...blocks.slice(0, previousBlockIndex),
+                      {
+                          content: `${previousBlock.content}\n${comment.value}`,
+                          loc: {
+                              end: comment.loc.end,
+                              start: previousBlock.loc.start,
+                          },
+                      },
+                      ...blocks.slice(previousBlockIndex + 1),
+                  ];
 
         previousLineComment = comment;
     }
@@ -201,7 +213,10 @@ const getWrappedContent = (
 const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
     ruleCreator<readonly [], MessageIds>({
         create: (context) => {
-            const parseCache: ParseCache = new Map();
+            let parseCache: ReadonlyMap<string, es.Program | null> = new Map<
+                string,
+                es.Program | null
+            >();
 
             return {
                 Program: () => {
@@ -214,10 +229,9 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                             continue;
                         }
 
-                        const parsedComment = parseCommentProgram(
-                            parseCache,
-                            block.content
-                        );
+                        const [nextCacheAfterParse, parsedComment] =
+                            parseCommentProgram(parseCache, block.content);
+                        parseCache = nextCacheAfterParse;
                         if (parsedComment !== undefined) {
                             if (!isTrivialProgram(parsedComment)) {
                                 context.report({
@@ -241,10 +255,13 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                             continue;
                         }
 
-                        if (
-                            parseCommentProgram(parseCache, wrappedContent) !==
-                            undefined
-                        ) {
+                        const [
+                            nextCacheAfterWrappedParse,
+                            parsedWrappedComment,
+                        ] = parseCommentProgram(parseCache, wrappedContent);
+                        parseCache = nextCacheAfterWrappedParse;
+
+                        if (parsedWrappedComment !== undefined) {
                             context.report({
                                 loc: block.loc,
                                 messageId: "forbidden",
@@ -256,7 +273,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
         },
         defaultOptions: [],
         meta: {
-        deprecated: true,
+            deprecated: true,
             docs: {
                 deprecated: true,
                 description: "disallow commented-out code blocks.",

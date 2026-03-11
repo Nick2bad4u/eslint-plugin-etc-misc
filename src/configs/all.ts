@@ -23,9 +23,8 @@ const allRuleEntries = Object.entries(pluginRules).map(
         [`etc-misc/${ruleName}`, getAllPresetSeverity(ruleModule)] as const
 );
 
-const allRules = Object.fromEntries(allRuleEntries) as Record<
-    string,
-    RuleSeverity
+const allRules = Object.fromEntries(allRuleEntries) as Readonly<
+    Record<string, RuleSeverity>
 >;
 
 /**

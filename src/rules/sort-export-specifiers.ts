@@ -40,10 +40,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         ExportNamedDeclaration: (
             node: Readonly<es.ExportNamedDeclaration>
         ): void => {
-            const exportSpecifiers: es.ExportSpecifier[] = [];
+            let exportSpecifiers: readonly es.ExportSpecifier[] = [];
             for (const specifier of node.specifiers) {
                 if (specifier.type === "ExportSpecifier") {
-                    exportSpecifiers.push(specifier);
+                    exportSpecifiers = [...exportSpecifiers, specifier];
                 }
             }
             if (exportSpecifiers.length < 2) {

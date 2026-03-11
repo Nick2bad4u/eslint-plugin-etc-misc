@@ -9,7 +9,7 @@ import type { TSESTree as es } from "@typescript-eslint/utils";
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 const defaultOptions: readonly {
-    prefix?: string;
+    readonly prefix?: string;
 }[] = [{}];
 
 type MessageIds = "forbidden" | "prefix";
@@ -47,7 +47,7 @@ const rule: ReturnType<typeof ruleCreator<typeof defaultOptions, MessageIds>> =
         },
         defaultOptions,
         meta: {
-        defaultOptions: [{}],
+            defaultOptions: [{}],
             deprecated: false,
             docs: {
                 deprecated: false,
@@ -58,8 +58,9 @@ const rule: ReturnType<typeof ruleCreator<typeof defaultOptions, MessageIds>> =
             },
             hasSuggestions: false,
             messages: {
-                forbidden: `Single-character type parameters are forbidden. Choose a more descriptive name for "{{name}}"`,
-                prefix: `Type parameter "{{name}}" does not have prefix "{{prefix}}"`,
+                forbidden:
+                    'Single-character type parameters are forbidden. Choose a more descriptive name for "{{name}}"',
+                prefix: 'Type parameter "{{name}}" does not have prefix "{{prefix}}"',
             },
             schema: [
                 {

@@ -50,10 +50,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 >({
     create: (context) => ({
         ArrayExpression: (node: Readonly<es.ArrayExpression>): void => {
-            const elements: (es.Expression | es.SpreadElement)[] = [];
+            let elements: readonly (es.Expression | es.SpreadElement)[] = [];
             for (const element of node.elements) {
                 if (element !== null) {
-                    elements.push(element);
+                    elements = [...elements, element];
                 }
             }
             if (elements.length < 2) {

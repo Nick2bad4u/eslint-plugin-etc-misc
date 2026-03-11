@@ -8,7 +8,7 @@ type MessageIds = "inconsistent";
 
 type Options = readonly [
     Readonly<{
-        style?: ImportStyle;
+        readonly style?: ImportStyle;
     }>,
 ];
 

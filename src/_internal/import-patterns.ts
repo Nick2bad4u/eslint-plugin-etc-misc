@@ -6,8 +6,8 @@ import { minimatch } from "minimatch";
  * Allow/disallow glob options for import source checks.
  */
 type ImportPathOptions = Readonly<{
-    allow?: readonly string[];
-    disallow?: readonly string[];
+    readonly allow?: readonly string[];
+    readonly disallow?: readonly string[];
 }>;
 
 const matchesAnyPattern = (

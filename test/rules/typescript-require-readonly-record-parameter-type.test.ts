@@ -17,8 +17,7 @@ ruleTester.run("typescript-require-readonly-record-parameter-type", rule, {
                     ],
                 },
             ],
-            output:
-                "function loadLookup(lookup: Readonly<Record<string, string>>) {}",
+            output: "function loadLookup(lookup: Readonly<Record<string, string>>) {}",
         },
         {
             code: "const resolve = (lookup: Record<string, string> | null) => lookup;",
@@ -34,8 +33,7 @@ ruleTester.run("typescript-require-readonly-record-parameter-type", rule, {
                     ],
                 },
             ],
-            output:
-                "const resolve = (lookup: Readonly<Record<string, string>> | null) => lookup;",
+            output: "const resolve = (lookup: Readonly<Record<string, string>> | null) => lookup;",
         },
         {
             code: "class Registry { constructor(private readonly lookup: Record<string, string>) {} }",
@@ -51,8 +49,7 @@ ruleTester.run("typescript-require-readonly-record-parameter-type", rule, {
                     ],
                 },
             ],
-            output:
-                "class Registry { constructor(private readonly lookup: Readonly<Record<string, string>>) {} }",
+            output: "class Registry { constructor(private readonly lookup: Readonly<Record<string, string>>) {} }",
         },
         {
             code: "interface API { resolve(lookup: Record<string, string> & { readonly kind: 'ok' }): void; }",
@@ -68,8 +65,7 @@ ruleTester.run("typescript-require-readonly-record-parameter-type", rule, {
                     ],
                 },
             ],
-            output:
-                "interface API { resolve(lookup: Readonly<Record<string, string>> & { readonly kind: 'ok' }): void; }",
+            output: "interface API { resolve(lookup: Readonly<Record<string, string>> & { readonly kind: 'ok' }): void; }",
         },
     ],
     valid: [

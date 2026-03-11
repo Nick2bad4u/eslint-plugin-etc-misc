@@ -11,19 +11,19 @@ const splitLines = (sourceText: string): readonly string[] =>
 
 const collapseEmptyLines = (sourceText: string): string => {
     const lines = splitLines(sourceText);
-    const output: string[] = [];
+    let output: readonly string[] = [];
     let emptyRun = 0;
 
     for (const line of lines) {
         const isEmpty = line.trim().length === 0;
         if (!isEmpty) {
             emptyRun = 0;
-            output.push(line);
+            output = [...output, line];
             continue;
         }
 
         if (emptyRun < 1) {
-            output.push(line);
+            output = [...output, line];
         }
 
         emptyRun += 1;

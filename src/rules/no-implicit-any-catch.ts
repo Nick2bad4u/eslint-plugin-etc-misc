@@ -19,7 +19,7 @@ type MessageIds =
 type Options = readonly [RuleOptions?];
 
 type RuleOptions = Readonly<{
-    allowExplicitAny?: boolean;
+    readonly allowExplicitAny?: boolean;
 }>;
 
 type TypedProgram = NonNullable<

@@ -7,9 +7,9 @@ type DeprecatedInfo = Exclude<
 type ReplacedByInfo = NonNullable<DeprecatedInfo["replacedBy"]>[number];
 
 type RuleDeprecationOptions = Readonly<{
-    message: string;
-    replacedBy?: ReplacedByInfo[];
-    ruleId: string;
+    readonly message: string;
+    readonly replacedBy?: readonly ReplacedByInfo[];
+    readonly ruleId: string;
 }>;
 
 type RuleModule = TSESLint.RuleModule<string, readonly unknown[]>;
@@ -22,13 +22,13 @@ const docsBaseUrl =
  */
 export const createReplacementRuleInfo = (
     replacement: Readonly<{
-        plugin?: Readonly<{
-            name: string;
-            url?: string;
+        readonly plugin?: Readonly<{
+            readonly name: string;
+            readonly url?: string;
         }>;
-        rule?: Readonly<{
-            name: string;
-            url?: string;
+        readonly rule?: Readonly<{
+            readonly name: string;
+            readonly url?: string;
         }>;
     }>
 ): ReplacedByInfo => ({
@@ -47,7 +47,7 @@ export const createDeprecatedRuleInfo = ({
     availableUntil: "2.0.0",
     deprecatedSince: "1.0.0",
     message,
-    ...(replacedBy.length === 0 ? {} : { replacedBy }),
+    ...(replacedBy.length === 0 ? {} : { replacedBy: [...replacedBy] }),
     url: `${docsBaseUrl}/${ruleId.replaceAll("/", "-")}`,
 });
 

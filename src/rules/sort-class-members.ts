@@ -33,13 +33,16 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 >({
     create: (context) => ({
         ClassBody: (node: Readonly<es.ClassBody>): void => {
-            const members: (es.MethodDefinition | es.PropertyDefinition)[] = [];
+            let members: readonly (
+                | es.MethodDefinition
+                | es.PropertyDefinition
+            )[] = [];
             for (const member of node.body) {
                 if (
                     member.type === "PropertyDefinition" ||
                     member.type === "MethodDefinition"
                 ) {
-                    members.push(member);
+                    members = [...members, member];
                 }
             }
 

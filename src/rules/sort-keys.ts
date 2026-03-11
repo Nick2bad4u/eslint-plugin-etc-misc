@@ -56,14 +56,14 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 >({
     create: (context) => ({
         ObjectExpression: (node: Readonly<es.ObjectExpression>): void => {
-            const properties: es.Property[] = [];
+            let properties: readonly es.Property[] = [];
             for (const property of node.properties) {
                 if (
                     property.type === "Property" &&
                     property.kind === "init" &&
                     !property.computed
                 ) {
-                    properties.push(property);
+                    properties = [...properties, property];
                 }
             }
             if (properties.length < 2) {

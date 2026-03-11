@@ -10,8 +10,8 @@ class UnsortedIdentifierMembers {
 }
 
 class UnsortedLiteralMembers {
-    zeta(): void {}
-    alpha(): void {}
+    "zeta-key"(): void {}
+    "alpha-key"(): void {}
 }
 
 class SkippedMembers {

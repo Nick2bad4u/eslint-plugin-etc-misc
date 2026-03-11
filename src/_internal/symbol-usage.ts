@@ -3,18 +3,18 @@ import type { TSESTree as es } from "@typescript-eslint/utils";
 import { getConstrainedTypeAtLocation } from "@typescript-eslint/type-utils";
 
 type JsDocTagInfo = Readonly<{
-    name: string;
-    text?: readonly JsDocTagTextPart[] | string;
+    readonly name: string;
+    readonly text?: readonly JsDocTagTextPart[] | string;
 }>;
 
-type JsDocTagTextPart = Readonly<{ text: string }>;
+type JsDocTagTextPart = Readonly<{ readonly text: string }>;
 
 type ParserServices = Readonly<
     Parameters<typeof getConstrainedTypeAtLocation>[0]
 >;
 
 type SymbolWithJsDocTags = Readonly<{
-    getJsDocTags: (checker?: unknown) => readonly JsDocTagInfo[];
+    readonly getJsDocTags: (checker?: unknown) => readonly JsDocTagInfo[];
 }>;
 
 /**

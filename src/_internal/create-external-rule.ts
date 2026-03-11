@@ -10,7 +10,7 @@ const isObjectRecord = (value: unknown): value is UnknownRecord =>
 
 const hasCreateFunction = (
     value: unknown
-): value is Readonly<{ create: RuleModule["create"] }> =>
+): value is Readonly<{ readonly create: RuleModule["create"] }> =>
     isObjectRecord(value) && typeof value["create"] === "function";
 
 const createLegacyContextCompat = (context: RuleContext): RuleContext => {
