@@ -106,6 +106,12 @@ import typescriptPreferReadonlySet from "./rules/typescript-prefer-readonly-set.
 import typescriptRequirePropTypeAnnotation from "./rules/typescript-require-prop-type-annotation.js";
 import typescriptRequireReadonlyArrayReturnType from "./rules/typescript-require-readonly-array-return-type.js";
 import typescriptRequireReadonlyArrayTypeAlias from "./rules/typescript-require-readonly-array-type-alias.js";
+import typescriptRequireReadonlyMapParameterType from "./rules/typescript-require-readonly-map-parameter-type.js";
+import typescriptRequireReadonlyMapReturnType from "./rules/typescript-require-readonly-map-return-type.js";
+import typescriptRequireReadonlyMapTypeAlias from "./rules/typescript-require-readonly-map-type-alias.js";
+import typescriptRequireReadonlyRecordReturnType from "./rules/typescript-require-readonly-record-return-type.js";
+import typescriptRequireReadonlySetReturnType from "./rules/typescript-require-readonly-set-return-type.js";
+import typescriptRequireReadonlySetTypeAlias from "./rules/typescript-require-readonly-set-type-alias.js";
 import typescriptRequireThisVoid from "./rules/typescript-require-this-void.js";
 import underscoreInternal from "./rules/underscore-internal.js";
 import unusedInternalProperties from "./rules/unused-internal-properties.js";
@@ -279,6 +285,18 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
         typescriptRequireReadonlyArrayReturnType,
     "typescript/require-readonly-array-type-alias":
         typescriptRequireReadonlyArrayTypeAlias,
+    "typescript/require-readonly-map-parameter-type":
+        typescriptRequireReadonlyMapParameterType,
+    "typescript/require-readonly-map-return-type":
+        typescriptRequireReadonlyMapReturnType,
+    "typescript/require-readonly-map-type-alias":
+        typescriptRequireReadonlyMapTypeAlias,
+    "typescript/require-readonly-record-return-type":
+        typescriptRequireReadonlyRecordReturnType,
+    "typescript/require-readonly-set-return-type":
+        typescriptRequireReadonlySetReturnType,
+    "typescript/require-readonly-set-type-alias":
+        typescriptRequireReadonlySetTypeAlias,
     "typescript/require-this-void": typescriptRequireThisVoid,
     "underscore-internal": underscoreInternal,
     "unused-internal-properties": unusedInternalProperties,

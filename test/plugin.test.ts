@@ -240,6 +240,24 @@ describe("plugin export", () => {
             plugin.rules["typescript/require-readonly-array-return-type"]
         ).toBeDefined();
         expect(
+            plugin.rules["typescript/require-readonly-map-parameter-type"]
+        ).toBeDefined();
+        expect(
+            plugin.rules["typescript/require-readonly-map-return-type"]
+        ).toBeDefined();
+        expect(
+            plugin.rules["typescript/require-readonly-map-type-alias"]
+        ).toBeDefined();
+        expect(
+            plugin.rules["typescript/require-readonly-record-return-type"]
+        ).toBeDefined();
+        expect(
+            plugin.rules["typescript/require-readonly-set-return-type"]
+        ).toBeDefined();
+        expect(
+            plugin.rules["typescript/require-readonly-set-type-alias"]
+        ).toBeDefined();
+        expect(
             plugin.rules["typescript/require-readonly-array-type-alias"]
         ).toBeDefined();
         expect(plugin.rules["typescript/require-this-void"]).toBeDefined();

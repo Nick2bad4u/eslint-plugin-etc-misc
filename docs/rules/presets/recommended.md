@@ -42,7 +42,7 @@ export default [etcMisc.configs.recommended];
 - ⚠️ `warn`: [`etc-misc/typescript/prefer-readonly-record`](../typescript-prefer-readonly-record.md) (R103)
 - ⚠️ `warn`: [`etc-misc/typescript/prefer-readonly-set`](../typescript-prefer-readonly-set.md) (R104)
 - ⚠️ `warn`: [`etc-misc/typescript/require-readonly-array-return-type`](../typescript-require-readonly-array-return-type.md) (R106)
-- ⚠️ `warn`: [`etc-misc/typescript/require-this-void`](../typescript-require-this-void.md) (R108)
+- ⚠️ `warn`: [`etc-misc/typescript/require-this-void`](../typescript-require-this-void.md) (R114)
 
 ## Adoption guidance
 
