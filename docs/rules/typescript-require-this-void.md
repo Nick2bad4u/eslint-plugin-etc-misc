@@ -83,7 +83,7 @@ Disable this rule if your project does not enforce explicit static-method `this`
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R103
+> **Rule catalog ID:** R105
 
 ## Further reading
 

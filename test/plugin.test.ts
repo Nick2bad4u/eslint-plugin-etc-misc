@@ -48,8 +48,10 @@ const recommendedRuleIds = [
     "throw-error",
     "typescript/no-boolean-literal-type",
     "typescript/prefer-readonly-array",
+    "typescript/prefer-readonly-index-signature",
     "typescript/prefer-readonly-map",
     "typescript/prefer-readonly-property",
+    "typescript/prefer-readonly-record",
     "typescript/prefer-readonly-set",
     "typescript/require-this-void",
 ] as const;
@@ -68,8 +70,10 @@ const recommendedRuleLevels = {
     "etc-misc/throw-error": "error",
     "etc-misc/typescript/no-boolean-literal-type": "error",
     "etc-misc/typescript/prefer-readonly-array": "warn",
+    "etc-misc/typescript/prefer-readonly-index-signature": "warn",
     "etc-misc/typescript/prefer-readonly-map": "warn",
     "etc-misc/typescript/prefer-readonly-property": "warn",
+    "etc-misc/typescript/prefer-readonly-record": "warn",
     "etc-misc/typescript/prefer-readonly-set": "warn",
     "etc-misc/typescript/require-this-void": "warn",
 } as const satisfies Readonly<Record<`etc-misc/${string}`, "error" | "warn">>;
@@ -213,10 +217,14 @@ describe("plugin export", () => {
         expect(plugin.rules["typescript/prefer-class-method"]).toBeDefined();
         expect(plugin.rules["typescript/prefer-enum"]).toBeDefined();
         expect(plugin.rules["typescript/prefer-readonly-array"]).toBeDefined();
+        expect(
+            plugin.rules["typescript/prefer-readonly-index-signature"]
+        ).toBeDefined();
         expect(plugin.rules["typescript/prefer-readonly-map"]).toBeDefined();
         expect(
             plugin.rules["typescript/prefer-readonly-property"]
         ).toBeDefined();
+        expect(plugin.rules["typescript/prefer-readonly-record"]).toBeDefined();
         expect(plugin.rules["typescript/prefer-readonly-set"]).toBeDefined();
         expect(
             plugin.rules["typescript/require-prop-type-annotation"]

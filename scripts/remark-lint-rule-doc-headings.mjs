@@ -52,6 +52,7 @@ const helperDocPathPattern =
     /(^|\/)docs\/rules\/(?!overview\.md$|getting-started\.md$|presets\/)[^/]+\.md$/u;
 const typeFestDocPathPattern = /(^|\/)docs\/rules\/prefer-type-fest-/u;
 const tsExtrasDocPathPattern = /(^|\/)docs\/rules\/prefer-ts-extras-/u;
+const ruleCatalogIdLinePattern = /^> \*\*Rule catalog ID:\*\* R\d{3}$/u;
 
 /**
  * @param {string} fileRuleId
@@ -416,6 +417,26 @@ export default function remarkLintRuleDocHeadings() {
         }
 
         const markdownContent = String(file);
+        const ruleCatalogIdLines = markdownContent
+            .split(/\r?\n/u)
+            .map((line) => line.trimEnd())
+            .filter((line) => ruleCatalogIdLinePattern.test(line));
+
+        if (ruleCatalogIdLines.length === 0) {
+            file.message(
+                "Missing required rule catalog marker line `> **Rule catalog ID:** R###`.",
+                getH2HeadingNodeAt(furtherReadingIndex) ?? firstH2HeadingNode,
+                "remark-lint:rule-doc-headings:missing-rule-catalog-id"
+            );
+        }
+
+        if (ruleCatalogIdLines.length > 1) {
+            file.message(
+                "Rule docs must contain exactly one `> **Rule catalog ID:** R###` marker line.",
+                getH2HeadingNodeAt(furtherReadingIndex) ?? firstH2HeadingNode,
+                "remark-lint:rule-doc-headings:duplicate-rule-catalog-id"
+            );
+        }
 
         if (
             typeFestDocPathPattern.test(normalizedPath) &&

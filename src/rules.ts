@@ -97,8 +97,10 @@ import typescriptPreferArrayTypeAlias from "./rules/typescript-prefer-array-type
 import typescriptPreferClassMethod from "./rules/typescript-prefer-class-method.js";
 import typescriptPreferEnum from "./rules/typescript-prefer-enum.js";
 import typescriptPreferReadonlyArray from "./rules/typescript-prefer-readonly-array.js";
+import typescriptPreferReadonlyIndexSignature from "./rules/typescript-prefer-readonly-index-signature.js";
 import typescriptPreferReadonlyMap from "./rules/typescript-prefer-readonly-map.js";
 import typescriptPreferReadonlyProperty from "./rules/typescript-prefer-readonly-property.js";
+import typescriptPreferReadonlyRecord from "./rules/typescript-prefer-readonly-record.js";
 import typescriptPreferReadonlySet from "./rules/typescript-prefer-readonly-set.js";
 import typescriptRequirePropTypeAnnotation from "./rules/typescript-require-prop-type-annotation.js";
 import typescriptRequireThisVoid from "./rules/typescript-require-this-void.js";
@@ -150,8 +152,10 @@ const recommendedRuleNames = new Set<string>([
     "throw-error",
     "typescript/no-boolean-literal-type",
     "typescript/prefer-readonly-array",
+    "typescript/prefer-readonly-index-signature",
     "typescript/prefer-readonly-map",
     "typescript/prefer-readonly-property",
+    "typescript/prefer-readonly-record",
     "typescript/prefer-readonly-set",
     "typescript/require-this-void",
 ]);
@@ -256,8 +260,11 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
     "typescript/prefer-class-method": typescriptPreferClassMethod,
     "typescript/prefer-enum": typescriptPreferEnum,
     "typescript/prefer-readonly-array": typescriptPreferReadonlyArray,
+    "typescript/prefer-readonly-index-signature":
+        typescriptPreferReadonlyIndexSignature,
     "typescript/prefer-readonly-map": typescriptPreferReadonlyMap,
     "typescript/prefer-readonly-property": typescriptPreferReadonlyProperty,
+    "typescript/prefer-readonly-record": typescriptPreferReadonlyRecord,
     "typescript/prefer-readonly-set": typescriptPreferReadonlySet,
     "typescript/require-prop-type-annotation":
         typescriptRequirePropTypeAnnotation,
@@ -331,11 +338,14 @@ const withCatalogDocsMetadata = (
     };
 };
 
-const decoratedRules: Record<string, RuleModule> = {};
+const decoratedRuleEntries = Object.entries(baseRules).map(
+    ([ruleName, ruleModule]) =>
+        [ruleName, withCatalogDocsMetadata(ruleName, ruleModule)] as const
+);
 
-for (const [ruleName, ruleModule] of Object.entries(baseRules)) {
-    decoratedRules[ruleName] = withCatalogDocsMetadata(ruleName, ruleModule);
-}
+const decoratedRules = Object.fromEntries(decoratedRuleEntries) as Readonly<
+    Record<string, RuleModule>
+>;
 
 /**
  * Rule implementations keyed by rule name with normalized docs metadata.
