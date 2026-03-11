@@ -252,6 +252,9 @@ describe("plugin export", () => {
             plugin.rules["typescript/require-readonly-record-return-type"]
         ).toBeDefined();
         expect(
+            plugin.rules["typescript/require-readonly-set-parameter-type"]
+        ).toBeDefined();
+        expect(
             plugin.rules["typescript/require-readonly-set-return-type"]
         ).toBeDefined();
         expect(

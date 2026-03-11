@@ -110,6 +110,7 @@ import typescriptRequireReadonlyMapParameterType from "./rules/typescript-requir
 import typescriptRequireReadonlyMapReturnType from "./rules/typescript-require-readonly-map-return-type.js";
 import typescriptRequireReadonlyMapTypeAlias from "./rules/typescript-require-readonly-map-type-alias.js";
 import typescriptRequireReadonlyRecordReturnType from "./rules/typescript-require-readonly-record-return-type.js";
+import typescriptRequireReadonlySetParameterType from "./rules/typescript-require-readonly-set-parameter-type.js";
 import typescriptRequireReadonlySetReturnType from "./rules/typescript-require-readonly-set-return-type.js";
 import typescriptRequireReadonlySetTypeAlias from "./rules/typescript-require-readonly-set-type-alias.js";
 import typescriptRequireThisVoid from "./rules/typescript-require-this-void.js";
@@ -293,6 +294,8 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
         typescriptRequireReadonlyMapTypeAlias,
     "typescript/require-readonly-record-return-type":
         typescriptRequireReadonlyRecordReturnType,
+    "typescript/require-readonly-set-parameter-type":
+        typescriptRequireReadonlySetParameterType,
     "typescript/require-readonly-set-return-type":
         typescriptRequireReadonlySetReturnType,
     "typescript/require-readonly-set-type-alias":
