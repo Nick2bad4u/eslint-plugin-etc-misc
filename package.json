@@ -34,14 +34,21 @@
     "type": "module",
     "exports": {
         ".": {
-            "types": "./dist/plugin.d.ts",
-            "import": "./dist/plugin.js",
+            "import": {
+                "types": "./dist/plugin.d.ts",
+                "default": "./dist/plugin.js"
+            },
+            "require": {
+                "types": "./dist/plugin.d.cts",
+                "default": "./dist/plugin.cjs"
+            },
             "default": "./dist/plugin.js"
         },
         "./package.json": "./package.json"
     },
-    "main": "index.js",
-    "types": "./dist/plugin.d.ts",
+    "main": "./dist/plugin.cjs",
+    "module": "./dist/plugin.js",
+    "types": "./dist/plugin.d.cts",
     "files": [
         "dist",
         "docs",
@@ -51,7 +58,7 @@
         "docs/docusaurus"
     ],
     "scripts": {
-        "build": "tsc -p tsconfig.build.json",
+        "build": "tsc -p tsconfig.build.json && node scripts/write-cjs-entry.mjs",
         "build:clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
         "build:eslint-inspector": "npx @eslint/config-inspector build --outDir \"docs/docusaurus/static/eslint-inspector\" --base \"/eslint-plugin-etc-misc/eslint-inspector/\"",
         "build:eslint-inspector:local": "npx @eslint/config-inspector",
@@ -125,8 +132,9 @@
         "lint:metrics": "npm run sloc",
         "lint:orphans": "npm run madge:orphans",
         "lint:package": "npm run lint:package-sort && npm run lint:packagelintrc && echo \"Package.json lint done!\"",
-        "lint:package:strict": "npm run lint:package-sort && npm run lint:package-check && npm run lint:packagelintrc && echo \"Package.json lint done!\"",
+        "lint:package:strict": "npm run lint:package-sort && npm run lint:package-check:strict && npm run lint:packagelintrc && echo \"Package.json lint done!\"",
         "lint:package-check": "publint && attw --pack .",
+        "lint:package-check:strict": "publint && attw --pack . --profile strict --config-path ./.attw.json",
         "lint:package-sort": "sort-package-json \"./package.json\" \"./docs/docusaurus/package.json\"",
         "lint:package-sort-check": "sort-package-json --check \"./package.json\" \"./docs/docusaurus/package.json\"",
         "lint:packagelintrc": "npmPkgJsonLint . --config .npmpackagejsonlintrc.json",

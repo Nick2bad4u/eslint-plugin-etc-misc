@@ -39,6 +39,15 @@ export default [
 ];
 ```
 
+If your project uses CommonJS config files, `require()` works too:
+
+```js
+// eslint.config.cjs
+const etcMisc = require("eslint-plugin-etc-misc");
+
+module.exports = [etcMisc.configs.recommended];
+```
+
 ## Presets
 
 | Preset |
