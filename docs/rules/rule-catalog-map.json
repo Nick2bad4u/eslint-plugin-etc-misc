@@ -688,48 +688,69 @@
   {
     "catalogId": "R099",
     "catalogIndex": 99,
+    "docId": "typescript-prefer-readonly-array-parameter",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/prefer-readonly-array-parameter"
+  },
+  {
+    "catalogId": "R100",
+    "catalogIndex": 100,
     "docId": "typescript-prefer-readonly-index-signature",
     "isTypeScriptRule": true,
     "ruleName": "typescript/prefer-readonly-index-signature"
   },
   {
-    "catalogId": "R100",
-    "catalogIndex": 100,
+    "catalogId": "R101",
+    "catalogIndex": 101,
     "docId": "typescript-prefer-readonly-map",
     "isTypeScriptRule": true,
     "ruleName": "typescript/prefer-readonly-map"
   },
   {
-    "catalogId": "R101",
-    "catalogIndex": 101,
+    "catalogId": "R102",
+    "catalogIndex": 102,
     "docId": "typescript-prefer-readonly-property",
     "isTypeScriptRule": true,
     "ruleName": "typescript/prefer-readonly-property"
   },
   {
-    "catalogId": "R102",
-    "catalogIndex": 102,
+    "catalogId": "R103",
+    "catalogIndex": 103,
     "docId": "typescript-prefer-readonly-record",
     "isTypeScriptRule": true,
     "ruleName": "typescript/prefer-readonly-record"
   },
   {
-    "catalogId": "R103",
-    "catalogIndex": 103,
+    "catalogId": "R104",
+    "catalogIndex": 104,
     "docId": "typescript-prefer-readonly-set",
     "isTypeScriptRule": true,
     "ruleName": "typescript/prefer-readonly-set"
   },
   {
-    "catalogId": "R104",
-    "catalogIndex": 104,
+    "catalogId": "R105",
+    "catalogIndex": 105,
     "docId": "typescript-require-prop-type-annotation",
     "isTypeScriptRule": true,
     "ruleName": "typescript/require-prop-type-annotation"
   },
   {
-    "catalogId": "R105",
-    "catalogIndex": 105,
+    "catalogId": "R106",
+    "catalogIndex": 106,
+    "docId": "typescript-require-readonly-array-return-type",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/require-readonly-array-return-type"
+  },
+  {
+    "catalogId": "R107",
+    "catalogIndex": 107,
+    "docId": "typescript-require-readonly-array-type-alias",
+    "isTypeScriptRule": true,
+    "ruleName": "typescript/require-readonly-array-type-alias"
+  },
+  {
+    "catalogId": "R108",
+    "catalogIndex": 108,
     "docId": "typescript-require-this-void",
     "isTypeScriptRule": true,
     "ruleName": "typescript/require-this-void"

@@ -35,12 +35,14 @@ export default [etcMisc.configs.recommended];
 - ⛔ `error`: [`etc-misc/throw-error`](../throw-error.md) (R074)
 - ⛔ `error`: [`etc-misc/typescript/no-boolean-literal-type`](../typescript-no-boolean-literal-type.md) (R085)
 - ⚠️ `warn`: [`etc-misc/typescript/prefer-readonly-array`](../typescript-prefer-readonly-array.md) (R098)
-- ⚠️ `warn`: [`etc-misc/typescript/prefer-readonly-index-signature`](../typescript-prefer-readonly-index-signature.md) (R099)
-- ⚠️ `warn`: [`etc-misc/typescript/prefer-readonly-map`](../typescript-prefer-readonly-map.md) (R100)
-- ⚠️ `warn`: [`etc-misc/typescript/prefer-readonly-property`](../typescript-prefer-readonly-property.md) (R101)
-- ⚠️ `warn`: [`etc-misc/typescript/prefer-readonly-record`](../typescript-prefer-readonly-record.md) (R102)
-- ⚠️ `warn`: [`etc-misc/typescript/prefer-readonly-set`](../typescript-prefer-readonly-set.md) (R103)
-- ⚠️ `warn`: [`etc-misc/typescript/require-this-void`](../typescript-require-this-void.md) (R105)
+- ⚠️ `warn`: [`etc-misc/typescript/prefer-readonly-array-parameter`](../typescript-prefer-readonly-array-parameter.md) (R099)
+- ⚠️ `warn`: [`etc-misc/typescript/prefer-readonly-index-signature`](../typescript-prefer-readonly-index-signature.md) (R100)
+- ⚠️ `warn`: [`etc-misc/typescript/prefer-readonly-map`](../typescript-prefer-readonly-map.md) (R101)
+- ⚠️ `warn`: [`etc-misc/typescript/prefer-readonly-property`](../typescript-prefer-readonly-property.md) (R102)
+- ⚠️ `warn`: [`etc-misc/typescript/prefer-readonly-record`](../typescript-prefer-readonly-record.md) (R103)
+- ⚠️ `warn`: [`etc-misc/typescript/prefer-readonly-set`](../typescript-prefer-readonly-set.md) (R104)
+- ⚠️ `warn`: [`etc-misc/typescript/require-readonly-array-return-type`](../typescript-require-readonly-array-return-type.md) (R106)
+- ⚠️ `warn`: [`etc-misc/typescript/require-this-void`](../typescript-require-this-void.md) (R108)
 
 ## Adoption guidance
 

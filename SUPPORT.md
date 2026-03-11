@@ -1,16 +1,17 @@
 # Support
 
-Thanks for using `eslint-plugin-typefest`.
+Thanks for using `eslint-plugin-etc-misc`.
 
 ## How to get help
 
 1. Check project docs first:
    - [README.md](./README.md)
    - [docs/](./docs/)
+   - [Project docs site](https://nick2bad4u.github.io/eslint-plugin-etc-misc/)
 2. Search existing issues:
-   - <https://github.com/Nick2bad4u/eslint-plugin-typefest/issues>
+   - <https://github.com/Nick2bad4u/eslint-plugin-etc-misc/issues>
 3. Open a new issue if needed:
-   - <https://github.com/Nick2bad4u/eslint-plugin-typefest/issues/new>
+   - <https://github.com/Nick2bad4u/eslint-plugin-etc-misc/issues/new>
 
 ## What to include in an issue
 
@@ -19,7 +20,7 @@ Please include:
 - Node.js version
 - TypeScript version
 - ESLint version
-- `eslint-plugin-typefest` version
+- `eslint-plugin-etc-misc` version
 - Minimal reproduction snippet
 - Expected behavior and actual behavior
 

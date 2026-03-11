@@ -19,3 +19,6 @@ Use ADRs to document:
 
 - [ADR 0001: Flat Config-first plugin shape](./0001-flat-config-first-plugin-shape.md)
 - [ADR 0002: Rules docs coverage enforcement](./0002-rule-docs-coverage-enforcement.md)
+- [ADR 0003: Unified etc + misc curation strategy](./0003-unified-etc-misc-curation-strategy.md)
+- [ADR 0004: Generated rule catalog metadata as source of truth](./0004-generated-rule-catalog-source-of-truth.md)
+- [ADR 0005: Risk-tiered recommended preset strategy](./0005-risk-tiered-recommended-preset-strategy.md)

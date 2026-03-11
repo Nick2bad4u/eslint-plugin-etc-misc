@@ -16,11 +16,13 @@ export const recommended = {
         "etc-misc/throw-error": "error",
         "etc-misc/typescript/no-boolean-literal-type": "error",
         "etc-misc/typescript/prefer-readonly-array": "warn",
+        "etc-misc/typescript/prefer-readonly-array-parameter": "warn",
         "etc-misc/typescript/prefer-readonly-index-signature": "warn",
         "etc-misc/typescript/prefer-readonly-map": "warn",
         "etc-misc/typescript/prefer-readonly-property": "warn",
         "etc-misc/typescript/prefer-readonly-record": "warn",
         "etc-misc/typescript/prefer-readonly-set": "warn",
+        "etc-misc/typescript/require-readonly-array-return-type": "warn",
         "etc-misc/typescript/require-this-void": "warn",
     },
 } as const;

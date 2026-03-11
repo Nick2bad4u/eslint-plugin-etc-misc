@@ -26,6 +26,19 @@ This repository uses `git-cliff` for changelog generation and release notes.
 Important: CI does **not** commit or push changelog changes.
 Release notes are generated at workflow runtime and attached to the GitHub release body.
 
+## Release pipeline at a glance
+
+```mermaid
+flowchart TD
+   A[Local pre-release checks] --> B[Bump package.json version]
+   B --> C[Push matching v* tag]
+   C --> D[CI validates tag/version parity]
+   D --> E[CI runs lint + typecheck + tests + pack dry-run]
+   E --> F[CI generates release notes via git-cliff]
+   F --> G[CI publishes npm package with provenance]
+   G --> H[CI creates GitHub release]
+```
+
 ## Create a release
 
 1. Bump `package.json` version.
@@ -66,3 +79,8 @@ public publish, complete all of the following package-entrypoint checks:
    smoke-tested in an isolated temp project.
 
 Treat this checklist as a release gate alongside lint/typecheck/tests.
+
+## Related docs
+
+- [CONTRIBUTING.md](./CONTRIBUTING.md)
+- [Architecture ADR index](./docs/docusaurus/site-docs/architecture/adr/index.md)

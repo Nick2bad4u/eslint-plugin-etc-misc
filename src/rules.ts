@@ -96,6 +96,7 @@ import typescriptNoUnsafeObjectAssignment from "./rules/typescript-no-unsafe-obj
 import typescriptPreferArrayTypeAlias from "./rules/typescript-prefer-array-type-alias.js";
 import typescriptPreferClassMethod from "./rules/typescript-prefer-class-method.js";
 import typescriptPreferEnum from "./rules/typescript-prefer-enum.js";
+import typescriptPreferReadonlyArrayParameter from "./rules/typescript-prefer-readonly-array-parameter.js";
 import typescriptPreferReadonlyArray from "./rules/typescript-prefer-readonly-array.js";
 import typescriptPreferReadonlyIndexSignature from "./rules/typescript-prefer-readonly-index-signature.js";
 import typescriptPreferReadonlyMap from "./rules/typescript-prefer-readonly-map.js";
@@ -103,6 +104,8 @@ import typescriptPreferReadonlyProperty from "./rules/typescript-prefer-readonly
 import typescriptPreferReadonlyRecord from "./rules/typescript-prefer-readonly-record.js";
 import typescriptPreferReadonlySet from "./rules/typescript-prefer-readonly-set.js";
 import typescriptRequirePropTypeAnnotation from "./rules/typescript-require-prop-type-annotation.js";
+import typescriptRequireReadonlyArrayReturnType from "./rules/typescript-require-readonly-array-return-type.js";
+import typescriptRequireReadonlyArrayTypeAlias from "./rules/typescript-require-readonly-array-type-alias.js";
 import typescriptRequireThisVoid from "./rules/typescript-require-this-void.js";
 import underscoreInternal from "./rules/underscore-internal.js";
 import unusedInternalProperties from "./rules/unused-internal-properties.js";
@@ -152,11 +155,13 @@ const recommendedRuleNames = new Set<string>([
     "throw-error",
     "typescript/no-boolean-literal-type",
     "typescript/prefer-readonly-array",
+    "typescript/prefer-readonly-array-parameter",
     "typescript/prefer-readonly-index-signature",
     "typescript/prefer-readonly-map",
     "typescript/prefer-readonly-property",
     "typescript/prefer-readonly-record",
     "typescript/prefer-readonly-set",
+    "typescript/require-readonly-array-return-type",
     "typescript/require-this-void",
 ]);
 
@@ -260,6 +265,8 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
     "typescript/prefer-class-method": typescriptPreferClassMethod,
     "typescript/prefer-enum": typescriptPreferEnum,
     "typescript/prefer-readonly-array": typescriptPreferReadonlyArray,
+    "typescript/prefer-readonly-array-parameter":
+        typescriptPreferReadonlyArrayParameter,
     "typescript/prefer-readonly-index-signature":
         typescriptPreferReadonlyIndexSignature,
     "typescript/prefer-readonly-map": typescriptPreferReadonlyMap,
@@ -268,6 +275,10 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
     "typescript/prefer-readonly-set": typescriptPreferReadonlySet,
     "typescript/require-prop-type-annotation":
         typescriptRequirePropTypeAnnotation,
+    "typescript/require-readonly-array-return-type":
+        typescriptRequireReadonlyArrayReturnType,
+    "typescript/require-readonly-array-type-alias":
+        typescriptRequireReadonlyArrayTypeAlias,
     "typescript/require-this-void": typescriptRequireThisVoid,
     "underscore-internal": underscoreInternal,
     "unused-internal-properties": unusedInternalProperties,

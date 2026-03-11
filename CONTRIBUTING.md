@@ -2,8 +2,8 @@
 
 Thanks for your interest in contributing.
 
-This repository contains an ESLint plugin focused on `type-fest` and
-`ts-extras` usage patterns for TypeScript codebases.
+This repository contains an ESLint plugin that curates and extends rules from
+`eslint-plugin-etc` and `eslint-plugin-misc` for TypeScript-heavy codebases.
 
 ## Prerequisites
 
@@ -87,7 +87,7 @@ are commit-message aware.
 
 Examples:
 
-- `feat(rule): add prefer-type-fest-xyz`
+- `feat(rule): add typescript/require-readonly-array-type-alias`
 - `fix(rule): avoid false positive in union type handling`
 - `docs: clarify configuration for type-aware rules`
 
