@@ -249,7 +249,16 @@ describe("plugin export", () => {
             plugin.rules["typescript/require-readonly-map-type-alias"]
         ).toBeDefined();
         expect(
+            plugin.rules["typescript/require-readonly-record-parameter-type"]
+        ).toBeDefined();
+        expect(
+            plugin.rules["typescript/require-readonly-record-property-type"]
+        ).toBeDefined();
+        expect(
             plugin.rules["typescript/require-readonly-record-return-type"]
+        ).toBeDefined();
+        expect(
+            plugin.rules["typescript/require-readonly-record-type-alias"]
         ).toBeDefined();
         expect(
             plugin.rules["typescript/require-readonly-set-parameter-type"]

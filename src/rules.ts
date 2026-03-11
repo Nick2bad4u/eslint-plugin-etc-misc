@@ -109,7 +109,10 @@ import typescriptRequireReadonlyArrayTypeAlias from "./rules/typescript-require-
 import typescriptRequireReadonlyMapParameterType from "./rules/typescript-require-readonly-map-parameter-type.js";
 import typescriptRequireReadonlyMapReturnType from "./rules/typescript-require-readonly-map-return-type.js";
 import typescriptRequireReadonlyMapTypeAlias from "./rules/typescript-require-readonly-map-type-alias.js";
+import typescriptRequireReadonlyRecordParameterType from "./rules/typescript-require-readonly-record-parameter-type.js";
+import typescriptRequireReadonlyRecordPropertyType from "./rules/typescript-require-readonly-record-property-type.js";
 import typescriptRequireReadonlyRecordReturnType from "./rules/typescript-require-readonly-record-return-type.js";
+import typescriptRequireReadonlyRecordTypeAlias from "./rules/typescript-require-readonly-record-type-alias.js";
 import typescriptRequireReadonlySetParameterType from "./rules/typescript-require-readonly-set-parameter-type.js";
 import typescriptRequireReadonlySetReturnType from "./rules/typescript-require-readonly-set-return-type.js";
 import typescriptRequireReadonlySetTypeAlias from "./rules/typescript-require-readonly-set-type-alias.js";
@@ -292,8 +295,14 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
         typescriptRequireReadonlyMapReturnType,
     "typescript/require-readonly-map-type-alias":
         typescriptRequireReadonlyMapTypeAlias,
+    "typescript/require-readonly-record-parameter-type":
+        typescriptRequireReadonlyRecordParameterType,
+    "typescript/require-readonly-record-property-type":
+        typescriptRequireReadonlyRecordPropertyType,
     "typescript/require-readonly-record-return-type":
         typescriptRequireReadonlyRecordReturnType,
+    "typescript/require-readonly-record-type-alias":
+        typescriptRequireReadonlyRecordTypeAlias,
     "typescript/require-readonly-set-parameter-type":
         typescriptRequireReadonlySetParameterType,
     "typescript/require-readonly-set-return-type":
