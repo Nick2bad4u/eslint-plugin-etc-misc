@@ -81,8 +81,13 @@ if you already enforce immutability through a broader rule strategy.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R116
+> **Rule catalog ID:** R122
 
 ## Further reading
 
 - [TypeScript Utility Types: `Readonly<Type>`](https://www.typescriptlang.org/docs/handbook/utility-types.html#readonlytype)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

@@ -71,9 +71,14 @@ convention.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R105
+> **Rule catalog ID:** R110
 
 ## Further reading
 
 - [TypeScript Utility Types: Record](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)
 - [TypeScript Utility Types: Readonly](https://www.typescriptlang.org/docs/handbook/utility-types.html#readonlytype)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

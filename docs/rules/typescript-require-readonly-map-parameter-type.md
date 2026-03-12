@@ -87,8 +87,13 @@ already enforce a broader readonly parameter policy via type-aware linting.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R110
+> **Rule catalog ID:** R116
 
 ## Further reading
 
 - [TypeScript: ReadonlyMap<K, V>](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

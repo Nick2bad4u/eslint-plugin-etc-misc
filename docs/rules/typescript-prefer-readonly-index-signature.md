@@ -81,9 +81,14 @@ Disable this rule if mutable index signatures are an intentional design choice.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R102
+> **Rule catalog ID:** R107
 
 ## Further reading
 
 - [TypeScript Handbook: Index Signatures](https://www.typescriptlang.org/docs/handbook/2/objects.html#index-signatures)
 - [TypeScript Handbook: readonly properties](https://www.typescriptlang.org/docs/handbook/2/objects.html#readonly-properties)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

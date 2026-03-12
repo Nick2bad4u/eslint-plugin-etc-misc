@@ -90,7 +90,12 @@ import typescriptNoEmptyInterfaces from "./rules/typescript-no-empty-interfaces.
 import typescriptNoInferrableTypes from "./rules/typescript-no-inferrable-types.js";
 import typescriptNoMultiTypeTuples from "./rules/typescript-no-multi-type-tuples.js";
 import typescriptNoNever from "./rules/typescript-no-never.js";
+import typescriptNoRedundantUndefinedConst from "./rules/typescript-no-redundant-undefined-const.js";
+import typescriptNoRedundantUndefinedDefaultParameter from "./rules/typescript-no-redundant-undefined-default-parameter.js";
 import typescriptNoRedundantUndefinedOptional from "./rules/typescript-no-redundant-undefined-optional.js";
+import typescriptNoRedundantUndefinedPromiseReturnType from "./rules/typescript-no-redundant-undefined-promise-return-type.js";
+import typescriptNoRedundantUndefinedReadonlyProperty from "./rules/typescript-no-redundant-undefined-readonly-property.js";
+import typescriptNoRedundantUndefinedReturnType from "./rules/typescript-no-redundant-undefined-return-type.js";
 import typescriptNoRestrictedSyntax from "./rules/typescript-no-restricted-syntax.js";
 import typescriptNoUnsafeObjectAssign from "./rules/typescript-no-unsafe-object-assign.js";
 import typescriptNoUnsafeObjectAssignment from "./rules/typescript-no-unsafe-object-assignment.js";
@@ -106,6 +111,7 @@ import typescriptPreferReadonlyProperty from "./rules/typescript-prefer-readonly
 import typescriptPreferReadonlyRecord from "./rules/typescript-prefer-readonly-record.js";
 import typescriptPreferReadonlySet from "./rules/typescript-prefer-readonly-set.js";
 import typescriptRequirePropTypeAnnotation from "./rules/typescript-require-prop-type-annotation.js";
+import typescriptRequireReadonlyArrayPropertyType from "./rules/typescript-require-readonly-array-property-type.js";
 import typescriptRequireReadonlyArrayReturnType from "./rules/typescript-require-readonly-array-return-type.js";
 import typescriptRequireReadonlyArrayTypeAlias from "./rules/typescript-require-readonly-array-type-alias.js";
 import typescriptRequireReadonlyMapParameterType from "./rules/typescript-require-readonly-map-parameter-type.js";
@@ -269,8 +275,18 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
     "typescript/no-inferrable-types": typescriptNoInferrableTypes,
     "typescript/no-multi-type-tuples": typescriptNoMultiTypeTuples,
     "typescript/no-never": typescriptNoNever,
+    "typescript/no-redundant-undefined-const":
+        typescriptNoRedundantUndefinedConst,
+    "typescript/no-redundant-undefined-default-parameter":
+        typescriptNoRedundantUndefinedDefaultParameter,
     "typescript/no-redundant-undefined-optional":
         typescriptNoRedundantUndefinedOptional,
+    "typescript/no-redundant-undefined-promise-return-type":
+        typescriptNoRedundantUndefinedPromiseReturnType,
+    "typescript/no-redundant-undefined-readonly-property":
+        typescriptNoRedundantUndefinedReadonlyProperty,
+    "typescript/no-redundant-undefined-return-type":
+        typescriptNoRedundantUndefinedReturnType,
     "typescript/no-restricted-syntax": typescriptNoRestrictedSyntax,
     "typescript/no-unsafe-object-assign": typescriptNoUnsafeObjectAssign,
     "typescript/no-unsafe-object-assignment":
@@ -290,6 +306,8 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
     "typescript/prefer-readonly-set": typescriptPreferReadonlySet,
     "typescript/require-prop-type-annotation":
         typescriptRequirePropTypeAnnotation,
+    "typescript/require-readonly-array-property-type":
+        typescriptRequireReadonlyArrayPropertyType,
     "typescript/require-readonly-array-return-type":
         typescriptRequireReadonlyArrayReturnType,
     "typescript/require-readonly-array-type-alias":

@@ -100,9 +100,14 @@ prefer not to expose readonly return contracts.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R108
+> **Rule catalog ID:** R114
 
 ## Further reading
 
 - [TypeScript: ReadonlyArray<T>](https://www.typescriptlang.org/docs/handbook/interfaces.html#readonly-properties)
 - [TypeScript: Tuple Types](https://www.typescriptlang.org/docs/handbook/2/objects.html#tuple-types)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

@@ -91,9 +91,14 @@ member names.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R099
+> **Rule catalog ID:** R104
 
 ## Further reading
 
 - [TypeScript Handbook: Tuple Types](https://www.typescriptlang.org/docs/handbook/2/objects.html#tuple-types)
 - [TypeScript 4.0: Named Tuple Members](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-0.html#named-tuple-elements)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.

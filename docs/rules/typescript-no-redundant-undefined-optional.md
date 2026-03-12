@@ -93,9 +93,14 @@ optional parameters or tuple members for stylistic consistency.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R092
+> **Rule catalog ID:** R094
 
 ## Further reading
 
 - [TypeScript Handbook: Optional Parameters](https://www.typescriptlang.org/docs/handbook/2/functions.html#optional-parameters)
 - [TypeScript Handbook: Tuple Types](https://www.typescriptlang.org/docs/handbook/2/objects.html#tuple-types)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Use focused codemods/autofix batches per package or directory.
