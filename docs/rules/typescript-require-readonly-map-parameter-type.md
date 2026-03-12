@@ -87,7 +87,7 @@ already enforce a broader readonly parameter policy via type-aware linting.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R108
+> **Rule catalog ID:** R109
 
 ## Further reading
 

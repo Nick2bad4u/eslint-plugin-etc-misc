@@ -71,7 +71,7 @@ Disable this rule if mutable maps are expected throughout your codebase.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R101
+> **Rule catalog ID:** R102
 
 ## Further reading
 

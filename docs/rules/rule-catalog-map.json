@@ -681,146 +681,153 @@
     {
         "catalogId": "R098",
         "catalogIndex": 98,
+        "docId": "typescript-prefer-named-tuple-members",
+        "isTypeScriptRule": true,
+        "ruleName": "typescript/prefer-named-tuple-members"
+    },
+    {
+        "catalogId": "R099",
+        "catalogIndex": 99,
         "docId": "typescript-prefer-readonly-array",
         "isTypeScriptRule": true,
         "ruleName": "typescript/prefer-readonly-array"
     },
     {
-        "catalogId": "R099",
-        "catalogIndex": 99,
+        "catalogId": "R100",
+        "catalogIndex": 100,
         "docId": "typescript-prefer-readonly-array-parameter",
         "isTypeScriptRule": true,
         "ruleName": "typescript/prefer-readonly-array-parameter"
     },
     {
-        "catalogId": "R100",
-        "catalogIndex": 100,
+        "catalogId": "R101",
+        "catalogIndex": 101,
         "docId": "typescript-prefer-readonly-index-signature",
         "isTypeScriptRule": true,
         "ruleName": "typescript/prefer-readonly-index-signature"
     },
     {
-        "catalogId": "R101",
-        "catalogIndex": 101,
+        "catalogId": "R102",
+        "catalogIndex": 102,
         "docId": "typescript-prefer-readonly-map",
         "isTypeScriptRule": true,
         "ruleName": "typescript/prefer-readonly-map"
     },
     {
-        "catalogId": "R102",
-        "catalogIndex": 102,
+        "catalogId": "R103",
+        "catalogIndex": 103,
         "docId": "typescript-prefer-readonly-property",
         "isTypeScriptRule": true,
         "ruleName": "typescript/prefer-readonly-property"
     },
     {
-        "catalogId": "R103",
-        "catalogIndex": 103,
+        "catalogId": "R104",
+        "catalogIndex": 104,
         "docId": "typescript-prefer-readonly-record",
         "isTypeScriptRule": true,
         "ruleName": "typescript/prefer-readonly-record"
     },
     {
-        "catalogId": "R104",
-        "catalogIndex": 104,
+        "catalogId": "R105",
+        "catalogIndex": 105,
         "docId": "typescript-prefer-readonly-set",
         "isTypeScriptRule": true,
         "ruleName": "typescript/prefer-readonly-set"
     },
     {
-        "catalogId": "R105",
-        "catalogIndex": 105,
+        "catalogId": "R106",
+        "catalogIndex": 106,
         "docId": "typescript-require-prop-type-annotation",
         "isTypeScriptRule": true,
         "ruleName": "typescript/require-prop-type-annotation"
     },
     {
-        "catalogId": "R106",
-        "catalogIndex": 106,
+        "catalogId": "R107",
+        "catalogIndex": 107,
         "docId": "typescript-require-readonly-array-return-type",
         "isTypeScriptRule": true,
         "ruleName": "typescript/require-readonly-array-return-type"
     },
     {
-        "catalogId": "R107",
-        "catalogIndex": 107,
+        "catalogId": "R108",
+        "catalogIndex": 108,
         "docId": "typescript-require-readonly-array-type-alias",
         "isTypeScriptRule": true,
         "ruleName": "typescript/require-readonly-array-type-alias"
     },
     {
-        "catalogId": "R108",
-        "catalogIndex": 108,
+        "catalogId": "R109",
+        "catalogIndex": 109,
         "docId": "typescript-require-readonly-map-parameter-type",
         "isTypeScriptRule": true,
         "ruleName": "typescript/require-readonly-map-parameter-type"
     },
     {
-        "catalogId": "R109",
-        "catalogIndex": 109,
+        "catalogId": "R110",
+        "catalogIndex": 110,
         "docId": "typescript-require-readonly-map-return-type",
         "isTypeScriptRule": true,
         "ruleName": "typescript/require-readonly-map-return-type"
     },
     {
-        "catalogId": "R110",
-        "catalogIndex": 110,
+        "catalogId": "R111",
+        "catalogIndex": 111,
         "docId": "typescript-require-readonly-map-type-alias",
         "isTypeScriptRule": true,
         "ruleName": "typescript/require-readonly-map-type-alias"
     },
     {
-        "catalogId": "R111",
-        "catalogIndex": 111,
+        "catalogId": "R112",
+        "catalogIndex": 112,
         "docId": "typescript-require-readonly-record-parameter-type",
         "isTypeScriptRule": true,
         "ruleName": "typescript/require-readonly-record-parameter-type"
     },
     {
-        "catalogId": "R112",
-        "catalogIndex": 112,
+        "catalogId": "R113",
+        "catalogIndex": 113,
         "docId": "typescript-require-readonly-record-property-type",
         "isTypeScriptRule": true,
         "ruleName": "typescript/require-readonly-record-property-type"
     },
     {
-        "catalogId": "R113",
-        "catalogIndex": 113,
+        "catalogId": "R114",
+        "catalogIndex": 114,
         "docId": "typescript-require-readonly-record-return-type",
         "isTypeScriptRule": true,
         "ruleName": "typescript/require-readonly-record-return-type"
     },
     {
-        "catalogId": "R114",
-        "catalogIndex": 114,
+        "catalogId": "R115",
+        "catalogIndex": 115,
         "docId": "typescript-require-readonly-record-type-alias",
         "isTypeScriptRule": true,
         "ruleName": "typescript/require-readonly-record-type-alias"
     },
     {
-        "catalogId": "R115",
-        "catalogIndex": 115,
+        "catalogId": "R116",
+        "catalogIndex": 116,
         "docId": "typescript-require-readonly-set-parameter-type",
         "isTypeScriptRule": true,
         "ruleName": "typescript/require-readonly-set-parameter-type"
     },
     {
-        "catalogId": "R116",
-        "catalogIndex": 116,
+        "catalogId": "R117",
+        "catalogIndex": 117,
         "docId": "typescript-require-readonly-set-return-type",
         "isTypeScriptRule": true,
         "ruleName": "typescript/require-readonly-set-return-type"
     },
     {
-        "catalogId": "R117",
-        "catalogIndex": 117,
+        "catalogId": "R118",
+        "catalogIndex": 118,
         "docId": "typescript-require-readonly-set-type-alias",
         "isTypeScriptRule": true,
         "ruleName": "typescript/require-readonly-set-type-alias"
     },
     {
-        "catalogId": "R118",
-        "catalogIndex": 118,
+        "catalogId": "R119",
+        "catalogIndex": 119,
         "docId": "typescript-require-this-void",
         "isTypeScriptRule": true,
         "ruleName": "typescript/require-this-void"

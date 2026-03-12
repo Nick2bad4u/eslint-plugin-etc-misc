@@ -79,7 +79,7 @@ Disable this rule if implicit `any`-style property declarations are allowed.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R105
+> **Rule catalog ID:** R106
 
 ## Further reading
 

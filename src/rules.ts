@@ -96,6 +96,7 @@ import typescriptNoUnsafeObjectAssignment from "./rules/typescript-no-unsafe-obj
 import typescriptPreferArrayTypeAlias from "./rules/typescript-prefer-array-type-alias.js";
 import typescriptPreferClassMethod from "./rules/typescript-prefer-class-method.js";
 import typescriptPreferEnum from "./rules/typescript-prefer-enum.js";
+import typescriptPreferNamedTupleMembers from "./rules/typescript-prefer-named-tuple-members.js";
 import typescriptPreferReadonlyArrayParameter from "./rules/typescript-prefer-readonly-array-parameter.js";
 import typescriptPreferReadonlyArray from "./rules/typescript-prefer-readonly-array.js";
 import typescriptPreferReadonlyIndexSignature from "./rules/typescript-prefer-readonly-index-signature.js";
@@ -274,6 +275,7 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
     "typescript/prefer-array-type-alias": typescriptPreferArrayTypeAlias,
     "typescript/prefer-class-method": typescriptPreferClassMethod,
     "typescript/prefer-enum": typescriptPreferEnum,
+    "typescript/prefer-named-tuple-members": typescriptPreferNamedTupleMembers,
     "typescript/prefer-readonly-array": typescriptPreferReadonlyArray,
     "typescript/prefer-readonly-array-parameter":
         typescriptPreferReadonlyArrayParameter,

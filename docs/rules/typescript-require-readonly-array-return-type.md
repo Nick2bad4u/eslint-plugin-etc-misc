@@ -100,7 +100,7 @@ prefer not to expose readonly return contracts.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R106
+> **Rule catalog ID:** R107
 
 ## Further reading
 
