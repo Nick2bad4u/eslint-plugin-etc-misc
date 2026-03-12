@@ -90,6 +90,7 @@ import typescriptNoEmptyInterfaces from "./rules/typescript-no-empty-interfaces.
 import typescriptNoInferrableTypes from "./rules/typescript-no-inferrable-types.js";
 import typescriptNoMultiTypeTuples from "./rules/typescript-no-multi-type-tuples.js";
 import typescriptNoNever from "./rules/typescript-no-never.js";
+import typescriptNoRedundantUndefinedOptional from "./rules/typescript-no-redundant-undefined-optional.js";
 import typescriptNoRestrictedSyntax from "./rules/typescript-no-restricted-syntax.js";
 import typescriptNoUnsafeObjectAssign from "./rules/typescript-no-unsafe-object-assign.js";
 import typescriptNoUnsafeObjectAssignment from "./rules/typescript-no-unsafe-object-assignment.js";
@@ -268,6 +269,8 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
     "typescript/no-inferrable-types": typescriptNoInferrableTypes,
     "typescript/no-multi-type-tuples": typescriptNoMultiTypeTuples,
     "typescript/no-never": typescriptNoNever,
+    "typescript/no-redundant-undefined-optional":
+        typescriptNoRedundantUndefinedOptional,
     "typescript/no-restricted-syntax": typescriptNoRestrictedSyntax,
     "typescript/no-unsafe-object-assign": typescriptNoUnsafeObjectAssign,
     "typescript/no-unsafe-object-assignment":
