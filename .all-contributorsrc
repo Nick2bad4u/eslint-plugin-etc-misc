@@ -1,0 +1,119 @@
+{
+    "badgeTemplate": "[![All Contributors.](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=flat-square)](#contributors)",
+    "commit": false,
+    "commitConvention": "gitmoji",
+    "commitType": "docs",
+    "contributors": [
+        {
+            "avatar_url": "https://avatars.githubusercontent.com/u/20943337?v=4",
+            "contributions": [
+                "bug",
+                "code",
+                "content",
+                "doc",
+                "ideas",
+                "infra",
+                "maintenance",
+                "plugin",
+                "research",
+                "review",
+                "test",
+                "tool"
+            ],
+            "login": "Nick2bad4u",
+            "name": "Nick2bad4u",
+            "profile": "https://github.com/Nick2bad4u"
+        },
+        {
+            "avatar_url": "https://avatars.githubusercontent.com/in/29110?v=4",
+            "contributions": [
+                "infra",
+                "security"
+            ],
+            "login": "dependabot[bot]",
+            "name": "dependabot[bot]",
+            "profile": "https://github.com/apps/dependabot"
+        },
+        {
+            "login": "step-security-bot",
+            "name": "StepSecurity Bot",
+            "avatar_url": "https://avatars.githubusercontent.com/u/89328645?v=4",
+            "profile": "https://www.stepsecurity.io/",
+            "contributions": [
+                "security",
+                "infra",
+                "maintenance"
+            ]
+        },
+        {
+            "login": "snyk-bot",
+            "name": "Snyk bot",
+            "avatar_url": "https://avatars.githubusercontent.com/u/19733683?v=4",
+            "profile": "https://snyk.io/",
+            "contributions": [
+                "security",
+                "infra",
+                "maintenance",
+                "review"
+            ]
+        },
+        {
+            "login": "cartant",
+            "name": "Nicholas Jamieson",
+            "avatar_url": "https://avatars.githubusercontent.com/u/3878593?v=4",
+            "profile": "https://ncjamieson.com/",
+            "contributions": [
+                "code"
+            ]
+        },
+        {
+            "login": "felixfbecker",
+            "name": "Felix Becker",
+            "avatar_url": "https://avatars.githubusercontent.com/u/10532611?v=4",
+            "profile": "https://github.com/felixfbecker",
+            "contributions": [
+                "code"
+            ]
+        },
+        {
+            "login": "danielnixon",
+            "name": "Daniel Nixon",
+            "avatar_url": "https://avatars.githubusercontent.com/u/6418489?v=4",
+            "profile": "https://github.com/danielnixon",
+            "contributions": [
+                "code"
+            ]
+        },
+        {
+            "login": "karlhorky",
+            "name": "Karl Horky",
+            "avatar_url": "https://avatars.githubusercontent.com/u/1935696?v=4",
+            "profile": "https://upleveled.io/",
+            "contributions": [
+                "code"
+            ]
+        },
+        {
+            "login": "Hotell",
+            "name": "Martin Hochel",
+            "avatar_url": "https://avatars.githubusercontent.com/u/1223799?v=4",
+            "profile": "https://medium.com/@martin_hotell",
+            "contributions": [
+                "code"
+            ]
+        }
+    ],
+    "contributorsPerLine": 4,
+    "contributorsSortAlphabetically": true,
+    "files": [
+        "README.md",
+        "CONTRIBUTORS.md"
+    ],
+    "imageSize": 80,
+    "linkToUsage": false,
+    "projectName": "eslint-plugin-etc-misc",
+    "projectOwner": "Nick2bad4u",
+    "repoHost": "https://github.com",
+    "repoType": "github",
+    "skipCi": true
+}
