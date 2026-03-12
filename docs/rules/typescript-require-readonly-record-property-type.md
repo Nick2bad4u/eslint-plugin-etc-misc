@@ -90,7 +90,7 @@ types or if you already enforce immutability through broader type-aware rules.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R113
+> **Rule catalog ID:** R114
 
 ## Further reading
 

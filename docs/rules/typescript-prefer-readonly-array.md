@@ -74,7 +74,7 @@ Disable this rule if mutable arrays and tuples are preferred in your API design.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R099
+> **Rule catalog ID:** R100
 
 ## Further reading
 
