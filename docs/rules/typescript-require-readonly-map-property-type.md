@@ -1,34 +1,34 @@
-# typescript/require-readonly-record-property-type
+# typescript/require-readonly-map-property-type
 
-Require `Readonly<Record<...>>` for property type annotations.
+Require `ReadonlyMap` for top-level property type annotations.
 
 ## Targeted pattern scope
 
-This rule targets top-level mutable `Record<K, V>` property type annotations,
+This rule targets top-level mutable `Map<K, V>` property type annotations,
 including top-level union/intersection members such as
-`Record<string, number> | null`.
+`Map<string, number> | null`.
 
 It checks property signatures in interfaces and type literals.
 
 ## What this rule reports
 
-This rule reports property annotations that use mutable `Record<...>`.
+This rule reports property annotations that use mutable `Map<...>`.
 
 ## Why this rule exists
 
 Property signatures define object contracts consumed across your codebase.
-Using `Readonly<Record<...>>` for these property types communicates immutability
-intent and helps avoid accidental mutation through shared dictionary-like data.
+Using `ReadonlyMap` for these property types communicates immutability intent
+and helps avoid accidental mutation through shared map-like data.
 
 ## ❌ Incorrect
 
 ```ts
 interface Config {
-    lookup: Record<string, number>;
+    lookup: Map<string, number>;
 }
 
 type ApiConfig = {
-    lookup: Record<string, number> | null;
+    lookup: Map<string, number> | null;
 };
 ```
 
@@ -36,11 +36,11 @@ type ApiConfig = {
 
 ```ts
 interface Config {
-    lookup: Readonly<Record<string, number>>;
+    lookup: ReadonlyMap<string, number>;
 }
 
 type ApiConfig = {
-    lookup: Readonly<Record<string, number>> | null;
+    lookup: ReadonlyMap<string, number> | null;
 };
 ```
 
@@ -48,7 +48,7 @@ type ApiConfig = {
 
 This rule is autofixable and also provides suggestions.
 
-- `Record<K, V>` is converted to `Readonly<Record<K, V>>`.
+- `Map<K, V>` is converted to `ReadonlyMap<K, V>`.
 - The rule intentionally checks only top-level property type annotations (and
   top-level union/intersection members), not nested object-property types.
 
@@ -56,12 +56,12 @@ This rule is autofixable and also provides suggestions.
 
 ```ts
 interface Config {
-    lookup: Promise<Record<string, number>>;
+    lookup: Promise<Map<string, number>>;
 }
 // ✅ valid (nested generic type is out of scope)
 
 type Settings = {
-    lookup: { nested: Record<string, number> };
+    lookup: { nested: Map<string, number> };
 };
 // ✅ valid (nested property type is out of scope)
 ```
@@ -75,7 +75,7 @@ export default [
     {
         plugins: { "etc-misc": etcMisc },
         rules: {
-            "etc-misc/typescript/require-readonly-record-property-type": "error",
+            "etc-misc/typescript/require-readonly-map-property-type": "error",
         },
     },
 ];
@@ -83,18 +83,19 @@ export default [
 
 ## When not to use it
 
-Disable this rule if your codebase intentionally uses mutable record property
-types or if you already enforce immutability through broader type-aware rules.
+Disable this rule if your codebase intentionally models property maps as
+mutable or if broader readonly policies already enforce your preferred
+constraints.
 
 ## Package documentation
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R123
+> **Rule catalog ID:** R119
 
 ## Further reading
 
-- [TypeScript Utility Types: `Readonly<Type>`](https://www.typescriptlang.org/docs/handbook/utility-types.html#readonlytype)
+- [TypeScript: ReadonlyMap<K, V>](https://www.typescriptlang.org/docs/handbook/utility-types.html)
 
 ## Adoption resources
 

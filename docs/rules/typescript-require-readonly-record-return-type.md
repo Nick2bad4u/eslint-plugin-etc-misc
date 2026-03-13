@@ -96,7 +96,7 @@ scope.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R121
+> **Rule catalog ID:** R124
 
 ## Further reading
 

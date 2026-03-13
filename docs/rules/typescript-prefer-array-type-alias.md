@@ -75,7 +75,7 @@ Disable this rule if your project does not standardize alias naming for array an
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R101
+> **Rule catalog ID:** R103
 
 ## Further reading
 

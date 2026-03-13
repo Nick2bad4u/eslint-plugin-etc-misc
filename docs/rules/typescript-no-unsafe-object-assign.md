@@ -79,7 +79,7 @@ Disable this rule if readonly object mutation via `Object.assign` is intentional
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R099
+> **Rule catalog ID:** R101
 
 ## Further reading
 

@@ -92,10 +92,12 @@ import typescriptNoMultiTypeTuples from "./rules/typescript-no-multi-type-tuples
 import typescriptNoNever from "./rules/typescript-no-never.js";
 import typescriptNoRedundantUndefinedConst from "./rules/typescript-no-redundant-undefined-const.js";
 import typescriptNoRedundantUndefinedDefaultParameter from "./rules/typescript-no-redundant-undefined-default-parameter.js";
+import typescriptNoRedundantUndefinedLet from "./rules/typescript-no-redundant-undefined-let.js";
 import typescriptNoRedundantUndefinedOptional from "./rules/typescript-no-redundant-undefined-optional.js";
 import typescriptNoRedundantUndefinedPromiseReturnType from "./rules/typescript-no-redundant-undefined-promise-return-type.js";
 import typescriptNoRedundantUndefinedReadonlyProperty from "./rules/typescript-no-redundant-undefined-readonly-property.js";
 import typescriptNoRedundantUndefinedReturnType from "./rules/typescript-no-redundant-undefined-return-type.js";
+import typescriptNoRedundantUndefinedVar from "./rules/typescript-no-redundant-undefined-var.js";
 import typescriptNoRestrictedSyntax from "./rules/typescript-no-restricted-syntax.js";
 import typescriptNoUnsafeObjectAssign from "./rules/typescript-no-unsafe-object-assign.js";
 import typescriptNoUnsafeObjectAssignment from "./rules/typescript-no-unsafe-object-assignment.js";
@@ -115,6 +117,7 @@ import typescriptRequireReadonlyArrayPropertyType from "./rules/typescript-requi
 import typescriptRequireReadonlyArrayReturnType from "./rules/typescript-require-readonly-array-return-type.js";
 import typescriptRequireReadonlyArrayTypeAlias from "./rules/typescript-require-readonly-array-type-alias.js";
 import typescriptRequireReadonlyMapParameterType from "./rules/typescript-require-readonly-map-parameter-type.js";
+import typescriptRequireReadonlyMapPropertyType from "./rules/typescript-require-readonly-map-property-type.js";
 import typescriptRequireReadonlyMapReturnType from "./rules/typescript-require-readonly-map-return-type.js";
 import typescriptRequireReadonlyMapTypeAlias from "./rules/typescript-require-readonly-map-type-alias.js";
 import typescriptRequireReadonlyRecordParameterType from "./rules/typescript-require-readonly-record-parameter-type.js";
@@ -122,6 +125,7 @@ import typescriptRequireReadonlyRecordPropertyType from "./rules/typescript-requ
 import typescriptRequireReadonlyRecordReturnType from "./rules/typescript-require-readonly-record-return-type.js";
 import typescriptRequireReadonlyRecordTypeAlias from "./rules/typescript-require-readonly-record-type-alias.js";
 import typescriptRequireReadonlySetParameterType from "./rules/typescript-require-readonly-set-parameter-type.js";
+import typescriptRequireReadonlySetPropertyType from "./rules/typescript-require-readonly-set-property-type.js";
 import typescriptRequireReadonlySetReturnType from "./rules/typescript-require-readonly-set-return-type.js";
 import typescriptRequireReadonlySetTypeAlias from "./rules/typescript-require-readonly-set-type-alias.js";
 import typescriptRequireThisVoid from "./rules/typescript-require-this-void.js";
@@ -279,6 +283,7 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
         typescriptNoRedundantUndefinedConst,
     "typescript/no-redundant-undefined-default-parameter":
         typescriptNoRedundantUndefinedDefaultParameter,
+    "typescript/no-redundant-undefined-let": typescriptNoRedundantUndefinedLet,
     "typescript/no-redundant-undefined-optional":
         typescriptNoRedundantUndefinedOptional,
     "typescript/no-redundant-undefined-promise-return-type":
@@ -287,6 +292,7 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
         typescriptNoRedundantUndefinedReadonlyProperty,
     "typescript/no-redundant-undefined-return-type":
         typescriptNoRedundantUndefinedReturnType,
+    "typescript/no-redundant-undefined-var": typescriptNoRedundantUndefinedVar,
     "typescript/no-restricted-syntax": typescriptNoRestrictedSyntax,
     "typescript/no-unsafe-object-assign": typescriptNoUnsafeObjectAssign,
     "typescript/no-unsafe-object-assignment":
@@ -314,6 +320,8 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
         typescriptRequireReadonlyArrayTypeAlias,
     "typescript/require-readonly-map-parameter-type":
         typescriptRequireReadonlyMapParameterType,
+    "typescript/require-readonly-map-property-type":
+        typescriptRequireReadonlyMapPropertyType,
     "typescript/require-readonly-map-return-type":
         typescriptRequireReadonlyMapReturnType,
     "typescript/require-readonly-map-type-alias":
@@ -328,6 +336,8 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
         typescriptRequireReadonlyRecordTypeAlias,
     "typescript/require-readonly-set-parameter-type":
         typescriptRequireReadonlySetParameterType,
+    "typescript/require-readonly-set-property-type":
+        typescriptRequireReadonlySetPropertyType,
     "typescript/require-readonly-set-return-type":
         typescriptRequireReadonlySetReturnType,
     "typescript/require-readonly-set-type-alias":

@@ -1,34 +1,34 @@
-# typescript/require-readonly-record-property-type
+# typescript/require-readonly-set-property-type
 
-Require `Readonly<Record<...>>` for property type annotations.
+Require `ReadonlySet` for top-level property type annotations.
 
 ## Targeted pattern scope
 
-This rule targets top-level mutable `Record<K, V>` property type annotations,
+This rule targets top-level mutable `Set<T>` property type annotations,
 including top-level union/intersection members such as
-`Record<string, number> | null`.
+`Set<string> | null`.
 
 It checks property signatures in interfaces and type literals.
 
 ## What this rule reports
 
-This rule reports property annotations that use mutable `Record<...>`.
+This rule reports property annotations that use mutable `Set<...>`.
 
 ## Why this rule exists
 
 Property signatures define object contracts consumed across your codebase.
-Using `Readonly<Record<...>>` for these property types communicates immutability
-intent and helps avoid accidental mutation through shared dictionary-like data.
+Using `ReadonlySet` for these property types communicates immutability intent
+and helps avoid accidental mutation through shared set-like data.
 
 ## ❌ Incorrect
 
 ```ts
 interface Config {
-    lookup: Record<string, number>;
+    values: Set<string>;
 }
 
 type ApiConfig = {
-    lookup: Record<string, number> | null;
+    values: Set<string> | null;
 };
 ```
 
@@ -36,11 +36,11 @@ type ApiConfig = {
 
 ```ts
 interface Config {
-    lookup: Readonly<Record<string, number>>;
+    values: ReadonlySet<string>;
 }
 
 type ApiConfig = {
-    lookup: Readonly<Record<string, number>> | null;
+    values: ReadonlySet<string> | null;
 };
 ```
 
@@ -48,7 +48,7 @@ type ApiConfig = {
 
 This rule is autofixable and also provides suggestions.
 
-- `Record<K, V>` is converted to `Readonly<Record<K, V>>`.
+- `Set<T>` is converted to `ReadonlySet<T>`.
 - The rule intentionally checks only top-level property type annotations (and
   top-level union/intersection members), not nested object-property types.
 
@@ -56,12 +56,12 @@ This rule is autofixable and also provides suggestions.
 
 ```ts
 interface Config {
-    lookup: Promise<Record<string, number>>;
+    values: Promise<Set<string>>;
 }
 // ✅ valid (nested generic type is out of scope)
 
 type Settings = {
-    lookup: { nested: Record<string, number> };
+    values: { nested: Set<string> };
 };
 // ✅ valid (nested property type is out of scope)
 ```
@@ -75,7 +75,7 @@ export default [
     {
         plugins: { "etc-misc": etcMisc },
         rules: {
-            "etc-misc/typescript/require-readonly-record-property-type": "error",
+            "etc-misc/typescript/require-readonly-set-property-type": "error",
         },
     },
 ];
@@ -83,18 +83,19 @@ export default [
 
 ## When not to use it
 
-Disable this rule if your codebase intentionally uses mutable record property
-types or if you already enforce immutability through broader type-aware rules.
+Disable this rule if your codebase intentionally models property sets as
+mutable or if broader readonly policies already enforce your preferred
+constraints.
 
 ## Package documentation
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R123
+> **Rule catalog ID:** R127
 
 ## Further reading
 
-- [TypeScript Utility Types: `Readonly<Type>`](https://www.typescriptlang.org/docs/handbook/utility-types.html#readonlytype)
+- [TypeScript: ReadonlySet<T>](https://www.typescriptlang.org/docs/handbook/utility-types.html)
 
 ## Adoption resources
 

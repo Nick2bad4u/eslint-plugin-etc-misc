@@ -152,6 +152,7 @@
         {
             "files": [
                 "*.json",
+                "*.webmanifest",
                 "**/.prettierrc",
                 "**/.htmlhintrc"
             ],

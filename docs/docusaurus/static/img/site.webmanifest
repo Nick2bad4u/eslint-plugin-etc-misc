@@ -1,6 +1,6 @@
 {
-    "name": "eslint-plugin-etc-misc",
-    "short_name": "etc-misc",
+    "background_color": "#ffffff",
+    "display": "standalone",
     "icons": [
         {
             "src": "/img/favicon.ico/web-app-manifest-192x192.png",
@@ -15,7 +15,7 @@
             "purpose": "maskable"
         }
     ],
-    "theme_color": "#ffffff",
-    "background_color": "#ffffff",
-    "display": "standalone"
+    "name": "eslint-plugin-etc-misc",
+    "short_name": "etc-misc",
+    "theme_color": "#ffffff"
 }
