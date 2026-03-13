@@ -865,12 +865,3 @@ eslint.config.bundled_**
 # old source plugins
 eslint-plugin-etc/
 eslint-plugin-misc/
-
-# Repo kickstart from other project files
-docs/rules/getting-started.md
-docs/rules/overview.md
-docs/rules/prefer-ts-extras-array-at.md
-docs/rules/guides/adoption-checklist.md
-docs/rules/guides/rollout-and-fix-safety.md
-docs/rules/presets/all.md
-src/prefer-ts-extras-assert-error.ts
