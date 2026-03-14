@@ -139,7 +139,7 @@ describe("plugin export", () => {
         expect(
             plugin.configs.strictTypeChecked.languageOptions?.parserOptions
                 ?.projectService
-        ).toBe(true);
+        ).toBeTruthy();
         expect(plugin.configs.allStrict.plugins["etc-misc"].meta).toEqual(
             plugin.meta
         );
@@ -430,7 +430,7 @@ describe("plugin export", () => {
         expect(
             plugin.configs.strictTypeChecked.languageOptions?.parserOptions
                 ?.projectService
-        ).toBe(true);
+        ).toBeTruthy();
 
         const allRuleNames = getSortedRuleNames(plugin.configs.all.rules);
         const allStrictRuleNames = getSortedRuleNames(

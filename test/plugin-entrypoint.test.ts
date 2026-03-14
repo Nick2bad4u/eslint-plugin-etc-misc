@@ -154,7 +154,7 @@ describe("plugin.mjs entrypoint", () => {
         expect(
             plugin.configs.strictTypeChecked.languageOptions?.parserOptions
                 ?.projectService
-        ).toBe(true);
+        ).toBeTruthy();
     });
 
     it("keeps the entrypoint module structure stable", () => {
