@@ -60,7 +60,7 @@
     "scripts": {
         "build": "tsc -p tsconfig.build.json && node scripts/write-cjs-entry.mjs",
         "build:clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
-        "build:eslint-inspector": "npx @eslint/config-inspector build --outDir \"docs/docusaurus/static/eslint-inspector\" --base \"/eslint-plugin-etc-misc/eslint-inspector/\"",
+        "build:eslint-inspector": "npx -y @eslint/config-inspector@1.4.2 build --outDir \"docs/docusaurus/static/eslint-inspector\" --base \"/eslint-plugin-etc-misc/eslint-inspector/\"",
         "build:eslint-inspector:local": "npx @eslint/config-inspector",
         "changelog:generate": "git-cliff --config cliff.toml --output CHANGELOG.md",
         "changelog:preview": "git-cliff --config cliff.toml --unreleased",
