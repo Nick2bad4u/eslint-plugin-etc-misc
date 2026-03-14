@@ -41,7 +41,7 @@ export const toCasing = (value: string, format: Casing): string => {
  * Extract the final filename segment without extension.
  */
 export const filenameStem = (filePath: string): string => {
-    const pathSegments = filePath.split(/[\\/]/u);
+    const pathSegments = filePath.split(/[/\\]/u);
     const lastPathSegment = pathSegments.at(-1) ?? filePath;
 
     return lastPathSegment.replace(/\.[^./\\]+$/u, "");

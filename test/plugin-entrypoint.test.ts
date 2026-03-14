@@ -127,6 +127,9 @@ describe("plugin.mjs entrypoint", () => {
         expect(plugin.configs.strictTypeChecked.rules).toEqual(
             configs.strictTypeChecked.rules
         );
+        expect(plugin.configs.strictTypeChecked.languageOptions).toEqual(
+            configs.strictTypeChecked.languageOptions
+        );
 
         const allStrictPluginReference =
             plugin.configs.allStrict.plugins["etc-misc"];
@@ -148,6 +151,10 @@ describe("plugin.mjs entrypoint", () => {
         expect(recommendedPluginReference.rules).toBe(plugin.rules);
         expect(strictPluginReference.rules).toBe(plugin.rules);
         expect(strictTypeCheckedPluginReference.rules).toBe(plugin.rules);
+        expect(
+            plugin.configs.strictTypeChecked.languageOptions?.parserOptions
+                ?.projectService
+        ).toBe(true);
     });
 
     it("keeps the entrypoint module structure stable", () => {

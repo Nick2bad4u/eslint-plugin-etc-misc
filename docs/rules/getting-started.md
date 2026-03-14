@@ -21,8 +21,8 @@ export default [
 ];
 ```
 
-Use `recommended` first, then promote to `all` when you want comprehensive
-coverage.
+Use `recommended` first, then move through stricter presets as your baseline
+stabilizes.
 
 ## Alternative: manual scoped setup
 
@@ -59,7 +59,8 @@ Use this pattern when you only extend rules and want full control over parser se
 ## Recommended rollout
 
 1. Start with `recommended`.
-2. Fix violations in small batches.
-3. Move to `all` when your baseline is stable and you want complete coverage.
+2. Promote to `strict` when you want the same rules to hard-fail.
+3. Move to `strictTypeChecked` once your lint config is fully type-aware.
+4. Adopt `allStrict` or `all` when you want full rule coverage.
 
 See the **Presets** section in this sidebar for details and examples.

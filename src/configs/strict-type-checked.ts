@@ -3,7 +3,16 @@
 import { rules as pluginRules } from "../rules.js";
 import { strict } from "./strict.js";
 
+type RuleDocsMetadata = Readonly<{
+    readonly requiresTypeChecking?: boolean;
+}>;
+
 type StrictTypeCheckedConfig = {
+    readonly languageOptions: Readonly<{
+        readonly parserOptions: Readonly<{
+            readonly projectService: true;
+        }>;
+    }>;
     readonly rules: Readonly<Record<string, "error">>;
 };
 
@@ -15,7 +24,11 @@ const additionalTypeCheckedRuleEntries = Object.entries(pluginRules)
             return [];
         }
 
-        if (ruleModule.meta.docs?.requiresTypeChecking !== true) {
+        const docsMetadata = ruleModule.meta.docs as
+            | RuleDocsMetadata
+            | undefined;
+
+        if (docsMetadata?.requiresTypeChecking !== true) {
             return [];
         }
 
@@ -41,6 +54,11 @@ const strictTypeCheckedRules = Object.fromEntries([
  * information.
  */
 export const strictTypeChecked: StrictTypeCheckedConfig = {
+    languageOptions: {
+        parserOptions: {
+            projectService: true,
+        },
+    },
     rules: strictTypeCheckedRules,
 };
 

@@ -26,7 +26,7 @@ describe("external rule resolution", () => {
     it("throws when plugin does not expose a valid rules map", () => {
         expect(() =>
             getExternalRuleFromPlugin(null, "my-rule", "example-plugin")
-        ).toThrowError(
+        ).toThrow(
             new TypeError(
                 'Plugin "example-plugin" does not expose a valid rules map.'
             )
@@ -38,7 +38,7 @@ describe("external rule resolution", () => {
                 "my-rule",
                 "example-plugin"
             )
-        ).toThrowError(
+        ).toThrow(
             new TypeError(
                 'Plugin "example-plugin" does not expose a valid rules map.'
             )
@@ -59,7 +59,7 @@ describe("external rule resolution", () => {
                             missingRuleName,
                             pluginName
                         )
-                    ).toThrowError(
+                    ).toThrow(
                         new Error(
                             `Rule "${missingRuleName}" was not found in plugin "${pluginName}".`
                         )
@@ -74,7 +74,7 @@ describe("external rule adaptation", () => {
     it("throws when the external module does not expose create", () => {
         expect(() =>
             adaptExternalRule({}, "https://example.com/rules/my-rule")
-        ).toThrowError(
+        ).toThrow(
             new TypeError("External rule module does not expose create().")
         );
     });

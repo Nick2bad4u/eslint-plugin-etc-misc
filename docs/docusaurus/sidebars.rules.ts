@@ -246,6 +246,30 @@ if (hasRulesPluginDocId("presets/recommended")) {
     });
 }
 
+if (hasRulesPluginDocId("presets/strict")) {
+    presetItems.push({
+        id: "presets/strict",
+        label: "🟠 Strict",
+        type: "doc",
+    });
+}
+
+if (hasRulesPluginDocId("presets/strict-type-checked")) {
+    presetItems.push({
+        id: "presets/strict-type-checked",
+        label: "🔵 Strict Type-Checked",
+        type: "doc",
+    });
+}
+
+if (hasRulesPluginDocId("presets/all-strict")) {
+    presetItems.push({
+        id: "presets/all-strict",
+        label: "🔴 All Strict",
+        type: "doc",
+    });
+}
+
 if (hasRulesPluginDocId("presets/all")) {
     presetItems.push({
         id: "presets/all",

@@ -1,15 +1,16 @@
 ---
-title: Recommended preset
+title: Strict preset
 ---
 
-# 🟡 Recommended
+# 🟠 Strict
 
-Use this preset as the default onboarding path for most projects.
+Use this preset when you want the `recommended` rule set with stricter
+enforcement.
 
 ## Config key
 
 ```ts
-etcMisc.configs.recommended
+etcMisc.configs.strict
 ```
 
 ## Flat Config example
@@ -17,7 +18,7 @@ etcMisc.configs.recommended
 ```ts
 import etcMisc from "eslint-plugin-etc-misc";
 
-export default [etcMisc.configs.recommended];
+export default [etcMisc.configs.strict];
 ```
 
 ## Rules in this preset
@@ -46,10 +47,5 @@ export default [etcMisc.configs.recommended];
 
 ## Adoption guidance
 
-This preset now enables a wider "safe baseline" mix:
-
-- strong correctness rules as `error`
-- low-risk style/maintainability rules as `warn`
-
-Start with this preset, then promote selected `warn` rules to `error` as your
-codebase stabilizes.
+Start here after your team is stable on `recommended` and ready to fail CI on the
+same baseline rule set.

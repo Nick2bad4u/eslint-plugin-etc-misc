@@ -1,23 +1,17 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const thisFilePath = fileURLToPath(import.meta.url);
 const scriptsDirectoryPath = path.dirname(thisFilePath);
 const repositoryRootPath = path.resolve(scriptsDirectoryPath, "..");
 
-const recommendedConfigPath = path.join(
-    repositoryRootPath,
-    "src",
-    "configs",
-    "recommended.ts"
-);
-const allPresetDocPath = path.join(
+const allStrictPresetDocPath = path.join(
     repositoryRootPath,
     "docs",
     "rules",
     "presets",
-    "all.md"
+    "all-strict.md"
 );
 const recommendedPresetDocPath = path.join(
     repositoryRootPath,
@@ -26,20 +20,33 @@ const recommendedPresetDocPath = path.join(
     "presets",
     "recommended.md"
 );
+const strictPresetDocPath = path.join(
+    repositoryRootPath,
+    "docs",
+    "rules",
+    "presets",
+    "strict.md"
+);
+const strictTypeCheckedPresetDocPath = path.join(
+    repositoryRootPath,
+    "docs",
+    "rules",
+    "presets",
+    "strict-type-checked.md"
+);
+const allPresetDocPath = path.join(
+    repositoryRootPath,
+    "docs",
+    "rules",
+    "presets",
+    "all.md"
+);
 const ruleCatalogMapPath = path.join(
     repositoryRootPath,
     "docs",
     "rules",
     "rule-catalog-map.json"
 );
-
-const extractRuleNamesFromRecommendedConfig = (sourceText) => {
-    const ruleNameMatches = sourceText.matchAll(
-        /"etc-misc\/([^"]+)"\s*:\s*"error"/gmu
-    );
-
-    return [...ruleNameMatches].map((match) => match[1] ?? "").filter(Boolean);
-};
 
 const toDocId = (ruleName) => ruleName.replaceAll("/", "-");
 
@@ -87,32 +94,90 @@ const replaceSection = (
     return `${content.slice(0, sectionStart)}${replacement}${content.slice(sectionEnd)}`;
 };
 
-const recommendedConfigText = await readFile(recommendedConfigPath, "utf8");
+const loadBuiltPlugin = async () => {
+    const builtPluginPath = path.join(repositoryRootPath, "dist", "plugin.js");
+    const builtPluginUrl = pathToFileURL(builtPluginPath).href;
+
+    try {
+        // eslint-disable-next-line no-unsanitized/method -- Controlled local file URL derived from repository root and constant dist path.
+        const importedModule = await import(builtPluginUrl);
+
+        return importedModule.default ?? importedModule;
+    } catch (error) {
+        throw new Error(
+            "Unable to load dist/plugin.js. Run `npm run build` before syncing preset links.",
+            {
+                cause: error,
+            }
+        );
+    }
+};
+
+const normalizeConfiguredRuleName = (configuredRuleName, namespace) => {
+    const namespacePrefix = `${namespace}/`;
+
+    if (configuredRuleName.startsWith(namespacePrefix)) {
+        return configuredRuleName.slice(namespacePrefix.length);
+    }
+
+    if (configuredRuleName.includes("/")) {
+        return null;
+    }
+
+    return configuredRuleName;
+};
+
+const presetOrder = [
+    "recommended",
+    "strict",
+    "strictTypeChecked",
+    "allStrict",
+];
+
 const ruleCatalogMap = JSON.parse(await readFile(ruleCatalogMapPath, "utf8"));
 
 const catalogByRuleName = new Map(
     ruleCatalogMap.map((entry) => [entry.ruleName, entry])
 );
 
-const recommendedRuleNames = extractRuleNamesFromRecommendedConfig(
-    recommendedConfigText
+const plugin = await loadBuiltPlugin();
+const namespace = plugin.meta?.namespace ?? "etc-misc";
+
+const presetRuleLinksByPresetName = Object.fromEntries(
+    presetOrder.map((presetName) => {
+        const configuredRules = plugin.configs?.[presetName]?.rules ?? {};
+        const ruleLinks = Object.keys(configuredRules)
+            .flatMap((configuredRuleName) => {
+                const normalizedRuleName = normalizeConfiguredRuleName(
+                    configuredRuleName,
+                    namespace
+                );
+
+                if (normalizedRuleName === null) {
+                    return [];
+                }
+
+                const entry = catalogByRuleName.get(normalizedRuleName);
+
+                if (!entry) {
+                    throw new Error(
+                        `Missing catalog entry for ${presetName} rule: ${normalizedRuleName}`
+                    );
+                }
+
+                return [
+                    toPresetRuleLinkLine({
+                        catalogId: entry.catalogId,
+                        docId: toDocId(normalizedRuleName),
+                        ruleName: normalizedRuleName,
+                    }),
+                ];
+            })
+            .toSorted((left, right) => left.localeCompare(right));
+
+        return [presetName, ruleLinks];
+    })
 );
-
-const recommendedRuleLinks = recommendedRuleNames.map((ruleName) => {
-    const entry = catalogByRuleName.get(ruleName);
-
-    if (!entry) {
-        throw new Error(
-            `Missing catalog entry for recommended rule: ${ruleName}`
-        );
-    }
-
-    return toPresetRuleLinkLine({
-        catalogId: entry.catalogId,
-        docId: toDocId(ruleName),
-        ruleName,
-    });
-});
 
 const allCoreRuleLinks = ruleCatalogMap
     .filter((entry) => !entry.ruleName.startsWith("typescript/"))
@@ -122,16 +187,40 @@ const allTypeScriptRuleLinks = ruleCatalogMap
     .filter((entry) => entry.ruleName.startsWith("typescript/"))
     .map((entry) => toPresetRuleLinkLine(entry));
 
+const allStrictPresetContent = await readFile(allStrictPresetDocPath, "utf8");
 const recommendedPresetContent = await readFile(
     recommendedPresetDocPath,
     "utf8"
 );
+const strictPresetContent = await readFile(strictPresetDocPath, "utf8");
+const strictTypeCheckedPresetContent = await readFile(
+    strictTypeCheckedPresetDocPath,
+    "utf8"
+);
 const allPresetContent = await readFile(allPresetDocPath, "utf8");
+
+const updatedAllStrictPresetContent = replaceSection(
+    allStrictPresetContent,
+    "Rules in this preset",
+    presetRuleLinksByPresetName.allStrict.join("\n")
+);
 
 const updatedRecommendedPresetContent = replaceSection(
     recommendedPresetContent,
     "Rules in this preset",
-    recommendedRuleLinks.join("\n")
+    presetRuleLinksByPresetName.recommended.join("\n")
+);
+
+const updatedStrictPresetContent = replaceSection(
+    strictPresetContent,
+    "Rules in this preset",
+    presetRuleLinksByPresetName.strict.join("\n")
+);
+
+const updatedStrictTypeCheckedPresetContent = replaceSection(
+    strictTypeCheckedPresetContent,
+    "Rules in this preset",
+    presetRuleLinksByPresetName.strictTypeChecked.join("\n")
 );
 
 const updatedAllPresetContentWithCore = replaceSection(
@@ -148,9 +237,16 @@ const updatedAllPresetContent = replaceSection(
     3
 );
 
+await writeFile(allStrictPresetDocPath, updatedAllStrictPresetContent, "utf8");
 await writeFile(
     recommendedPresetDocPath,
     updatedRecommendedPresetContent,
+    "utf8"
+);
+await writeFile(strictPresetDocPath, updatedStrictPresetContent, "utf8");
+await writeFile(
+    strictTypeCheckedPresetDocPath,
+    updatedStrictTypeCheckedPresetContent,
     "utf8"
 );
 await writeFile(allPresetDocPath, updatedAllPresetContent, "utf8");

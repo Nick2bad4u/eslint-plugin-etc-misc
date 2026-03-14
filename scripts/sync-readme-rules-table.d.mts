@@ -58,7 +58,12 @@ export interface ReadmePlugin {
         | undefined;
 }
 
-export type PresetName = "all" | "recommended";
+export type PresetName =
+    | "all"
+    | "allStrict"
+    | "recommended"
+    | "strict"
+    | "strictTypeChecked";
 
 export type PresetRuleNamesByPreset = Readonly<Record<PresetName, Set<string>>>;
 

@@ -18,7 +18,7 @@ describe("core rule resolver behavior", () => {
                 (suffix) => {
                     const impossibleRuleId = `etc-misc-missing-core-rule-${suffix}`;
 
-                    expect(() => getCoreRule(impossibleRuleId)).toThrowError(
+                    expect(() => getCoreRule(impossibleRuleId)).toThrow(
                         new Error(
                             `Missing core ESLint rule "${impossibleRuleId}".`
                         )

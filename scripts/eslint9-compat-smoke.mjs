@@ -30,7 +30,7 @@ const scriptsDirectoryPath = fileURLToPath(new URL(".", import.meta.url));
 const repositoryRootPath = path.resolve(scriptsDirectoryPath, "..");
 const typedFixturePath = path.resolve(
     repositoryRootPath,
-    "test/fixtures/compat/eslint9-typescript-prefer-enum.invalid.ts"
+    "test/fixtures/internal/no-internal.fixture.ts"
 );
 const sortArrayFixturePath = path.resolve(
     repositoryRootPath,
@@ -270,7 +270,7 @@ const scenarios = /** @type {const} */ ([
         fix: false,
         fixturePath: typedFixturePath,
         name: "typed-detection",
-        ruleId: "etc-misc/typescript/prefer-enum",
+        ruleId: "etc-misc/no-internal",
         typed: true,
     },
     {

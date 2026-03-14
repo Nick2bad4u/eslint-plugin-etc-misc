@@ -53,6 +53,9 @@ module.exports = [etcMisc.configs.recommended];
 | Preset |
 | --- |
 | [🟡](https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/recommended) [`etcMisc.configs.recommended`](https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/recommended) |
+| [🟠](https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/strict) [`etcMisc.configs.strict`](https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/strict) |
+| [🔵](https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/strict-type-checked) [`etcMisc.configs.strictTypeChecked`](https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/strict-type-checked) |
+| [🔴](https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/all-strict) [`etcMisc.configs.allStrict`](https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/all-strict) |
 | [🟣](https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/all) [`etcMisc.configs.all`](https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/all) |
 
 ## Plugin namespace

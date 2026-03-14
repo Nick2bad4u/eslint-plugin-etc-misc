@@ -91,7 +91,15 @@ type RuleDocsMetadata = Readonly<{
     deprecated: boolean;
     frozen: boolean;
     recommended: boolean;
+    requiresTypeChecking?: boolean;
 }>;
+
+const toSortedStrings = (values: readonly string[]): readonly string[] =>
+    values.toSorted((left, right) => left.localeCompare(right));
+
+const getSortedRuleNames = (
+    ruleMap: Readonly<Record<string, unknown>>
+): readonly string[] => toSortedStrings(Object.keys(ruleMap));
 
 describe("plugin export", () => {
     it("exposes rules and configs", () => {
@@ -125,9 +133,13 @@ describe("plugin export", () => {
         expect(
             plugin.configs.strictTypeChecked.plugins["etc-misc"].meta
         ).toEqual(plugin.meta);
+        expect(plugin.configs.strictTypeChecked.plugins["etc-misc"].rules).toBe(
+            plugin.rules
+        );
         expect(
-            plugin.configs.strictTypeChecked.plugins["etc-misc"].rules
-        ).toBe(plugin.rules);
+            plugin.configs.strictTypeChecked.languageOptions?.parserOptions
+                ?.projectService
+        ).toBe(true);
         expect(plugin.configs.allStrict.plugins["etc-misc"].meta).toEqual(
             plugin.meta
         );
@@ -312,70 +324,6 @@ describe("plugin export", () => {
             const level = recommendedRuleLevels[ruleName];
 
             expect(plugin.configs.recommended.rules[ruleName]).toBe(level);
-            expect(plugin.configs.strict.rules[ruleName]).toBe("error");
-        }
-
-        const recommendedRuleNames = Object.keys(
-            plugin.configs.recommended.rules
-        ).toSorted();
-        const strictRuleNames = Object.keys(plugin.configs.strict.rules).toSorted();
-
-        expect(strictRuleNames).toEqual(recommendedRuleNames);
-
-        const typedRequiredNonDeprecatedRuleNames = Object.entries(
-            plugin.rules
-        )
-            .filter(
-                ([, ruleModule]) =>
-                    ruleModule.meta.deprecated === false &&
-                    ruleModule.meta.docs?.requiresTypeChecking === true
-            )
-            .map(([ruleName]) => `etc-misc/${ruleName}`)
-            .toSorted();
-
-        const expectedStrictTypeCheckedRuleNames = [
-            ...new Set([...strictRuleNames, ...typedRequiredNonDeprecatedRuleNames]),
-        ].toSorted();
-
-        const strictTypeCheckedRuleNames = Object.keys(
-            plugin.configs.strictTypeChecked.rules
-        ).toSorted();
-
-        expect(strictTypeCheckedRuleNames).toEqual(
-            expectedStrictTypeCheckedRuleNames
-        );
-
-        for (const strictTypeCheckedRuleName of strictTypeCheckedRuleNames) {
-            expect(
-                plugin.configs.strictTypeChecked.rules[strictTypeCheckedRuleName]
-            ).toBe("error");
-        }
-
-        const allRuleNames = Object.keys(plugin.configs.all.rules).toSorted();
-        const allStrictRuleNames = Object.keys(
-            plugin.configs.allStrict.rules
-        ).toSorted();
-
-        expect(allStrictRuleNames).toEqual(allRuleNames);
-
-        for (const [qualifiedRuleName, configuredSeverity] of Object.entries(
-            plugin.configs.allStrict.rules
-        )) {
-            const shortRuleName = qualifiedRuleName.slice("etc-misc/".length);
-            const ruleModule = plugin.rules[shortRuleName];
-
-            expect(ruleModule).toBeDefined();
-
-            if (ruleModule === undefined) {
-                throw new Error(
-                    `Expected exported rule for ${qualifiedRuleName}.`
-                );
-            }
-
-            const expectedSeverity =
-                ruleModule.meta.deprecated === false ? "error" : "warn";
-
-            expect(configuredSeverity).toBe(expectedSeverity);
         }
 
         for (const deprecatedRuleId of deprecatedRuleIds) {
@@ -423,6 +371,92 @@ describe("plugin export", () => {
             } else {
                 expect(rule.meta?.deprecated).toBeFalsy();
             }
+        }
+    });
+
+    it("keeps strict presets as progressive supersets", () => {
+        const recommendedRuleLevelKeys = Object.keys(
+            recommendedRuleLevels
+        ) as readonly (keyof typeof recommendedRuleLevels)[];
+
+        for (const ruleName of recommendedRuleLevelKeys) {
+            expect(plugin.configs.strict.rules[ruleName]).toBe("error");
+        }
+
+        const recommendedRuleNames = getSortedRuleNames(
+            plugin.configs.recommended.rules
+        );
+        const strictRuleNames = getSortedRuleNames(plugin.configs.strict.rules);
+
+        expect(strictRuleNames).toEqual(recommendedRuleNames);
+
+        const typedRequiredNonDeprecatedRuleNames = toSortedStrings(
+            Object.entries(plugin.rules)
+                .filter(([, ruleModule]) => {
+                    const docs = ruleModule.meta.docs as
+                        | RuleDocsMetadata
+                        | undefined;
+
+                    return (
+                        ruleModule.meta.deprecated === false &&
+                        docs?.requiresTypeChecking === true
+                    );
+                })
+                .map(([ruleName]) => `etc-misc/${ruleName}`)
+        );
+
+        const expectedStrictTypeCheckedRuleNames = toSortedStrings([
+            ...new Set([
+                ...strictRuleNames,
+                ...typedRequiredNonDeprecatedRuleNames,
+            ]),
+        ]);
+        const strictTypeCheckedRuleNames = getSortedRuleNames(
+            plugin.configs.strictTypeChecked.rules
+        );
+
+        expect(strictTypeCheckedRuleNames).toEqual(
+            expectedStrictTypeCheckedRuleNames
+        );
+
+        for (const strictTypeCheckedRuleName of strictTypeCheckedRuleNames) {
+            expect(
+                plugin.configs.strictTypeChecked.rules[
+                    strictTypeCheckedRuleName
+                ]
+            ).toBe("error");
+        }
+
+        expect(
+            plugin.configs.strictTypeChecked.languageOptions?.parserOptions
+                ?.projectService
+        ).toBe(true);
+
+        const allRuleNames = getSortedRuleNames(plugin.configs.all.rules);
+        const allStrictRuleNames = getSortedRuleNames(
+            plugin.configs.allStrict.rules
+        );
+
+        expect(allStrictRuleNames).toEqual(allRuleNames);
+
+        for (const [qualifiedRuleName, configuredSeverity] of Object.entries(
+            plugin.configs.allStrict.rules
+        )) {
+            const shortRuleName = qualifiedRuleName.slice("etc-misc/".length);
+            const ruleModule = plugin.rules[shortRuleName];
+
+            expect(ruleModule).toBeDefined();
+
+            if (ruleModule === undefined) {
+                throw new Error(
+                    `Expected exported rule for ${qualifiedRuleName}.`
+                );
+            }
+
+            const expectedSeverity =
+                ruleModule.meta.deprecated === false ? "error" : "warn";
+
+            expect(configuredSeverity).toBe(expectedSeverity);
         }
     });
 });

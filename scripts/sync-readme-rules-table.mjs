@@ -84,6 +84,24 @@ const presetMetadataByName = {
             "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/recommended",
         icon: "🟡",
     },
+    strict: {
+        configKey: "etcMisc.configs.strict",
+        docsUrl:
+            "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/strict",
+        icon: "🟠",
+    },
+    strictTypeChecked: {
+        configKey: "etcMisc.configs.strictTypeChecked",
+        docsUrl:
+            "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/strict-type-checked",
+        icon: "🔵",
+    },
+    allStrict: {
+        configKey: "etcMisc.configs.allStrict",
+        docsUrl:
+            "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/all-strict",
+        icon: "🔴",
+    },
     all: {
         configKey: "etcMisc.configs.all",
         docsUrl:
@@ -92,7 +110,13 @@ const presetMetadataByName = {
     },
 };
 
-const presetOrder = ["recommended", "all"];
+const presetOrder = [
+    "recommended",
+    "strict",
+    "strictTypeChecked",
+    "allStrict",
+    "all",
+];
 
 const rulesSectionHeading = "## Rules";
 
@@ -109,7 +133,10 @@ const detectLineEnding = (markdownText) =>
  */
 const createEmptyPresetRuleNamesByPreset = () => ({
     all: new Set(),
+    allStrict: new Set(),
     recommended: new Set(),
+    strict: new Set(),
+    strictTypeChecked: new Set(),
 });
 
 /**
