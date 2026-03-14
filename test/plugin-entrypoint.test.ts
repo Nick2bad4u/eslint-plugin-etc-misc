@@ -118,19 +118,36 @@ describe("plugin.mjs entrypoint", () => {
         expect(plugin.processors).toEqual({});
 
         expect(Object.keys(plugin.rules)).toEqual(Object.keys(rules));
+        expect(plugin.configs.allStrict.rules).toEqual(configs.allStrict.rules);
         expect(plugin.configs.all.rules).toEqual(configs.all.rules);
         expect(plugin.configs.recommended.rules).toEqual(
             configs.recommended.rules
         );
+        expect(plugin.configs.strict.rules).toEqual(configs.strict.rules);
+        expect(plugin.configs.strictTypeChecked.rules).toEqual(
+            configs.strictTypeChecked.rules
+        );
 
+        const allStrictPluginReference =
+            plugin.configs.allStrict.plugins["etc-misc"];
         const allPluginReference = plugin.configs.all.plugins["etc-misc"];
         const recommendedPluginReference =
             plugin.configs.recommended.plugins["etc-misc"];
+        const strictPluginReference = plugin.configs.strict.plugins["etc-misc"];
+        const strictTypeCheckedPluginReference =
+            plugin.configs.strictTypeChecked.plugins["etc-misc"];
 
+        expect(allStrictPluginReference.meta).toEqual(plugin.meta);
         expect(allPluginReference.meta).toEqual(plugin.meta);
         expect(recommendedPluginReference.meta).toEqual(plugin.meta);
+        expect(strictPluginReference.meta).toEqual(plugin.meta);
+        expect(strictTypeCheckedPluginReference.meta).toEqual(plugin.meta);
+
+        expect(allStrictPluginReference.rules).toBe(plugin.rules);
         expect(allPluginReference.rules).toBe(plugin.rules);
         expect(recommendedPluginReference.rules).toBe(plugin.rules);
+        expect(strictPluginReference.rules).toBe(plugin.rules);
+        expect(strictTypeCheckedPluginReference.rules).toBe(plugin.rules);
     });
 
     it("keeps the entrypoint module structure stable", () => {

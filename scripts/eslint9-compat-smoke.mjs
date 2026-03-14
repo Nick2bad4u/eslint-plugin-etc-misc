@@ -30,11 +30,11 @@ const scriptsDirectoryPath = fileURLToPath(new URL(".", import.meta.url));
 const repositoryRootPath = path.resolve(scriptsDirectoryPath, "..");
 const typedFixturePath = path.resolve(
     repositoryRootPath,
-    "test/fixtures/typed/prefer-ts-extras-safe-cast-to.invalid.ts"
+    "test/fixtures/compat/eslint9-typescript-prefer-enum.invalid.ts"
 );
-const arrayableFixturePath = path.resolve(
+const sortArrayFixturePath = path.resolve(
     repositoryRootPath,
-    "test/fixtures/typed/prefer-type-fest-arrayable.invalid.ts"
+    "test/fixtures/compat/eslint9-sort-array.invalid.ts"
 );
 
 const expectedEslintMajorArgumentPrefix = "--expect-eslint-major=";
@@ -174,7 +174,7 @@ const createCompatibilityConfig = (ruleId, typed) => {
             },
             name: `compat-smoke:${ruleId}`,
             plugins: {
-                typefest: plugin,
+                [plugin.meta.namespace]: plugin,
             },
             rules: {
                 [ruleId]: "error",
@@ -270,25 +270,25 @@ const scenarios = /** @type {const} */ ([
         fix: false,
         fixturePath: typedFixturePath,
         name: "typed-detection",
-        ruleId: "typefest/prefer-ts-extras-safe-cast-to",
-        typed: true,
-    },
-    {
-        expectedMaximumMessages: 0,
-        expectedMinimumMessages: 0,
-        expectedOutputIncludes: ["safeCastTo<"],
-        fix: true,
-        fixturePath: typedFixturePath,
-        name: "typed-autofix",
-        ruleId: "typefest/prefer-ts-extras-safe-cast-to",
+        ruleId: "etc-misc/typescript/prefer-enum",
         typed: true,
     },
     {
         expectedMinimumMessages: 1,
         fix: false,
-        fixturePath: arrayableFixturePath,
+        fixturePath: sortArrayFixturePath,
         name: "non-typed-detection",
-        ruleId: "typefest/prefer-type-fest-arrayable",
+        ruleId: "etc-misc/sort-array",
+        typed: false,
+    },
+    {
+        expectedMaximumMessages: 0,
+        expectedMinimumMessages: 0,
+        expectedOutputIncludes: ['const values = ["a", "b"];'],
+        fix: true,
+        fixturePath: sortArrayFixturePath,
+        name: "non-typed-autofix",
+        ruleId: "etc-misc/sort-array",
         typed: false,
     },
 ]);

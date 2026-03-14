@@ -103,12 +103,35 @@ describe("plugin export", () => {
         expect(plugin.processors).toEqual({});
         expect(plugin.rules).toBeDefined();
         expect(plugin.configs).toBeDefined();
+        expect(plugin.configs.allStrict.plugins["etc-misc"]).toBeDefined();
         expect(plugin.configs.all.plugins["etc-misc"]).toBeDefined();
         expect(plugin.configs.recommended.plugins["etc-misc"]).toBeDefined();
+        expect(plugin.configs.strict.plugins["etc-misc"]).toBeDefined();
+        expect(
+            plugin.configs.strictTypeChecked.plugins["etc-misc"]
+        ).toBeDefined();
         expect(plugin.configs.recommended.plugins["etc-misc"].meta).toEqual(
             plugin.meta
         );
         expect(plugin.configs.recommended.plugins["etc-misc"].rules).toBe(
+            plugin.rules
+        );
+        expect(plugin.configs.strict.plugins["etc-misc"].meta).toEqual(
+            plugin.meta
+        );
+        expect(plugin.configs.strict.plugins["etc-misc"].rules).toBe(
+            plugin.rules
+        );
+        expect(
+            plugin.configs.strictTypeChecked.plugins["etc-misc"].meta
+        ).toEqual(plugin.meta);
+        expect(
+            plugin.configs.strictTypeChecked.plugins["etc-misc"].rules
+        ).toBe(plugin.rules);
+        expect(plugin.configs.allStrict.plugins["etc-misc"].meta).toEqual(
+            plugin.meta
+        );
+        expect(plugin.configs.allStrict.plugins["etc-misc"].rules).toBe(
             plugin.rules
         );
         expect(plugin.rules["array-type"]).toBeDefined();
@@ -289,6 +312,70 @@ describe("plugin export", () => {
             const level = recommendedRuleLevels[ruleName];
 
             expect(plugin.configs.recommended.rules[ruleName]).toBe(level);
+            expect(plugin.configs.strict.rules[ruleName]).toBe("error");
+        }
+
+        const recommendedRuleNames = Object.keys(
+            plugin.configs.recommended.rules
+        ).toSorted();
+        const strictRuleNames = Object.keys(plugin.configs.strict.rules).toSorted();
+
+        expect(strictRuleNames).toEqual(recommendedRuleNames);
+
+        const typedRequiredNonDeprecatedRuleNames = Object.entries(
+            plugin.rules
+        )
+            .filter(
+                ([, ruleModule]) =>
+                    ruleModule.meta.deprecated === false &&
+                    ruleModule.meta.docs?.requiresTypeChecking === true
+            )
+            .map(([ruleName]) => `etc-misc/${ruleName}`)
+            .toSorted();
+
+        const expectedStrictTypeCheckedRuleNames = [
+            ...new Set([...strictRuleNames, ...typedRequiredNonDeprecatedRuleNames]),
+        ].toSorted();
+
+        const strictTypeCheckedRuleNames = Object.keys(
+            plugin.configs.strictTypeChecked.rules
+        ).toSorted();
+
+        expect(strictTypeCheckedRuleNames).toEqual(
+            expectedStrictTypeCheckedRuleNames
+        );
+
+        for (const strictTypeCheckedRuleName of strictTypeCheckedRuleNames) {
+            expect(
+                plugin.configs.strictTypeChecked.rules[strictTypeCheckedRuleName]
+            ).toBe("error");
+        }
+
+        const allRuleNames = Object.keys(plugin.configs.all.rules).toSorted();
+        const allStrictRuleNames = Object.keys(
+            plugin.configs.allStrict.rules
+        ).toSorted();
+
+        expect(allStrictRuleNames).toEqual(allRuleNames);
+
+        for (const [qualifiedRuleName, configuredSeverity] of Object.entries(
+            plugin.configs.allStrict.rules
+        )) {
+            const shortRuleName = qualifiedRuleName.slice("etc-misc/".length);
+            const ruleModule = plugin.rules[shortRuleName];
+
+            expect(ruleModule).toBeDefined();
+
+            if (ruleModule === undefined) {
+                throw new Error(
+                    `Expected exported rule for ${qualifiedRuleName}.`
+                );
+            }
+
+            const expectedSeverity =
+                ruleModule.meta.deprecated === false ? "error" : "warn";
+
+            expect(configuredSeverity).toBe(expectedSeverity);
         }
 
         for (const deprecatedRuleId of deprecatedRuleIds) {
