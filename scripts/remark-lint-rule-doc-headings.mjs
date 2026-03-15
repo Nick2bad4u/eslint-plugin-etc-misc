@@ -3,10 +3,24 @@
  *   docs.
  */
 
+import { existsSync, readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+
 /** @typedef {import("mdast").Heading} Heading */
 /** @typedef {import("mdast").Root} Root */
 /** @typedef {import("unist").Node} Node */
 /** @typedef {import("vfile").VFile} VFile */
+/** @typedef {{ name?: unknown }} PackageMetadata */
+
+/**
+ * @typedef {{
+ *     helperDocPathPattern?: RegExp;
+ *     requirePackageDocumentation?: boolean;
+ *     packageDocumentationLabelPattern?: RegExp;
+ *     ruleCatalogIdLinePattern?: RegExp;
+ *     ruleNamespaceAliases?: readonly string[];
+ *     }} RemarkLintRuleDocHeadingsOptions
+ */
 
 const canonicalHeadingOrder = [
     "Targeted pattern scope",
@@ -40,7 +54,6 @@ const requiredCoreHeadings = [
     "Why this rule exists",
     "❌ Incorrect",
     "✅ Correct",
-    "Package documentation",
     "Further reading",
 ];
 
@@ -48,23 +61,146 @@ const headingOrderIndex = new Map(
     canonicalHeadingOrder.map((heading, index) => [heading, index])
 );
 
-const helperDocPathPattern =
+const defaultHelperDocPathPattern =
     /(^|\/)docs\/rules\/(?!overview\.md$|getting-started\.md$|presets\/)[^/]+\.md$/u;
-const typeFestDocPathPattern = /(^|\/)docs\/rules\/prefer-type-fest-/u;
-const tsExtrasDocPathPattern = /(^|\/)docs\/rules\/prefer-ts-extras-/u;
-const ruleCatalogIdLinePattern = /^> \*\*Rule catalog ID:\*\* R\d{3}$/u;
+const defaultRuleCatalogIdLinePattern = /^> \*\*Rule catalog ID:\*\* R\d{3}$/u;
+const defaultPackageDocumentationLabelPattern =
+    /^[^\r\n]+ package documentation:$/mu;
+const eslintPluginPackagePrefix = "eslint-plugin-";
+
+const packageMetadataCache = new Map();
 
 /**
- * @param {string} fileRuleId
+ * @param {string} documentPath
+ *
+ * @returns {PackageMetadata | undefined}
+ */
+const getNearestPackageMetadata = (documentPath) => {
+    const traversedDirectories = [];
+    let currentDirectory = dirname(documentPath);
+
+    while (true) {
+        traversedDirectories.push(currentDirectory);
+
+        if (packageMetadataCache.has(currentDirectory)) {
+            const cachedPackageMetadata = packageMetadataCache.get(
+                currentDirectory
+            );
+
+            for (const traversedDirectory of traversedDirectories) {
+                packageMetadataCache.set(
+                    traversedDirectory,
+                    cachedPackageMetadata
+                );
+            }
+
+            return cachedPackageMetadata;
+        }
+
+        const packageJsonPath = join(currentDirectory, "package.json");
+
+        if (existsSync(packageJsonPath)) {
+            let packageMetadata;
+
+            try {
+                packageMetadata = /** @type {PackageMetadata} */ (
+                    JSON.parse(readFileSync(packageJsonPath, "utf8"))
+                );
+            } catch {
+                packageMetadata = undefined;
+            }
+
+            for (const traversedDirectory of traversedDirectories) {
+                packageMetadataCache.set(traversedDirectory, packageMetadata);
+            }
+
+            return packageMetadata;
+        }
+
+        const parentDirectory = dirname(currentDirectory);
+
+        if (parentDirectory === currentDirectory) {
+            for (const traversedDirectory of traversedDirectories) {
+                packageMetadataCache.set(traversedDirectory, undefined);
+            }
+
+            return undefined;
+        }
+
+        currentDirectory = parentDirectory;
+    }
+};
+
+/**
+ * @param {unknown} packageName
+ *
+ * @returns {packageName is string}
+ */
+const isPackageName = (packageName) => typeof packageName === "string";
+
+/**
+ * @param {string} packageName
  *
  * @returns {readonly string[]}
  */
-const getExpectedH1Titles = (fileRuleId) => {
-    if (fileRuleId.startsWith("typescript-")) {
-        return [fileRuleId, `typescript/${fileRuleId.slice(11)}`];
+const getRuleNamespaceAliasesFromPackageName = (packageName) => {
+    const aliases = new Set();
+
+    if (packageName.startsWith(eslintPluginPackagePrefix)) {
+        const pluginName = packageName.slice(eslintPluginPackagePrefix.length);
+
+        if (pluginName !== "") {
+            aliases.add(pluginName);
+        }
+
+        return [...aliases];
     }
 
-    return [fileRuleId];
+    if (!packageName.startsWith("@")) {
+        return [...aliases];
+    }
+
+    const packageSeparatorIndex = packageName.indexOf("/");
+
+    if (packageSeparatorIndex === -1) {
+        return [...aliases];
+    }
+
+    const packageScope = packageName.slice(0, packageSeparatorIndex);
+    const scopedPackageName = packageName.slice(packageSeparatorIndex + 1);
+
+    if (!scopedPackageName.startsWith(eslintPluginPackagePrefix)) {
+        return [...aliases];
+    }
+
+    const pluginName = scopedPackageName.slice(eslintPluginPackagePrefix.length);
+
+    if (pluginName !== "") {
+        aliases.add(pluginName);
+        aliases.add(`${packageScope}/${pluginName}`);
+    }
+
+    return [...aliases];
+};
+
+/**
+ * @param {string} fileRuleId
+ * @param {readonly string[]} ruleNamespaceAliases
+ *
+ * @returns {readonly string[]}
+ */
+const getExpectedH1Titles = (fileRuleId, ruleNamespaceAliases) => {
+    const expectedH1Titles = new Set([fileRuleId]);
+
+    if (fileRuleId.startsWith("typescript-")) {
+        expectedH1Titles.add(`typescript/${fileRuleId.slice(11)}`);
+    }
+
+    for (const ruleNamespaceAlias of ruleNamespaceAliases) {
+        expectedH1Titles.add(`${ruleNamespaceAlias}/${fileRuleId}`);
+    }
+
+    return [...expectedH1Titles];
 };
 
 /**
@@ -133,6 +269,26 @@ const isHeadingNode = (node) =>
     "depth" in node;
 
 /**
+ * @param {VFile} file
+ * @param {Heading} sectionHeading
+ * @param {Heading | undefined} nextSectionHeading
+ *
+ * @returns {string}
+ */
+const getSectionContent = (file, sectionHeading, nextSectionHeading) => {
+    const sectionStartOffset = sectionHeading.position?.end?.offset;
+    const nextSectionOffset = nextSectionHeading?.position?.start?.offset;
+    const markdownStartOffset =
+        typeof sectionStartOffset === "number" ? sectionStartOffset : 0;
+    const markdownEndOffset =
+        typeof nextSectionOffset === "number"
+            ? nextSectionOffset
+            : String(file).length;
+
+    return String(file).slice(markdownStartOffset, markdownEndOffset);
+};
+
+/**
  * @param {Root} tree
  * @param {1 | 2} depth
  *
@@ -157,9 +313,21 @@ const getHeadingsByDepth = (tree, depth) =>
 /**
  * Enforce canonical helper-doc heading schema.
  *
+ * @param {RemarkLintRuleDocHeadingsOptions} [options]
+ *
  * @returns {(tree: Node, file: VFile) => void}
  */
-export default function remarkLintRuleDocHeadings () {
+export default function remarkLintRuleDocHeadings (options = {}) {
+    const helperDocPathPattern =
+        options.helperDocPathPattern ?? defaultHelperDocPathPattern;
+    const requirePackageDocumentation =
+        options.requirePackageDocumentation ?? false;
+    const packageDocumentationLabelPattern =
+        options.packageDocumentationLabelPattern ??
+        defaultPackageDocumentationLabelPattern;
+    const ruleCatalogIdLinePattern =
+        options.ruleCatalogIdLinePattern ?? defaultRuleCatalogIdLinePattern;
+
     return (tree, file) => {
         if (typeof file.path !== "string") {
             return;
@@ -185,6 +353,16 @@ export default function remarkLintRuleDocHeadings () {
             .split("/")
             .at(-1)
             ?.replace(/\.md$/u, "");
+        const packageMetadata = getNearestPackageMetadata(file.path);
+        const packageRuleNamespaceAliases = isPackageName(packageMetadata?.name)
+            ? getRuleNamespaceAliasesFromPackageName(packageMetadata.name)
+            : [];
+        const ruleNamespaceAliases = [
+            ...new Set([
+                ...packageRuleNamespaceAliases,
+                ...(options.ruleNamespaceAliases ?? []),
+            ]),
+        ];
 
         if (h1Headings.length !== 1) {
             file.message(
@@ -196,7 +374,10 @@ export default function remarkLintRuleDocHeadings () {
 
         if (h1Headings.length === 1 && typeof expectedRuleTitle === "string") {
             const actualTitle = getNodeText(h1Headings[0]).trim();
-            const expectedH1Titles = getExpectedH1Titles(expectedRuleTitle);
+            const expectedH1Titles = getExpectedH1Titles(
+                expectedRuleTitle,
+                ruleNamespaceAliases
+            );
 
             if (!expectedH1Titles.includes(actualTitle)) {
                 file.message(
@@ -358,7 +539,7 @@ export default function remarkLintRuleDocHeadings () {
             );
         }
 
-        if (packageDocumentationIndex === -1) {
+        if (requirePackageDocumentation && packageDocumentationIndex === -1) {
             file.message(
                 "Missing required `## Package documentation` section.",
                 undefined,
@@ -381,21 +562,11 @@ export default function remarkLintRuleDocHeadings () {
                 return;
             }
 
-            const nextH2Index =
-                h2Headings[deprecatedSectionIndex + 1]?.position?.start?.offset;
-            const deprecatedStartOffset =
-                deprecatedSectionHeading.position?.end?.offset;
-            const markdownStartOffset =
-                typeof deprecatedStartOffset === "number"
-                    ? deprecatedStartOffset
-                    : 0;
-            const markdownEndOffset =
-                typeof nextH2Index === "number"
-                    ? nextH2Index
-                    : String(file).length;
-            const deprecatedSectionContent = String(file).slice(
-                markdownStartOffset,
-                markdownEndOffset
+            const nextH2Heading = h2Headings[deprecatedSectionIndex + 1];
+            const deprecatedSectionContent = getSectionContent(
+                file,
+                deprecatedSectionHeading,
+                nextH2Heading
             );
 
             if (!/\[[^\]]+\]\([^\)]+\)/u.test(deprecatedSectionContent)) {
@@ -421,6 +592,33 @@ export default function remarkLintRuleDocHeadings () {
             );
         }
 
+        if (packageDocumentationIndex !== -1) {
+            const packageDocumentationHeading =
+                h2Headings[packageDocumentationIndex];
+
+            if (packageDocumentationHeading !== undefined) {
+                const nextPackageSectionHeading =
+                    h2Headings[packageDocumentationIndex + 1];
+                const packageDocumentationContent = getSectionContent(
+                    file,
+                    packageDocumentationHeading,
+                    nextPackageSectionHeading
+                );
+
+                if (
+                    !packageDocumentationLabelPattern.test(
+                        packageDocumentationContent
+                    )
+                ) {
+                    file.message(
+                        "`## Package documentation` must include at least one `<package> package documentation:` label line.",
+                        packageDocumentationHeading,
+                        "remark-lint:rule-doc-headings:package-docs-label"
+                    );
+                }
+            }
+        }
+
         const markdownContent = String(file);
         const ruleCatalogIdLines = markdownContent
             .split(/\r?\n/u)
@@ -440,28 +638,6 @@ export default function remarkLintRuleDocHeadings () {
                 "Rule docs must contain exactly one `> **Rule catalog ID:** R###` marker line.",
                 getH2HeadingNodeAt(furtherReadingIndex) ?? firstH2HeadingNode,
                 "remark-lint:rule-doc-headings:duplicate-rule-catalog-id"
-            );
-        }
-
-        if (
-            typeFestDocPathPattern.test(normalizedPath) &&
-            !/^TypeFest package documentation:$/mu.test(markdownContent)
-        ) {
-            file.message(
-                "TypeFest helper docs must include the exact label `TypeFest package documentation:`.",
-                undefined,
-                "remark-lint:rule-doc-headings:typefest-label"
-            );
-        }
-
-        if (
-            tsExtrasDocPathPattern.test(normalizedPath) &&
-            !/^ts-extras package documentation:$/mu.test(markdownContent)
-        ) {
-            file.message(
-                "ts-extras helper docs must include the exact label `ts-extras package documentation:`.",
-                undefined,
-                "remark-lint:rule-doc-headings:ts-extras-label"
             );
         }
     };
