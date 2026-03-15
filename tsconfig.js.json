@@ -15,10 +15,12 @@
         ".cache/**",
         "coverage/**",
         "dist/**",
+        "eslint.config.bundled_*.mjs",
         "node_modules/**"
     ],
     "extends": "./tsconfig.json",
     "include": [
-        "*.mjs"
+        "*.mjs",
+        "test/_internal/**/*.d.ts"
     ]
 }

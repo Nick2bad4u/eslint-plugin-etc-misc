@@ -6,7 +6,7 @@
         "erasableSyntaxOnly": true,
         "incremental": true,
         "isolatedDeclarations": false,
-        "noCheck": true,
+        "noCheck": false,
         "noEmit": true,
         "tsBuildInfoFile": "./.cache/tsbuildinfo/tsconfig.eslint.tsbuildinfo"
     },
@@ -14,7 +14,9 @@
         ".cache/**",
         "coverage/**",
         "dist/**",
-        "node_modules/**"
+        "eslint.config.bundled_*.mjs",
+        "node_modules/**",
+        "test/fixtures/**"
     ],
     "extends": "./tsconfig.json",
     "include": [
@@ -30,6 +32,7 @@
         "test/**/*.d.ts",
         "test/**/*.ts",
         "test/**/*.mjs",
+        "prettier.config.ts",
         "vitest.stryker.config.ts",
         "vite.config.ts",
         "docs/**/*.mjs",
