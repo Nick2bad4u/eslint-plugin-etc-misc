@@ -11,55 +11,111 @@ import { dirname, join } from "node:path";
 /** @typedef {import("unist").Node} Node */
 /** @typedef {import("vfile").VFile} VFile */
 /** @typedef {{ name?: unknown }} PackageMetadata */
+/** @typedef {boolean | undefined} HeadingToggle */
 
 /**
  * @typedef {{
+ *     headings?: Partial<Record<string, HeadingToggle>>;
  *     helperDocPathPattern?: RegExp;
  *     requirePackageDocumentation?: boolean;
+ *     requirePackageDocumentationLabel?: boolean;
  *     packageDocumentationLabelPattern?: RegExp;
  *     ruleCatalogIdLinePattern?: RegExp;
  *     ruleNamespaceAliases?: readonly string[];
- *     }} RemarkLintRuleDocHeadingsOptions
+ * }} RemarkLintRuleDocHeadingsOptions
  */
 
-const canonicalHeadingOrder = [
-    "Targeted pattern scope",
-    "What this rule reports",
-    "Why this rule exists",
-    "❌ Incorrect",
-    "✅ Correct",
-    "Deprecated",
-    "Behavior and migration notes",
-    "Additional examples",
-    "ESLint flat config example",
-    "When not to use it",
-    "Package documentation",
-    "Further reading",
-    "Adoption resources",
+const canonicalHeadingDefinitions = [
+    {
+        heading: "Targeted pattern scope",
+        key: "targetedPatternScope",
+        requiredByDefault: true,
+    },
+    {
+        heading: "What this rule reports",
+        key: "whatThisRuleReports",
+        requiredByDefault: true,
+    },
+    {
+        heading: "Why this rule exists",
+        key: "whyThisRuleExists",
+        requiredByDefault: true,
+    },
+    { heading: "❌ Incorrect", key: "incorrect", requiredByDefault: true },
+    { heading: "✅ Correct", key: "correct", requiredByDefault: true },
+    { heading: "Deprecated", key: "deprecated", requiredByDefault: false },
+    {
+        heading: "Behavior and migration notes",
+        key: "behaviorAndMigrationNotes",
+        requiredByDefault: false,
+    },
+    {
+        heading: "Additional examples",
+        key: "additionalExamples",
+        requiredByDefault: false,
+    },
+    {
+        heading: "ESLint flat config example",
+        key: "eslintFlatConfigExample",
+        requiredByDefault: false,
+    },
+    {
+        heading: "When not to use it",
+        key: "whenNotToUseIt",
+        requiredByDefault: false,
+    },
+    {
+        heading: "Package documentation",
+        key: "packageDocumentation",
+        requiredByDefault: false,
+    },
+    {
+        heading: "Further reading",
+        key: "furtherReading",
+        requiredByDefault: true,
+    },
+    {
+        heading: "Adoption resources",
+        key: "adoptionResources",
+        requiredByDefault: false,
+    },
 ];
 
-const optionalDetailHeadings = new Set([
-    "Matched patterns",
-    "Detection boundaries",
-]);
+const optionalDetailHeadingDefinitions = [
+    { heading: "Matched patterns", key: "matchedPatterns" },
+    { heading: "Detection boundaries", key: "detectionBoundaries" },
+];
+
+const canonicalHeadingOrder = canonicalHeadingDefinitions.map(
+    (definition) => definition.heading
+);
+
+const canonicalHeadingDefinitionsByTitle = new Map(
+    canonicalHeadingDefinitions.map((definition) => [
+        definition.heading,
+        definition,
+    ])
+);
+
+const optionalDetailHeadingDefinitionsByTitle = new Map(
+    optionalDetailHeadingDefinitions.map((definition) => [
+        definition.heading,
+        definition,
+    ])
+);
+
+const defaultHeadingToggles = Object.freeze(
+    Object.fromEntries(
+        [...canonicalHeadingDefinitions, ...optionalDetailHeadingDefinitions].map(
+            (definition) => [definition.key, true]
+        )
+    )
+);
 
 const optionalDetailAllowedParentHeadings = new Set([
     "Targeted pattern scope",
     "What this rule reports",
 ]);
-
-const requiredCoreHeadings = [
-    "Targeted pattern scope",
-    "What this rule reports",
-    "Why this rule exists",
-    "❌ Incorrect",
-    "✅ Correct",
-    "Further reading",
-];
-
-const headingOrderIndex = new Map(
-    canonicalHeadingOrder.map((heading, index) => [heading, index])
-);
 
 const defaultHelperDocPathPattern =
     /(^|\/)docs\/rules\/(?!overview\.md$|getting-started\.md$|presets\/)[^/]+\.md$/u;
@@ -318,15 +374,39 @@ const getHeadingsByDepth = (tree, depth) =>
  * @returns {(tree: Node, file: VFile) => void}
  */
 export default function remarkLintRuleDocHeadings (options = {}) {
+    const headingToggles = {
+        ...defaultHeadingToggles,
+        ...(options.headings ?? {}),
+    };
     const helperDocPathPattern =
         options.helperDocPathPattern ?? defaultHelperDocPathPattern;
     const requirePackageDocumentation =
         options.requirePackageDocumentation ?? false;
+    const requirePackageDocumentationLabel =
+        options.requirePackageDocumentationLabel ??
+        options.packageDocumentationLabelPattern !== undefined;
     const packageDocumentationLabelPattern =
         options.packageDocumentationLabelPattern ??
         defaultPackageDocumentationLabelPattern;
     const ruleCatalogIdLinePattern =
         options.ruleCatalogIdLinePattern ?? defaultRuleCatalogIdLinePattern;
+    /** @param {keyof typeof defaultHeadingToggles} headingKey */
+    const isHeadingEnabled = (headingKey) => headingToggles[headingKey] !== false;
+    const enabledCanonicalHeadingOrder = canonicalHeadingDefinitions
+        .filter((definition) => isHeadingEnabled(definition.key))
+        .map((definition) => definition.heading);
+    const headingOrderIndex = new Map(
+        enabledCanonicalHeadingOrder.map((heading, index) => [heading, index])
+    );
+    const optionalDetailHeadings = new Set(
+        optionalDetailHeadingDefinitions
+            .filter((definition) => isHeadingEnabled(definition.key))
+            .map((definition) => definition.heading)
+    );
+    const requiredCanonicalHeadings = canonicalHeadingDefinitions.filter(
+        (definition) =>
+            isHeadingEnabled(definition.key) && definition.requiredByDefault
+    );
 
     return (tree, file) => {
         if (typeof file.path !== "string") {
@@ -391,6 +471,17 @@ export default function remarkLintRuleDocHeadings (options = {}) {
         const seenHeadings = new Set();
 
         for (const [index, headingName] of headingNames.entries()) {
+            const headingDefinition = canonicalHeadingDefinitionsByTitle.get(
+                headingName
+            );
+
+            if (
+                headingDefinition !== undefined &&
+                !isHeadingEnabled(headingDefinition.key)
+            ) {
+                continue;
+            }
+
             if (seenHeadings.has(headingName)) {
                 file.message(
                     `Duplicate H2 heading \`${headingName}\` is not allowed.`,
@@ -413,13 +504,20 @@ export default function remarkLintRuleDocHeadings (options = {}) {
             }
 
             const headingName = getNodeText(node).trim();
+            const detailHeadingDefinition =
+                optionalDetailHeadingDefinitionsByTitle.get(headingName);
 
             if (node.depth === 2) {
                 currentH2HeadingName = headingName;
                 continue;
             }
 
-            if (node.depth !== 3 || !optionalDetailHeadings.has(headingName)) {
+            if (
+                node.depth !== 3 ||
+                detailHeadingDefinition === undefined ||
+                !isHeadingEnabled(detailHeadingDefinition.key) ||
+                !optionalDetailHeadings.has(headingName)
+            ) {
                 continue;
             }
 
@@ -461,6 +559,17 @@ export default function remarkLintRuleDocHeadings (options = {}) {
         let lastOrder = -1;
 
         for (const [index, headingName] of headingNames.entries()) {
+            const headingDefinition = canonicalHeadingDefinitionsByTitle.get(
+                headingName
+            );
+
+            if (
+                headingDefinition !== undefined &&
+                !isHeadingEnabled(headingDefinition.key)
+            ) {
+                continue;
+            }
+
             const headingOrder = headingOrderIndex.get(headingName);
             const headingNode = h2Headings[index];
 
@@ -489,11 +598,22 @@ export default function remarkLintRuleDocHeadings (options = {}) {
         );
         const deprecatedSectionIndex = headingNames.indexOf("Deprecated");
         const furtherReadingIndex = headingNames.indexOf("Further reading");
+        const packageDocumentationEnabled = isHeadingEnabled(
+            "packageDocumentation"
+        );
+        const furtherReadingEnabled = isHeadingEnabled("furtherReading");
+        const deprecatedEnabled = isHeadingEnabled("deprecated");
+        const targetedPatternScopeEnabled = isHeadingEnabled(
+            "targetedPatternScope"
+        );
+        const whatThisRuleReportsEnabled = isHeadingEnabled(
+            "whatThisRuleReports"
+        );
 
-        for (const requiredHeading of requiredCoreHeadings) {
-            if (!headingNames.includes(requiredHeading)) {
+        for (const requiredHeading of requiredCanonicalHeadings) {
+            if (!headingNames.includes(requiredHeading.heading)) {
                 file.message(
-                    `Missing required H2 heading \`${requiredHeading}\`.`,
+                    `Missing required H2 heading \`${requiredHeading.heading}\`.`,
                     undefined,
                     "remark-lint:rule-doc-headings:missing-required"
                 );
@@ -513,7 +633,7 @@ export default function remarkLintRuleDocHeadings (options = {}) {
                 : undefined;
         const firstH2HeadingNode = h2Headings[0];
 
-        if (targetedPatternScopeIndex !== 0) {
+        if (targetedPatternScopeEnabled && targetedPatternScopeIndex !== 0) {
             const targetedPatternScopeHeading =
                 getH2HeadingNodeAt(targetedPatternScopeIndex) ??
                 getH2HeadingNodeAt(whatThisRuleReportsIndex) ??
@@ -526,7 +646,11 @@ export default function remarkLintRuleDocHeadings (options = {}) {
             );
         }
 
-        if (whatThisRuleReportsIndex !== targetedPatternScopeIndex + 1) {
+        if (
+            targetedPatternScopeEnabled &&
+            whatThisRuleReportsEnabled &&
+            whatThisRuleReportsIndex !== targetedPatternScopeIndex + 1
+        ) {
             const targetedPatternScopeHeading =
                 getH2HeadingNodeAt(whatThisRuleReportsIndex) ??
                 getH2HeadingNodeAt(targetedPatternScopeIndex) ??
@@ -539,7 +663,11 @@ export default function remarkLintRuleDocHeadings (options = {}) {
             );
         }
 
-        if (requirePackageDocumentation && packageDocumentationIndex === -1) {
+        if (
+            packageDocumentationEnabled &&
+            requirePackageDocumentation &&
+            packageDocumentationIndex === -1
+        ) {
             file.message(
                 "Missing required `## Package documentation` section.",
                 undefined,
@@ -547,7 +675,7 @@ export default function remarkLintRuleDocHeadings (options = {}) {
             );
         }
 
-        if (furtherReadingIndex === -1) {
+        if (furtherReadingEnabled && furtherReadingIndex === -1) {
             file.message(
                 "Missing required `## Further reading` section.",
                 undefined,
@@ -555,7 +683,7 @@ export default function remarkLintRuleDocHeadings (options = {}) {
             );
         }
 
-        if (deprecatedSectionIndex !== -1) {
+        if (deprecatedEnabled && deprecatedSectionIndex !== -1) {
             const deprecatedSectionHeading = h2Headings[deprecatedSectionIndex];
 
             if (deprecatedSectionHeading === undefined) {
@@ -579,6 +707,8 @@ export default function remarkLintRuleDocHeadings (options = {}) {
         }
 
         if (
+            packageDocumentationEnabled &&
+            furtherReadingEnabled &&
             packageDocumentationIndex !== -1 &&
             furtherReadingIndex !== -1 &&
             packageDocumentationIndex !== furtherReadingIndex - 1
@@ -592,7 +722,11 @@ export default function remarkLintRuleDocHeadings (options = {}) {
             );
         }
 
-        if (packageDocumentationIndex !== -1) {
+        if (
+            packageDocumentationEnabled &&
+            requirePackageDocumentationLabel &&
+            packageDocumentationIndex !== -1
+        ) {
             const packageDocumentationHeading =
                 h2Headings[packageDocumentationIndex];
 
