@@ -21,6 +21,7 @@
     "extends": "./tsconfig.json",
     "include": [
         "*.mjs",
+        "src/types/**/*.d.ts",
         "test/_internal/**/*.d.ts"
     ]
 }

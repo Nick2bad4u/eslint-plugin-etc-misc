@@ -33,14 +33,56 @@ const canonicalSections = [
 const sectionHeadingPattern = /^##\s+(.+?)\s*$/gmu;
 const catalogMarkerPattern = /^> \*\*Rule catalog ID:\*\*\s*(R\d{3})\s*$/gmu;
 
+/**
+ * @typedef {Readonly<{
+ *     catalogId: string;
+ *     docId: string;
+ *     ruleName: string;
+ * }>} RuleCatalogEntry
+ */
+
+/** @typedef {Readonly<Map<string, string>>} SectionContentMap */
+
+/**
+ * @typedef {Readonly<{
+ *     headingName: string;
+ *     index: number;
+ *     rawHeading: string;
+ * }>} SubheadingMatch
+ */
+
+/**
+ * @typedef {Readonly<{
+ *     existingSections: SectionContentMap;
+ *     isTypeCheckedRule: boolean;
+ *     namespaceRuleName: string;
+ * }>} GeneratedSectionsInput
+ */
+
+/**
+ * @param {string} ruleName
+ *
+ * @returns {string}
+ */
 const toNamespaceRuleName = (ruleName) => `etc-misc/${ruleName}`;
 
 const toTypeCheckingNotice =
     "⚠️ This rule requires type information to run. Configure type-aware linting (`parserOptions.project` or `projectService`) before enabling it.";
 
+/**
+ * @param {string} value
+ *
+ * @returns {string}
+ */
 const ensureTrailingNewline = (value) =>
     value.endsWith("\n") ? value : `${value}\n`;
 
+/**
+ * @param {SectionContentMap} existingSections
+ * @param {readonly string[]} headingNames
+ *
+ * @returns {string | undefined}
+ */
 const getSectionByAnyHeading = (existingSections, headingNames) => {
     for (const headingName of headingNames) {
         const value = existingSections.get(headingName);
@@ -53,6 +95,11 @@ const getSectionByAnyHeading = (existingSections, headingNames) => {
     return undefined;
 };
 
+/**
+ * @param {string} sectionBody
+ *
+ * @returns {readonly SubheadingMatch[]}
+ */
 const collectLevel3Headings = (sectionBody) => {
     const matches = sectionBody.matchAll(/^###\s+(.+?)\s*$/gmu);
 
@@ -63,6 +110,12 @@ const collectLevel3Headings = (sectionBody) => {
     }));
 };
 
+/**
+ * @param {string | undefined} sectionBody
+ * @param {string} subsectionHeading
+ *
+ * @returns {string | undefined}
+ */
 const extractNestedSubsection = (sectionBody, subsectionHeading) => {
     if (typeof sectionBody !== "string" || sectionBody.trim().length === 0) {
         return undefined;
@@ -78,6 +131,11 @@ const extractNestedSubsection = (sectionBody, subsectionHeading) => {
     }
 
     const targetSubheading = subheadings[targetIndex];
+
+    if (targetSubheading === undefined) {
+        return undefined;
+    }
+
     const nextSubheading = subheadings[targetIndex + 1];
     const bodyStart =
         targetSubheading.index + targetSubheading.rawHeading.length;
@@ -87,9 +145,15 @@ const extractNestedSubsection = (sectionBody, subsectionHeading) => {
     return body.length > 0 ? body : undefined;
 };
 
+/**
+ * @param {string | undefined} sectionBody
+ * @param {string} subsectionHeading
+ *
+ * @returns {string}
+ */
 const stripNestedSubsection = (sectionBody, subsectionHeading) => {
     if (typeof sectionBody !== "string" || sectionBody.trim().length === 0) {
-        return sectionBody;
+        return "";
     }
 
     const subheadings = collectLevel3Headings(sectionBody);
@@ -102,6 +166,11 @@ const stripNestedSubsection = (sectionBody, subsectionHeading) => {
     }
 
     const targetSubheading = subheadings[targetIndex];
+
+    if (targetSubheading === undefined) {
+        return sectionBody;
+    }
+
     const nextSubheading = subheadings[targetIndex + 1];
     const sectionStart = targetSubheading.index;
     const sectionEnd = nextSubheading?.index ?? sectionBody.length;
@@ -109,6 +178,11 @@ const stripNestedSubsection = (sectionBody, subsectionHeading) => {
     return `${sectionBody.slice(0, sectionStart)}${sectionBody.slice(sectionEnd)}`.trim();
 };
 
+/**
+ * @param {string} content
+ *
+ * @returns {SectionContentMap}
+ */
 const getSectionContentMap = (content) => {
     const matches = [...content.matchAll(sectionHeadingPattern)];
     const sectionMap = new Map();
@@ -117,9 +191,10 @@ const getSectionContentMap = (content) => {
         const heading = match[1]?.trim() ?? "";
         const start = match.index ?? 0;
         const bodyStart = start + match[0].length;
+        const nextMatch = matches[index + 1];
         const nextStart =
             index + 1 < matches.length
-                ? (matches[index + 1].index ?? content.length)
+                ? (nextMatch?.index ?? content.length)
                 : content.length;
         const rawBody = content
             .slice(bodyStart, nextStart)
@@ -131,6 +206,13 @@ const getSectionContentMap = (content) => {
     return sectionMap;
 };
 
+/**
+ * @param {SectionContentMap} existingSections
+ * @param {string} heading
+ * @param {string} fallbackBody
+ *
+ * @returns {string}
+ */
 const getHeadingBody = (existingSections, heading, fallbackBody) => {
     const current = existingSections.get(heading);
 
@@ -141,6 +223,11 @@ const getHeadingBody = (existingSections, heading, fallbackBody) => {
     return fallbackBody.trimEnd();
 };
 
+/**
+ * @param {string} body
+ *
+ * @returns {boolean}
+ */
 const isPlaceholderExampleBody = (body) => {
     const normalizedBody = body.trim();
 
@@ -160,6 +247,11 @@ const isPlaceholderExampleBody = (body) => {
     return fenceCount < 2;
 };
 
+/**
+ * @param {GeneratedSectionsInput} input
+ *
+ * @returns {readonly string[]}
+ */
 const toGeneratedSections = ({
     existingSections,
     isTypeCheckedRule,
@@ -313,7 +405,7 @@ const toGeneratedSections = ({
         const currentScopeBody = getHeadingBody(
             existingSections,
             "Targeted pattern scope",
-            defaultBodies.get("Targeted pattern scope")
+            defaultBodies.get("Targeted pattern scope") ?? ""
         );
 
         defaultBodies.set(
@@ -324,7 +416,7 @@ const toGeneratedSections = ({
 
     const hasDeprecatedContent =
         typeof getSectionByAnyHeading(existingSections, ["Deprecated"]) ===
-            "string" ||
+        "string" ||
         (typeof legacyStatus === "string" && /deprecated/iu.test(legacyStatus));
 
     if (hasDeprecatedContent) {
@@ -372,6 +464,7 @@ const toGeneratedSections = ({
     });
 };
 
+/** @type {readonly RuleCatalogEntry[]} */
 const ruleCatalogMap = JSON.parse(await readFile(ruleCatalogMapPath, "utf8"));
 
 const ruleCatalogByDocId = new Map(

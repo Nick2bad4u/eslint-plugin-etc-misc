@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 
-// @ts-expect-error -- Script module is authored in .mjs without a dedicated declaration file.
 import remarkLintRuleDocHeadings from "../../scripts/remark-lint-rule-doc-headings.mjs";
 
 type CapturedMessage = Readonly<{
@@ -70,10 +69,9 @@ const createValidRuleDocTree = (): RootNode => ({
 });
 
 const runRuleDocHeadingLint = (markdownContent: string): CapturedMessage[] => {
-    const transformer = remarkLintRuleDocHeadings() as (
-        tree: RootNode,
-        file: Readonly<MockVFile>
-    ) => void;
+    const transformer = remarkLintRuleDocHeadings.call(
+        {} as never
+    ) as unknown as (tree: RootNode, file: Readonly<MockVFile>) => void;
     const file = new MockVFile(
         "docs/rules/typescript-prefer-readonly-index-signature.md",
         markdownContent

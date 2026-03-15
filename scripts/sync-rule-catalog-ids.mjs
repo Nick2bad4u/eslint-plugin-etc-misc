@@ -17,6 +17,12 @@ const furtherReadingHeadingPattern = /^##\s+Further\s+reading\s*$/imu;
 const existingCatalogMarkerPattern =
     /^> \*\*Rule catalog ID:\*\* R\d{3}\s*\n?/gmu;
 
+/**
+ * @param {string} leftRuleName
+ * @param {string} rightRuleName
+ *
+ * @returns {number}
+ */
 const compareRuleNamesForCatalog = (leftRuleName, rightRuleName) => {
     const leftIsTypeScriptRule = leftRuleName.startsWith("typescript/");
     const rightIsTypeScriptRule = rightRuleName.startsWith("typescript/");
@@ -28,6 +34,11 @@ const compareRuleNamesForCatalog = (leftRuleName, rightRuleName) => {
     return leftRuleName.localeCompare(rightRuleName);
 };
 
+/**
+ * @param {string} ruleFileName
+ *
+ * @returns {string}
+ */
 const toRuleNameFromFileName = (ruleFileName) => {
     const withoutExtension = ruleFileName.replace(/\.ts$/u, "");
 
@@ -38,11 +49,26 @@ const toRuleNameFromFileName = (ruleFileName) => {
     return withoutExtension;
 };
 
+/**
+ * @param {string} ruleName
+ *
+ * @returns {string}
+ */
 const toRuleDocId = (ruleName) => ruleName.replaceAll("/", "-");
 
+/**
+ * @param {number} catalogIndex
+ *
+ * @returns {string}
+ */
 const toRuleCatalogId = (catalogIndex) =>
     `R${`${catalogIndex}`.padStart(3, "0")}`;
 
+/**
+ * @param {string} sourceText
+ *
+ * @returns {string}
+ */
 const ensureFurtherReadingSectionHasContent = (sourceText) => {
     const headingMatch = furtherReadingHeadingPattern.exec(sourceText);
 
@@ -71,6 +97,12 @@ const ensureFurtherReadingSectionHasContent = (sourceText) => {
     return `${sourceText.slice(0, headingEndIndex)}${sectionContent}${contentAfterHeading.slice(nextHeadingOffset)}`;
 };
 
+/**
+ * @param {string} sourceText
+ * @param {string} catalogId
+ *
+ * @returns {string}
+ */
 const upsertCatalogIdBlock = (sourceText, catalogId) => {
     const markerLine = `${ruleCatalogMarkerPrefix} ${catalogId}`;
     const sourceWithoutCatalogMarker = sourceText
@@ -99,8 +131,19 @@ const upsertCatalogIdBlock = (sourceText, catalogId) => {
     );
 };
 
+/**
+ * @param {string} sourceText
+ *
+ * @returns {string}
+ */
 const toUnixLineEndings = (sourceText) => sourceText.replaceAll("\r\n", "\n");
 
+/**
+ * @param {string} sourceText
+ * @param {"\n" | "\r\n"} lineEnding
+ *
+ * @returns {string}
+ */
 const fromUnixLineEndings = (sourceText, lineEnding) =>
     lineEnding === "\r\n" ? sourceText.replaceAll("\n", "\r\n") : sourceText;
 

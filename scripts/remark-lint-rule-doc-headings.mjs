@@ -159,7 +159,7 @@ const getHeadingsByDepth = (tree, depth) =>
  *
  * @returns {(tree: Node, file: VFile) => void}
  */
-export default function remarkLintRuleDocHeadings() {
+export default function remarkLintRuleDocHeadings () {
     return (tree, file) => {
         if (typeof file.path !== "string") {
             return;
@@ -376,6 +376,11 @@ export default function remarkLintRuleDocHeadings() {
 
         if (deprecatedSectionIndex !== -1) {
             const deprecatedSectionHeading = h2Headings[deprecatedSectionIndex];
+
+            if (deprecatedSectionHeading === undefined) {
+                return;
+            }
+
             const nextH2Index =
                 h2Headings[deprecatedSectionIndex + 1]?.position?.start?.offset;
             const deprecatedStartOffset =

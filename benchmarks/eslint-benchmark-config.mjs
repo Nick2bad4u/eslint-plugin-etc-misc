@@ -145,7 +145,10 @@ const resolveRuleSet = (presetName) => {
         configs[presetName],
         `plugin.configs.${presetName}`
     );
-    const rules = ensureRulesRecord(preset.rules, `${presetName} preset rules`);
+    const rules = ensureRulesRecord(
+        preset["rules"],
+        `${presetName} preset rules`
+    );
 
     return Object.freeze({ ...rules });
 };
@@ -171,8 +174,11 @@ export const typefestRuleSets = Object.freeze({
  *   API / CLI usage.
  */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- This .mjs module relies on JSDoc contracts instead of TS syntax.
-export function createTypefestFlatConfig(options) {
+export function createTypefestFlatConfig (options) {
     const { rules } = options;
+    const pluginModule = /** @type {import("eslint").ESLint.Plugin} */ (
+        /** @type {unknown} */ (plugin)
+    );
 
     return [
         {
@@ -188,7 +194,7 @@ export function createTypefestFlatConfig(options) {
             },
             name: "benchmark:typefest",
             plugins: {
-                typefest: plugin,
+                typefest: pluginModule,
             },
             rules,
         },

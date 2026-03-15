@@ -125,7 +125,9 @@ const preferArrowPlugin = fixupPluginRules(asEslintPlugin(pluginPreferArrow));
 const sortClassMembersPlugin = fixupPluginRules(
     asEslintPlugin(pluginSortClassMembers)
 );
-const writeGoodCommentsPlugin = fixupPluginRules(pluginWriteGood);
+const writeGoodCommentsPlugin = fixupPluginRules(
+    asEslintPlugin(pluginWriteGood)
+);
 const pluginLoadableImports = fixupPluginRules(
     asEslintPlugin(loadbleImportsPlugin)
 );
@@ -188,6 +190,34 @@ const readPluginConfigRules = (pluginValue, configName) => {
 
     // eslint-disable-next-line security/detect-object-injection -- configName is a controlled constant, not user input.
     return readConfigRules(configs[configName]);
+};
+
+/**
+ * Read a named plugin config object safely.
+ *
+ * @param {unknown} pluginValue
+ * @param {string} configName
+ *
+ * @returns {Readonly<Record<string, unknown>>}
+ */
+const readPluginNamedConfig = (pluginValue, configName) => {
+    if (!isReadonlyRecord(pluginValue)) {
+        return {};
+    }
+
+    const { configs } = pluginValue;
+    if (!isReadonlyRecord(configs)) {
+        return {};
+    }
+
+    if (!Object.hasOwn(configs, configName)) {
+        return {};
+    }
+
+    // eslint-disable-next-line security/detect-object-injection -- configName is a controlled constant, not user input.
+    const configValue = configs[configName];
+
+    return isReadonlyRecord(configValue) ? configValue : {};
 };
 
 const require = createRequire(import.meta.url);
@@ -275,7 +305,7 @@ if (
 // #region 🌍 Global Configs and Rules
 // SECTION: Global Configs and Rules
 // ═══════════════════════════════════════════════════════════════════════════════
-export default defineConfig([
+const config = [
     globalIgnores([
         "**/CHANGELOG.md",
         ".remarkrc.mjs",
@@ -387,8 +417,7 @@ export default defineConfig([
         name: "ESLint comments recommended (code files only)",
     },
     {
-        // @ts-expect-error -- Plugin needs update for Eslint v10
-        ...arrayFunc.configs.all,
+        ...readPluginNamedConfig(arrayFunc, "all"),
         files: ["**/*.{js,jsx,mjs,cjs,ts,tsx,cts,mts}"],
         name: "Array func all (code files only)",
     },
@@ -538,7 +567,7 @@ export default defineConfig([
         rules: {
             ...css.configs.recommended.rules,
             ...readPluginConfigRules(pluginUndefinedCss, "recommended"),
-            ...pluginCssModules.configs.recommended.rules,
+            ...readPluginConfigRules(pluginCssModules, "recommended"),
             // CSS Eslint Rules (css/*)
             "css/no-empty-blocks": "error",
             "css/no-invalid-at-rules": "warn",
@@ -715,7 +744,9 @@ export default defineConfig([
             security: pluginSecurity,
             sonarjs: sonarjs,
             "sort-class-members": sortClassMembersPlugin,
-            "total-functions": fixupPluginRules(pluginTotalFunctions),
+            "total-functions": fixupPluginRules(
+                asEslintPlugin(pluginTotalFunctions)
+            ),
             "tsdoc-require-2": tsdocRequire,
             unicorn: eslintPluginUnicorn,
             "unused-imports": pluginUnusedImports,
@@ -733,8 +764,7 @@ export default defineConfig([
             ...importX.flatConfigs.recommended.rules,
             ...importX.flatConfigs.electron.rules,
             ...importX.flatConfigs.typescript.rules,
-            // @ts-expect-error -- Plugin needs update for Eslint v10
-            ...pluginPromise.configs["flat/recommended"].rules,
+            ...readPluginConfigRules(pluginPromise, "flat/recommended"),
             ...eslintPluginUnicorn.configs.all.rules,
             ...sonarjsConfigs.recommended.rules,
             ...pluginPerfectionist.configs["recommended-natural"].rules,
@@ -743,12 +773,15 @@ export default defineConfig([
             ...eslintPluginMath.configs.recommended.rules,
             ...comments.recommended.rules,
             ...pluginCanonical.configs.recommended.rules,
-            // @ts-expect-error -- Plugin needs update for Eslint v10
-            ...pluginSortClassMembers.configs["flat/recommended"].rules,
-            // @ts-expect-error -- Plugin needs update for Eslint v10
-            ...eslintPluginNoUseExtendNative.configs.recommended.rules,
-            // @ts-expect-error -- Plugin needs update for Eslint v10
-            ...pluginMicrosoftSdl.configs.required.rules,
+            ...readPluginConfigRules(
+                pluginSortClassMembers,
+                "flat/recommended"
+            ),
+            ...readPluginConfigRules(
+                eslintPluginNoUseExtendNative,
+                "recommended"
+            ),
+            ...readPluginConfigRules(pluginMicrosoftSdl, "required"),
             ...readPluginConfigRules(listeners, "strict"),
             ...moduleInterop.configs.recommended.rules,
             ...readPluginConfigRules(pluginTotalFunctions, "recommended"),
@@ -2571,8 +2604,7 @@ export default defineConfig([
             ...importX.flatConfigs.recommended.rules,
             ...importX.flatConfigs.electron.rules,
             ...importX.flatConfigs.typescript.rules,
-            // @ts-expect-error -- Plugin needs update for Eslint v10
-            ...pluginPromise.configs["flat/recommended"].rules,
+            ...readPluginConfigRules(pluginPromise, "flat/recommended"),
             ...eslintPluginUnicorn.configs.all.rules,
             ...sonarjsConfigs.recommended.rules,
             ...pluginPerfectionist.configs["recommended-natural"].rules,
@@ -2947,4 +2979,8 @@ export default defineConfig([
     // #region 🧹 Prettier Disable Config
     eslintConfigPrettier,
     // #endregion
-]);
+];
+
+export default defineConfig(
+    /** @type {EslintConfig[]} */(/** @type {unknown} */ (config))
+);

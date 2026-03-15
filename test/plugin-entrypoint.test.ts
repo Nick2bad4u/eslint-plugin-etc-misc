@@ -6,7 +6,6 @@ import * as fc from "fast-check";
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-// @ts-expect-error -- plugin.mjs is a runtime JS entrypoint without a dedicated declaration file.
 import plugin from "../plugin.mjs";
 import { pluginMeta } from "../src/_internal/plugin-meta";
 import { configs } from "../src/configs";

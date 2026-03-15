@@ -118,7 +118,7 @@ const assertEslintMajor = (expectedMajor) => {
 
     console.log(
         `${pc.green("✓")}` +
-            ` ESLint runtime ${pc.bold(runtimeVersion)} detected for compatibility smoke checks.`
+        ` ESLint runtime ${pc.bold(runtimeVersion)} detected for compatibility smoke checks.`
     );
 };
 
@@ -138,12 +138,16 @@ const assertFixtureExists = (fixturePath) => {
  * @returns {import("eslint").Linter.Config[]}
  */
 const createCompatibilityConfig = (ruleId, typed) => {
-    const recommendedConfig = plugin.configs?.recommended;
-    if (!isUnknownRecord(recommendedConfig)) {
+    const recommendedConfigValue = plugin.configs?.recommended;
+    if (!isUnknownRecord(recommendedConfigValue)) {
         throw new Error(
             "Plugin recommended config is unavailable. Compatibility smoke test cannot continue."
         );
     }
+
+    const recommendedConfig = /** @type {UnknownRecord} */ (
+        recommendedConfigValue
+    );
 
     const baseLanguageOptions = isUnknownRecord(
         recommendedConfig["languageOptions"]
@@ -156,6 +160,9 @@ const createCompatibilityConfig = (ruleId, typed) => {
     )
         ? baseLanguageOptions["parserOptions"]
         : {};
+    const eslintPluginModule = /** @type {import("eslint").ESLint.Plugin} */ (
+        /** @type {unknown} */ (plugin)
+    );
 
     return [
         {
@@ -174,7 +181,7 @@ const createCompatibilityConfig = (ruleId, typed) => {
             },
             name: `compat-smoke:${ruleId}`,
             plugins: {
-                [plugin.meta.namespace]: plugin,
+                [plugin.meta.namespace]: eslintPluginModule,
             },
             rules: {
                 [ruleId]: "error",
@@ -258,9 +265,9 @@ const runScenario = async ({
 
     console.log(
         `${pc.green("✓")}` +
-            ` ${pc.bold(name)} ${pc.gray("->")} ${pc.bold(ruleId)} (${typed ? "typed" : "non-typed"}, fix=${fix}) produced ${pc.magenta(
-                String(matchingMessages.length)
-            )} message(s).`
+        ` ${pc.bold(name)} ${pc.gray("->")} ${pc.bold(ruleId)} (${typed ? "typed" : "non-typed"}, fix=${fix}) produced ${pc.magenta(
+            String(matchingMessages.length)
+        )} message(s).`
     );
 };
 

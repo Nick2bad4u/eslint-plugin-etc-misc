@@ -1,6 +1,45 @@
+// @ts-check
+
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+
+/** @typedef {"recommended" | "strict" | "strictTypeChecked" | "allStrict"} PresetName */
+
+/**
+ * @typedef {Readonly<{
+ *     catalogId: string;
+ *     catalogIndex: number;
+ *     docId: string;
+ *     isTypeScriptRule: boolean;
+ *     ruleName: string;
+ * }>} RuleCatalogEntry
+ */
+
+/**
+ * @typedef {Readonly<{
+ *     headingLevel: number;
+ *     headingName: string;
+ *     index: number;
+ *     rawHeading: string;
+ * }>} HeadingEntry
+ */
+
+/**
+ * @typedef {Readonly<{
+ *     configs?: Readonly<
+ *         Record<
+ *             string,
+ *             Readonly<{
+ *                 rules?: Readonly<Record<string, unknown>>;
+ *             }>
+ *         >
+ *     >;
+ *     meta?: Readonly<{
+ *         namespace?: string;
+ *     }>;
+ * }>} BuiltPlugin
+ */
 
 const thisFilePath = fileURLToPath(import.meta.url);
 const scriptsDirectoryPath = path.dirname(thisFilePath);
@@ -48,11 +87,30 @@ const ruleCatalogMapPath = path.join(
     "rule-catalog-map.json"
 );
 
+/**
+ * @param {string} ruleName
+ *
+ * @returns {string}
+ */
 const toDocId = (ruleName) => ruleName.replaceAll("/", "-");
 
+/**
+ * @param {{
+ *     catalogId: string;
+ *     docId: string;
+ *     ruleName: string;
+ * }} input
+ *
+ * @returns {string}
+ */
 const toPresetRuleLinkLine = ({ catalogId, docId, ruleName }) =>
     `- [\`etc-misc/${ruleName}\`](../${docId}.md) (${catalogId})`;
 
+/**
+ * @param {string} content
+ *
+ * @returns {readonly HeadingEntry[]}
+ */
 const collectHeadings = (content) => {
     const headingMatches = content.matchAll(/^(#{1,6})\s+(.+?)\s*$/gmu);
 
@@ -64,6 +122,14 @@ const collectHeadings = (content) => {
     }));
 };
 
+/**
+ * @param {string} content
+ * @param {string} sectionHeading
+ * @param {string} replacementBody
+ * @param {number} [headingLevel]
+ *
+ * @returns {string}
+ */
 const replaceSection = (
     content,
     sectionHeading,
@@ -82,6 +148,13 @@ const replaceSection = (
     }
 
     const targetHeading = headings[targetHeadingIndex];
+
+    if (targetHeading === undefined) {
+        throw new Error(
+            `Unable to resolve heading index: ${targetHeadingIndex}`
+        );
+    }
+
     const nextHeading = headings
         .slice(targetHeadingIndex + 1)
         .find((heading) => heading.headingLevel <= headingLevel);
@@ -94,6 +167,9 @@ const replaceSection = (
     return `${content.slice(0, sectionStart)}${replacement}${content.slice(sectionEnd)}`;
 };
 
+/**
+ * @returns {Promise<BuiltPlugin>}
+ */
 const loadBuiltPlugin = async () => {
     const builtPluginPath = path.join(repositoryRootPath, "dist", "plugin.js");
     const builtPluginUrl = pathToFileURL(builtPluginPath).href;
@@ -102,7 +178,9 @@ const loadBuiltPlugin = async () => {
         // eslint-disable-next-line no-unsanitized/method -- Controlled local file URL derived from repository root and constant dist path.
         const importedModule = await import(builtPluginUrl);
 
-        return importedModule.default ?? importedModule;
+        return /** @type {BuiltPlugin} */ (
+            importedModule.default ?? importedModule
+        );
     } catch (error) {
         throw new Error(
             "Unable to load dist/plugin.js. Run `npm run build` before syncing preset links.",
@@ -113,6 +191,12 @@ const loadBuiltPlugin = async () => {
     }
 };
 
+/**
+ * @param {string} configuredRuleName
+ * @param {string} namespace
+ *
+ * @returns {null | string}
+ */
 const normalizeConfiguredRuleName = (configuredRuleName, namespace) => {
     const namespacePrefix = `${namespace}/`;
 
@@ -127,6 +211,7 @@ const normalizeConfiguredRuleName = (configuredRuleName, namespace) => {
     return configuredRuleName;
 };
 
+/** @type {readonly PresetName[]} */
 const presetOrder = [
     "recommended",
     "strict",
@@ -134,6 +219,7 @@ const presetOrder = [
     "allStrict",
 ];
 
+/** @type {readonly RuleCatalogEntry[]} */
 const ruleCatalogMap = JSON.parse(await readFile(ruleCatalogMapPath, "utf8"));
 
 const catalogByRuleName = new Map(
@@ -143,41 +229,47 @@ const catalogByRuleName = new Map(
 const plugin = await loadBuiltPlugin();
 const namespace = plugin.meta?.namespace ?? "etc-misc";
 
-const presetRuleLinksByPresetName = Object.fromEntries(
-    presetOrder.map((presetName) => {
-        const configuredRules = plugin.configs?.[presetName]?.rules ?? {};
-        const ruleLinks = Object.keys(configuredRules)
-            .flatMap((configuredRuleName) => {
-                const normalizedRuleName = normalizeConfiguredRuleName(
-                    configuredRuleName,
-                    namespace
+/** @type {Record<PresetName, readonly string[]>} */
+const presetRuleLinksByPresetName = {
+    allStrict: [],
+    recommended: [],
+    strict: [],
+    strictTypeChecked: [],
+};
+
+for (const presetName of presetOrder) {
+    const configuredRules = plugin.configs?.[presetName]?.rules ?? {};
+    const ruleLinks = Object.keys(configuredRules)
+        .flatMap((configuredRuleName) => {
+            const normalizedRuleName = normalizeConfiguredRuleName(
+                configuredRuleName,
+                namespace
+            );
+
+            if (normalizedRuleName === null) {
+                return [];
+            }
+
+            const entry = catalogByRuleName.get(normalizedRuleName);
+
+            if (!entry) {
+                throw new Error(
+                    `Missing catalog entry for ${presetName} rule: ${normalizedRuleName}`
                 );
+            }
 
-                if (normalizedRuleName === null) {
-                    return [];
-                }
+            return [
+                toPresetRuleLinkLine({
+                    catalogId: entry.catalogId,
+                    docId: toDocId(normalizedRuleName),
+                    ruleName: normalizedRuleName,
+                }),
+            ];
+        })
+        .toSorted((left, right) => left.localeCompare(right));
 
-                const entry = catalogByRuleName.get(normalizedRuleName);
-
-                if (!entry) {
-                    throw new Error(
-                        `Missing catalog entry for ${presetName} rule: ${normalizedRuleName}`
-                    );
-                }
-
-                return [
-                    toPresetRuleLinkLine({
-                        catalogId: entry.catalogId,
-                        docId: toDocId(normalizedRuleName),
-                        ruleName: normalizedRuleName,
-                    }),
-                ];
-            })
-            .toSorted((left, right) => left.localeCompare(right));
-
-        return [presetName, ruleLinks];
-    })
-);
+    presetRuleLinksByPresetName[presetName] = ruleLinks;
+}
 
 const allCoreRuleLinks = ruleCatalogMap
     .filter((entry) => !entry.ruleName.startsWith("typescript/"))
@@ -202,25 +294,25 @@ const allPresetContent = await readFile(allPresetDocPath, "utf8");
 const updatedAllStrictPresetContent = replaceSection(
     allStrictPresetContent,
     "Rules in this preset",
-    presetRuleLinksByPresetName.allStrict.join("\n")
+    presetRuleLinksByPresetName["allStrict"].join("\n")
 );
 
 const updatedRecommendedPresetContent = replaceSection(
     recommendedPresetContent,
     "Rules in this preset",
-    presetRuleLinksByPresetName.recommended.join("\n")
+    presetRuleLinksByPresetName["recommended"].join("\n")
 );
 
 const updatedStrictPresetContent = replaceSection(
     strictPresetContent,
     "Rules in this preset",
-    presetRuleLinksByPresetName.strict.join("\n")
+    presetRuleLinksByPresetName["strict"].join("\n")
 );
 
 const updatedStrictTypeCheckedPresetContent = replaceSection(
     strictTypeCheckedPresetContent,
     "Rules in this preset",
-    presetRuleLinksByPresetName.strictTypeChecked.join("\n")
+    presetRuleLinksByPresetName["strictTypeChecked"].join("\n")
 );
 
 const updatedAllPresetContentWithCore = replaceSection(
