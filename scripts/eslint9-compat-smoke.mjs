@@ -32,6 +32,10 @@ const typedFixturePath = path.resolve(
     repositoryRootPath,
     "test/fixtures/internal/no-internal.fixture.ts"
 );
+const typedFixtureProjectServicePattern = path
+    .relative(repositoryRootPath, typedFixturePath)
+    .split(path.sep)
+    .join("/");
 const sortArrayFixturePath = path.resolve(
     repositoryRootPath,
     "test/fixtures/compat/eslint9-sort-array.invalid.ts"
@@ -174,7 +178,13 @@ const createCompatibilityConfig = (ruleId, typed) => {
                 parserOptions: {
                     ...baseParserOptions,
                     ecmaVersion: "latest",
-                    project: typed ? "./tsconfig.eslint.json" : undefined,
+                    projectService: typed
+                        ? {
+                            allowDefaultProject: [
+                                typedFixtureProjectServicePattern,
+                            ],
+                        }
+                        : undefined,
                     sourceType: "module",
                     tsconfigRootDir: repositoryRootPath,
                 },

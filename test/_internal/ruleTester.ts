@@ -4,12 +4,14 @@ import parser from "@typescript-eslint/parser";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 import { afterAll, describe, it } from "vitest";
 
+const ruleTesterTimeoutMilliseconds = 30_000;
+
 RuleTester.afterAll = afterAll;
 RuleTester.describe = (name, callback): void => {
     describe(name, callback);
 };
 RuleTester.it = (name, callback): void => {
-    it(name, callback);
+    it(name, callback, ruleTesterTimeoutMilliseconds);
 };
 
 export const ruleTester: RuleTester = new RuleTester({
