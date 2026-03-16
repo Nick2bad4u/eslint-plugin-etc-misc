@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { arrayFirst } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
@@ -83,7 +85,7 @@ const isInFirstFunctionExpressionStatement = (
     }
 
     return (
-        node.range[0] >= firstStatement.range[0] &&
+        arrayFirst(node.range) >= arrayFirst(firstStatement.range) &&
         node.range[1] <= firstStatement.range[1]
     );
 };

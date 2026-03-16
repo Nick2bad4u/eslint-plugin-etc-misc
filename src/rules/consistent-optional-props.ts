@@ -1,15 +1,17 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { arrayJoin, isEmpty  } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-const selector = [
+const selector = arrayJoin([
     "TSPropertySignature[optional=true] > TSTypeAnnotation > TSUnionType",
     "PropertyDefinition[optional=true] > TSTypeAnnotation > TSUnionType",
-].join(", ");
+], ", ");
 
 const buildOptionalUnionFixText = (
     sourceCode: Readonly<TSESLint.SourceCode>,
@@ -29,13 +31,13 @@ const buildOptionalUnionFixText = (
     }
 
     if (
-        nonUndefinedTypeTexts.length === 0 ||
+        isEmpty(nonUndefinedTypeTexts) ||
         nonUndefinedTypeTexts.length === unionType.types.length
     ) {
         return undefined;
     }
 
-    return nonUndefinedTypeTexts.join(" | ");
+    return arrayJoin(nonUndefinedTypeTexts, " | ");
 };
 
 /**

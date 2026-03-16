@@ -1,15 +1,17 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { arrayJoin } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-const selector = [
+const selector = arrayJoin([
     ":not(TSTypeOperator[operator='readonly']) > :matches(TSArrayType, TSTupleType)",
     "TSTypeReference > Identifier[name='Array']",
-].join(", ");
+], ", ");
 
 /**
  * Require readonly array and tuple type annotations.

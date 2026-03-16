@@ -12,6 +12,7 @@ import {
     ESLintUtils,
     type TSESLint,
 } from "@typescript-eslint/utils";
+import { arrayFind, arrayFirst  } from "ts-extras";
 import * as tsutils from "tsutils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -110,7 +111,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         const checkRejectionCall = (
             callExpression: Readonly<es.CallExpression>
         ): void => {
-            const rejectionValue = callExpression.arguments[0];
+            const rejectionValue = arrayFirst(callExpression.arguments);
             if (rejectionValue === undefined) {
                 return;
             }
@@ -153,12 +154,9 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         return;
                     }
 
-                    const rejectVariable = context.sourceCode
-                        .getDeclaredVariables(callback)
-                        .find(
-                            (declaredVariable) =>
-                                declaredVariable.name === rejectParameter.name
-                        );
+                    const rejectVariable = arrayFind(context.sourceCode
+                        .getDeclaredVariables(callback), (declaredVariable) =>
+                                declaredVariable.name === rejectParameter.name);
                     if (rejectVariable === undefined) {
                         return;
                     }

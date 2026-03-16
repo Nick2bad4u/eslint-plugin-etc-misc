@@ -1,13 +1,14 @@
 /* eslint-disable total-functions/no-hidden-type-assertions -- @typescript-eslint RuleCreator requires an explicit docs metadata generic for typed docs fields. */
 
 import type { TSESLint } from "@typescript-eslint/utils";
+import type { UnknownArray } from "type-fest";
 
 import { ESLintUtils } from "@typescript-eslint/utils";
 
 /**
  * Broad rule-module type used by incrementally migrated rule files.
  */
-export type AnyRuleModule = TSESLint.RuleModule<string, readonly unknown[]>;
+export type AnyRuleModule = TSESLint.RuleModule<string, Readonly<UnknownArray>>;
 
 type RuleCreatorFactory = ReturnType<
     typeof ESLintUtils.RuleCreator<RuleDocsMetadata>

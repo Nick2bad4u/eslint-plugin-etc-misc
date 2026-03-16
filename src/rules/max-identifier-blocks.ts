@@ -1,5 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { arrayJoin } from "ts-extras";
+
 import { countIdentifierBlocks } from "../_internal/identifier-blocks.js";
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -9,10 +11,10 @@ type Options = readonly [];
 
 const maxIdentifierBlocks = 4;
 
-const disallowedSelector = [
+const disallowedSelector = arrayJoin([
     "Identifier.id",
     ":not(Property[shorthand=true]) > Identifier.key",
-].join(", ");
+], ", ");
 
 /**
  * Disallow identifiers containing more than four casing blocks.

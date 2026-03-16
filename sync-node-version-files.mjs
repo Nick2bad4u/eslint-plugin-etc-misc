@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 /**
  * Synchronize repository Node version files.
@@ -37,7 +36,7 @@ const normalizeNodeVersion = (version) => {
         throw new TypeError("Expected a string Node.js version.");
     }
 
-    const trimmedVersion = version.trim().replace(/^v/iu, "");
+    const trimmedVersion = version.trim().replace(/^v/iv, "");
 
     if (!/^\d+\.\d+\.\d+$/v.test(trimmedVersion)) {
         throw new TypeError(

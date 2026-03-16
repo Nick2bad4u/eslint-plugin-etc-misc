@@ -1,3 +1,5 @@
+import { objectFromEntries, objectKeys, safeCastTo   } from "ts-extras";
+
 import { recommended } from "./recommended.js";
 
 type StrictConfig = {
@@ -8,11 +10,11 @@ type StrictRules = Readonly<{
     readonly [TRuleName in keyof typeof recommended.rules]: "error";
 }>;
 
-const recommendedRuleNames = Object.keys(
+const recommendedRuleNames = safeCastTo<readonly (keyof typeof recommended.rules)[]>(objectKeys(
     recommended.rules
-) as readonly (keyof typeof recommended.rules)[];
+));
 
-const strictRules = Object.fromEntries(
+const strictRules = objectFromEntries(
     recommendedRuleNames.map((ruleName) => [ruleName, "error"] as const)
 ) as StrictRules;
 

@@ -1,6 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import parser from "@typescript-eslint/parser";
+import { arrayFirst, arrayJoin, stringSplit   } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 import {
@@ -64,10 +65,8 @@ const stripLeadingAsterisk = (line: string): string => {
 };
 
 const normalizeBlockCommentContent = (content: string): string =>
-    content
-        .split("\n")
-        .map((line) => stripLeadingAsterisk(line))
-        .join("\n");
+    arrayJoin(stringSplit(content, "\n")
+        .map((line) => stripLeadingAsterisk(line)), "\n");
 
 const toLocCopy = (loc: Readonly<es.SourceLocation>): es.SourceLocation => ({
     end: loc.end,
@@ -151,7 +150,7 @@ const isTrivialProgram = (program: Readonly<es.Program>): boolean => {
 
     if (
         program.body.length === 1 &&
-        program.body[0]?.type === "LabeledStatement"
+        arrayFirst(program.body)?.type === "LabeledStatement"
     ) {
         return true;
     }

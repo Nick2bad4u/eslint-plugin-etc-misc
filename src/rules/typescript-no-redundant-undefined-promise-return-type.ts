@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { arrayAt, arrayFirst, arrayJoin, isEmpty    } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden" | "suggestRemoveRedundantUndefined";
@@ -29,13 +31,13 @@ const buildFixedTypeText = (
     }
 
     if (
-        nonUndefinedTypeTexts.length === 0 ||
+        isEmpty(nonUndefinedTypeTexts) ||
         nonUndefinedTypeTexts.length === unionType.types.length
     ) {
         return undefined;
     }
 
-    return nonUndefinedTypeTexts.join(" | ");
+    return arrayJoin(nonUndefinedTypeTexts, " | ");
 };
 
 const unwrapExpression = (
@@ -101,7 +103,7 @@ const isDefinitelyDefinedExpression = (
     }
 
     if (unwrappedExpression.type === "SequenceExpression") {
-        const lastExpression = unwrappedExpression.expressions.at(-1);
+        const lastExpression = arrayAt(unwrappedExpression.expressions, -1);
 
         return (
             lastExpression !== undefined &&
@@ -129,7 +131,7 @@ const hasDefinitelyDefinedReturnValue = (
         return false;
     }
 
-    const statement = body.body[0];
+    const statement = arrayFirst(body.body);
 
     if (statement === undefined) {
         return false;

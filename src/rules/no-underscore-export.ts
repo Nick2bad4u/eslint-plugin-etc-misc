@@ -1,16 +1,18 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { arrayJoin } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-const disallowedSelector = [
+const disallowedSelector = arrayJoin([
     "ExportNamedDeclaration > FunctionDeclaration > Identifier.id[name=/^_/u]",
     "ExportNamedDeclaration > TSDeclareFunction > Identifier.id[name=/^_/u]",
     "ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id[name=/^_/u]",
-].join(", ");
+], ", ");
 
 /**
  * Disallow named exports whose identifier starts with an underscore.

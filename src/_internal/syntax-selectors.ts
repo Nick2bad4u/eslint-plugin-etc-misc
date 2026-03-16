@@ -1,5 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { objectFromEntries } from "ts-extras";
+
 /**
  * Normalized selector entry used by syntax-based rules.
  */
@@ -56,7 +58,7 @@ export const buildRestrictedSyntaxListeners = (
     entries: readonly SyntaxSelectorEntry[],
     report: (node: Readonly<es.Node>, entry: SyntaxSelectorEntry) => void
 ): Readonly<Record<string, (node: Readonly<es.Node>) => void>> =>
-    Object.fromEntries(
+    objectFromEntries(
         entries.map((entry) => [
             entry.selector,
             (node: Readonly<es.Node>): void => {

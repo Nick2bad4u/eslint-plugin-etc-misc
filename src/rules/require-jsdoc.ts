@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { arrayLast } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 import {
     createReplacementRuleInfo,
@@ -33,8 +35,8 @@ const hasJSDocComment = (
     node: Readonly<es.Node>
 ): boolean => {
     const comments = sourceCode.getCommentsBefore(node);
-    // eslint-disable-next-line unicorn/prefer-at -- Node >=16.0 support baseline
-    const comment = comments[comments.length - 1];
+     
+    const comment = arrayLast(comments);
 
     return comment?.type === "Block" && comment.value.startsWith("*");
 };

@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { arrayFirst } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden" | "suggestAddThisVoid";
@@ -13,7 +15,7 @@ const createThisVoidSuggestionFix = (
     sourceCode: Readonly<TSESLint.SourceCode>,
     functionExpression: Readonly<es.FunctionExpression>
 ): TSESLint.ReportFixFunction | undefined => {
-    const firstParameter = functionExpression.params[0];
+    const firstParameter = arrayFirst(functionExpression.params);
 
     if (
         firstParameter?.type === "Identifier" &&

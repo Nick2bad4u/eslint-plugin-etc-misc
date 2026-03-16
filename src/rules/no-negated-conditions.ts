@@ -1,5 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { arrayJoin } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
@@ -23,7 +25,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     MessageIds
 >({
     create: (context) => ({
-        [disallowedSelectors.join(", ")]: (node: Readonly<es.Node>): void => {
+        [arrayJoin(disallowedSelectors, ", ")]: (node: Readonly<es.Node>): void => {
             context.report({
                 messageId: "forbidden",
                 node,

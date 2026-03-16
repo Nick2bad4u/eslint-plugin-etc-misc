@@ -1,5 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { arrayFirst } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
@@ -12,8 +14,8 @@ const toSafeStringLiteralText = (
     templateLiteral: Readonly<es.TemplateLiteral>
 ): string =>
     JSON.stringify(
-        templateLiteral.quasis[0]?.value.cooked ??
-            templateLiteral.quasis[0]?.value.raw ??
+        arrayFirst(templateLiteral.quasis)?.value.cooked ??
+            arrayFirst(templateLiteral.quasis)?.value.raw ??
             ""
     );
 

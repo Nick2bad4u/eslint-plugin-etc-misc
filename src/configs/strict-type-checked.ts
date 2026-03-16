@@ -1,5 +1,7 @@
 /* eslint-disable canonical/no-reassign-imports -- Flat-config strict type-checked preset intentionally inspects imported plugin rule metadata. */
 
+import { objectEntries, objectFromEntries  } from "ts-extras";
+
 import { rules as pluginRules } from "../rules.js";
 import { strict } from "./strict.js";
 
@@ -16,9 +18,9 @@ type StrictTypeCheckedConfig = {
     readonly rules: Readonly<Record<string, "error">>;
 };
 
-const strictRuleEntries = Object.entries(strict.rules);
+const strictRuleEntries = objectEntries(strict.rules);
 
-const additionalTypeCheckedRuleEntries = Object.entries(pluginRules)
+const additionalTypeCheckedRuleEntries = objectEntries(pluginRules)
     .flatMap(([ruleName, ruleModule]) => {
         if (ruleModule.meta.deprecated !== false) {
             return [];
@@ -44,7 +46,7 @@ const additionalTypeCheckedRuleEntries = Object.entries(pluginRules)
         leftRuleName.localeCompare(rightRuleName)
     );
 
-const strictTypeCheckedRules = Object.fromEntries([
+const strictTypeCheckedRules = objectFromEntries([
     ...strictRuleEntries,
     ...additionalTypeCheckedRuleEntries,
 ]) as Readonly<Record<string, "error">>;

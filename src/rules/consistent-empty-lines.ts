@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { arrayJoin, stringSplit  } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "inconsistent";
@@ -7,7 +9,7 @@ type MessageIds = "inconsistent";
 type Options = readonly [];
 
 const splitLines = (sourceText: string): readonly string[] =>
-    sourceText.split(/\r?\n/u);
+    stringSplit(sourceText, /\r?\n/u);
 
 const collapseEmptyLines = (sourceText: string): string => {
     const lines = splitLines(sourceText);
@@ -29,7 +31,7 @@ const collapseEmptyLines = (sourceText: string): string => {
         emptyRun += 1;
     }
 
-    return output.join("\n");
+    return arrayJoin(output, "\n");
 };
 
 const hasTooManyEmptyLines = (sourceText: string): boolean => {

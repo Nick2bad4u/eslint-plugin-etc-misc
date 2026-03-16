@@ -1,3 +1,5 @@
+import { arrayAt, arrayJoin, stringSplit   } from "ts-extras";
+
 import { splitIdentifierBlocks } from "./identifier-blocks.js";
 
 /**
@@ -9,9 +11,8 @@ const splitWords = (value: string): readonly string[] =>
     splitIdentifierBlocks(value).map((word) => word.toLowerCase());
 
 const toPascal = (value: string): string =>
-    splitWords(value)
-        .map((word) => `${word[0]?.toUpperCase() ?? ""}${word.slice(1)}`)
-        .join("");
+    arrayJoin(splitWords(value)
+        .map((word) => `${word[0]?.toUpperCase() ?? ""}${word.slice(1)}`), "");
 
 /**
  * Convert an input string into the requested casing format.
@@ -24,7 +25,7 @@ export const toCasing = (value: string, format: Casing): string => {
         }
 
         case "kebab-case": {
-            return splitWords(value).join("-");
+            return arrayJoin(splitWords(value), "-");
         }
 
         case "PascalCase": {
@@ -41,8 +42,8 @@ export const toCasing = (value: string, format: Casing): string => {
  * Extract the final filename segment without extension.
  */
 export const filenameStem = (filePath: string): string => {
-    const pathSegments = filePath.split(/[/\\]/u);
-    const lastPathSegment = pathSegments.at(-1) ?? filePath;
+    const pathSegments = stringSplit(filePath, /[/\\]/u);
+    const lastPathSegment = arrayAt(pathSegments, -1) ?? filePath;
 
     return lastPathSegment.replace(/\.[^./\\]+$/u, "");
 };

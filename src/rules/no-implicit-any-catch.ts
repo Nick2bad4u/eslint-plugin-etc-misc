@@ -7,6 +7,7 @@ import {
     ESLintUtils,
     type TSESLint,
 } from "@typescript-eslint/utils";
+import { arrayFirst } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -60,9 +61,9 @@ const isParenthesized = (
 
     return (
         tokenBefore.value === "(" &&
-        tokenBefore.range[1] <= node.range[0] &&
+        tokenBefore.range[1] <= arrayFirst(node.range) &&
         tokenAfter.value === ")" &&
-        tokenAfter.range[0] >= node.range[1]
+        arrayFirst(tokenAfter.range) >= node.range[1]
     );
 };
 

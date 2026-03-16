@@ -1,9 +1,10 @@
 import type { TSESLint } from "@typescript-eslint/utils";
+import type { UnknownArray } from "type-fest";
 
 // eslint-disable-next-line import-x/no-deprecated, sonarjs/deprecation -- ESLint currently exposes core rules through this compatibility entrypoint.
 import { builtinRules } from "eslint/use-at-your-own-risk";
 
-type RuleModule = TSESLint.RuleModule<string, readonly unknown[]>;
+type RuleModule = TSESLint.RuleModule<string, Readonly<UnknownArray>>;
 
 /**
  * Resolve a core ESLint rule module by rule ID.

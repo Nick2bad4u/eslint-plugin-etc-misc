@@ -2,6 +2,8 @@
 
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { arrayAt, arrayFirst, arrayJoin   } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "incorrectSorting";
@@ -25,7 +27,7 @@ const buildFix =
         sorted: readonly (es.Expression | es.SpreadElement)[]
     ): TSESLint.ReportFixFunction =>
     (fixer): TSESLint.RuleFix => {
-        const [first, last] = [node.elements[0], node.elements.at(-1)];
+        const [first, last] = [arrayFirst(node.elements), arrayAt(node.elements, -1)];
         if (
             first === null ||
             first === undefined ||
@@ -36,8 +38,8 @@ const buildFix =
         }
 
         return fixer.replaceTextRange(
-            [first.range[0], last.range[1]],
-            sorted.map((element) => sourceCode.getText(element)).join(", ")
+            [arrayFirst(first.range), last.range[1]],
+            arrayJoin(sorted.map((element) => sourceCode.getText(element)), ", ")
         );
     };
 

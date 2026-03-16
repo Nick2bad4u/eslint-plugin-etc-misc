@@ -1,5 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { arrayJoin } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 import {
     createReplacementRuleInfo,
@@ -10,10 +12,10 @@ type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-const selector = [
+const selector = arrayJoin([
     "PropertyDefinition[value.type='Literal'] > TSTypeAnnotation",
     "VariableDeclarator[init.type='Literal'] > Identifier.id > TSTypeAnnotation",
-].join(", ");
+], ", ");
 
 /**
  * Disallow explicit primitive type annotations when they are inferrable.

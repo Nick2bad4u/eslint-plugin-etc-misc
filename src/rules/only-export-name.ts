@@ -1,5 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { arrayFind } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
@@ -89,9 +91,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     return;
                 }
 
-                const disallowedName = exportedNames.find(
-                    (name) => !allowedNames.has(name)
-                );
+                const disallowedName = arrayFind(exportedNames, (name) => !allowedNames.has(name));
 
                 context.report({
                     data: {

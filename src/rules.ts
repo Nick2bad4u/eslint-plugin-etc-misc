@@ -1,4 +1,7 @@
 import type { TSESLint } from "@typescript-eslint/utils";
+import type { UnknownArray } from "type-fest";
+
+import { objectEntries, objectKeys, safeCastTo, setHas, objectFromEntries     } from "ts-extras";
 
 import type { RuleCatalogEntry } from "./_internal/rule-catalog.js";
 
@@ -147,7 +150,7 @@ type RuleDocsMetadata = {
     readonly url?: string;
 };
 
-type RuleModule = TSESLint.RuleModule<string, readonly unknown[]>;
+type RuleModule = TSESLint.RuleModule<string, Readonly<UnknownArray>>;
 
 const rulesWithRequiredTypeChecking = new Set<string>([
     "no-assign-mutated-array",
@@ -349,7 +352,7 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
     words: words,
 };
 
-const ruleCatalog = buildRuleCatalog(Object.keys(baseRules));
+const ruleCatalog = buildRuleCatalog(objectKeys(baseRules));
 
 /**
  * Globally ordered catalog entries for every rule.
@@ -379,9 +382,9 @@ const withCatalogDocsMetadata = (
         throw new Error(`Missing rule catalog entry for rule "${ruleName}".`);
     }
 
-    const currentDocsMetadata = (ruleModule.meta.docs ??
-        {}) as RuleDocsMetadata;
-    const hasRequiredTypeChecking = rulesWithRequiredTypeChecking.has(ruleName);
+    const currentDocsMetadata = safeCastTo<RuleDocsMetadata>(ruleModule.meta.docs ??
+        {});
+    const hasRequiredTypeChecking = setHas(rulesWithRequiredTypeChecking, ruleName);
     const deprecatedMetadata =
         ruleModule.meta.deprecated === undefined
             ? false
@@ -396,7 +399,7 @@ const withCatalogDocsMetadata = (
             currentDocsMetadata.frozen ??
             currentDocsMetadata.deprecated ??
             isDeprecatedRule,
-        recommended: recommendedRuleNames.has(ruleName),
+        recommended: setHas(recommendedRuleNames, ruleName),
         requiresTypeChecking:
             currentDocsMetadata.requiresTypeChecking ?? hasRequiredTypeChecking,
         ruleName,
@@ -412,14 +415,14 @@ const withCatalogDocsMetadata = (
     };
 };
 
-const decoratedRuleEntries = Object.entries(baseRules).map(
+const decoratedRuleEntries = objectEntries(baseRules).map(
     ([ruleName, ruleModule]) =>
         [ruleName, withCatalogDocsMetadata(ruleName, ruleModule)] as const
 );
 
-const decoratedRules = Object.fromEntries(decoratedRuleEntries) as Readonly<
+const decoratedRules = safeCastTo<Readonly<
     Record<string, RuleModule>
->;
+>>(objectFromEntries(decoratedRuleEntries));
 
 /**
  * Rule implementations keyed by rule name with normalized docs metadata.

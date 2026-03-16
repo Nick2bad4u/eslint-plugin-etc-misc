@@ -1,16 +1,18 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { arrayJoin, isEmpty  } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden" | "suggestRemoveRedundantUndefined";
 
 type Options = readonly [];
 
-const selector = [
+const selector = arrayJoin([
     "Identifier[optional=true] > TSTypeAnnotation > TSUnionType",
     "TSNamedTupleMember[optional=true] > TSUnionType",
     "TSOptionalType > TSUnionType",
-].join(", ");
+], ", ");
 
 const buildFixedTypeText = (
     sourceCode: Readonly<TSESLint.SourceCode>,
@@ -30,13 +32,13 @@ const buildFixedTypeText = (
     }
 
     if (
-        nonUndefinedTypeTexts.length === 0 ||
+        isEmpty(nonUndefinedTypeTexts) ||
         nonUndefinedTypeTexts.length === unionType.types.length
     ) {
         return undefined;
     }
 
-    return nonUndefinedTypeTexts.join(" | ");
+    return arrayJoin(nonUndefinedTypeTexts, " | ");
 };
 
 /**

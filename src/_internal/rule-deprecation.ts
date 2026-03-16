@@ -1,4 +1,5 @@
 import type { TSESLint } from "@typescript-eslint/utils";
+import type { UnknownArray } from "type-fest";
 
 type DeprecatedInfo = Exclude<
     TSESLint.RuleMetaData<string>["deprecated"],
@@ -12,7 +13,7 @@ type RuleDeprecationOptions = Readonly<{
     readonly ruleId: string;
 }>;
 
-type RuleModule = TSESLint.RuleModule<string, readonly unknown[]>;
+type RuleModule = TSESLint.RuleModule<string, Readonly<UnknownArray>>;
 
 const docsBaseUrl =
     "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules";

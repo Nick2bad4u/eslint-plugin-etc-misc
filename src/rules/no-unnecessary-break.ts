@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { arrayFirst } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden" | "suggestRemove";
@@ -24,14 +26,14 @@ const createTrailingBreakRemovalFix = (
 
     const leadingText = sourceCode.text.slice(
         previousToken.range[1],
-        node.range[0]
+        arrayFirst(node.range)
     );
     const leadingWhitespaceLength =
         /^[\t ]*/u.exec(leadingText)?.[0].length ?? 0;
 
     return (fixer) =>
         fixer.removeRange([
-            node.range[0] - leadingWhitespaceLength,
+            arrayFirst(node.range) - leadingWhitespaceLength,
             node.range[1],
         ]);
 };

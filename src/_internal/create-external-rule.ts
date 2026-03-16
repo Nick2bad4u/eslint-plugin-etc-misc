@@ -1,9 +1,12 @@
 import type { TSESLint } from "@typescript-eslint/utils";
+import type { UnknownArray, UnknownRecord  } from "type-fest";
 
-type RuleContext = TSESLint.RuleContext<string, readonly unknown[]>;
-type RuleModule = TSESLint.RuleModule<string, readonly unknown[]>;
+import { safeCastTo } from "ts-extras";
 
-type UnknownRecord = Readonly<Record<string, unknown>>;
+type RuleContext = TSESLint.RuleContext<string, Readonly<UnknownArray>>;
+type RuleModule = TSESLint.RuleModule<string, Readonly<UnknownArray>>;
+
+type UnknownRecord = Readonly<UnknownRecord>;
 
 const isObjectRecord = (value: unknown): value is UnknownRecord =>
     typeof value === "object" && value !== null;
@@ -11,7 +14,7 @@ const isObjectRecord = (value: unknown): value is UnknownRecord =>
 const hasCreateFunction = (
     value: unknown
 ): value is Readonly<{ readonly create: RuleModule["create"] }> =>
-    isObjectRecord(value) && typeof value["create"] === "function";
+    isObjectRecord(value) && typeof value.create === "function";
 
 const createLegacyContextCompat = (context: RuleContext): RuleContext => {
     const contextRecord = context as RuleContext & UnknownRecord;
@@ -47,13 +50,13 @@ export const getExternalRuleFromPlugin = (
     ruleName: string,
     pluginName: string
 ): unknown => {
-    if (!isObjectRecord(plugin) || !isObjectRecord(plugin["rules"])) {
+    if (!isObjectRecord(plugin) || !isObjectRecord(plugin.rules)) {
         throw new TypeError(
             `Plugin "${pluginName}" does not expose a valid rules map.`
         );
     }
 
-    const rules = plugin["rules"];
+    const rules = plugin.rules;
     if (!Object.hasOwn(rules, ruleName)) {
         throw new Error(
             `Rule "${ruleName}" was not found in plugin "${pluginName}".`
@@ -75,11 +78,11 @@ export const adaptExternalRule = (
     }
 
     const externalRuleRecord = externalRule as UnknownRecord;
-    const externalMeta = isObjectRecord(externalRuleRecord["meta"])
-        ? externalRuleRecord["meta"]
+    const externalMeta = isObjectRecord(externalRuleRecord.meta)
+        ? externalRuleRecord.meta
         : {};
-    const externalDocs = isObjectRecord(externalMeta["docs"])
-        ? externalMeta["docs"]
+    const externalDocs = isObjectRecord(externalMeta.docs)
+        ? externalMeta.docs
         : {};
     const create: RuleModule["create"] = (context) =>
         externalRule.create(createLegacyContextCompat(context));
@@ -87,8 +90,8 @@ export const adaptExternalRule = (
     return {
         ...(externalRuleRecord as unknown as RuleModule),
         create,
-        defaultOptions: Array.isArray(externalRuleRecord["defaultOptions"])
-            ? (externalRuleRecord["defaultOptions"] as readonly unknown[])
+        defaultOptions: Array.isArray(externalRuleRecord.defaultOptions)
+            ? (safeCastTo<Readonly<UnknownArray>>(externalRuleRecord.defaultOptions))
             : [],
         meta: {
             ...(externalMeta as unknown as RuleModule["meta"]),

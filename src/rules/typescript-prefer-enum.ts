@@ -3,6 +3,7 @@ import {
     isTypeFlagSet,
 } from "@typescript-eslint/type-utils";
 import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
+import { arrayFirst } from "ts-extras";
 import * as tsutils from "tsutils";
 import ts from "typescript";
 
@@ -114,10 +115,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     return;
                 }
 
-                const signature = getConstrainedTypeAtLocation(
+                const signature = arrayFirst(getConstrainedTypeAtLocation(
                     parserServices,
                     functionNode
-                ).getCallSignatures()[0];
+                ).getCallSignatures());
                 const returnType =
                     signature === undefined
                         ? undefined

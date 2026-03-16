@@ -1,3 +1,5 @@
+import { safeCastTo } from "ts-extras";
+
 import { type Casing, filenameStem, toCasing } from "../_internal/casing.js";
 import { ruleCreator } from "../_internal/rule-creator.js";
 import {
@@ -14,7 +16,7 @@ type Options = readonly [
 ];
 
 const defaultOptions = {
-    format: "kebab-case" as Casing,
+    format: safeCastTo<Casing>("kebab-case"),
 };
 
 /**

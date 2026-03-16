@@ -1,15 +1,17 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { arrayJoin } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-const selector = [
+const selector = arrayJoin([
     "TSPropertySignature[optional=true] > TSTypeAnnotation > TSLiteralType > Literal[value=true]",
     "TSPropertySignature[optional=true] > TSTypeAnnotation > TSLiteralType > Literal[value=false]",
-].join(", ");
+], ", ");
 
 /**
  * Disallow optional boolean literal property types.

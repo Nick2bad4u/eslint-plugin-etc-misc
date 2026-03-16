@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { arrayJoin, stringSplit  } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
@@ -7,7 +9,7 @@ type MessageIds = "forbidden";
 type Options = readonly [];
 
 const splitLines = (sourceText: string): readonly string[] =>
-    sourceText.split(/\r?\n/u);
+    stringSplit(sourceText, /\r?\n/u);
 
 const hasBlankLine = (text: string): boolean =>
     splitLines(text).some((line) => line.trim().length === 0);
@@ -15,7 +17,7 @@ const hasBlankLine = (text: string): boolean =>
 const normalizeExpressionSource = (sourceText: string): string => {
     const lines = splitLines(sourceText).map((line) => line.trimEnd());
 
-    return lines.filter((line) => line.trim().length > 0).join("\n");
+    return arrayJoin(lines.filter((line) => line.trim().length > 0), "\n");
 };
 
 const createFix =

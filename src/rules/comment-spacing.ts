@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { arrayFirst } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "invalidSpacing";
@@ -27,13 +29,13 @@ const buildFix =
     (fixer): TSESLint.RuleFix => {
         const textBetween = sourceCode.text.slice(
             comment.range[1],
-            nextNode.range[0]
+            arrayFirst(nextNode.range)
         );
         const lineEnding = textBetween.includes("\r\n") ? "\r\n" : "\n";
         const indentation = " ".repeat(nextNode.loc.start.column);
 
         return fixer.replaceTextRange(
-            [comment.range[1], nextNode.range[0]],
+            [comment.range[1], arrayFirst(nextNode.range)],
             `${lineEnding.repeat(expected + 1)}${indentation}`
         );
     };

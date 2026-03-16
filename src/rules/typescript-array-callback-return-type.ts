@@ -6,6 +6,7 @@ import {
     isTypeArrayTypeOrUnionOfArrayTypes,
 } from "@typescript-eslint/type-utils";
 import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
+import { arrayFirst } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -49,7 +50,7 @@ const isFirstCallbackArgument = (
     callback:
         | Readonly<es.ArrowFunctionExpression>
         | Readonly<es.FunctionExpression>
-): boolean => callExpression.arguments[0] === callback;
+): boolean => arrayFirst(callExpression.arguments) === callback;
 
 /**
  * Require explicit return types for array callback functions.

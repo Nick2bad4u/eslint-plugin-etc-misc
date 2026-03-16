@@ -1,6 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { resolve } from "node:path";
+import { isEmpty } from "ts-extras";
 
 import { type Casing, filenameStem, toCasing } from "../_internal/casing.js";
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -81,7 +82,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 const matching = exports.filter(
                     (entry) => entry.name === expected
                 );
-                if (matching.length === 0 || exports.length <= 1) {
+                if (isEmpty(matching) || exports.length <= 1) {
                     return;
                 }
 

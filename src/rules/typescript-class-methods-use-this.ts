@@ -1,5 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { arrayAt, objectEntries  } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 import {
     createReplacementRuleInfo,
@@ -22,7 +24,7 @@ const containsThisExpression = (root: Readonly<es.Node>): boolean => {
     };
 
     while (stack.length > 0) {
-        const node = stack.at(-1);
+        const node = arrayAt(stack, -1);
         stack = stack.slice(0, -1);
         if (node === undefined) {
             continue;
@@ -32,7 +34,7 @@ const containsThisExpression = (root: Readonly<es.Node>): boolean => {
             return true;
         }
 
-        for (const [key, child] of Object.entries(node)) {
+        for (const [key, child] of objectEntries(node)) {
             if (key === "loc" || key === "parent" || key === "range") {
                 continue;
             }

@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { arrayFirst } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
@@ -21,7 +23,7 @@ const getUndefinedInitializationRemovalRange = (
         return undefined;
     }
 
-    let fixStartIndex = equalsToken.range[0];
+    let fixStartIndex = arrayFirst(equalsToken.range);
     const sourceText = sourceCode.text;
 
     while (fixStartIndex > 0) {

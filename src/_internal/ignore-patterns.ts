@@ -1,6 +1,8 @@
 /**
  * Compiled ignore-pattern result grouped by mode with invalid entries tracked.
  */
+import { objectEntries } from "ts-extras";
+
 export type CompiledIgnorePatterns = Readonly<{
     readonly invalidPatterns: readonly string[];
     readonly patterns: IgnorePatternBuckets;
@@ -33,7 +35,7 @@ export const compileIgnorePatterns = (
     let pathPatterns: readonly RegExp[] = [];
     let invalidPatterns: readonly string[] = [];
 
-    for (const [pattern, mode] of Object.entries(ignored)) {
+    for (const [pattern, mode] of objectEntries(ignored)) {
         try {
             const regularExpression = new RegExp(pattern, "u");
             if (mode === "name") {

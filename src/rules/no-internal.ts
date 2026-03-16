@@ -1,6 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { ESLintUtils } from "@typescript-eslint/utils";
+import { isEmpty } from "ts-extras";
 
 import {
     compileIgnorePatterns,
@@ -74,7 +75,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     typeChecker,
                     "internal"
                 );
-                if (internalComments.length === 0) {
+                if (isEmpty(internalComments)) {
                     return;
                 }
 

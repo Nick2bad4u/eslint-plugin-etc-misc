@@ -1,6 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { getConstrainedTypeAtLocation } from "@typescript-eslint/type-utils";
+import { arrayJoin } from "ts-extras";
 
 type JsDocTagInfo = Readonly<{
     readonly name: string;
@@ -74,9 +75,8 @@ const normalizeTagComment = (
         return normalized.length > 0 ? normalized : undefined;
     }
 
-    const normalized = text
-        .map((part) => part.text)
-        .join("")
+    const normalized = arrayJoin(text
+        .map((part) => part.text), "")
         .replaceAll(/\s+/gu, " ")
         .trim();
 

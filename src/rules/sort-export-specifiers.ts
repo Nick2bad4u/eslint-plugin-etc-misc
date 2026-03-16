@@ -2,6 +2,8 @@
 
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { arrayJoin } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "incorrectSortingOrder";
@@ -26,7 +28,7 @@ const buildFix = (
             node.specifiers[node.specifiers.length - 1]?.range[1] ??
                 node.range[1],
         ],
-        sorted.map((specifier) => sourceCode.getText(specifier)).join(", ")
+        arrayJoin(sorted.map((specifier) => sourceCode.getText(specifier)), ", ")
     );
 
 /**

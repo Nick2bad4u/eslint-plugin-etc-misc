@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { arrayFirst } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden" | "suggestRemoveConst";
@@ -60,7 +62,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                               }
 
                               return fixer.removeRange([
-                                  constToken.range[0],
+                                  arrayFirst(constToken.range),
                                   removeEnd,
                               ]);
                           };

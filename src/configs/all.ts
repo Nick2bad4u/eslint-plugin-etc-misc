@@ -1,5 +1,7 @@
 /* eslint-disable canonical/no-reassign-imports -- Rule entry map intentionally references imported plugin rules object. */
 
+import { objectEntries, objectFromEntries  } from "ts-extras";
+
 import { rules as pluginRules } from "../rules.js";
 
 type AllConfig = {
@@ -18,12 +20,12 @@ const getAllPresetSeverity = (
     return ruleModule.meta.type === "problem" ? "error" : "warn";
 };
 
-const allRuleEntries = Object.entries(pluginRules).map(
+const allRuleEntries = objectEntries(pluginRules).map(
     ([ruleName, ruleModule]) =>
         [`etc-misc/${ruleName}`, getAllPresetSeverity(ruleModule)] as const
 );
 
-const allRules = Object.fromEntries(allRuleEntries) as Readonly<
+const allRules = objectFromEntries(allRuleEntries) as Readonly<
     Record<string, RuleSeverity>
 >;
 
