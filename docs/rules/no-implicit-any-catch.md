@@ -37,13 +37,13 @@ narrowing before property access.
 
 ```ts
 Promise.reject(new Error("Boom")).catch((error) => {
-  console.error(error);
+ console.error(error);
 });
 ```
 
 ```ts
 Promise.reject(new Error("Boom")).catch((error: any) => {
-  console.error(error);
+ console.error(error);
 });
 ```
 
@@ -51,9 +51,9 @@ Promise.reject(new Error("Boom")).catch((error: any) => {
 
 ```ts
 Promise.reject(new Error("Boom")).catch((error: unknown) => {
-  if (error instanceof Error) {
-    console.error(error.message);
-  }
+ if (error instanceof Error) {
+  console.error(error.message);
+ }
 });
 ```
 
@@ -68,16 +68,16 @@ narrowed annotations, a safe suggestion is provided instead of forced rewrite.
 
 ```ts
 type Options = [
-  {
-    allowExplicitAny?: boolean;
-  }?,
+ {
+  allowExplicitAny?: boolean;
+ }?,
 ];
 ```
 
 Default:
 
 ```ts
-[{}]
+[{}];
 ```
 
 ### `allowExplicitAny`
@@ -89,17 +89,17 @@ rejection callbacks.
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-  {
-    plugins: { "etc-misc": etcMisc },
-    rules: {
-      "etc-misc/no-implicit-any-catch": [
-        "error",
-        {
-          allowExplicitAny: true,
-        },
-      ],
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-implicit-any-catch": [
+    "error",
+    {
+     allowExplicitAny: true,
     },
+   ],
   },
+ },
 ];
 ```
 
@@ -107,17 +107,17 @@ export default [
 
 ```ts
 Promise.resolve(1).then(
-  (value) => value,
-  (error: string) => {
-    console.error(error);
-  }
+ (value) => value,
+ (error: string) => {
+  console.error(error);
+ }
 );
 // ❌ reported as narrowed type, with suggestion to use unknown
 
 Promise.resolve(1).catch((error: unknown) => {
-  if (error instanceof Error) {
-    console.error(error.message);
-  }
+ if (error instanceof Error) {
+  console.error(error.message);
+ }
 });
 // ✅ valid
 ```
@@ -128,12 +128,12 @@ Promise.resolve(1).catch((error: unknown) => {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-implicit-any-catch": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-implicit-any-catch": "error",
+  },
+ },
 ];
 ```
 

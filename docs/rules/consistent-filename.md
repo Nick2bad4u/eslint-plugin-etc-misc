@@ -54,16 +54,18 @@ It reports only and does not provide an autofix.
 
 ```ts
 type Options = [
-    {
-        format?: "camelCase" | "kebab-case" | "PascalCase";
-    },
+ {
+  format?: "camelCase" | "kebab-case" | "PascalCase";
+ },
 ];
 ```
 
 Default:
 
 ```ts
-{ format: "kebab-case" }
+{
+ format: "kebab-case";
+}
 ```
 
 ### Status
@@ -86,12 +88,12 @@ Use the **Deprecated** section above for lifecycle details.
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/consistent-filename": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/consistent-filename": "error",
+  },
+ },
 ];
 ```
 

@@ -22,7 +22,7 @@ makes migration toward ESM import style easier.
 
 ```ts
 function loadPath() {
-    return require("node:path");
+ return require("node:path");
 }
 ```
 
@@ -32,7 +32,7 @@ function loadPath() {
 const path = require("node:path");
 
 function loadPath() {
-    return path;
+ return path;
 }
 ```
 
@@ -60,12 +60,12 @@ logger.info(os.platform());
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/prefer-const-require": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/prefer-const-require": "error",
+  },
+ },
 ];
 ```
 

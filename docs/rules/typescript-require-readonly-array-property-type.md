@@ -28,11 +28,11 @@ mutation through references that are passed around the codebase.
 
 ```ts
 interface Config {
-    values: string[];
+ values: string[];
 }
 
 type ApiConfig = {
-    values: Array<string> | null;
+ values: Array<string> | null;
 };
 ```
 
@@ -40,11 +40,11 @@ type ApiConfig = {
 
 ```ts
 interface Config {
-    values: readonly string[];
+ values: readonly string[];
 }
 
 type ApiConfig = {
-    values: ReadonlyArray<string> | null;
+ values: ReadonlyArray<string> | null;
 };
 ```
 
@@ -64,12 +64,12 @@ This rule has no options.
 
 ```ts
 interface Config {
-    values: Promise<string[]>;
+ values: Promise<string[]>;
 }
 // ✅ valid (nested generic type is out of scope)
 
 type Settings = {
-    values: { nested: string[] };
+ values: { nested: string[] };
 };
 // ✅ valid (nested property type is out of scope)
 ```
@@ -80,12 +80,12 @@ type Settings = {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/require-readonly-array-property-type": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/require-readonly-array-property-type": "error",
+  },
+ },
 ];
 ```
 

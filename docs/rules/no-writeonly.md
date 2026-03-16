@@ -18,9 +18,9 @@ Write-only properties hide state flow and make object behavior harder to debug.
 
 ```ts
 const state = {
-    set value(next: number) {
-        this._value = next;
-    },
+ set value(next: number) {
+  this._value = next;
+ },
 };
 ```
 
@@ -28,13 +28,13 @@ const state = {
 
 ```ts
 const state = {
-    _value: 0,
-    get value() {
-        return this._value;
-    },
-    set value(next: number) {
-        this._value = next;
-    },
+ _value: 0,
+ get value() {
+  return this._value;
+ },
+ set value(next: number) {
+  this._value = next;
+ },
 };
 ```
 
@@ -46,22 +46,22 @@ This rule forwards options and behavior to ESLint core `accessor-pairs`.
 
 ```ts
 class Box {
-    set value(next: number) {
-        this._value = next;
-    }
+ set value(next: number) {
+  this._value = next;
+ }
 }
 // ❌ reported
 
 class BoxFixed {
-    _value = 0;
+ _value = 0;
 
-    get value() {
-        return this._value;
-    }
+ get value() {
+  return this._value;
+ }
 
-    set value(next: number) {
-        this._value = next;
-    }
+ set value(next: number) {
+  this._value = next;
+ }
 }
 // ✅ valid
 ```
@@ -72,12 +72,12 @@ class BoxFixed {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-writeonly": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-writeonly": "error",
+  },
+ },
 ];
 ```
 

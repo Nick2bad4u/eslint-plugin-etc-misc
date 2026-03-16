@@ -16,25 +16,20 @@ This rule reports expression statements whose inner source text contains empty l
 
 ## Why this rule exists
 
-Blank lines *inside* a single expression usually come from accidental edits and
+Blank lines _inside_ a single expression usually come from accidental edits and
 make statement boundaries harder to read. Normalizing these expressions reduces
 formatting noise.
 
 ## ❌ Incorrect
 
 ```ts
-someCall(
-
-    1
-);
+someCall(1);
 ```
 
 ## ✅ Correct
 
 ```ts
-someCall(
-    1
-);
+someCall(1);
 ```
 
 ## Behavior and migration notes
@@ -52,16 +47,13 @@ This rule has no options.
 
 ```ts
 doWork(
-    value,
+ value,
 
-    nextValue
+ nextValue
 );
 // ❌ reported
 
-doWork(
-    value,
-    nextValue
-);
+doWork(value, nextValue);
 // ✅ valid
 ```
 
@@ -71,12 +63,12 @@ doWork(
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-expression-empty-lines": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-expression-empty-lines": "error",
+  },
+ },
 ];
 ```
 

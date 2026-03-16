@@ -23,7 +23,7 @@ generic type parameters.
 
 ```ts
 function toUpper<T>(value: string): string {
-    return value.toUpperCase();
+ return value.toUpperCase();
 }
 ```
 
@@ -31,7 +31,7 @@ function toUpper<T>(value: string): string {
 
 ```ts
 function identity<T>(value: T): T {
-    return value;
+ return value;
 }
 ```
 
@@ -49,12 +49,12 @@ This rule forwards options to
 
 ```ts
 function parse<T extends string>(input: string): string {
-    return input.trim();
+ return input.trim();
 }
 // ❌ reported: generic does not add a relation
 
 function first<T>(items: readonly T[]): T | undefined {
-    return items[0];
+ return items[0];
 }
 // ✅ valid: generic ties parameter and return type
 ```
@@ -65,12 +65,12 @@ function first<T>(items: readonly T[]): T | undefined {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-useless-generics": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-useless-generics": "error",
+  },
+ },
 ];
 ```
 

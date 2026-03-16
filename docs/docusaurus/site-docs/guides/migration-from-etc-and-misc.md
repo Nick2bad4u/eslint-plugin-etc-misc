@@ -31,13 +31,13 @@ import etc from "eslint-plugin-etc";
 import misc from "eslint-plugin-misc";
 
 export default [
-    {
-        plugins: { etc, misc },
-        rules: {
-            "etc/no-internal": "error",
-            "misc/no-t": "error",
-        },
-    },
+ {
+  plugins: { etc, misc },
+  rules: {
+   "etc/no-internal": "error",
+   "misc/no-t": "error",
+  },
+ },
 ];
 ```
 

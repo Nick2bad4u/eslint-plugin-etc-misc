@@ -34,11 +34,11 @@ to read.
 
 ```ts
 interface User {
-    name?: string | undefined;
+ name?: string | undefined;
 }
 
 class Config {
-    timeoutMs?: number | undefined;
+ timeoutMs?: number | undefined;
 }
 ```
 
@@ -46,11 +46,11 @@ class Config {
 
 ```ts
 interface User {
-    name?: string;
+ name?: string;
 }
 
 class Config {
-    timeoutMs?: number;
+ timeoutMs?: number;
 }
 ```
 
@@ -68,12 +68,12 @@ This rule has no options.
 
 ```ts
 type Options = {
-    verbose?: boolean | undefined;
+ verbose?: boolean | undefined;
 };
 // ❌ reported
 
 type OptionsFixed = {
-    verbose?: boolean;
+ verbose?: boolean;
 };
 // ✅ valid
 ```
@@ -84,12 +84,12 @@ type OptionsFixed = {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/consistent-optional-props": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/consistent-optional-props": "error",
+  },
+ },
 ];
 ```
 

@@ -24,9 +24,9 @@ static methods or standalone functions.
 
 ```ts
 class C {
-    method() {
-        return 1;
-    }
+ method() {
+  return 1;
+ }
 }
 ```
 
@@ -34,17 +34,17 @@ class C {
 
 ```ts
 class C {
-    method() {
-        return this;
-    }
+ method() {
+  return this;
+ }
 }
 ```
 
 ```ts
 class C {
-    method(this: void) {
-        return 1;
-    }
+ method(this: void) {
+  return 1;
+ }
 }
 ```
 
@@ -74,13 +74,13 @@ Use the **Deprecated** section above for lifecycle details.
 
 ```ts
 class Service {
-    static create() {
-        return new Service();
-    }
+ static create() {
+  return new Service();
+ }
 
-    run() {
-        return this;
-    }
+ run() {
+  return this;
+ }
 }
 // ✅ static methods are outside this rule; instance method uses this
 ```
@@ -91,12 +91,12 @@ class Service {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/class-methods-use-this": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/class-methods-use-this": "error",
+  },
+ },
 ];
 ```
 

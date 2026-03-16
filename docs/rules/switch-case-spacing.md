@@ -25,8 +25,8 @@ visually consistent.
 
 ```ts
 switch (x) {
-    case 1:
-        foo();
+ case 1:
+  foo();
 }
 ```
 
@@ -34,9 +34,9 @@ switch (x) {
 
 ```ts
 switch (x) {
-    case 1: {
-        foo();
-    }
+ case 1: {
+  foo();
+ }
 }
 ```
 
@@ -65,13 +65,15 @@ Use the **Deprecated** section above for lifecycle details.
 
 ```ts
 switch (status) {
-    case "ok": doWork(); break;
-    // ❌ first statement is on same line as `case`
+ case "ok":
+  doWork();
+  break;
+ // ❌ first statement is on same line as `case`
 
-    case "done":
-        doWork();
-        break;
-    // ✅ valid
+ case "done":
+  doWork();
+  break;
+ // ✅ valid
 }
 ```
 
@@ -81,12 +83,12 @@ switch (status) {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/switch-case-spacing": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/switch-case-spacing": "error",
+  },
+ },
 ];
 ```
 

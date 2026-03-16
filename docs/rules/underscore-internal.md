@@ -35,8 +35,8 @@ export function parseSecret(): void {}
 
 ```ts
 export interface Thing {
-    /** @internal */
-    compute(): number;
+ /** @internal */
+ compute(): number;
 }
 ```
 
@@ -49,8 +49,8 @@ export function _parseSecret(): void {}
 
 ```ts
 export interface Thing {
-    /** @internal */
-    _compute(): number;
+ /** @internal */
+ _compute(): number;
 }
 ```
 
@@ -83,12 +83,12 @@ export const _token = "x";
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/underscore-internal": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/underscore-internal": "error",
+  },
+ },
 ];
 ```
 

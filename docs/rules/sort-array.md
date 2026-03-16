@@ -25,13 +25,21 @@ faster during code review.
 ## ❌ Incorrect
 
 ```ts
-const statuses = ["pending", "active", "archived"];
+const statuses = [
+ "pending",
+ "active",
+ "archived",
+];
 ```
 
 ## ✅ Correct
 
 ```ts
-const statuses = ["active", "archived", "pending"];
+const statuses = [
+ "active",
+ "archived",
+ "pending",
+];
 ```
 
 ## Behavior and migration notes
@@ -61,12 +69,12 @@ const dynamic = [prefix, "alpha"];
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/sort-array": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/sort-array": "error",
+  },
+ },
 ];
 ```
 

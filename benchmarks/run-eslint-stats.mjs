@@ -990,9 +990,9 @@ if (compareArgument !== undefined) {
     if (baselineScenarioMap === null) {
         console.warn(
             `\n${pc.yellow("No baseline benchmark report found at")}` +
-            ` ${pc.magenta(comparePath)}. ${pc.yellow(
-                "Skipping comparison."
-            )}`
+                ` ${pc.magenta(comparePath)}. ${pc.yellow(
+                    "Skipping comparison."
+                )}`
         );
     } else {
         const comparisonRows = toComparisonRows(
@@ -1002,7 +1002,7 @@ if (compareArgument !== undefined) {
         if (comparisonRows.length === 0) {
             console.warn(
                 `\n${pc.yellow("No matching scenario names were found in")}` +
-                ` ${pc.magenta(comparePath)}.`
+                    ` ${pc.magenta(comparePath)}.`
             );
         } else {
             console.log(
@@ -1021,5 +1021,5 @@ await writeFile(outputPath, `${JSON.stringify(report, null, 2)}\n`, "utf8");
 
 console.log(
     `\n${pc.green("✓ Wrote benchmark stats to")}` +
-    ` ${pc.bold(pc.magenta(outputPath))}`
+        ` ${pc.bold(pc.magenta(outputPath))}`
 );

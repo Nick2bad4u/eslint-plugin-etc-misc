@@ -1,5 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { isDefined } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 import {
     createReplacementRuleInfo,
@@ -50,7 +52,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             let hasPreviousName = false;
             for (const member of members) {
                 const currentName = memberName(member);
-                if (currentName === undefined) {
+                if (!isDefined(currentName)) {
                     continue;
                 }
 

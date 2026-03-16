@@ -10,7 +10,7 @@ Use this preset when you want the `recommended` baseline without the
 ## Config key
 
 ```ts
-etcMisc.configs.minimal
+etcMisc.configs.minimal;
 ```
 
 ## Flat Config example

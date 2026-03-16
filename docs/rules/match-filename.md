@@ -57,13 +57,13 @@ once naming conventions are stable.
 
 ```ts
 type Options = [
-    {
-        format?: "camelCase" | "kebab-case" | "PascalCase";
-        match?: boolean;
-        prefix?: string;
-        selector?: string | string[];
-        suffix?: string;
-    },
+ {
+  format?: "camelCase" | "kebab-case" | "PascalCase";
+  match?: boolean;
+  prefix?: string;
+  selector?: string | string[];
+  suffix?: string;
+ },
 ];
 ```
 
@@ -88,12 +88,12 @@ export function userService() {}
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/match-filename": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/match-filename": "error",
+  },
+ },
 ];
 ```
 

@@ -63,12 +63,12 @@ Object.assign(readonlyTarget, { value: 2 });
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/no-unsafe-object-assignment": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/no-unsafe-object-assignment": "error",
+  },
+ },
 ];
 ```
 

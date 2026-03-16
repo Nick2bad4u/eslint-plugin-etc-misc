@@ -24,7 +24,7 @@ constraints, or over-narrowed generics.
 
 ```ts
 const fail = (): never => {
-    throw new Error("x");
+ throw new Error("x");
 };
 
 const result = fail();
@@ -51,7 +51,7 @@ This rule has no options.
 
 ```ts
 function assertNever(_value: never): never {
-    throw new Error("unexpected");
+ throw new Error("unexpected");
 }
 
 type NeverAlias = never;
@@ -64,12 +64,12 @@ type NeverAlias = never;
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/no-never": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/no-never": "error",
+  },
+ },
 ];
 ```
 

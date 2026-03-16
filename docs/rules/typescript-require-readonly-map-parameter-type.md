@@ -29,7 +29,7 @@ function loadIndex(index: Map<string, number>): void {}
 const resolver = (index: Map<string, number> | null) => index;
 
 class Registry {
-    constructor(private readonly table: Map<string, string>) {}
+ constructor(private readonly table: Map<string, string>) {}
 }
 ```
 
@@ -41,7 +41,7 @@ function loadIndex(index: ReadonlyMap<string, number>): void {}
 const resolver = (index: ReadonlyMap<string, number> | null) => index;
 
 class Registry {
-    constructor(private readonly table: ReadonlyMap<string, string>) {}
+ constructor(private readonly table: ReadonlyMap<string, string>) {}
 }
 ```
 
@@ -69,12 +69,12 @@ function configure(index?: ReadonlyMap<string, number>): void {}
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/require-readonly-map-parameter-type": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/require-readonly-map-parameter-type": "error",
+  },
+ },
 ];
 ```
 
@@ -91,7 +91,7 @@ already enforce a broader readonly parameter policy via type-aware linting.
 
 ## Further reading
 
-- [TypeScript: ReadonlyMap<K, V>](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+- [TypeScript: ReadonlyMap\<K, V>](https://www.typescriptlang.org/docs/handbook/utility-types.html)
 
 ## Adoption resources
 

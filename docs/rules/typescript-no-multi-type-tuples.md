@@ -58,12 +58,12 @@ type PairFixed = [Value, boolean];
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/no-multi-type-tuples": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/no-multi-type-tuples": "error",
+  },
+ },
 ];
 ```
 

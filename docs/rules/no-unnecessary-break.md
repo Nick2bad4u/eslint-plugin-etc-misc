@@ -23,10 +23,10 @@ keeps `switch` blocks smaller and easier to scan.
 
 ```ts
 switch (x) {
-    case 1:
-        break;
-    case 2:
-        break;
+ case 1:
+  break;
+ case 2:
+  break;
 }
 ```
 
@@ -34,9 +34,9 @@ switch (x) {
 
 ```ts
 switch (x) {
-    case 1:
-        break;
-    case 2:
+ case 1:
+  break;
+ case 2:
 }
 ```
 
@@ -55,12 +55,12 @@ This rule has no options.
 
 ```ts
 switch (status) {
-    case "ok":
-        handleOk();
-        break;
-    default:
-        handleDefault();
-        break; // ❌ unnecessary (last case)
+ case "ok":
+  handleOk();
+  break;
+ default:
+  handleDefault();
+  break; // ❌ unnecessary (last case)
 }
 ```
 
@@ -70,12 +70,12 @@ switch (status) {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-unnecessary-break": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-unnecessary-break": "error",
+  },
+ },
 ];
 ```
 

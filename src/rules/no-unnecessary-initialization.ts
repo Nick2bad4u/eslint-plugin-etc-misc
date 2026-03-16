@@ -1,6 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
-import { arrayFirst } from "ts-extras";
+import { arrayFirst, isDefined } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -55,7 +55,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     node
                 );
 
-                if (removalRange === undefined) {
+                if (!isDefined(removalRange)) {
                     return;
                 }
 

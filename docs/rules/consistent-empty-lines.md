@@ -31,7 +31,6 @@ reduces noisy formatting diffs.
 ```ts
 const first = 1;
 
-
 const second = 2;
 ```
 
@@ -61,9 +60,9 @@ This rule has no options.
 
 ```ts
 function run(): void {
-    stepOne();
+ stepOne();
 
-    stepTwo();
+ stepTwo();
 }
 ```
 
@@ -73,12 +72,12 @@ function run(): void {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/consistent-empty-lines": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/consistent-empty-lines": "error",
+  },
+ },
 ];
 ```
 

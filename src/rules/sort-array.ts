@@ -2,7 +2,13 @@
 
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
-import { arrayAt, arrayFirst, arrayJoin   } from "ts-extras";
+import {
+    arrayAt,
+    arrayFirst,
+    arrayJoin,
+    isDefined,
+    isPresent,
+} from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -27,19 +33,20 @@ const buildFix =
         sorted: readonly (es.Expression | es.SpreadElement)[]
     ): TSESLint.ReportFixFunction =>
     (fixer): TSESLint.RuleFix => {
-        const [first, last] = [arrayFirst(node.elements), arrayAt(node.elements, -1)];
-        if (
-            first === null ||
-            first === undefined ||
-            last === null ||
-            last === undefined
-        ) {
+        const [first, last] = [
+            arrayFirst(node.elements),
+            arrayAt(node.elements, -1),
+        ];
+        if (!isPresent(first) || !isPresent(last)) {
             return fixer.replaceText(node, sourceCode.getText(node));
         }
 
         return fixer.replaceTextRange(
             [arrayFirst(first.range), last.range[1]],
-            arrayJoin(sorted.map((element) => sourceCode.getText(element)), ", ")
+            arrayJoin(
+                sorted.map((element) => sourceCode.getText(element)),
+                ", "
+            )
         );
     };
 
@@ -65,7 +72,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             const sortKeys = elements.map((element) =>
                 getSortableValue(element)
             );
-            if (sortKeys.includes(undefined)) {
+            if (sortKeys.some((sortKey) => !isDefined(sortKey))) {
                 return;
             }
 

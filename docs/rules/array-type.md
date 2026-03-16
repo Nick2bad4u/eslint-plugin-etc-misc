@@ -53,12 +53,12 @@ type ValuesFixed = string[];
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/array-type": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/array-type": "error",
+  },
+ },
 ];
 ```
 

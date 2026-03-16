@@ -50,8 +50,8 @@ It reports only and does not provide an autofix.
 
 ```ts
 type Options = {
-    allow?: string[];
-    disallow?: string[];
+ allow?: string[];
+ disallow?: string[];
 };
 ```
 
@@ -61,7 +61,7 @@ Use `allow` for specific exceptions:
 
 ```ts
 {
-    allow: ["../allowed-source"]
+ allow: ["../allowed-source"];
 }
 ```
 
@@ -86,15 +86,15 @@ import mod from "@/shared/mod";
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-relative-parent-import": [
-                "error",
-                { allow: ["../allowed-source"] },
-            ],
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-relative-parent-import": [
+    "error",
+    { allow: ["../allowed-source"] },
+   ],
+  },
+ },
 ];
 ```
 

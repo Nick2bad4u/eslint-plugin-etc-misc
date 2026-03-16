@@ -59,12 +59,12 @@ When this rule reports `canReplace`, replacing the type parameter with `unknown`
 
 ```ts
 function wrap<T extends string>(value: T): void {
-    console.log(value);
+ console.log(value);
 }
 // ❌ reported with `canReplace`: `T` can be replaced with `string`
 
 function pair<T>(left: T, right: T): [T, T] {
-    return [left, right];
+ return [left, right];
 }
 // ✅ valid: `T` meaningfully relates parameters and return type
 ```
@@ -75,12 +75,12 @@ function pair<T>(left: T, right: T): [T, T] {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-misused-generics": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-misused-generics": "error",
+  },
+ },
 ];
 ```
 

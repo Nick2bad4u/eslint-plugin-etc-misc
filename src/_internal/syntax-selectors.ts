@@ -1,6 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
-import { objectFromEntries } from "ts-extras";
+import { isDefined, keyIn } from "ts-extras";
 
 /**
  * Normalized selector entry used by syntax-based rules.
@@ -25,7 +25,7 @@ const isSelectorObject = (
 ): value is Readonly<{
     readonly message?: string;
     readonly selector: string;
-}> => typeof value === "object" && value !== null && "selector" in value;
+}> => typeof value === "object" && value !== null && keyIn(value, "selector");
 
 /**
  * Normalize a selector option into a selector entry object.
@@ -34,7 +34,7 @@ export const normalizeSyntaxSelector = (
     selector: SyntaxSelectorOption
 ): SyntaxSelectorEntry => {
     if (isSelectorObject(selector)) {
-        if (selector.message === undefined) {
+        if (!isDefined(selector.message)) {
             return {
                 selector: selector.selector,
             };
@@ -57,12 +57,15 @@ export const normalizeSyntaxSelector = (
 export const buildRestrictedSyntaxListeners = (
     entries: readonly SyntaxSelectorEntry[],
     report: (node: Readonly<es.Node>, entry: SyntaxSelectorEntry) => void
-): Readonly<Record<string, (node: Readonly<es.Node>) => void>> =>
-    objectFromEntries(
-        entries.map((entry) => [
-            entry.selector,
-            (node: Readonly<es.Node>): void => {
-                report(node, entry);
-            },
-        ])
-    );
+): Readonly<Record<string, (node: Readonly<es.Node>) => void>> => {
+    // eslint-disable-next-line etc-misc/typescript/prefer-readonly-record -- Local builder object is mutated during listener collection before returning readonly view.
+    const listeners: Record<string, (node: Readonly<es.Node>) => void> = {};
+
+    for (const entry of entries) {
+        listeners[entry.selector] = (node: Readonly<es.Node>): void => {
+            report(node, entry);
+        };
+    }
+
+    return listeners;
+};

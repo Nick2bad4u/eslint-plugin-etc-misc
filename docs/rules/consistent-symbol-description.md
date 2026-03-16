@@ -62,12 +62,12 @@ const bad = Symbol("Cache_Key");
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/consistent-symbol-description": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/consistent-symbol-description": "error",
+  },
+ },
 ];
 ```
 

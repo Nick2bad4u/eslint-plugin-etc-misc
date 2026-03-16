@@ -1,6 +1,6 @@
 /* eslint-disable canonical/no-reassign-imports -- Flat-config strict type-checked preset intentionally inspects imported plugin rule metadata. */
 
-import { objectEntries, objectFromEntries  } from "ts-extras";
+import { keyIn, objectEntries, objectFromEntries } from "ts-extras";
 
 import { rules as pluginRules } from "../rules.js";
 import { strict } from "./strict.js";
@@ -18,38 +18,33 @@ type StrictTypeCheckedConfig = {
     readonly rules: Readonly<Record<string, "error">>;
 };
 
-const strictRuleEntries = objectEntries(strict.rules);
+const additionalTypeCheckedRuleEntries: readonly (readonly [
+    string,
+    "error",
+])[] = objectEntries(pluginRules).flatMap(([ruleName, ruleModule]) => {
+    if (ruleModule.meta.deprecated !== false) {
+        return [];
+    }
 
-const additionalTypeCheckedRuleEntries = objectEntries(pluginRules)
-    .flatMap(([ruleName, ruleModule]) => {
-        if (ruleModule.meta.deprecated !== false) {
-            return [];
-        }
+    const docsMetadata = ruleModule.meta.docs as RuleDocsMetadata | undefined;
 
-        const docsMetadata = ruleModule.meta.docs as
-            | RuleDocsMetadata
-            | undefined;
+    if (docsMetadata?.requiresTypeChecking !== true) {
+        return [];
+    }
 
-        if (docsMetadata?.requiresTypeChecking !== true) {
-            return [];
-        }
+    const qualifiedRuleName = `etc-misc/${ruleName}`;
 
-        const qualifiedRuleName = `etc-misc/${ruleName}`;
+    if (keyIn(strict.rules, qualifiedRuleName)) {
+        return [];
+    }
 
-        if (qualifiedRuleName in strict.rules) {
-            return [];
-        }
+    return [[qualifiedRuleName, "error"] as const];
+});
 
-        return [[qualifiedRuleName, "error"] as const];
-    })
-    .toSorted(([leftRuleName], [rightRuleName]) =>
-        leftRuleName.localeCompare(rightRuleName)
-    );
-
-const strictTypeCheckedRules = objectFromEntries([
-    ...strictRuleEntries,
-    ...additionalTypeCheckedRuleEntries,
-]) as Readonly<Record<string, "error">>;
+const strictTypeCheckedRules = {
+    ...strict.rules,
+    ...objectFromEntries(additionalTypeCheckedRuleEntries),
+} satisfies Readonly<Record<string, "error">>;
 
 /**
  * Strict preset augmented with every non-deprecated rule that requires type

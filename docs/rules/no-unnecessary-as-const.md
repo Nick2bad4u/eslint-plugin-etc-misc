@@ -9,7 +9,7 @@ are likely redundant:
 
 - `{} as const` in variable initializers, and
 - any `as const` initializer when the variable already has an explicit type
-annotation.
+  annotation.
 
 This is intentionally narrow and does not report every possible redundant
 `as const` usage.
@@ -52,7 +52,7 @@ This rule has no options.
 
 ```ts
 const options: Readonly<Record<string, string>> = {
-    mode: "strict",
+ mode: "strict",
 } as const;
 // ❌ reported because variable already has explicit type annotation
 
@@ -66,12 +66,12 @@ const tuple = ["a", "b"] as const;
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-unnecessary-as-const": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-unnecessary-as-const": "error",
+  },
+ },
 ];
 ```
 

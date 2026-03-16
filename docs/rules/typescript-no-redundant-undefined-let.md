@@ -76,12 +76,12 @@ let output: string | undefined = maybe;
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/no-redundant-undefined-let": "warn",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/no-redundant-undefined-let": "warn",
+  },
+ },
 ];
 ```
 

@@ -66,12 +66,12 @@ export default class UserService {}
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/class-match-filename": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/class-match-filename": "error",
+  },
+ },
 ];
 ```
 

@@ -1,5 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { isDefined } from "ts-extras";
+
 import {
     getImportSourceFromNode,
     shouldReportImportSource,
@@ -51,7 +53,7 @@ const createImportVisitors = (
     "ImportDeclaration, ExportNamedDeclaration[source], ExportAllDeclaration, ImportExpression":
         (node: Readonly<es.Node>): void => {
             const sourceText = getImportSourceFromNode(node);
-            if (sourceText === undefined) {
+            if (!isDefined(sourceText)) {
                 return;
             }
 

@@ -24,11 +24,11 @@ and helps avoid accidental mutation through shared set-like data.
 
 ```ts
 interface Config {
-    values: Set<string>;
+ values: Set<string>;
 }
 
 type ApiConfig = {
-    values: Set<string> | null;
+ values: Set<string> | null;
 };
 ```
 
@@ -36,11 +36,11 @@ type ApiConfig = {
 
 ```ts
 interface Config {
-    values: ReadonlySet<string>;
+ values: ReadonlySet<string>;
 }
 
 type ApiConfig = {
-    values: ReadonlySet<string> | null;
+ values: ReadonlySet<string> | null;
 };
 ```
 
@@ -56,12 +56,12 @@ This rule is autofixable and also provides suggestions.
 
 ```ts
 interface Config {
-    values: Promise<Set<string>>;
+ values: Promise<Set<string>>;
 }
 // ✅ valid (nested generic type is out of scope)
 
 type Settings = {
-    values: { nested: Set<string> };
+ values: { nested: Set<string> };
 };
 // ✅ valid (nested property type is out of scope)
 ```
@@ -72,12 +72,12 @@ type Settings = {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/require-readonly-set-property-type": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/require-readonly-set-property-type": "error",
+  },
+ },
 ];
 ```
 

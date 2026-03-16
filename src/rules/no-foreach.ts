@@ -6,6 +6,7 @@ import {
     isTypeArrayTypeOrUnionOfArrayTypes,
 } from "@typescript-eslint/type-utils";
 import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
+import { setHas } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -46,7 +47,7 @@ const matchesConfiguredCollectionType = (
     type: Readonly<ts.Type>,
     configuredTypeNames: ReadonlySet<string>
 ): boolean => {
-    if (configuredTypeNames.has("Array")) {
+    if (setHas(configuredTypeNames, "Array")) {
         const apparentType = typeChecker.getApparentType(type);
 
         if (

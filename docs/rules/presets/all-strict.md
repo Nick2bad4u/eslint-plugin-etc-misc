@@ -10,7 +10,7 @@ surface.
 ## Config key
 
 ```ts
-etcMisc.configs.allStrict
+etcMisc.configs.allStrict;
 ```
 
 ## Flat Config example

@@ -3,6 +3,7 @@ import type { UnknownArray } from "type-fest";
 
 // eslint-disable-next-line import-x/no-deprecated, sonarjs/deprecation -- ESLint currently exposes core rules through this compatibility entrypoint.
 import { builtinRules } from "eslint/use-at-your-own-risk";
+import { isDefined } from "ts-extras";
 
 type RuleModule = TSESLint.RuleModule<string, Readonly<UnknownArray>>;
 
@@ -12,7 +13,7 @@ type RuleModule = TSESLint.RuleModule<string, Readonly<UnknownArray>>;
 export const getCoreRule = (ruleId: string): RuleModule => {
     // eslint-disable-next-line @typescript-eslint/no-deprecated, import-x/no-deprecated, sonarjs/deprecation -- ESLint currently exposes core rule modules through this entrypoint.
     const coreRule = builtinRules.get(ruleId);
-    if (coreRule === undefined) {
+    if (!isDefined(coreRule)) {
         throw new Error(`Missing core ESLint rule "${ruleId}".`);
     }
 

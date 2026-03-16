@@ -26,7 +26,7 @@ custom rules.
 ```ts
 // config: { selectors: ["WithStatement"] }
 with (obj) {
-    doWork();
+ doWork();
 }
 ```
 
@@ -55,9 +55,9 @@ It reports only and does not provide an autofix.
 
 ```ts
 type Options = [
-    {
-        selectors?: Array<string | { message?: string; selector: string }>;
-    },
+ {
+  selectors?: Array<string | { message?: string; selector: string }>;
+ },
 ];
 ```
 
@@ -90,12 +90,12 @@ eval("2 + 2");
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/no-restricted-syntax": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/no-restricted-syntax": "error",
+  },
+ },
 ];
 ```
 

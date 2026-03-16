@@ -12,7 +12,7 @@ It reports:
 
 - single-character names (for example `T`, `K`, `U`), and
 - names with two or more characters that do not start with configured `prefix`
-(when `prefix` is set).
+  (when `prefix` is set).
 
 ## What this rule reports
 
@@ -29,7 +29,7 @@ maintenance.
 
 ```ts
 function identity<T>(value: T): T {
-    return value;
+ return value;
 }
 ```
 
@@ -37,7 +37,7 @@ function identity<T>(value: T): T {
 
 ```ts
 function identity<ValueType>(value: ValueType): ValueType {
-    return value;
+ return value;
 }
 ```
 
@@ -52,16 +52,16 @@ in touched code paths.
 
 ```ts
 type Options = [
-    {
-        prefix?: string;
-    }?,
+ {
+  prefix?: string;
+ }?,
 ];
 ```
 
 ### Default configuration
 
 ```ts
-[{}]
+[{}];
 ```
 
 ### `prefix`
@@ -81,12 +81,12 @@ Example configuration:
 ```ts
 // config: { prefix: "Type" }
 function map<TypeInput, TypeOutput>(value: TypeInput): TypeOutput {
-    return value as unknown as TypeOutput;
+ return value as unknown as TypeOutput;
 }
 // ✅ valid
 
 function map<Input, Output>(value: Input): Output {
-    return value as unknown as Output;
+ return value as unknown as Output;
 }
 // ❌ reported because names do not start with "Type"
 ```
@@ -97,12 +97,12 @@ function map<Input, Output>(value: Input): Output {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-t": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-t": "error",
+  },
+ },
 ];
 ```
 

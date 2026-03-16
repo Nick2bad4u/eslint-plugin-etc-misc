@@ -22,13 +22,13 @@ especially when assertions are involved.
 ## ❌ Incorrect
 
 ```ts
-const value = (() => 1) as (() => number);
+const value = (() => 1) as () => number;
 ```
 
 ## ✅ Correct
 
 ```ts
-const value: () => number = (() => 1) as (() => number);
+const value: () => number = (() => 1) as () => number;
 ```
 
 ## Behavior and migration notes
@@ -45,18 +45,18 @@ This rule has no options.
 
 ```ts
 const model = {
-    run() {
-        return 1;
-    },
+ run() {
+  return 1;
+ },
 } as {
-    run(): number;
+ run(): number;
 };
 // ❌ reported without an explicit declarator annotation
 
 const typedModel: { run(): number } = {
-    run() {
-        return 1;
-    },
+ run() {
+  return 1;
+ },
 };
 // ✅ valid
 ```
@@ -67,12 +67,12 @@ const typedModel: { run(): number } = {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/no-complex-declarator-type": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/no-complex-declarator-type": "error",
+  },
+ },
 ];
 ```
 

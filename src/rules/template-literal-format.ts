@@ -1,6 +1,12 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
-import { arrayFirst, arrayJoin, isEmpty, stringSplit    } from "ts-extras";
+import {
+    arrayFirst,
+    arrayJoin,
+    arrayLast,
+    isEmpty,
+    stringSplit,
+} from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -15,34 +21,38 @@ const hasExpectedBoundaryNewlines = (
     node: Readonly<es.TemplateLiteral>
 ): boolean => {
     const first = arrayFirst(node.quasis)?.value.raw ?? "";
-    // eslint-disable-next-line unicorn/prefer-at -- Node >=16.0 support baseline
-    const last = node.quasis[node.quasis.length - 1]?.value.raw ?? "";
+    const last = arrayLast(node.quasis)?.value.raw ?? "";
 
     return first.startsWith("\n") && last.endsWith("\n");
 };
 
 const normalizeTemplate = (sourceText: string): string => {
-    const lines = stringSplit(sourceText, /\r?\n/u);
+    const lines = stringSplit(sourceText.replaceAll(/\r\n?/gu, "\n"), "\n");
     const contentLines = lines.slice(1, -1);
     const indents = contentLines
         .filter((line) => line.trim().length > 0)
         .map((line) => /^\s*/u.exec(line)?.[0].length ?? 0);
     const minIndent = isEmpty(indents) ? 0 : Math.min(...indents);
 
-    const normalizedContent = arrayJoin(contentLines
-        .map((line) =>
-            line.length >= minIndent ? line.slice(minIndent) : line
-        )
-        .map((line) => `  ${line}`), "\n");
+    const normalizedContent = arrayJoin(
+        contentLines
+            .map((line) =>
+                line.length >= minIndent ? line.slice(minIndent) : line
+            )
+            .map((line) => `  ${line}`),
+        "\n"
+    );
 
-    // eslint-disable-next-line unicorn/prefer-at -- Node >=16.0 support baseline
-    const lastLine = lines[lines.length - 1] ?? "";
+    const lastLine = arrayLast(lines) ?? "";
 
-    return arrayJoin([
-        arrayFirst(lines),
-        normalizedContent,
-        lastLine,
-    ], "\n");
+    return arrayJoin(
+        [
+            arrayFirst(lines),
+            normalizedContent,
+            lastLine,
+        ],
+        "\n"
+    );
 };
 
 const buildFix =

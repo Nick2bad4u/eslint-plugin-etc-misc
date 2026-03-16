@@ -19,13 +19,22 @@ comparisons.
 ## ❌ Incorrect
 
 ```ts
-const hasValue = [1, 2, 3].indexOf(2) !== -1;
+const hasValue =
+ [
+  1,
+  2,
+  3,
+ ].indexOf(2) !== -1;
 ```
 
 ## ✅ Correct
 
 ```ts
-const hasValue = [1, 2, 3].includes(2);
+const hasValue = [
+ 1,
+ 2,
+ 3,
+].includes(2);
 ```
 
 ## Behavior and migration notes
@@ -53,12 +62,12 @@ const hasName2 = names.includes("alice");
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/prefer-includes": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/prefer-includes": "error",
+  },
+ },
 ];
 ```
 

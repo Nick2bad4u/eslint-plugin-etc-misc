@@ -22,8 +22,8 @@ For interface-compatible shapes, interfaces can provide clearer extension patter
 
 ```ts
 type Person = {
-    name: string;
-    age: number;
+ name: string;
+ age: number;
 };
 ```
 
@@ -35,14 +35,14 @@ type Comparator<T> = (left: T, right: T) => number;
 
 ```ts
 interface Person {
-    name: string;
-    age: number;
+ name: string;
+ age: number;
 }
 ```
 
 ```ts
 interface Comparator<T> {
-    (left: T, right: T): number;
+ (left: T, right: T): number;
 }
 ```
 
@@ -59,17 +59,17 @@ Use instead: [`@typescript-eslint/consistent-type-definitions`](https://typescri
 
 ```ts
 type Options = [
-    {
-        allowIntersection?: boolean;
-        allowLocal?: boolean;
-    }?,
+ {
+  allowIntersection?: boolean;
+  allowLocal?: boolean;
+ }?,
 ];
 ```
 
 ### Default configuration
 
 ```ts
-[{}]
+[{}];
 ```
 
 Effective behavior with defaults:
@@ -89,11 +89,11 @@ With `allowIntersection: false`:
 
 ```ts
 interface Name {
-    name: string;
+ name: string;
 }
 
 interface Age {
-    age: number;
+ age: number;
 }
 
 type User = Name & Age;
@@ -103,11 +103,11 @@ is converted to:
 
 ```ts
 interface Name {
-    name: string;
+ name: string;
 }
 
 interface Age {
-    age: number;
+ age: number;
 }
 
 interface User extends Name, Age {}
@@ -119,18 +119,18 @@ interface User extends Name, Age {}
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/prefer-interface": [
+    "error",
     {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/prefer-interface": [
-                "error",
-                {
-                    allowIntersection: false,
-                    allowLocal: true,
-                },
-            ],
-        },
+     allowIntersection: false,
+     allowLocal: true,
     },
+   ],
+  },
+ },
 ];
 ```
 

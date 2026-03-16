@@ -1,6 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
-import { arrayFirst } from "ts-extras";
+import { arrayFirst, isDefined } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -18,7 +18,7 @@ const createTrailingBreakRemovalFix = (
     const previousTokenLine = previousToken?.loc.end.line;
     const breakLine = node.loc.start.line;
     const shouldRemoveLeadingWhitespace =
-        previousTokenLine !== undefined && previousTokenLine === breakLine;
+        isDefined(previousTokenLine) && previousTokenLine === breakLine;
 
     if (previousToken === null || !shouldRemoveLeadingWhitespace) {
         return (fixer) => fixer.remove(node);

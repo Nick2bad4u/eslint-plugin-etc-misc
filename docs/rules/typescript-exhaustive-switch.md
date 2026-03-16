@@ -21,10 +21,10 @@ A required `default` branch reduces accidental non-exhaustive control flow.
 
 ```ts
 switch (x) {
-    case 1:
-        break;
-    case 2:
-        break;
+ case 1:
+  break;
+ case 2:
+  break;
 }
 ```
 
@@ -32,10 +32,10 @@ switch (x) {
 
 ```ts
 switch (x) {
-    case 1:
-        break;
-    default:
-        break;
+ case 1:
+  break;
+ default:
+  break;
 }
 ```
 
@@ -65,16 +65,16 @@ Use the **Deprecated** section above for lifecycle details.
 
 ```ts
 switch (status) {
-    case "ready":
-        return 1;
+ case "ready":
+  return 1;
 }
 // ✅ valid (single branch switch is outside this rule)
 
 switch (status) {
-    case "ready":
-        return 1;
-    case "done":
-        return 2;
+ case "ready":
+  return 1;
+ case "done":
+  return 2;
 }
 // ❌ reported: multiple branches and no default
 ```
@@ -85,12 +85,12 @@ switch (status) {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/exhaustive-switch": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/exhaustive-switch": "error",
+  },
+ },
 ];
 ```
 

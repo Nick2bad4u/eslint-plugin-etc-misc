@@ -19,11 +19,11 @@ mutation of dictionary-like objects.
 
 ```ts
 interface UserLookup {
-    [id: string]: User;
+ [id: string]: User;
 }
 
 type CountByKey = {
-    [key: string]: number;
+ [key: string]: number;
 };
 ```
 
@@ -31,11 +31,11 @@ type CountByKey = {
 
 ```ts
 interface UserLookup {
-    readonly [id: string]: User;
+ readonly [id: string]: User;
 }
 
 type CountByKey = {
-    readonly [key: string]: number;
+ readonly [key: string]: number;
 };
 ```
 
@@ -48,12 +48,12 @@ index signature.
 
 ```ts
 type Cache = {
-    [name: string]: string;
+ [name: string]: string;
 };
 // ❌ reported
 
 type CacheView = {
-    readonly [name: string]: string;
+ readonly [name: string]: string;
 };
 // ✅ valid
 ```
@@ -64,12 +64,12 @@ type CacheView = {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/prefer-readonly-index-signature": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/prefer-readonly-index-signature": "error",
+  },
+ },
 ];
 ```
 

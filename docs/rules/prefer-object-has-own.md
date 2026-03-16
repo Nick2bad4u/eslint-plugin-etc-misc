@@ -52,12 +52,12 @@ Object.hasOwn(config, "port");
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/prefer-object-has-own": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/prefer-object-has-own": "error",
+  },
+ },
 ];
 ```
 

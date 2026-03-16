@@ -23,12 +23,12 @@ low-ambiguity style.
 
 ```ts
 const handlers = {
-    onClick() {
-        return "clicked";
-    },
-    onHover: function () {
-        return "hovered";
-    },
+ onClick() {
+  return "clicked";
+ },
+ onHover: function () {
+  return "hovered";
+ },
 };
 ```
 
@@ -36,11 +36,11 @@ const handlers = {
 
 ```ts
 const handlers = {
-    onClick: () => "clicked",
-    onHover: () => "hovered",
-    withThis(this: void) {
-        return "ok";
-    },
+ onClick: () => "clicked",
+ onHover: () => "hovered",
+ withThis(this: void) {
+  return "ok";
+ },
 };
 ```
 
@@ -56,17 +56,17 @@ uses method-style `this`, keep it as a method and annotate `this` explicitly.
 
 ```ts
 const formatter = {
-    prefix: "#",
-    format(this: { prefix: string }, value: number) {
-        return `${this.prefix}${value}`;
-    },
+ prefix: "#",
+ format(this: { prefix: string }, value: number) {
+  return `${this.prefix}${value}`;
+ },
 };
 // ✅ valid: explicit `this` parameter is allowed by this rule
 
 const formatter2 = {
-    format(value: number) {
-        return String(value);
-    },
+ format(value: number) {
+  return String(value);
+ },
 };
 // ❌ reported
 ```
@@ -77,12 +77,12 @@ const formatter2 = {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/prefer-arrow-function-property": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/prefer-arrow-function-property": "error",
+  },
+ },
 ];
 ```
 

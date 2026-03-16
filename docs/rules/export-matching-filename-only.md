@@ -58,16 +58,18 @@ enabling this rule at `error`.
 
 ```ts
 type Options = [
-    {
-        format?: "camelCase" | "kebab-case" | "PascalCase";
-    },
+ {
+  format?: "camelCase" | "kebab-case" | "PascalCase";
+ },
 ];
 ```
 
 Default:
 
 ```ts
-{ format: "PascalCase" }
+{
+ format: "PascalCase";
+}
 ```
 
 ## Additional examples
@@ -85,12 +87,12 @@ export { userService };
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/export-matching-filename-only": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/export-matching-filename-only": "error",
+  },
+ },
 ];
 ```
 

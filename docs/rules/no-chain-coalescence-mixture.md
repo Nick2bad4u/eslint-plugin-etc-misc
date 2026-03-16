@@ -63,12 +63,12 @@ const titleSafe = maybeTitle ?? "Untitled";
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-chain-coalescence-mixture": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-chain-coalescence-mixture": "error",
+  },
+ },
 ];
 ```
 

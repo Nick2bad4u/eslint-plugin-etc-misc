@@ -291,18 +291,18 @@ const formatReplacement = (replacement) => {
 
     const displayName =
         typeof normalizedPluginName === "string" &&
-            typeof normalizedRuleName === "string"
+        typeof normalizedRuleName === "string"
             ? normalizedPluginName === normalizedRuleName ||
-                normalizedPluginName.endsWith(`/${normalizedRuleName}`)
+              normalizedPluginName.endsWith(`/${normalizedRuleName}`)
                 ? normalizedPluginName
                 : normalizedRuleName.startsWith(`${normalizedPluginName}/`)
-                    ? normalizedRuleName
-                    : `${normalizedPluginName}/${normalizedRuleName}`
+                  ? normalizedRuleName
+                  : `${normalizedPluginName}/${normalizedRuleName}`
             : typeof normalizedRuleName === "string"
-                ? normalizedRuleName
-                : typeof normalizedPluginName === "string"
-                    ? normalizedPluginName
-                    : "replacement";
+              ? normalizedRuleName
+              : typeof normalizedPluginName === "string"
+                ? normalizedPluginName
+                : "replacement";
     const replacementUrl = replacement.rule?.url ?? replacement.plugin?.url;
 
     if (typeof replacementUrl === "string" && replacementUrl.length > 0) {
@@ -319,7 +319,7 @@ const formatReplacement = (replacement) => {
  */
 const getDeprecatedIndicator = (ruleModule) =>
     ruleModule.meta?.deprecated === undefined ||
-        ruleModule.meta?.deprecated === false
+    ruleModule.meta?.deprecated === false
         ? "—"
         : "⚠️";
 

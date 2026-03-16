@@ -1,8 +1,8 @@
+import { objectEntries } from "ts-extras";
+
 /**
  * Compiled ignore-pattern result grouped by mode with invalid entries tracked.
  */
-import { objectEntries } from "ts-extras";
-
 export type CompiledIgnorePatterns = Readonly<{
     readonly invalidPatterns: readonly string[];
     readonly patterns: IgnorePatternBuckets;

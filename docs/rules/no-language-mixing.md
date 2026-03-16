@@ -59,12 +59,12 @@ const mixed = `пользовательId42`;
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-language-mixing": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-language-mixing": "error",
+  },
+ },
 ];
 ```
 

@@ -8,10 +8,13 @@ type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-const selector = arrayJoin([
-    ":not(TSTypeOperator[operator='readonly']) > :matches(TSArrayType, TSTupleType)",
-    "TSTypeReference > Identifier[name='Array']",
-], ", ");
+const selector = arrayJoin(
+    [
+        ":not(TSTypeOperator[operator='readonly']) > :matches(TSArrayType, TSTupleType)",
+        "TSTypeReference > Identifier[name='Array']",
+    ],
+    ", "
+);
 
 /**
  * Require readonly array and tuple type annotations.

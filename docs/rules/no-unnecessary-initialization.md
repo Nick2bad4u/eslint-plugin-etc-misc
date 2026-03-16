@@ -25,7 +25,7 @@ Removing these initializers makes intent clearer and avoids unnecessary syntax.
 ```ts
 const value = undefined;
 class C {
-    field = undefined;
+ field = undefined;
 }
 ```
 
@@ -34,7 +34,7 @@ class C {
 ```ts
 let value: number | undefined;
 class C {
-    field?: number;
+ field?: number;
 }
 ```
 
@@ -64,12 +64,12 @@ let cache: string | undefined;
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-unnecessary-initialization": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-unnecessary-initialization": "error",
+  },
+ },
 ];
 ```
 

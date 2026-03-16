@@ -64,12 +64,12 @@ type Users = [id: string, name: string];
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/consistent-array-type-name": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/consistent-array-type-name": "error",
+  },
+ },
 ];
 ```
 

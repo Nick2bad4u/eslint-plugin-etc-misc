@@ -64,12 +64,12 @@ export const _apiToken = "x";
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-underscore-export": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-underscore-export": "error",
+  },
+ },
 ];
 ```
 

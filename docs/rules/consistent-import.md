@@ -20,7 +20,7 @@ It distinguishes five styles:
 This rule reports imports whose style does not match the expected style.
 
 - Without options, the first import style seen for a given module source becomes
-the expected style for subsequent imports from that same source.
+  the expected style for subsequent imports from that same source.
 - With `style`, all imports must match the configured style globally.
 
 ## Why this rule exists
@@ -61,9 +61,9 @@ cleanup) before promoting from `warn` to `error`.
 
 ```ts
 type Options = [
-    {
-        style?: "default" | "mixed" | "named" | "namespace" | "side-effect";
-    },
+ {
+  style?: "default" | "mixed" | "named" | "namespace" | "side-effect";
+ },
 ];
 ```
 
@@ -72,7 +72,7 @@ type Options = [
 ### Default configuration
 
 ```ts
-[{}]
+[{}];
 ```
 
 When `style` is omitted, the first seen import style for each module source is
@@ -98,12 +98,12 @@ import "reflect-metadata";
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/consistent-import": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/consistent-import": "error",
+  },
+ },
 ];
 ```
 

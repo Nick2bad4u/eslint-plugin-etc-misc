@@ -3,9 +3,9 @@ title: Docs Site Is Online
 slug: docs-site-online
 authors: nick
 tags:
-    - docs
-    - docusaurus
-    - release
+ - docs
+ - docusaurus
+ - release
 ---
 
 The Docusaurus site is now live with:

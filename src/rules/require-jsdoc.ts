@@ -1,6 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
-import { arrayLast } from "ts-extras";
+import { arrayLast, setHas } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 import {
@@ -35,7 +35,7 @@ const hasJSDocComment = (
     node: Readonly<es.Node>
 ): boolean => {
     const comments = sourceCode.getCommentsBefore(node);
-     
+
     const comment = arrayLast(comments);
 
     return comment?.type === "Block" && comment.value.startsWith("*");
@@ -67,7 +67,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 
         return {
             ClassDeclaration: (node: Readonly<es.ClassDeclaration>): void => {
-                if (!kinds.has("class") || node.id === null) {
+                if (!setHas(kinds, "class") || node.id === null) {
                     return;
                 }
 
@@ -76,7 +76,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             FunctionDeclaration: (
                 node: Readonly<es.FunctionDeclaration>
             ): void => {
-                if (!kinds.has("function") || node.id === null) {
+                if (!setHas(kinds, "function") || node.id === null) {
                     return;
                 }
 
@@ -84,7 +84,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             },
             MethodDefinition: (node: Readonly<es.MethodDefinition>): void => {
                 if (
-                    !kinds.has("method") ||
+                    !setHas(kinds, "method") ||
                     node.kind === "constructor" ||
                     node.key.type !== "Identifier"
                 ) {
@@ -96,7 +96,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             "TSTypeAliasDeclaration, TSInterfaceDeclaration": (
                 node: Readonly<es.Node>
             ): void => {
-                if (!kinds.has("type")) {
+                if (!setHas(kinds, "type")) {
                     return;
                 }
 
@@ -111,7 +111,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 node: Readonly<es.VariableDeclarator>
             ): void => {
                 if (
-                    !kinds.has("arrow-function") ||
+                    !setHas(kinds, "arrow-function") ||
                     node.id.type !== "Identifier" ||
                     node.init?.type !== "ArrowFunctionExpression" ||
                     node.parent.type !== "VariableDeclaration" ||

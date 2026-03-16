@@ -51,12 +51,12 @@ throw new TypeError("invalid");
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/throw-new-error": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/throw-new-error": "error",
+  },
+ },
 ];
 ```
 

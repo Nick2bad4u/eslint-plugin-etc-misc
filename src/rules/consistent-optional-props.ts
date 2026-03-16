@@ -1,6 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
-import { arrayJoin, isEmpty  } from "ts-extras";
+import { arrayJoin, isDefined, isEmpty } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -8,10 +8,13 @@ type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-const selector = arrayJoin([
-    "TSPropertySignature[optional=true] > TSTypeAnnotation > TSUnionType",
-    "PropertyDefinition[optional=true] > TSTypeAnnotation > TSUnionType",
-], ", ");
+const selector = arrayJoin(
+    [
+        "TSPropertySignature[optional=true] > TSTypeAnnotation > TSUnionType",
+        "PropertyDefinition[optional=true] > TSTypeAnnotation > TSUnionType",
+    ],
+    ", "
+);
 
 const buildOptionalUnionFixText = (
     sourceCode: Readonly<TSESLint.SourceCode>,
@@ -60,7 +63,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     sourceCode,
                     node
                 );
-                if (fixedTypeText === undefined) {
+                if (!isDefined(fixedTypeText)) {
                     return;
                 }
 

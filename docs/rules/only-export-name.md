@@ -46,7 +46,9 @@ export const value = 1;
 with options:
 
 ```ts
-{ names: ["value"] }
+{
+ names: ["value"];
+}
 ```
 
 ## Behavior and migration notes
@@ -60,7 +62,7 @@ explicitly allowed.
 
 ```ts
 type Options = {
-    names?: string[];
+ names?: string[];
 };
 ```
 
@@ -91,12 +93,12 @@ export { buildClient as client };
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/only-export-name": ["error", { names: ["value"] }],
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/only-export-name": ["error", { names: ["value"] }],
+  },
+ },
 ];
 ```
 

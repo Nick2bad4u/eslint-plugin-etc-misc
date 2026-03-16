@@ -9,7 +9,7 @@ Use this preset as the default onboarding path for most projects.
 ## Config key
 
 ```ts
-etcMisc.configs.recommended
+etcMisc.configs.recommended;
 ```
 
 ## Flat Config example

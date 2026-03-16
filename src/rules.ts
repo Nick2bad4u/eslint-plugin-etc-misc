@@ -1,7 +1,7 @@
 import type { TSESLint } from "@typescript-eslint/utils";
 import type { UnknownArray } from "type-fest";
 
-import { objectEntries, objectKeys, safeCastTo, setHas, objectFromEntries     } from "ts-extras";
+import { objectEntries, objectKeys, safeCastTo, setHas } from "ts-extras";
 
 import type { RuleCatalogEntry } from "./_internal/rule-catalog.js";
 
@@ -382,9 +382,13 @@ const withCatalogDocsMetadata = (
         throw new Error(`Missing rule catalog entry for rule "${ruleName}".`);
     }
 
-    const currentDocsMetadata = safeCastTo<RuleDocsMetadata>(ruleModule.meta.docs ??
-        {});
-    const hasRequiredTypeChecking = setHas(rulesWithRequiredTypeChecking, ruleName);
+    const currentDocsMetadata = safeCastTo<RuleDocsMetadata>(
+        ruleModule.meta.docs ?? {}
+    );
+    const hasRequiredTypeChecking = setHas(
+        rulesWithRequiredTypeChecking,
+        ruleName
+    );
     const deprecatedMetadata =
         ruleModule.meta.deprecated === undefined
             ? false
@@ -420,9 +424,17 @@ const decoratedRuleEntries = objectEntries(baseRules).map(
         [ruleName, withCatalogDocsMetadata(ruleName, ruleModule)] as const
 );
 
-const decoratedRules = safeCastTo<Readonly<
-    Record<string, RuleModule>
->>(objectFromEntries(decoratedRuleEntries));
+let decoratedRulesAccumulator: Readonly<Record<string, RuleModule>> = {};
+
+for (const [ruleName, ruleModule] of decoratedRuleEntries) {
+    decoratedRulesAccumulator = {
+        ...decoratedRulesAccumulator,
+        [ruleName]: ruleModule,
+    };
+}
+
+const decoratedRules: Readonly<Record<string, RuleModule>> =
+    decoratedRulesAccumulator;
 
 /**
  * Rule implementations keyed by rule name with normalized docs metadata.

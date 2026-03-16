@@ -30,7 +30,7 @@ function parse(values: string[]) {}
 const fn = (pair: [string, number]) => pair[0];
 
 class Store {
-    constructor(private keys: Array<string>) {}
+ constructor(private keys: Array<string>) {}
 }
 ```
 
@@ -42,7 +42,7 @@ function parse(values: readonly string[]) {}
 const fn = (pair: readonly [string, number]) => pair[0];
 
 class Store {
-    constructor(private keys: ReadonlyArray<string>) {}
+ constructor(private keys: ReadonlyArray<string>) {}
 }
 ```
 
@@ -75,12 +75,12 @@ function f(config: { values: string[] }): void {}
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/prefer-readonly-array-parameter": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/prefer-readonly-array-parameter": "error",
+  },
+ },
 ];
 ```
 

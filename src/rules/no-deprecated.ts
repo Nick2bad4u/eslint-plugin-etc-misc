@@ -1,7 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { ESLintUtils } from "@typescript-eslint/utils";
-import { isEmpty } from "ts-extras";
+import { isDefined, isEmpty } from "ts-extras";
 
 import {
     compileIgnorePatterns,
@@ -57,7 +57,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 }
 
                 const symbol = getIdentifierSymbol(parserServices, node);
-                if (symbol === undefined) {
+                if (!isDefined(symbol)) {
                     return;
                 }
 
@@ -84,7 +84,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 }
 
                 for (const comment of deprecatedComments) {
-                    if (comment === undefined) {
+                    if (!isDefined(comment)) {
                         context.report({
                             data: { name: symbolName },
                             messageId: "forbidden",

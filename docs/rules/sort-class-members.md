@@ -27,8 +27,8 @@ more predictable to scan.
 
 ```ts
 class Example {
-    zebra(): void {}
-    alpha(): void {}
+ zebra(): void {}
+ alpha(): void {}
 }
 ```
 
@@ -36,8 +36,8 @@ class Example {
 
 ```ts
 class Example {
-    alpha(): void {}
-    zebra(): void {}
+ alpha(): void {}
+ zebra(): void {}
 }
 ```
 
@@ -66,14 +66,14 @@ Use the **Deprecated** section above for lifecycle details.
 
 ```ts
 class Tokens {
-    "a-token" = "#000";
-    "z-token" = "#fff";
+ "a-token" = "#000";
+ "z-token" = "#fff";
 }
 // ✅ valid
 
 class WithComputed {
-    [dynamicKey](): void {}
-    alpha(): void {}
+ [dynamicKey](): void {}
+ alpha(): void {}
 }
 // computed member names are not directly sortable by this rule
 ```
@@ -84,12 +84,12 @@ class WithComputed {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/sort-class-members": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/sort-class-members": "error",
+  },
+ },
 ];
 ```
 

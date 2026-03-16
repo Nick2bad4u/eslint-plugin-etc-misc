@@ -15,9 +15,7 @@ Then enable it in your Flat Config:
 ```ts
 import etcMisc from "eslint-plugin-etc-misc";
 
-export default [
-    etcMisc.configs.recommended,
-];
+export default [etcMisc.configs.recommended];
 ```
 
 ## Recommended approach

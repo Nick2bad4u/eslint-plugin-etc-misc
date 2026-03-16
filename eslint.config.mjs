@@ -3023,5 +3023,5 @@ const config = [
 ];
 
 export default defineConfig(
-    /** @type {EslintConfig[]} */(/** @type {unknown} */ (config))
+    /** @type {EslintConfig[]} */ (/** @type {unknown} */ (config))
 );

@@ -24,11 +24,11 @@ and helps avoid accidental mutation through shared map-like data.
 
 ```ts
 interface Config {
-    lookup: Map<string, number>;
+ lookup: Map<string, number>;
 }
 
 type ApiConfig = {
-    lookup: Map<string, number> | null;
+ lookup: Map<string, number> | null;
 };
 ```
 
@@ -36,11 +36,11 @@ type ApiConfig = {
 
 ```ts
 interface Config {
-    lookup: ReadonlyMap<string, number>;
+ lookup: ReadonlyMap<string, number>;
 }
 
 type ApiConfig = {
-    lookup: ReadonlyMap<string, number> | null;
+ lookup: ReadonlyMap<string, number> | null;
 };
 ```
 
@@ -56,12 +56,12 @@ This rule is autofixable and also provides suggestions.
 
 ```ts
 interface Config {
-    lookup: Promise<Map<string, number>>;
+ lookup: Promise<Map<string, number>>;
 }
 // ✅ valid (nested generic type is out of scope)
 
 type Settings = {
-    lookup: { nested: Map<string, number> };
+ lookup: { nested: Map<string, number> };
 };
 // ✅ valid (nested property type is out of scope)
 ```
@@ -72,12 +72,12 @@ type Settings = {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/require-readonly-map-property-type": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/require-readonly-map-property-type": "error",
+  },
+ },
 ];
 ```
 
@@ -95,7 +95,7 @@ constraints.
 
 ## Further reading
 
-- [TypeScript: ReadonlyMap<K, V>](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+- [TypeScript: ReadonlyMap\<K, V>](https://www.typescriptlang.org/docs/handbook/utility-types.html)
 
 ## Adoption resources
 

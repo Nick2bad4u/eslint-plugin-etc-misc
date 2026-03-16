@@ -6,7 +6,7 @@ import {
     isTypeArrayTypeOrUnionOfArrayTypes,
 } from "@typescript-eslint/type-utils";
 import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
-import { arrayFirst } from "ts-extras";
+import { arrayFirst, setHas } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -83,7 +83,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     callee.type !== "MemberExpression" ||
                     callee.object.type === "Super" ||
                     callee.property.type !== "Identifier" ||
-                    !arrayCallbackMethodNames.has(callee.property.name)
+                    !setHas(arrayCallbackMethodNames, callee.property.name)
                 ) {
                     return;
                 }

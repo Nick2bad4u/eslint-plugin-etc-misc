@@ -38,7 +38,7 @@ across contributors and editors.
  * Renders the profile panel.
  */
 const renderProfile = () => {
-    // ...
+ // ...
 };
 ```
 
@@ -56,7 +56,7 @@ const normalize = (value: string) => value.trim();
  */
 
 const renderProfile = () => {
-    // ...
+ // ...
 };
 ```
 
@@ -82,7 +82,7 @@ This rule has no options.
 ```ts
 /* eslint-disable no-console */
 const run = () => {
-    console.log("allowed here");
+ console.log("allowed here");
 };
 ```
 
@@ -101,12 +101,12 @@ const createTask = () => ({ id: crypto.randomUUID() });
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/comment-spacing": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/comment-spacing": "error",
+  },
+ },
 ];
 ```
 

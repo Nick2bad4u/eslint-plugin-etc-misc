@@ -8,10 +8,13 @@ type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-const selector = arrayJoin([
-    "TSPropertySignature[optional=true] > TSTypeAnnotation > TSLiteralType > Literal[value=true]",
-    "TSPropertySignature[optional=true] > TSTypeAnnotation > TSLiteralType > Literal[value=false]",
-], ", ");
+const selector = arrayJoin(
+    [
+        "TSPropertySignature[optional=true] > TSTypeAnnotation > TSLiteralType > Literal[value=true]",
+        "TSPropertySignature[optional=true] > TSTypeAnnotation > TSLiteralType > Literal[value=false]",
+    ],
+    ", "
+);
 
 /**
  * Disallow optional boolean literal property types.

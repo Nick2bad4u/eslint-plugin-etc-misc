@@ -416,7 +416,7 @@ const toGeneratedSections = ({
 
     const hasDeprecatedContent =
         typeof getSectionByAnyHeading(existingSections, ["Deprecated"]) ===
-        "string" ||
+            "string" ||
         (typeof legacyStatus === "string" && /deprecated/iu.test(legacyStatus));
 
     if (hasDeprecatedContent) {

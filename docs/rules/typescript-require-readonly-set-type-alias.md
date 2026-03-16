@@ -62,12 +62,12 @@ type Config = { tags: Set<string> };
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/require-readonly-set-type-alias": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/require-readonly-set-type-alias": "error",
+  },
+ },
 ];
 ```
 

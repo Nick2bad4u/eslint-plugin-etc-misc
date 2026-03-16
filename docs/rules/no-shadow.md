@@ -25,8 +25,8 @@ Shadowing can hide outer bindings and make data flow harder to reason about.
 ```ts
 const x = 1;
 function f() {
-    const x = 2;
-    return x;
+ const x = 2;
+ return x;
 }
 ```
 
@@ -35,8 +35,8 @@ function f() {
 ```ts
 const x = 1;
 function f() {
-    const y = x + 1;
-    return y;
+ const y = x + 1;
+ return y;
 }
 ```
 
@@ -65,11 +65,11 @@ Use the **Deprecated** section above for lifecycle details.
 
 ```ts
 enum Status {
-    Ready,
+ Ready,
 }
 
 function run(Status: number): number {
-    return Status;
+ return Status;
 }
 // enum-related declarations are intentionally ignored by this rule.
 ```
@@ -80,12 +80,12 @@ function run(Status: number): number {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-shadow": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-shadow": "error",
+  },
+ },
 ];
 ```
 

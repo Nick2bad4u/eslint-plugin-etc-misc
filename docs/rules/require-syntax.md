@@ -16,7 +16,7 @@ This rule reports each configured selector that has zero matches.
 
 - If the selector is configured as a plain string, the default message is used.
 - If the selector is configured as an object with `message`, your custom message
-is emitted.
+  is emitted.
 
 ## Why this rule exists
 
@@ -34,7 +34,9 @@ const x = 1;
 with options:
 
 ```ts
-{ selectors: ["ExportDefaultDeclaration"] }
+{
+ selectors: ["ExportDefaultDeclaration"];
+}
 ```
 
 ## ✅ Correct
@@ -46,7 +48,9 @@ export default 1;
 with options:
 
 ```ts
-{ selectors: ["ExportDefaultDeclaration"] }
+{
+ selectors: ["ExportDefaultDeclaration"];
+}
 ```
 
 ## Behavior and migration notes
@@ -61,13 +65,13 @@ that map to concrete architecture rules.
 
 ```ts
 type Options = {
-    selectors?: Array<
-        | string
-        | {
-              message?: string;
-              selector: string;
-          }
-    >;
+ selectors?: Array<
+  | string
+  | {
+     message?: string;
+     selector: string;
+    }
+ >;
 };
 ```
 
@@ -96,15 +100,15 @@ with options:
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/require-syntax": [
-                "error",
-                { selectors: ["ExportDefaultDeclaration"] },
-            ],
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/require-syntax": [
+    "error",
+    { selectors: ["ExportDefaultDeclaration"] },
+   ],
+  },
+ },
 ];
 ```
 

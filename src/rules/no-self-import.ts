@@ -1,6 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { dirname, resolve } from "node:path";
+import { arrayIncludes } from "ts-extras";
 
 import { getImportSourceFromNode } from "../_internal/import-patterns.js";
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -65,7 +66,9 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         sourceText
                     );
 
-                    if (candidatePaths.includes(normalizedCurrentFilePath)) {
+                    if (
+                        arrayIncludes(candidatePaths, normalizedCurrentFilePath)
+                    ) {
                         context.report({
                             messageId: "forbidden",
                             node,

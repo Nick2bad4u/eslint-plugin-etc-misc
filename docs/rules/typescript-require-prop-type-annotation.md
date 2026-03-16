@@ -21,7 +21,7 @@ Uninitialized properties without annotations leave property type intent unclear.
 
 ```ts
 class C {
-    value;
+ value;
 }
 ```
 
@@ -29,7 +29,7 @@ class C {
 
 ```ts
 class C {
-    value: string;
+ value: string;
 }
 ```
 
@@ -48,11 +48,11 @@ This rule has no options.
 
 ```ts
 class User {
-    name = "anonymous";
-    // ✅ valid: initializer provides type
+ name = "anonymous";
+ // ✅ valid: initializer provides type
 
-    role;
-    // ❌ reported: no initializer and no annotation
+ role;
+ // ❌ reported: no initializer and no annotation
 }
 ```
 
@@ -62,12 +62,12 @@ class User {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/require-prop-type-annotation": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/require-prop-type-annotation": "error",
+  },
+ },
 ];
 ```
 

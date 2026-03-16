@@ -32,13 +32,13 @@ clearer as the non-`undefined` type.
 
 ```ts
 function read(value: string | undefined = "x") {
-    return value;
+ return value;
 }
 
 const pick = (count: number | undefined = 0) => count;
 
 class Box {
-    constructor(private label: string | undefined = "box") {}
+ constructor(private label: string | undefined = "box") {}
 }
 ```
 
@@ -46,13 +46,13 @@ class Box {
 
 ```ts
 function read(value: string = "x") {
-    return value;
+ return value;
 }
 
 const pick = (count: number = 0) => count;
 
 class Box {
-    constructor(private label: string = "box") {}
+ constructor(private label: string = "box") {}
 }
 ```
 
@@ -76,7 +76,7 @@ This rule has no options.
 ```ts
 const maybe = undefined as string | undefined;
 function read(value: string | undefined = maybe) {
-    return value;
+ return value;
 }
 // ✅ valid (initializer may be undefined)
 ```
@@ -87,12 +87,12 @@ function read(value: string | undefined = maybe) {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/no-redundant-undefined-default-parameter": "warn",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/no-redundant-undefined-default-parameter": "warn",
+  },
+ },
 ];
 ```
 

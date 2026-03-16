@@ -49,8 +49,8 @@ Default `disallow` is `./*`, but you can override with custom `allow` and
 
 ```ts
 type Options = {
-    allow?: string[];
-    disallow?: string[];
+ allow?: string[];
+ disallow?: string[];
 };
 ```
 
@@ -80,12 +80,12 @@ await import("./runtime");
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-sibling-import": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-sibling-import": "error",
+  },
+ },
 ];
 ```
 

@@ -18,7 +18,7 @@ Extra parentheses in IIFE arrow bodies reduce readability and add noise.
 ## ❌ Incorrect
 
 ```ts
-(() => (doWork()))();
+(() => doWork())();
 ```
 
 ## ✅ Correct
@@ -39,7 +39,7 @@ This rule forwards options and behavior to `unicorn/no-unreadable-iife`.
 ## Additional examples
 
 ```ts
-const value = (() => (compute()))();
+const value = (() => compute())();
 // ❌ reported by forwarded unicorn rule
 
 const valueFixed = (() => compute())();
@@ -52,12 +52,12 @@ const valueFixed = (() => compute())();
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/uppercase-iife": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/uppercase-iife": "error",
+  },
+ },
 ];
 ```
 

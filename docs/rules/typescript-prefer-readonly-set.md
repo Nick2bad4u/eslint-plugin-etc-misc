@@ -53,12 +53,12 @@ type AllowedRolesView = ReadonlySet<string>;
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/prefer-readonly-set": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/prefer-readonly-set": "error",
+  },
+ },
 ];
 ```
 

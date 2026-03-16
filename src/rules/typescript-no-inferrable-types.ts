@@ -12,10 +12,13 @@ type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-const selector = arrayJoin([
-    "PropertyDefinition[value.type='Literal'] > TSTypeAnnotation",
-    "VariableDeclarator[init.type='Literal'] > Identifier.id > TSTypeAnnotation",
-], ", ");
+const selector = arrayJoin(
+    [
+        "PropertyDefinition[value.type='Literal'] > TSTypeAnnotation",
+        "VariableDeclarator[init.type='Literal'] > Identifier.id > TSTypeAnnotation",
+    ],
+    ", "
+);
 
 /**
  * Disallow explicit primitive type annotations when they are inferrable.

@@ -460,12 +460,12 @@ describe("plugin export", () => {
         for (const preferReadonlyRuleId of preferReadonlyRuleIds) {
             const qualifiedRuleName = `etc-misc/${preferReadonlyRuleId}`;
 
-            expect(qualifiedRuleName in plugin.configs.minimal.rules).toBeFalsy(
-                
-            );
-            expect(qualifiedRuleName in plugin.configs.recommended.rules).toBeTruthy(
-                
-            );
+            expect(
+                qualifiedRuleName in plugin.configs.minimal.rules
+            ).toBeFalsy();
+            expect(
+                qualifiedRuleName in plugin.configs.recommended.rules
+            ).toBeTruthy();
         }
 
         const recommendedRuleLevelKeys = Object.keys(

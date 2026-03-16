@@ -6,7 +6,7 @@ Disallow usage of symbols tagged with `@deprecated`.
 
 ⚠️ This rule requires type information to run. Configure type-aware linting (`parserOptions.project` or `projectService`) before enabling it.
 
-This rule inspects identifier *usages* and resolves each identifier to a
+This rule inspects identifier _usages_ and resolves each identifier to a
 TypeScript symbol.
 
 If the resolved symbol has one or more `@deprecated` JSDoc tags, usage is
@@ -37,8 +37,8 @@ oldMethod();
 
 ```ts
 interface Api {
-  /** @deprecated Use `nextValue` instead. */
-  oldValue: string;
+ /** @deprecated Use `nextValue` instead. */
+ oldValue: string;
 }
 
 declare const api: Api;
@@ -77,16 +77,16 @@ It reports only and does not provide an autofix.
 
 ```ts
 type Options = [
-  {
-    ignored?: Record<string, "name" | "path">;
-  }?,
+ {
+  ignored?: Record<string, "name" | "path">;
+ }?,
 ];
 ```
 
 Default:
 
 ```ts
-[{}]
+[{}];
 ```
 
 Use `ignored` to suppress some deprecated symbols by regular-expression pattern:
@@ -103,20 +103,20 @@ Example:
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-  {
-    plugins: { "etc-misc": etcMisc },
-    rules: {
-      "etc-misc/no-deprecated": [
-        "warn",
-        {
-          ignored: {
-            "^LegacyMethod$": "name",
-            "modules/legacy": "path",
-          },
-        },
-      ],
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-deprecated": [
+    "warn",
+    {
+     ignored: {
+      "^LegacyMethod$": "name",
+      "modules/legacy": "path",
+     },
     },
+   ],
   },
+ },
 ];
 ```
 
@@ -127,7 +127,7 @@ Use the **Deprecated** section above for lifecycle details.
 ## Additional examples
 
 ```ts
-/** @deprecated internal migration shim */
+/** @deprecated Internal migration shim */
 declare const legacyApi: () => void;
 
 legacyApi();
@@ -144,12 +144,12 @@ legacyApi();
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-deprecated": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-deprecated": "error",
+  },
+ },
 ];
 ```
 

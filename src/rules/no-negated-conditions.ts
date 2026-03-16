@@ -25,7 +25,9 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     MessageIds
 >({
     create: (context) => ({
-        [arrayJoin(disallowedSelectors, ", ")]: (node: Readonly<es.Node>): void => {
+        [arrayJoin(disallowedSelectors, ", ")]: (
+            node: Readonly<es.Node>
+        ): void => {
             context.report({
                 messageId: "forbidden",
                 node,

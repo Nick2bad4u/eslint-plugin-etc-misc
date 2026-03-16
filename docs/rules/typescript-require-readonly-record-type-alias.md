@@ -63,12 +63,12 @@ type Config = { lookup: Record<string, number> };
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/require-readonly-record-type-alias": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/require-readonly-record-type-alias": "error",
+  },
+ },
 ];
 ```
 

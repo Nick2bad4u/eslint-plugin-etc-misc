@@ -39,8 +39,8 @@ Typical migration is replacing `"@"` with a concrete module path like
 
 ```ts
 type Options = {
-    allow?: string[];
-    disallow?: string[];
+ allow?: string[];
+ disallow?: string[];
 };
 ```
 
@@ -48,7 +48,7 @@ Default:
 
 ```json
 {
-    "disallow": ["@"]
+ "disallow": ["@"]
 }
 ```
 
@@ -68,12 +68,12 @@ export { value } from "@/core/value";
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-at-sign-import": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-at-sign-import": "error",
+  },
+ },
 ];
 ```
 

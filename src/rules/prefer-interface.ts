@@ -2,7 +2,7 @@ import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
 import { getConstrainedTypeAtLocation } from "@typescript-eslint/type-utils";
 import { ESLintUtils } from "@typescript-eslint/utils";
-import { arrayFirst, arrayJoin  } from "ts-extras";
+import { arrayFirst, arrayJoin, isDefined } from "ts-extras";
 import * as tsutils from "tsutils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -69,8 +69,12 @@ const createFunctionTypeFixText = (
         sourceCode,
         functionTypeNode.typeParameters
     );
-    const parametersText = arrayJoin(functionTypeNode.params
-        .map((parameter) => sourceCode.getText(parameter)), ", ");
+    const parametersText = arrayJoin(
+        functionTypeNode.params.map((parameter) =>
+            sourceCode.getText(parameter)
+        ),
+        ", "
+    );
     const returnTypeText =
         functionTypeNode.returnType === undefined
             ? "void"
@@ -89,8 +93,12 @@ const createIntersectionFixText = (
         sourceCode,
         typeAliasDeclaration.typeParameters
     );
-    const baseTypesText = arrayJoin(referenceNodes
-        .map((referenceNode) => sourceCode.getText(referenceNode)), ", ");
+    const baseTypesText = arrayJoin(
+        referenceNodes.map((referenceNode) =>
+            sourceCode.getText(referenceNode)
+        ),
+        ", "
+    );
     const extendsClause =
         baseTypesText.length > 0 ? ` extends ${baseTypesText}` : "";
     const bodyText =
@@ -238,7 +246,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     intersectionTypeNode,
                     typedParserServices
                 );
-                if (conversion === undefined) {
+                if (!isDefined(conversion)) {
                     return;
                 }
 

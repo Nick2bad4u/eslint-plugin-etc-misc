@@ -24,11 +24,11 @@ intent and helps avoid accidental mutation through shared dictionary-like data.
 
 ```ts
 interface Config {
-    lookup: Record<string, number>;
+ lookup: Record<string, number>;
 }
 
 type ApiConfig = {
-    lookup: Record<string, number> | null;
+ lookup: Record<string, number> | null;
 };
 ```
 
@@ -36,11 +36,11 @@ type ApiConfig = {
 
 ```ts
 interface Config {
-    lookup: Readonly<Record<string, number>>;
+ lookup: Readonly<Record<string, number>>;
 }
 
 type ApiConfig = {
-    lookup: Readonly<Record<string, number>> | null;
+ lookup: Readonly<Record<string, number>> | null;
 };
 ```
 
@@ -56,12 +56,12 @@ This rule is autofixable and also provides suggestions.
 
 ```ts
 interface Config {
-    lookup: Promise<Record<string, number>>;
+ lookup: Promise<Record<string, number>>;
 }
 // ✅ valid (nested generic type is out of scope)
 
 type Settings = {
-    lookup: { nested: Record<string, number> };
+ lookup: { nested: Record<string, number> };
 };
 // ✅ valid (nested property type is out of scope)
 ```
@@ -72,12 +72,12 @@ type Settings = {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/require-readonly-record-property-type": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/require-readonly-record-property-type": "error",
+  },
+ },
 ];
 ```
 

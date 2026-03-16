@@ -61,12 +61,12 @@ obj.version = 1;
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/define-function-in-one-statement": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/define-function-in-one-statement": "error",
+  },
+ },
 ];
 ```
 

@@ -59,12 +59,12 @@ export { A, B, C };
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/sort-export-specifiers": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/sort-export-specifiers": "error",
+  },
+ },
 ];
 ```
 

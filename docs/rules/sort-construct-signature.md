@@ -20,8 +20,8 @@ predictable shape.
 
 ```ts
 interface I {
-    x: string;
-    new (): string;
+ x: string;
+ new (): string;
 }
 ```
 
@@ -29,8 +29,8 @@ interface I {
 
 ```ts
 interface I {
-    new (): string;
-    x: string;
+ new (): string;
+ x: string;
 }
 ```
 
@@ -49,14 +49,14 @@ This rule has no options.
 
 ```ts
 interface Factory {
-    id: string;
-    new (): FactoryInstance;
+ id: string;
+ new (): FactoryInstance;
 }
 // ❌ construct signature is not first
 
 interface FactoryFixed {
-    new (): FactoryInstance;
-    id: string;
+ new (): FactoryInstance;
+ id: string;
 }
 // ✅ valid
 ```
@@ -67,12 +67,12 @@ interface FactoryFixed {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/sort-construct-signature": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/sort-construct-signature": "error",
+  },
+ },
 ];
 ```
 

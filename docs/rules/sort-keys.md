@@ -29,8 +29,8 @@ multiple contributors add new properties.
 
 ```ts
 const config = {
-    zIndex: 10,
-    align: "start",
+ zIndex: 10,
+ align: "start",
 };
 ```
 
@@ -38,8 +38,8 @@ const config = {
 
 ```ts
 const config = {
-    align: "start",
-    zIndex: 10,
+ align: "start",
+ zIndex: 10,
 };
 ```
 
@@ -58,15 +58,15 @@ This rule has no options.
 
 ```ts
 const tokens = {
-    "a-color": "#000",
-    zColor: "#fff",
+ "a-color": "#000",
+ zColor: "#fff",
 };
 // ✅ mixed identifier/string keys are sorted by key text
 
 const partial = {
-    b: 2,
-    [dynamicKey]: 1,
-    a: 1,
+ b: 2,
+ [dynamicKey]: 1,
+ a: 1,
 };
 // ❌ reported: non-computed initializer keys (`b`, `a`) are still checked
 ```
@@ -77,12 +77,12 @@ const partial = {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/sort-keys": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/sort-keys": "error",
+  },
+ },
 ];
 ```
 

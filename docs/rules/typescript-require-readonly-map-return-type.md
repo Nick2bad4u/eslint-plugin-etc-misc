@@ -23,13 +23,13 @@ non-mutating intent to callers and reduces accidental mutation of shared maps.
 
 ```ts
 function buildLookup(): Map<string, number> {
-    return new Map();
+ return new Map();
 }
 
 type Resolver = () => Map<string, string> | null;
 
 interface API {
-    run(): Map<string, string>;
+ run(): Map<string, string>;
 }
 ```
 
@@ -37,13 +37,13 @@ interface API {
 
 ```ts
 function buildLookup(): ReadonlyMap<string, number> {
-    return new Map();
+ return new Map();
 }
 
 type Resolver = () => ReadonlyMap<string, string> | null;
 
 interface API {
-    run(): ReadonlyMap<string, string>;
+ run(): ReadonlyMap<string, string>;
 }
 ```
 
@@ -59,12 +59,12 @@ This rule is autofixable and also provides suggestions.
 
 ```ts
 function buildConfig(): Promise<Map<string, string>> {
-    return Promise.resolve(new Map());
+ return Promise.resolve(new Map());
 }
 // ✅ valid (nested generic type is out of scope)
 
 function buildState(): { values: Map<string, string> } {
-    return { values: new Map() };
+ return { values: new Map() };
 }
 // ✅ valid (nested object-property type is out of scope)
 ```
@@ -75,12 +75,12 @@ function buildState(): { values: Map<string, string> } {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/require-readonly-map-return-type": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/require-readonly-map-return-type": "error",
+  },
+ },
 ];
 ```
 
@@ -97,7 +97,7 @@ types or if you already enforce broader readonly type policy at the same scope.
 
 ## Further reading
 
-- [TypeScript: ReadonlyMap<K, V>](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+- [TypeScript: ReadonlyMap\<K, V>](https://www.typescriptlang.org/docs/handbook/utility-types.html)
 
 ## Adoption resources
 

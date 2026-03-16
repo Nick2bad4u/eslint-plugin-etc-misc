@@ -31,7 +31,9 @@ import value from "../source";
 with options:
 
 ```ts
-{ disallow: ["../**"] }
+{
+ disallow: ["../**"];
+}
 ```
 
 ## ✅ Correct
@@ -57,8 +59,8 @@ configure `disallow` patterns.
 
 ```ts
 type Options = {
-    allow?: string[];
-    disallow?: string[];
+ allow?: string[];
+ disallow?: string[];
 };
 ```
 
@@ -79,12 +81,12 @@ import shared from "../shared/math";
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/disallow-import": ["error", { disallow: ["../**"] }],
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/disallow-import": ["error", { disallow: ["../**"] }],
+  },
+ },
 ];
 ```
 

@@ -9,18 +9,18 @@ This rule analyzes TypeScript `TSEnumMember` nodes and validates naming for:
 - enum member identifiers (for example `ACTIVE_USER`), and
 - string literal member values when provided.
 
-It enforces SCREAMING_SNAKE_CASE in both places.
+It enforces SCREAMING\_SNAKE\_CASE in both places.
 
 ## What this rule reports
 
 This rule reports enum members when **neither** of these matches
-SCREAMING_SNAKE_CASE:
+SCREAMING\_SNAKE\_CASE:
 
 - the member identifier name, or
 - the string literal initializer value.
 
 In other words, the current implementation accepts a member if either side is
-already SCREAMING_SNAKE_CASE.
+already SCREAMING\_SNAKE\_CASE.
 
 ## Why this rule exists
 
@@ -32,8 +32,8 @@ Standardizing enum casing lowers conversion glue and helps grepability.
 
 ```ts
 enum Status {
-    pendingApproval = "PENDING_APPROVAL",
-    ACTIVE_USER = "active_user",
+ pendingApproval = "PENDING_APPROVAL",
+ ACTIVE_USER = "active_user",
 }
 ```
 
@@ -41,8 +41,8 @@ enum Status {
 
 ```ts
 enum Status {
-    PENDING_APPROVAL = "PENDING_APPROVAL",
-    ACTIVE_USER = "ACTIVE_USER",
+ PENDING_APPROVAL = "PENDING_APPROVAL",
+ ACTIVE_USER = "ACTIVE_USER",
 }
 ```
 
@@ -58,22 +58,23 @@ This rule has no options.
 
 ```ts
 enum EventType {
-    USER_CREATED,
-    USER_DELETED,
+ USER_CREATED,
+ USER_DELETED,
 }
 ```
 
 ```ts
 enum Permission {
-    READ_ONLY = "READ_ONLY",
-    READ_WRITE = "READ_WRITE",
+ READ_ONLY = "READ_ONLY",
+ READ_WRITE = "READ_WRITE",
 }
 ```
 
-```ts
-enum Partial {
-    USER_CREATED = "user_created",
-}
+````ts
+
+
+
+enum Partial {    USER_CREATED = "user_created",}
 // ✅ currently accepted (name matches SCREAMING_SNAKE_CASE)
 
 ## ESLint flat config example
@@ -89,7 +90,7 @@ export default [
         },
     },
 ];
-```
+````
 
 ## When not to use it
 

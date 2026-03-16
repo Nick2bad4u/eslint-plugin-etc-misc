@@ -30,7 +30,7 @@ function loadLookup(lookup: Record<string, string>): void {}
 const resolver = (lookup: Record<string, string> | null) => lookup;
 
 class Registry {
-    constructor(private readonly lookup: Record<string, string>) {}
+ constructor(private readonly lookup: Record<string, string>) {}
 }
 ```
 
@@ -42,7 +42,7 @@ function loadLookup(lookup: Readonly<Record<string, string>>): void {}
 const resolver = (lookup: Readonly<Record<string, string>> | null) => lookup;
 
 class Registry {
-    constructor(private readonly lookup: Readonly<Record<string, string>>) {}
+ constructor(private readonly lookup: Readonly<Record<string, string>>) {}
 }
 ```
 
@@ -70,12 +70,12 @@ function configure(lookup?: Readonly<Record<string, string>>): void {}
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/require-readonly-record-parameter-type": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/require-readonly-record-parameter-type": "error",
+  },
+ },
 ];
 ```
 

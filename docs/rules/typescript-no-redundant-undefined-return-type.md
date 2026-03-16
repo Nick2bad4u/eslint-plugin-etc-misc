@@ -39,13 +39,13 @@ clarity.
 const read = (): string | undefined => "x";
 
 function count(): number | undefined {
-    return 1;
+ return 1;
 }
 
 class Box {
-    get label(): string | undefined {
-        return "box";
-    }
+ get label(): string | undefined {
+  return "box";
+ }
 }
 ```
 
@@ -55,13 +55,13 @@ class Box {
 const read = (): string => "x";
 
 function count(): number {
-    return 1;
+ return 1;
 }
 
 class Box {
-    get label(): string {
-        return "box";
-    }
+ get label(): string {
+  return "box";
+ }
 }
 ```
 
@@ -88,8 +88,8 @@ const read = (): string | undefined => value;
 // ✅ valid (returned identifier may be undefined)
 
 function read(): string | undefined {
-    const value = "x";
-    return value;
+ const value = "x";
+ return value;
 }
 // ✅ valid (multiple statements in block body are out of conservative scope)
 ```
@@ -100,12 +100,12 @@ function read(): string | undefined {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/no-redundant-undefined-return-type": "warn",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/no-redundant-undefined-return-type": "warn",
+  },
+ },
 ];
 ```
 

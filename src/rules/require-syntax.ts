@@ -1,5 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { isDefined } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 import {
     normalizeSyntaxSelector,
@@ -50,7 +52,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         continue;
                     }
 
-                    if (entry.message !== undefined) {
+                    if (isDefined(entry.message)) {
                         context.report({
                             data: {
                                 message: entry.message,

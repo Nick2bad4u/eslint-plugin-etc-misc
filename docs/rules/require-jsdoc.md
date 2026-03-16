@@ -11,7 +11,7 @@ This rule checks declaration nodes that are configured via `kinds`, including:
 - `method` (`MethodDefinition`, excluding constructors)
 - `type` (`TSInterfaceDeclaration`, `TSTypeAliasDeclaration`)
 - `arrow-function` (named `const` variable declarators initialized with an
-arrow function)
+  arrow function)
 
 Each targeted declaration must have a leading JSDoc block comment (`/** ... */`).
 
@@ -34,7 +34,9 @@ function f() {}
 with options:
 
 ```ts
-{ kinds: ["function"] }
+{
+ kinds: ["function"];
+}
 ```
 
 ## ✅ Correct
@@ -49,7 +51,9 @@ function f() {}
 with options:
 
 ```ts
-{ kinds: ["function"] }
+{
+ kinds: ["function"];
+}
 ```
 
 ## Deprecated
@@ -73,9 +77,9 @@ the initial backlog is resolved.
 type Kind = "arrow-function" | "class" | "function" | "method" | "type";
 
 type Options = [
-    {
-        kinds?: Kind[];
-    },
+ {
+  kinds?: Kind[];
+ },
 ];
 ```
 
@@ -83,10 +87,16 @@ type Options = [
 
 ```ts
 [
-    {
-        kinds: ["arrow-function", "class", "function", "method", "type"],
-    },
-]
+ {
+  kinds: [
+   "arrow-function",
+   "class",
+   "function",
+   "method",
+   "type",
+  ],
+ },
+];
 ```
 
 ### Status
@@ -105,7 +115,9 @@ const identity = <T>(value: T) => value;
 with options:
 
 ```ts
-{ kinds: ["arrow-function"] }
+{
+ kinds: ["arrow-function"];
+}
 ```
 
 ```ts
@@ -121,12 +133,12 @@ const identity = <T>(value: T) => value;
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/require-jsdoc": ["error", { kinds: ["function"] }],
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/require-jsdoc": ["error", { kinds: ["function"] }],
+  },
+ },
 ];
 ```
 

@@ -33,8 +33,8 @@ noise and weakens type precision.
 
 ```ts
 class Box {
-    readonly value: string | undefined = "x";
-    static readonly count: number | undefined = 0;
+ readonly value: string | undefined = "x";
+ static readonly count: number | undefined = 0;
 }
 ```
 
@@ -42,8 +42,8 @@ class Box {
 
 ```ts
 class Box {
-    readonly value: string = "x";
-    static readonly count: number = 0;
+ readonly value: string = "x";
+ static readonly count: number = 0;
 }
 ```
 
@@ -66,11 +66,11 @@ This rule has no options.
 const maybe = undefined as string | undefined;
 
 class Box {
-    readonly value: string | undefined = maybe;
-    // ✅ valid (initializer may be undefined)
+ readonly value: string | undefined = maybe;
+ // ✅ valid (initializer may be undefined)
 
-    value2: string | undefined = "x";
-    // ✅ valid (not readonly)
+ value2: string | undefined = "x";
+ // ✅ valid (not readonly)
 }
 ```
 
@@ -80,12 +80,12 @@ class Box {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/no-redundant-undefined-readonly-property": "warn",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/no-redundant-undefined-readonly-property": "warn",
+  },
+ },
 ];
 ```
 

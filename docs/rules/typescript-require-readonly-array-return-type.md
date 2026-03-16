@@ -27,13 +27,13 @@ immutability to consumers and prevents accidental mutation at call sites.
 
 ```ts
 function getNames(): string[] {
-    return [];
+ return [];
 }
 
 type PairFactory = () => [string, number];
 
 interface Api {
-    run(): Array<string>;
+ run(): Array<string>;
 }
 ```
 
@@ -41,13 +41,13 @@ interface Api {
 
 ```ts
 function getNames(): readonly string[] {
-    return [];
+ return [];
 }
 
 type PairFactory = () => readonly [string, number];
 
 interface Api {
-    run(): ReadonlyArray<string>;
+ run(): ReadonlyArray<string>;
 }
 ```
 
@@ -71,7 +71,7 @@ type Resolver = () => readonly string[] | null;
 // ✅ valid
 
 function getConfig(): { values: string[] } {
-    return { values: [] };
+ return { values: [] };
 }
 // ✅ valid (nested property type is out of scope)
 ```
@@ -82,12 +82,12 @@ function getConfig(): { values: string[] } {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/require-readonly-array-return-type": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/require-readonly-array-return-type": "error",
+  },
+ },
 ];
 ```
 

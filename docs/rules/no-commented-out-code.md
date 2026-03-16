@@ -33,9 +33,9 @@ const answer = 42;
 
 ```ts
 class Example {
-    public a: string;
-    // public b: string;
-    public c: string;
+ public a: string;
+ // public b: string;
+ public c: string;
 }
 ```
 
@@ -48,9 +48,9 @@ const answer = 42;
 
 ```ts
 class Example {
-  // #region Public API
-  public execute(): void {}
-  // #endregion
+ // #region Public API
+ public execute(): void {}
+ // #endregion
 }
 ```
 
@@ -95,12 +95,12 @@ Use the **Deprecated** section above for lifecycle details.
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-commented-out-code": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-commented-out-code": "error",
+  },
+ },
 ];
 ```
 

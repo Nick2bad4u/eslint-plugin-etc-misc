@@ -12,7 +12,7 @@ enforces single-line or multi-line formatting based on property count.
 For each object literal with at least two properties:
 
 - if property count is less than or equal to `maxProperties`, the object must be
-on a single line;
+  on a single line;
 - otherwise, the object must span multiple lines.
 
 ## Why this rule exists
@@ -33,8 +33,8 @@ const point = { x: 1, y: 2 };
 ```ts
 // default maxProperties: 1
 const point = {
-    x: 1,
-    y: 2,
+ x: 1,
+ y: 2,
 };
 ```
 
@@ -54,9 +54,9 @@ before enforcing as `error`.
 
 ```ts
 type Options = [
-    {
-        maxProperties?: number; // default: 1
-    },
+ {
+  maxProperties?: number; // default: 1
+ },
 ];
 ```
 
@@ -65,7 +65,7 @@ type Options = [
 ### Default configuration
 
 ```ts
-[{ maxProperties: 1 }]
+[{ maxProperties: 1 }];
 ```
 
 ## Additional examples
@@ -75,9 +75,9 @@ const pair = { left: 1, right: 2 };
 // ✅ valid when configured with { maxProperties: 2 }
 
 const tupleLike = {
-    first: 1,
-    second: 2,
-    third: 3,
+ first: 1,
+ second: 2,
+ third: 3,
 };
 // ✅ required when maxProperties is 2
 ```
@@ -88,12 +88,12 @@ const tupleLike = {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/object-format": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/object-format": "error",
+  },
+ },
 ];
 ```
 

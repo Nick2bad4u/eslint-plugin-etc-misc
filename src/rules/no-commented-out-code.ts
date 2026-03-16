@@ -1,7 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import parser from "@typescript-eslint/parser";
-import { arrayFirst, arrayJoin, stringSplit   } from "ts-extras";
+import { arrayFirst, arrayJoin, isDefined, stringSplit } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 import {
@@ -65,8 +65,10 @@ const stripLeadingAsterisk = (line: string): string => {
 };
 
 const normalizeBlockCommentContent = (content: string): string =>
-    arrayJoin(stringSplit(content, "\n")
-        .map((line) => stripLeadingAsterisk(line)), "\n");
+    arrayJoin(
+        stringSplit(content, "\n").map((line) => stripLeadingAsterisk(line)),
+        "\n"
+    );
 
 const toLocCopy = (loc: Readonly<es.SourceLocation>): es.SourceLocation => ({
     end: loc.end,
@@ -99,26 +101,25 @@ const toCommentBlocks = (
         const previousBlock =
             previousBlockIndex >= 0 ? blocks[previousBlockIndex] : undefined;
 
-        blocks =
-            previousBlock === undefined
-                ? [
-                      ...blocks,
-                      {
-                          content: comment.value,
-                          loc: toLocCopy(comment.loc),
+        blocks = isDefined(previousBlock)
+            ? [
+                  ...blocks.slice(0, previousBlockIndex),
+                  {
+                      content: `${previousBlock.content}\n${comment.value}`,
+                      loc: {
+                          end: comment.loc.end,
+                          start: previousBlock.loc.start,
                       },
-                  ]
-                : [
-                      ...blocks.slice(0, previousBlockIndex),
-                      {
-                          content: `${previousBlock.content}\n${comment.value}`,
-                          loc: {
-                              end: comment.loc.end,
-                              start: previousBlock.loc.start,
-                          },
-                      },
-                      ...blocks.slice(previousBlockIndex + 1),
-                  ];
+                  },
+                  ...blocks.slice(previousBlockIndex + 1),
+              ]
+            : [
+                  ...blocks,
+                  {
+                      content: comment.value,
+                      loc: toLocCopy(comment.loc),
+                  },
+              ];
 
         previousLineComment = comment;
     }
@@ -250,7 +251,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                             block.content,
                             node
                         );
-                        if (wrappedContent === undefined) {
+                        if (!isDefined(wrappedContent)) {
                             continue;
                         }
 

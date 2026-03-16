@@ -29,7 +29,9 @@ type Nested = Promise<Record<string, Record<string, number>>>;
 ```ts
 type Store = Readonly<Record<string, number>>;
 
-type Nested = Promise<Readonly<Record<string, Readonly<Record<string, number>>>>>;
+type Nested = Promise<
+ Readonly<Record<string, Readonly<Record<string, number>>>>
+>;
 ```
 
 ## Behavior and migration notes
@@ -53,12 +55,12 @@ type FlagsView = Readonly<Record<string, boolean>>;
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/prefer-readonly-record": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/prefer-readonly-record": "error",
+  },
+ },
 ];
 ```
 

@@ -3,9 +3,9 @@ title: ADR-Driven Docs Roadmap
 slug: adr-driven-docs-roadmap
 authors: nick
 tags:
-    - docs
-    - adr
-    - architecture
+ - docs
+ - adr
+ - architecture
 ---
 
 We added three new ADRs to document core project strategy:

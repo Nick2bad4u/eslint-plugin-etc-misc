@@ -23,13 +23,13 @@ non-mutating intent to callers and reduces accidental mutation of shared sets.
 
 ```ts
 function buildTags(): Set<string> {
-    return new Set();
+ return new Set();
 }
 
 type Resolver = () => Set<string> | null;
 
 interface API {
-    run(): Set<string>;
+ run(): Set<string>;
 }
 ```
 
@@ -37,13 +37,13 @@ interface API {
 
 ```ts
 function buildTags(): ReadonlySet<string> {
-    return new Set();
+ return new Set();
 }
 
 type Resolver = () => ReadonlySet<string> | null;
 
 interface API {
-    run(): ReadonlySet<string>;
+ run(): ReadonlySet<string>;
 }
 ```
 
@@ -59,12 +59,12 @@ This rule is autofixable and also provides suggestions.
 
 ```ts
 function buildConfig(): Promise<Set<string>> {
-    return Promise.resolve(new Set());
+ return Promise.resolve(new Set());
 }
 // ✅ valid (nested generic type is out of scope)
 
 function buildState(): { values: Set<string> } {
-    return { values: new Set() };
+ return { values: new Set() };
 }
 // ✅ valid (nested object-property type is out of scope)
 ```
@@ -75,12 +75,12 @@ function buildState(): { values: Set<string> } {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/require-readonly-set-return-type": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/require-readonly-set-return-type": "error",
+  },
+ },
 ];
 ```
 

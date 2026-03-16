@@ -10,7 +10,7 @@ enforcement.
 ## Config key
 
 ```ts
-etcMisc.configs.strict
+etcMisc.configs.strict;
 ```
 
 ## Flat Config example

@@ -7,7 +7,7 @@ Disallow template literals that contain no expressions.
 This rule matches template literals with zero interpolations:
 
 - `` `plain text` ``
-- `` `` `` (empty template)
+- ` ` \`\` (empty template)
 
 It reports only when `expressions.length === 0`.
 
@@ -63,12 +63,12 @@ const title = "Dashboard";
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-unnecessary-template-literal": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-unnecessary-template-literal": "error",
+  },
+ },
 ];
 ```
 

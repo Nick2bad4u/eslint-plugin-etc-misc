@@ -54,12 +54,12 @@ type CacheView = ReadonlyMap<string, number>;
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/prefer-readonly-map": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/prefer-readonly-map": "error",
+  },
+ },
 ];
 ```
 

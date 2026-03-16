@@ -6,6 +6,7 @@ import {
     isTypeArrayTypeOrUnionOfArrayTypes,
 } from "@typescript-eslint/type-utils";
 import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
+import { setHas } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -78,7 +79,7 @@ const mutatesReferencedArray = (
 
     if (
         property.type === "Identifier" &&
-        creatorMethodNames.has(property.name)
+        setHas(creatorMethodNames, property.name)
     ) {
         return false;
     }

@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { isDefined } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden" | "suggestAddReadonly";
@@ -38,9 +40,8 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             context.report({
                 messageId: "forbidden",
                 node,
-                ...(fix === undefined
-                    ? {}
-                    : {
+                ...(isDefined(fix)
+                    ? {
                           fix,
                           suggest: [
                               {
@@ -48,7 +49,8 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                                   messageId: "suggestAddReadonly",
                               },
                           ],
-                      }),
+                      }
+                    : {}),
             });
         },
     }),

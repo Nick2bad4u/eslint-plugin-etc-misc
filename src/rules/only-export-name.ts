@@ -1,6 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
-import { arrayFind } from "ts-extras";
+import { setHas } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -71,7 +71,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             ExportDefaultDeclaration: (
                 node: Readonly<es.ExportDefaultDeclaration>
             ): void => {
-                if (allowedNames.has("default")) {
+                if (setHas(allowedNames, "default")) {
                     return;
                 }
 
@@ -87,19 +87,21 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 node: Readonly<es.ExportNamedDeclaration>
             ): void => {
                 const exportedNames = getExportedNames(node);
-                if (exportedNames.every((name) => allowedNames.has(name))) {
+                for (const name of exportedNames) {
+                    if (setHas(allowedNames, name)) {
+                        continue;
+                    }
+
+                    context.report({
+                        data: {
+                            name,
+                        },
+                        messageId: "forbidden",
+                        node,
+                    });
+
                     return;
                 }
-
-                const disallowedName = arrayFind(exportedNames, (name) => !allowedNames.has(name));
-
-                context.report({
-                    data: {
-                        name: disallowedName ?? "<unknown>",
-                    },
-                    messageId: "forbidden",
-                    node,
-                });
             },
         };
     },

@@ -1,5 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { arrayLast } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 import {
     createReplacementRuleInfo,
@@ -16,8 +18,7 @@ const isValidCaseBody = (node: Readonly<es.SwitchCase>): boolean => {
     }
 
     const [firstStatement] = node.consequent;
-    // eslint-disable-next-line unicorn/prefer-at -- Node >=16.0 support baseline
-    const lastStatement = node.consequent[node.consequent.length - 1];
+    const lastStatement = arrayLast(node.consequent);
     if (firstStatement === undefined || lastStatement === undefined) {
         return true;
     }

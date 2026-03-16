@@ -1,6 +1,6 @@
 /* eslint-disable canonical/no-reassign-imports -- Rule entry map intentionally references imported plugin rules metadata. */
 
-import { objectEntries, objectFromEntries  } from "ts-extras";
+import { objectEntries, objectFromEntries } from "ts-extras";
 
 import { rules as pluginRules } from "../rules.js";
 

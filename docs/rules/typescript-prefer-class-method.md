@@ -20,7 +20,7 @@ function property declarations.
 
 ```ts
 class C {
-    value = () => {};
+ value = () => {};
 }
 ```
 
@@ -28,7 +28,7 @@ class C {
 
 ```ts
 class C {
-    value(): void {}
+ value(): void {}
 }
 ```
 
@@ -47,7 +47,7 @@ This rule has no options.
 
 ```ts
 class C {
-    handler: () => void = () => {};
+ handler: () => void = () => {};
 }
 // ✅ valid (explicit property type annotation)
 ```
@@ -58,12 +58,12 @@ class C {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/prefer-class-method": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/prefer-class-method": "error",
+  },
+ },
 ];
 ```
 

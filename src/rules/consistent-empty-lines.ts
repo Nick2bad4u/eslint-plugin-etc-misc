@@ -1,6 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
-import { arrayJoin, stringSplit  } from "ts-extras";
+import { arrayJoin, stringSplit } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -9,7 +9,7 @@ type MessageIds = "inconsistent";
 type Options = readonly [];
 
 const splitLines = (sourceText: string): readonly string[] =>
-    stringSplit(sourceText, /\r?\n/u);
+    stringSplit(sourceText.replaceAll(/\r\n?/gu, "\n"), "\n");
 
 const collapseEmptyLines = (sourceText: string): string => {
     const lines = splitLines(sourceText);

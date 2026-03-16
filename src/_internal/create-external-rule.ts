@@ -1,25 +1,22 @@
 import type { TSESLint } from "@typescript-eslint/utils";
-import type { UnknownArray, UnknownRecord  } from "type-fest";
+import type { UnknownArray, UnknownRecord } from "type-fest";
 
-import { safeCastTo } from "ts-extras";
+import { objectHasOwn, safeCastTo } from "ts-extras";
 
 type RuleContext = TSESLint.RuleContext<string, Readonly<UnknownArray>>;
 type RuleModule = TSESLint.RuleModule<string, Readonly<UnknownArray>>;
-
-type UnknownRecord = Readonly<UnknownRecord>;
 
 const isObjectRecord = (value: unknown): value is UnknownRecord =>
     typeof value === "object" && value !== null;
 
 const hasCreateFunction = (
     value: unknown
-): value is Readonly<{ readonly create: RuleModule["create"] }> =>
-    isObjectRecord(value) && typeof value.create === "function";
+): value is Readonly<UnknownRecord> &
+    Readonly<{ readonly create: RuleModule["create"] }> =>
+    isObjectRecord(value) && typeof value["create"] === "function";
 
-const createLegacyContextCompat = (context: RuleContext): RuleContext => {
-    const contextRecord = context as RuleContext & UnknownRecord;
-
-    return new Proxy(contextRecord, {
+const createLegacyContextCompat = (context: RuleContext): RuleContext =>
+    new Proxy(context, {
         get: (target, property, receiver): unknown => {
             if (property === "getSourceCode") {
                 return (): Readonly<TSESLint.SourceCode> => target.sourceCode;
@@ -39,8 +36,7 @@ const createLegacyContextCompat = (context: RuleContext): RuleContext => {
 
             return Reflect.get(target, property, receiver);
         },
-    }) as unknown as RuleContext;
-};
+    });
 
 /**
  * Resolve a rule module from an external ESLint plugin's `rules` map.
@@ -50,14 +46,14 @@ export const getExternalRuleFromPlugin = (
     ruleName: string,
     pluginName: string
 ): unknown => {
-    if (!isObjectRecord(plugin) || !isObjectRecord(plugin.rules)) {
+    if (!isObjectRecord(plugin) || !isObjectRecord(plugin["rules"])) {
         throw new TypeError(
             `Plugin "${pluginName}" does not expose a valid rules map.`
         );
     }
 
-    const rules = plugin.rules;
-    if (!Object.hasOwn(rules, ruleName)) {
+    const rules = plugin["rules"];
+    if (!objectHasOwn(rules, ruleName)) {
         throw new Error(
             `Rule "${ruleName}" was not found in plugin "${pluginName}".`
         );
@@ -77,12 +73,12 @@ export const adaptExternalRule = (
         throw new TypeError("External rule module does not expose create().");
     }
 
-    const externalRuleRecord = externalRule as UnknownRecord;
-    const externalMeta = isObjectRecord(externalRuleRecord.meta)
-        ? externalRuleRecord.meta
+    const externalRuleRecord = externalRule;
+    const externalMeta = isObjectRecord(externalRuleRecord["meta"])
+        ? externalRuleRecord["meta"]
         : {};
-    const externalDocs = isObjectRecord(externalMeta.docs)
-        ? externalMeta.docs
+    const externalDocs = isObjectRecord(externalMeta["docs"])
+        ? externalMeta["docs"]
         : {};
     const create: RuleModule["create"] = (context) =>
         externalRule.create(createLegacyContextCompat(context));
@@ -90,8 +86,10 @@ export const adaptExternalRule = (
     return {
         ...(externalRuleRecord as unknown as RuleModule),
         create,
-        defaultOptions: Array.isArray(externalRuleRecord.defaultOptions)
-            ? (safeCastTo<Readonly<UnknownArray>>(externalRuleRecord.defaultOptions))
+        defaultOptions: Array.isArray(externalRuleRecord["defaultOptions"])
+            ? safeCastTo<Readonly<UnknownArray>>(
+                  externalRuleRecord["defaultOptions"]
+              )
             : [],
         meta: {
             ...(externalMeta as unknown as RuleModule["meta"]),

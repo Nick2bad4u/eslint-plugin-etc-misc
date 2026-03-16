@@ -8,11 +8,14 @@ type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-const disallowedSelector = arrayJoin([
-    "ExportNamedDeclaration > FunctionDeclaration > Identifier.id[name=/^_/u]",
-    "ExportNamedDeclaration > TSDeclareFunction > Identifier.id[name=/^_/u]",
-    "ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id[name=/^_/u]",
-], ", ");
+const disallowedSelector = arrayJoin(
+    [
+        "ExportNamedDeclaration > FunctionDeclaration > Identifier.id[name=/^_/u]",
+        "ExportNamedDeclaration > TSDeclareFunction > Identifier.id[name=/^_/u]",
+        "ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > Identifier.id[name=/^_/u]",
+    ],
+    ", "
+);
 
 /**
  * Disallow named exports whose identifier starts with an underscore.

@@ -1,7 +1,8 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
+import type { UnknownRecord } from "type-fest";
 
 import { getConstrainedTypeAtLocation } from "@typescript-eslint/type-utils";
-import { arrayJoin } from "ts-extras";
+import { arrayJoin, isDefined, keyIn } from "ts-extras";
 
 type JsDocTagInfo = Readonly<{
     readonly name: string;
@@ -66,7 +67,7 @@ export const isDeclarationIdentifier = (
 const normalizeTagComment = (
     text: readonly JsDocTagTextPart[] | string | undefined
 ): string | undefined => {
-    if (text === undefined) {
+    if (!isDefined(text)) {
         return undefined;
     }
 
@@ -75,26 +76,31 @@ const normalizeTagComment = (
         return normalized.length > 0 ? normalized : undefined;
     }
 
-    const normalized = arrayJoin(text
-        .map((part) => part.text), "")
+    const normalized = arrayJoin(
+        text.map((part) => part.text),
+        ""
+    )
         .replaceAll(/\s+/gu, " ")
         .trim();
 
     return normalized.length > 0 ? normalized : undefined;
 };
 
+const isUnknownRecord = (value: unknown): value is UnknownRecord =>
+    typeof value === "object" && value !== null;
+
 const isSymbolWithJsDocTags = (
     symbol: unknown
 ): symbol is SymbolWithJsDocTags => {
-    if (typeof symbol !== "object" || symbol === null) {
+    if (!isUnknownRecord(symbol)) {
         return false;
     }
 
-    if (!("getJsDocTags" in symbol)) {
+    if (!keyIn(symbol, "getJsDocTags")) {
         return false;
     }
 
-    return typeof symbol.getJsDocTags === "function";
+    return typeof symbol["getJsDocTags"] === "function";
 };
 
 /**
@@ -109,8 +115,10 @@ export const getJsDocTagComments = (
         return [];
     }
 
-    return symbol
-        .getJsDocTags(checker)
+    const tags = symbol.getJsDocTags();
+    const resolvedTags = tags.length > 0 ? tags : symbol.getJsDocTags(checker);
+
+    return resolvedTags
         .filter((tag) => tag.name === tagName)
         .map((tag) => normalizeTagComment(tag.text));
 };
@@ -131,7 +139,7 @@ export const getIdentifierSymbol = (
     node: Readonly<es.Identifier>
 ): ReturnType<ParserServices["getSymbolAtLocation"]> | undefined => {
     const symbolFromLocation = parserServices.getSymbolAtLocation(node);
-    if (symbolFromLocation !== undefined) {
+    if (isDefined(symbolFromLocation)) {
         return symbolFromLocation;
     }
 

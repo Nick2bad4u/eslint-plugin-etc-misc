@@ -52,8 +52,8 @@ entrypoint imports.
 
 ```ts
 type Options = {
-    allow?: string[];
-    disallow?: string[];
+ allow?: string[];
+ disallow?: string[];
 };
 ```
 
@@ -61,7 +61,7 @@ Default:
 
 ```json
 {
-    "disallow": ["./*/**", "[^@]*/**", "@?*/*/**"]
+ "disallow": ["./*/**", "[^@]*/**", "@?*/*/**"]
 }
 ```
 
@@ -82,12 +82,12 @@ import c from "@scope/package";
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-internal-modules": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-internal-modules": "error",
+  },
+ },
 ];
 ```
 

@@ -70,12 +70,12 @@ const sqlNormalized = `
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/template-literal-format": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/template-literal-format": "error",
+  },
+ },
 ];
 ```
 

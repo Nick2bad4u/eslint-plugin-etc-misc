@@ -20,8 +20,8 @@ discoverable shape.
 
 ```ts
 interface I {
-    x: string;
-    (): string;
+ x: string;
+ (): string;
 }
 ```
 
@@ -29,8 +29,8 @@ interface I {
 
 ```ts
 interface I {
-    (): string;
-    x: string;
+ (): string;
+ x: string;
 }
 ```
 
@@ -49,16 +49,16 @@ This rule has no options.
 
 ```ts
 interface Factory {
-    new (): FactoryInstance;
-    (): FactoryInstance;
-    version: string;
+ new (): FactoryInstance;
+ (): FactoryInstance;
+ version: string;
 }
 // ❌ call signature is not first
 
 interface FactoryFixed {
-    (): FactoryInstance;
-    new (): FactoryInstance;
-    version: string;
+ (): FactoryInstance;
+ new (): FactoryInstance;
+ version: string;
 }
 // ✅ valid
 ```
@@ -69,12 +69,12 @@ interface FactoryFixed {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/sort-call-signature": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/sort-call-signature": "error",
+  },
+ },
 ];
 ```
 

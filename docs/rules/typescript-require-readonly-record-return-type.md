@@ -25,13 +25,13 @@ shared dictionary-like objects.
 
 ```ts
 function buildLookup(): Record<string, number> {
-    return {};
+ return {};
 }
 
 type Resolver = () => Record<string, string> | null;
 
 interface API {
-    run(): Record<string, string>;
+ run(): Record<string, string>;
 }
 ```
 
@@ -39,13 +39,13 @@ interface API {
 
 ```ts
 function buildLookup(): Readonly<Record<string, number>> {
-    return {};
+ return {};
 }
 
 type Resolver = () => Readonly<Record<string, string>> | null;
 
 interface API {
-    run(): Readonly<Record<string, string>>;
+ run(): Readonly<Record<string, string>>;
 }
 ```
 
@@ -61,12 +61,12 @@ This rule is autofixable and also provides suggestions.
 
 ```ts
 function buildConfig(): Promise<Record<string, string>> {
-    return Promise.resolve({});
+ return Promise.resolve({});
 }
 // ✅ valid (nested generic type is out of scope)
 
 function buildState(): { values: Record<string, string> } {
-    return { values: {} };
+ return { values: {} };
 }
 // ✅ valid (nested object-property type is out of scope)
 ```
@@ -77,12 +77,12 @@ function buildState(): { values: Record<string, string> } {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/require-readonly-record-return-type": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/require-readonly-record-return-type": "error",
+  },
+ },
 ];
 ```
 

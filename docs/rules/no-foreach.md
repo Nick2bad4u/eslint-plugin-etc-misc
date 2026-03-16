@@ -31,7 +31,7 @@ answers.forEach((answer) => console.log(answer));
 ```ts
 const answers = [42, 54];
 for (const answer of answers) {
-    console.log(answer);
+ console.log(answer);
 }
 ```
 
@@ -46,7 +46,7 @@ utilities to `for...of` before promoting to `error`.
 
 ```ts
 type Options = {
-    types?: string[];
+ types?: string[];
 };
 ```
 
@@ -61,13 +61,17 @@ Use this option to control which type names are checked.
 ## Additional examples
 
 ```ts
-const set = new Set([1, 2, 3]);
+const set = new Set([
+ 1,
+ 2,
+ 3,
+]);
 set.forEach((value) => console.log(value));
 // ❌ reported with default options
 
 const map = new Map<string, number>();
 for (const [key, value] of map) {
-    console.log(key, value);
+ console.log(key, value);
 }
 // ✅ preferred style
 ```
@@ -78,12 +82,12 @@ for (const [key, value] of map) {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-foreach": ["error", { types: ["Array", "Set"] }],
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-foreach": ["error", { types: ["Array", "Set"] }],
+  },
+ },
 ];
 ```
 

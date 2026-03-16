@@ -20,7 +20,7 @@ accidental state changes.
 
 ```ts
 class C {
-    value: string;
+ value: string;
 }
 ```
 
@@ -28,7 +28,7 @@ class C {
 
 ```ts
 class C {
-    readonly value: string;
+ readonly value: string;
 }
 ```
 
@@ -46,12 +46,12 @@ This rule has no options.
 
 ```ts
 interface Settings {
-    mode: "dark" | "light";
+ mode: "dark" | "light";
 }
 // ❌ reported
 
 interface ReadonlySettings {
-    readonly mode: "dark" | "light";
+ readonly mode: "dark" | "light";
 }
 // ✅ valid
 ```
@@ -62,12 +62,12 @@ interface ReadonlySettings {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/prefer-readonly-property": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/prefer-readonly-property": "error",
+  },
+ },
 ];
 ```
 

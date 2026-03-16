@@ -6,7 +6,7 @@ Disallow usage of symbols tagged with `@internal`.
 
 ⚠️ This rule requires type information to run. Configure type-aware linting (`parserOptions.project` or `projectService`) before enabling it.
 
-This rule inspects identifier *usages* and resolves each identifier to a
+This rule inspects identifier _usages_ and resolves each identifier to a
 TypeScript symbol.
 
 If the resolved symbol has one or more `@internal` JSDoc tags, usage is
@@ -31,7 +31,7 @@ outside a package's supported API surface.
 ```ts
 /** @internal */
 interface InternalType {
-  readonly value: number;
+ readonly value: number;
 }
 
 const item: InternalType = { value: 42 };
@@ -48,7 +48,7 @@ internalFunction();
 
 ```ts
 interface PublicType {
-  readonly value: number;
+ readonly value: number;
 }
 
 const item: PublicType = { value: 42 };
@@ -57,7 +57,7 @@ const item: PublicType = { value: 42 };
 ```ts
 /** @internal */
 interface InternalType {
-  readonly value: number;
+ readonly value: number;
 }
 
 // Declaration is allowed. Only usage is reported.
@@ -74,16 +74,16 @@ focuses on usage sites resolved through TypeScript symbol information.
 
 ```ts
 type Options = [
-  {
-    ignored?: Record<string, "name" | "path">;
-  }?,
+ {
+  ignored?: Record<string, "name" | "path">;
+ }?,
 ];
 ```
 
 Default:
 
 ```ts
-[{}]
+[{}];
 ```
 
 Use `ignored` to suppress some internal symbols by regular-expression pattern:
@@ -100,20 +100,20 @@ Example:
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-  {
-    plugins: { "etc-misc": etcMisc },
-    rules: {
-      "etc-misc/no-internal": [
-        "error",
-        {
-          ignored: {
-            "^ExperimentalInternalType$": "name",
-            "modules/internal": "path",
-          },
-        },
-      ],
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-internal": [
+    "error",
+    {
+     ignored: {
+      "^ExperimentalInternalType$": "name",
+      "modules/internal": "path",
+     },
     },
+   ],
   },
+ },
 ];
 ```
 
@@ -137,12 +137,12 @@ const ignoredValue = __internalThing;
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-internal": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-internal": "error",
+  },
+ },
 ];
 ```
 

@@ -1,6 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
-import { arrayJoin, isEmpty  } from "ts-extras";
+import { arrayJoin, isDefined, isEmpty } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -8,11 +8,14 @@ type MessageIds = "forbidden" | "suggestRemoveRedundantUndefined";
 
 type Options = readonly [];
 
-const selector = arrayJoin([
-    "Identifier[optional=true] > TSTypeAnnotation > TSUnionType",
-    "TSNamedTupleMember[optional=true] > TSUnionType",
-    "TSOptionalType > TSUnionType",
-], ", ");
+const selector = arrayJoin(
+    [
+        "Identifier[optional=true] > TSTypeAnnotation > TSUnionType",
+        "TSNamedTupleMember[optional=true] > TSUnionType",
+        "TSOptionalType > TSUnionType",
+    ],
+    ", "
+);
 
 const buildFixedTypeText = (
     sourceCode: Readonly<TSESLint.SourceCode>,
@@ -60,7 +63,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 
                 const fixedTypeText = buildFixedTypeText(sourceCode, node);
 
-                if (fixedTypeText === undefined) {
+                if (!isDefined(fixedTypeText)) {
                     return;
                 }
 

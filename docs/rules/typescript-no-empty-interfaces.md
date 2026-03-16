@@ -28,7 +28,7 @@ interface I {}
 
 ```ts
 interface I {
-    value: string;
+ value: string;
 }
 ```
 
@@ -70,12 +70,12 @@ interface Empty {}
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/no-empty-interfaces": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/no-empty-interfaces": "error",
+  },
+ },
 ];
 ```
 

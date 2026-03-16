@@ -25,13 +25,13 @@ boundary.
 ## ❌ Incorrect
 
 ```ts
-const create = () => ((() => 1) as (() => number));
+const create = () => (() => 1) as () => number;
 ```
 
 ## ✅ Correct
 
 ```ts
-const create = (): () => number => (() => 1);
+const create = (): (() => number) => () => 1;
 ```
 
 ## Behavior and migration notes
@@ -48,7 +48,7 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-const create = () => ({ run() {} } as { run(): void });
+const create = () => ({ run() {} }) as { run(): void };
 // ❌ reported: complex asserted return expression and no return annotation
 
 const createTyped = (): { run(): void } => ({ run() {} });
@@ -61,12 +61,12 @@ const createTyped = (): { run(): void } => ({ run() {} });
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/no-complex-return-type": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/no-complex-return-type": "error",
+  },
+ },
 ];
 ```
 

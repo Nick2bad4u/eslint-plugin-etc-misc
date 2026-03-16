@@ -45,8 +45,8 @@ with `path`, and so on.
 
 ```ts
 type Options = {
-    allow?: string[];
-    disallow?: string[];
+ allow?: string[];
+ disallow?: string[];
 };
 ```
 
@@ -54,7 +54,7 @@ Default:
 
 ```json
 {
-    "disallow": ["node:*"]
+ "disallow": ["node:*"]
 }
 ```
 
@@ -74,12 +74,12 @@ const fsModule = await import("fs");
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-nodejs-modules": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-nodejs-modules": "error",
+  },
+ },
 ];
 ```
 

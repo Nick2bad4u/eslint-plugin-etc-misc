@@ -1,6 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
-import { arrayJoin, isEmpty  } from "ts-extras";
+import { arrayJoin, isDefined, isEmpty } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -203,7 +203,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         typeAnnotation.typeAnnotation
                     );
 
-                    if (fixedTypeText === undefined) {
+                    if (!isDefined(fixedTypeText)) {
                         continue;
                     }
 

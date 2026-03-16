@@ -39,9 +39,9 @@ This rule reports only and does not provide an autofix.
 
 ```ts
 type Options = [
-    {
-        allowDirectiveComments?: boolean;
-    }?,
+ {
+  allowDirectiveComments?: boolean;
+ }?,
 ];
 ```
 
@@ -50,7 +50,7 @@ type Options = [
 Default:
 
 ```ts
-[{ allowDirectiveComments: true }]
+[{ allowDirectiveComments: true }];
 ```
 
 When `allowDirectiveComments` is `true`, comments such as
@@ -78,12 +78,12 @@ const nextValue = 2;
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-single-line-comment": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-single-line-comment": "error",
+  },
+ },
 ];
 ```
 

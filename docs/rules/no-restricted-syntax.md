@@ -23,28 +23,32 @@ It provides a general escape hatch for enforcing project-specific syntax bans.
 
 ```ts
 if (x) {
-    y();
+ y();
 }
 ```
 
 with options:
 
 ```ts
-{ selectors: ["IfStatement"] }
+{
+ selectors: ["IfStatement"];
+}
 ```
 
 ## ✅ Correct
 
 ```ts
 for (;;) {
-    break;
+ break;
 }
 ```
 
 with options:
 
 ```ts
-{ selectors: ["IfStatement"] }
+{
+ selectors: ["IfStatement"];
+}
 ```
 
 ## Deprecated
@@ -64,22 +68,22 @@ It reports only and does not provide an autofix.
 
 ```ts
 type Options = [
-    {
-        selectors?: Array<
-            | string
-            | {
-                  message?: string;
-                  selector: string;
-              }
-        >;
-    },
+ {
+  selectors?: Array<
+   | string
+   | {
+      message?: string;
+      selector: string;
+     }
+  >;
+ },
 ];
 ```
 
 ### Default configuration
 
 ```ts
-[{ selectors: [] }]
+[{ selectors: [] }];
 ```
 
 With the default empty selector list, this rule does not report anything until
@@ -108,15 +112,12 @@ setTimeout(() => {}, 1000);
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-restricted-syntax": [
-                "error",
-                { selectors: ["IfStatement"] },
-            ],
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-restricted-syntax": ["error", { selectors: ["IfStatement"] }],
+  },
+ },
 ];
 ```
 

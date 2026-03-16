@@ -33,8 +33,8 @@ type Status = "open" | "closed";
 
 ```ts
 enum Status {
-    Open = "open",
-    Closed = "closed",
+ Open = "open",
+ Closed = "closed",
 }
 ```
 
@@ -53,12 +53,12 @@ This rule has no options.
 
 ```ts
 enum Status {
-    Open = "open",
-    Closed = "closed",
+ Open = "open",
+ Closed = "closed",
 }
 
 const getStatus = (): Status => {
-    return "open";
+ return "open";
 };
 // ❌ reported (string literal return in enum-like return context)
 ```
@@ -69,12 +69,12 @@ const getStatus = (): Status => {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/prefer-enum": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/prefer-enum": "error",
+  },
+ },
 ];
 ```
 

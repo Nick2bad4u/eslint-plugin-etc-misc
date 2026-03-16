@@ -19,8 +19,8 @@ cost.
 
 ```ts
 const data = {
-    used: 1,
-    unused: 2,
+ used: 1,
+ unused: 2,
 };
 
 console.log(data.used);
@@ -30,8 +30,8 @@ console.log(data.used);
 
 ```ts
 const data = {
-    used: 1,
-    alsoUsed: 2,
+ used: 1,
+ alsoUsed: 2,
 };
 
 console.log(data.used + data.alsoUsed);
@@ -50,15 +50,15 @@ This rule forwards options and behavior to `unicorn/no-unused-properties`.
 
 ```ts
 const result = {
-    id: 1,
-    debug: true,
+ id: 1,
+ debug: true,
 };
 console.log(result.id);
 // ❌ `debug` is never read
 
 const resultFixed = {
-    id: 1,
-    debug: true,
+ id: 1,
+ debug: true,
 };
 console.log(resultFixed.id, resultFixed.debug);
 // ✅ valid
@@ -70,12 +70,12 @@ console.log(resultFixed.id, resultFixed.debug);
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/unused-internal-properties": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/unused-internal-properties": "error",
+  },
+ },
 ];
 ```
 

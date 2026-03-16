@@ -1,6 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
-import { arrayAt, objectEntries  } from "ts-extras";
+import { arrayAt, objectEntries, objectHasOwn } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 import {
@@ -13,7 +13,7 @@ type MessageIds = "forbidden";
 type Options = readonly [];
 
 const isNode = (value: unknown): value is Readonly<es.Node> =>
-    typeof value === "object" && value !== null && "type" in value;
+    typeof value === "object" && value !== null && objectHasOwn(value, "type");
 
 const containsThisExpression = (root: Readonly<es.Node>): boolean => {
     let stack: readonly es.Node[] = [root];

@@ -2,6 +2,7 @@ import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 import type * as ts from "typescript";
 
 import { ESLintUtils } from "@typescript-eslint/utils";
+import { isDefined } from "ts-extras";
 import * as tsutils from "tsutils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -47,7 +48,7 @@ const isTypeUseInsideConstraint = (
 ): boolean =>
     typeParameters.some((typeParameter) => {
         const { constraint } = typeParameter;
-        if (constraint === undefined) {
+        if (!isDefined(constraint)) {
             return false;
         }
 
@@ -63,7 +64,7 @@ const isConstrainedByAnotherTypeParameter = (
     usageMap: Readonly<VariableUsageMap>
 ): boolean => {
     const { constraint } = currentTypeParameter;
-    if (constraint === undefined) {
+    if (!isDefined(constraint)) {
         return false;
     }
 
@@ -94,7 +95,7 @@ const getTypeParameterReplacement = (
     typeParameter: Readonly<ts.TypeParameterDeclaration>
 ): string => {
     const { constraint } = typeParameter;
-    if (constraint === undefined) {
+    if (!isDefined(constraint)) {
         return "unknown";
     }
 
@@ -205,7 +206,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
             if (
                 !tsutils.isSignatureDeclaration(tsNode) ||
-                tsNode.typeParameters === undefined
+                !isDefined(tsNode.typeParameters)
             ) {
                 return;
             }

@@ -25,8 +25,8 @@ input values.
 
 ```ts
 function f(value: number) {
-    sideEffect();
-    value += 1;
+ sideEffect();
+ value += 1;
 }
 ```
 
@@ -34,23 +34,23 @@ function f(value: number) {
 
 ```ts
 function f(value: number) {
-    value += 1;
-    sideEffect();
+ value += 1;
+ sideEffect();
 }
 ```
 
 ```ts
 function f(value: number): number {
-    const nextValue = value + 1;
-    return nextValue;
+ const nextValue = value + 1;
+ return nextValue;
 }
 ```
 
 ```ts
 function initialize(value: number) {
-    value = normalize(value);
-    // ✅ allowed: reassignment occurs in first expression statement
-    return value;
+ value = normalize(value);
+ // ✅ allowed: reassignment occurs in first expression statement
+ return value;
 }
 ```
 
@@ -68,10 +68,10 @@ This rule has no options.
 
 ```ts
 function increment(count: number): number {
-    doWork();
-    count++;
-    // ❌ reported: update occurs after the first expression statement
-    return count;
+ doWork();
+ count++;
+ // ❌ reported: update occurs after the first expression statement
+ return count;
 }
 ```
 
@@ -81,12 +81,12 @@ function increment(count: number): number {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-param-reassign": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-param-reassign": "error",
+  },
+ },
 ];
 ```
 

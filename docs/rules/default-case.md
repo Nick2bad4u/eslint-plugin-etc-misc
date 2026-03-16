@@ -19,8 +19,8 @@ control flow.
 
 ```ts
 switch (status) {
-    case "open":
-        break;
+ case "open":
+  break;
 }
 ```
 
@@ -28,10 +28,10 @@ switch (status) {
 
 ```ts
 switch (status) {
-    case "open":
-        break;
-    default:
-        break;
+ case "open":
+  break;
+ default:
+  break;
 }
 ```
 
@@ -43,18 +43,18 @@ This rule forwards options and behavior to ESLint core `default-case`.
 
 ```ts
 switch (kind) {
-    case "a":
-        runA();
-        break;
+ case "a":
+  runA();
+  break;
 }
 // ❌ reported
 
 switch (kind) {
-    case "a":
-        runA();
-        break;
-    default:
-        throw new Error(`Unhandled kind: ${kind}`);
+ case "a":
+  runA();
+  break;
+ default:
+  throw new Error(`Unhandled kind: ${kind}`);
 }
 // ✅ valid
 ```
@@ -65,12 +65,12 @@ switch (kind) {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/default-case": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/default-case": "error",
+  },
+ },
 ];
 ```
 

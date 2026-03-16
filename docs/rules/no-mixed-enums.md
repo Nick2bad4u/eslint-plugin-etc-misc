@@ -20,8 +20,8 @@ understand.
 
 ```ts
 enum State {
-    open = "open",
-    closed = 2,
+ open = "open",
+ closed = 2,
 }
 ```
 
@@ -29,8 +29,8 @@ enum State {
 
 ```ts
 enum State {
-    open = 1,
-    closed = 2,
+ open = 1,
+ closed = 2,
 }
 ```
 
@@ -48,14 +48,14 @@ This rule forwards options and behavior to
 
 ```ts
 enum NumericStatus {
-    Open = 1,
-    Closed = 2,
+ Open = 1,
+ Closed = 2,
 }
 // ✅ valid
 
 enum MixedStatus {
-    Open = "open",
-    Closed = 2,
+ Open = "open",
+ Closed = 2,
 }
 // ❌ reported
 ```
@@ -66,12 +66,12 @@ enum MixedStatus {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-mixed-enums": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-mixed-enums": "error",
+  },
+ },
 ];
 ```
 

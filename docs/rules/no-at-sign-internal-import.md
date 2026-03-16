@@ -39,8 +39,8 @@ allowed local relative imports.
 
 ```ts
 type Options = {
-    allow?: string[];
-    disallow?: string[];
+ allow?: string[];
+ disallow?: string[];
 };
 ```
 
@@ -48,7 +48,7 @@ Default:
 
 ```json
 {
-    "disallow": ["@/**"]
+ "disallow": ["@/**"]
 }
 ```
 
@@ -69,12 +69,12 @@ import { helper } from "@";
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-at-sign-internal-import": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-at-sign-internal-import": "error",
+  },
+ },
 ];
 ```
 

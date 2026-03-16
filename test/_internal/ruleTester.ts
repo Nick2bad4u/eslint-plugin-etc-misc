@@ -20,7 +20,7 @@ export const ruleTester: RuleTester = new RuleTester({
         parserOptions: {
             ecmaVersion: "latest",
             projectService: {
-                allowDefaultProject: ["*.ts"],
+                allowDefaultProject: ["*.ts", "*.tsx"],
             },
             sourceType: "module",
             tsconfigRootDir: process.cwd(),

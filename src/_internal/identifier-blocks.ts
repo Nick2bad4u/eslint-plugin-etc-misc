@@ -2,7 +2,7 @@ import { stringSplit } from "ts-extras";
 
 const camelCaseBoundaryPattern = /(?<=[\da-z])(?=[A-Z])/gu;
 const nonAlphanumericPattern = /[^0-9A-Za-z]+/gu;
-const whitespacePattern = /\s+/u;
+const whitespacePattern = /\s+/gu;
 
 /**
  * Split identifier-like text into non-empty blocks while preserving original
@@ -18,8 +18,11 @@ export const splitIdentifierBlocks = (value: string): readonly string[] => {
         return [];
     }
 
-    return stringSplit(normalized, whitespacePattern)
-        .filter((segment) => segment.length > 0);
+    const normalizedWhitespace = normalized.replaceAll(whitespacePattern, " ");
+
+    return stringSplit(normalizedWhitespace, " ").filter(
+        (segment) => segment.length > 0
+    );
 };
 
 /**

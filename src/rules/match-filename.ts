@@ -1,6 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { resolve } from "node:path";
+import { isDefined } from "ts-extras";
 
 import { type Casing, filenameStem, toCasing } from "../_internal/casing.js";
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -27,7 +28,7 @@ const defaultSelectors = [
 const normalizeSelector = (
     selector: Options[0]["selector"]
 ): readonly string[] => {
-    if (selector === undefined) {
+    if (!isDefined(selector)) {
         return defaultSelectors;
     }
 

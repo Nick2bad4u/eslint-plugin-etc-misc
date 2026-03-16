@@ -12,7 +12,7 @@ import {
     ESLintUtils,
     type TSESLint,
 } from "@typescript-eslint/utils";
-import { arrayFind, arrayFirst  } from "ts-extras";
+import { arrayFirst, isDefined } from "ts-extras";
 import * as tsutils from "tsutils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -154,10 +154,17 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         return;
                     }
 
-                    const rejectVariable = arrayFind(context.sourceCode
-                        .getDeclaredVariables(callback), (declaredVariable) =>
-                                declaredVariable.name === rejectParameter.name);
-                    if (rejectVariable === undefined) {
+                    const rejectVariable = arrayFirst(
+                        context.sourceCode
+                            .getDeclaredVariables(callback)
+                            .filter(
+                                (declaredVariable) =>
+                                    declaredVariable.name ===
+                                    rejectParameter.name
+                            )
+                    );
+
+                    if (!isDefined(rejectVariable)) {
                         return;
                     }
 

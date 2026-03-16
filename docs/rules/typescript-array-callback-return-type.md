@@ -35,7 +35,11 @@ clarity and catches accidental return-shape drift earlier.
 ## ❌ Incorrect
 
 ```ts
-[1, 2, 3].map((value) => value + 1);
+[
+ 1,
+ 2,
+ 3,
+].map((value) => value + 1);
 ```
 
 ```ts
@@ -45,7 +49,11 @@ users.find((user) => user.id === targetId);
 ## ✅ Correct
 
 ```ts
-[1, 2, 3].map((value): number => value + 1);
+[
+ 1,
+ 2,
+ 3,
+].map((value): number => value + 1);
 ```
 
 ```ts
@@ -54,7 +62,7 @@ users.find((user): boolean => user.id === targetId);
 
 ```ts
 const collection = {
-    map: (callback: (value: number) => number): number => callback(1),
+ map: (callback: (value: number) => number): number => callback(1),
 };
 
 collection.map((value) => value + 1);
@@ -77,7 +85,11 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-const scores = [2, 4, 6] as const;
+const scores = [
+ 2,
+ 4,
+ 6,
+] as const;
 
 const doubled = scores.map((score): number => score * 2);
 ```
@@ -97,12 +109,12 @@ custom.map((value: number) => value + 1);
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/array-callback-return-type": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/array-callback-return-type": "error",
+  },
+ },
 ];
 ```
 

@@ -28,7 +28,7 @@ const AaaBbbCccDddEee = 1;
 function aaaBbbCccDddEee() {}
 
 const obj = {
-    veryLongCompoundIdentifierName: 1,
+ veryLongCompoundIdentifierName: 1,
 };
 ```
 
@@ -65,12 +65,12 @@ const parseHttpBody = true;
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/max-identifier-blocks": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/max-identifier-blocks": "error",
+  },
+ },
 ];
 ```
 

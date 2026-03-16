@@ -6,10 +6,12 @@ import * as fc from "fast-check";
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-import plugin from "../plugin.mjs";
+import pluginExport from "../plugin.mjs";
 import { pluginMeta } from "../src/_internal/plugin-meta";
 import { configs } from "../src/configs";
 import { rules } from "../src/rules";
+
+const plugin = pluginExport;
 
 const readPluginEntrypointSource = (): string =>
     readFileSync("plugin.mjs", "utf8");

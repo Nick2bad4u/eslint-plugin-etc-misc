@@ -25,16 +25,20 @@ expressions. Positive predicates are usually easier to scan and reason about.
 ## ❌ Incorrect
 
 ```ts
-if (!x && y) {}
-if (x !== 1 && y) {}
+if (!x && y) {
+}
+if (x !== 1 && y) {
+}
 const value = !x || y;
 ```
 
 ## ✅ Correct
 
 ```ts
-if (x && y) {}
-if (x === 1 && y) {}
+if (x && y) {
+}
+if (x === 1 && y) {
+}
 const value = x && y;
 ```
 
@@ -53,12 +57,12 @@ This rule has no options.
 
 ```ts
 if (!isReady || hasError) {
-    return;
+ return;
 }
 // ❌ reported
 
 if (isReady && hasNoError) {
-    start();
+ start();
 }
 // ✅ valid when predicates are already positive.
 ```
@@ -69,12 +73,12 @@ if (isReady && hasNoError) {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-negated-conditions": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-negated-conditions": "error",
+  },
+ },
 ];
 ```
 

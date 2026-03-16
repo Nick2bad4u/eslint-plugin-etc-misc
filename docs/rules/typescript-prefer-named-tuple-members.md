@@ -73,12 +73,12 @@ type Point = [x: number, y: number];
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/prefer-named-tuple-members": "warn",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/prefer-named-tuple-members": "warn",
+  },
+ },
 ];
 ```
 

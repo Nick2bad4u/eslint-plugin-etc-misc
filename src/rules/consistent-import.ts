@@ -1,5 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { isDefined } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type ImportStyle = "default" | "mixed" | "named" | "namespace" | "side-effect";
@@ -61,7 +63,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 const source = node.source.value;
                 const style = styleFromImport(node);
                 const expected = options.style ?? seen.get(source) ?? style;
-                if (options.style === undefined) {
+                if (!isDefined(options.style)) {
                     seen.set(source, expected);
                 }
 

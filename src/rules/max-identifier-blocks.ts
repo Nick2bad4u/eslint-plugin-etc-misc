@@ -11,10 +11,10 @@ type Options = readonly [];
 
 const maxIdentifierBlocks = 4;
 
-const disallowedSelector = arrayJoin([
-    "Identifier.id",
-    ":not(Property[shorthand=true]) > Identifier.key",
-], ", ");
+const disallowedSelector = arrayJoin(
+    ["Identifier.id", ":not(Property[shorthand=true]) > Identifier.key"],
+    ", "
+);
 
 /**
  * Disallow identifiers containing more than four casing blocks.

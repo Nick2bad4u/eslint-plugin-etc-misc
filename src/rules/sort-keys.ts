@@ -2,7 +2,7 @@
 
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
-import { arrayFirst, arrayJoin, arrayLast   } from "ts-extras";
+import { arrayFirst, arrayJoin, arrayLast, isDefined } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -32,7 +32,7 @@ const buildFix =
     ): TSESLint.ReportFixFunction =>
     (fixer): TSESLint.RuleFix => {
         const first = arrayFirst(properties);
-         
+
         const last = arrayLast(properties);
         if (first === undefined || last === undefined) {
             return fixer.insertTextAfterRange([0, 0], "");
@@ -45,7 +45,10 @@ const buildFix =
 
         return fixer.replaceTextRange(
             [arrayFirst(first.range), last.range[1]],
-            arrayJoin(sorted.map((property) => sourceCode.getText(property)), ", ")
+            arrayJoin(
+                sorted.map((property) => sourceCode.getText(property)),
+                ", "
+            )
         );
     };
 
@@ -76,7 +79,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             let hasPreviousName = false;
             for (const property of properties) {
                 const currentName = keyName(property);
-                if (currentName === undefined) {
+                if (!isDefined(currentName)) {
                     return;
                 }
 

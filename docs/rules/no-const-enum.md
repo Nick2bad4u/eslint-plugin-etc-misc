@@ -22,8 +22,8 @@ toolchains and isolated transpilation flows.
 
 ```ts
 const enum Status {
-    Ready,
-    Running,
+ Ready,
+ Running,
 }
 ```
 
@@ -31,8 +31,8 @@ const enum Status {
 
 ```ts
 enum Status {
-    Ready,
-    Running,
+ Ready,
+ Running,
 }
 ```
 
@@ -49,7 +49,7 @@ Migration options:
 
 ```ts
 type Options = {
-    allowLocal?: boolean;
+ allowLocal?: boolean;
 };
 ```
 
@@ -64,12 +64,12 @@ When `true`, non-exported `const enum` declarations are allowed.
 ```ts
 // config: { allowLocal: true }
 const enum LocalKind {
-    A,
+ A,
 }
 // ✅ allowed when not exported
 
 export const enum PublicKind {
-    A,
+ A,
 }
 // ❌ still reported
 ```
@@ -80,12 +80,12 @@ export const enum PublicKind {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-const-enum": ["error", { allowLocal: true }],
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-const-enum": ["error", { allowLocal: true }],
+  },
+ },
 ];
 ```
 

@@ -23,7 +23,7 @@ and are commonly intended to be `boolean`.
 
 ```ts
 interface Flags {
-    on?: true;
+ on?: true;
 }
 ```
 
@@ -31,7 +31,7 @@ interface Flags {
 
 ```ts
 interface Flags {
-    on?: boolean;
+ on?: boolean;
 }
 ```
 
@@ -49,12 +49,12 @@ This rule has no options.
 
 ```ts
 interface Flags {
-    enabled?: false;
+ enabled?: false;
 }
 // ❌ reported
 
 interface FlagsFixed {
-    enabled?: boolean;
+ enabled?: boolean;
 }
 // ✅ valid
 ```
@@ -65,12 +65,12 @@ interface FlagsFixed {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/no-boolean-literal-type": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/no-boolean-literal-type": "error",
+  },
+ },
 ];
 ```
 

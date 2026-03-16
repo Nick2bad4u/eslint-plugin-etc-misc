@@ -1,4 +1,4 @@
-import { arrayAt, arrayJoin, stringSplit   } from "ts-extras";
+import { arrayAt, arrayJoin, stringSplit } from "ts-extras";
 
 import { splitIdentifierBlocks } from "./identifier-blocks.js";
 
@@ -11,8 +11,12 @@ const splitWords = (value: string): readonly string[] =>
     splitIdentifierBlocks(value).map((word) => word.toLowerCase());
 
 const toPascal = (value: string): string =>
-    arrayJoin(splitWords(value)
-        .map((word) => `${word[0]?.toUpperCase() ?? ""}${word.slice(1)}`), "");
+    arrayJoin(
+        splitWords(value).map(
+            (word) => `${word[0]?.toUpperCase() ?? ""}${word.slice(1)}`
+        ),
+        ""
+    );
 
 /**
  * Convert an input string into the requested casing format.
@@ -42,7 +46,8 @@ export const toCasing = (value: string, format: Casing): string => {
  * Extract the final filename segment without extension.
  */
 export const filenameStem = (filePath: string): string => {
-    const pathSegments = stringSplit(filePath, /[/\\]/u);
+    const normalizedPath = filePath.replaceAll("\\", "/");
+    const pathSegments = stringSplit(normalizedPath, "/");
     const lastPathSegment = arrayAt(pathSegments, -1) ?? filePath;
 
     return lastPathSegment.replace(/\.[^./\\]+$/u, "");

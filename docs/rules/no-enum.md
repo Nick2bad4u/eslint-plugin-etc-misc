@@ -19,8 +19,8 @@ objects are preferred over enum runtime constructs.
 
 ```ts
 enum Status {
-    Ready,
-    Running,
+ Ready,
+ Running,
 }
 ```
 
@@ -28,8 +28,8 @@ enum Status {
 
 ```ts
 const Status = {
-    Ready: "Ready",
-    Running: "Running",
+ Ready: "Ready",
+ Running: "Running",
 } as const;
 
 type Status = (typeof Status)[keyof typeof Status];
@@ -49,14 +49,14 @@ This rule has no options.
 
 ```ts
 enum HttpCode {
-    Ok = 200,
-    NotFound = 404,
+ Ok = 200,
+ NotFound = 404,
 }
 // ❌ reported
 
 const HttpCode = {
-    Ok: 200,
-    NotFound: 404,
+ Ok: 200,
+ NotFound: 404,
 } as const;
 
 type HttpCode = (typeof HttpCode)[keyof typeof HttpCode];
@@ -69,12 +69,12 @@ type HttpCode = (typeof HttpCode)[keyof typeof HttpCode];
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-enum": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-enum": "error",
+  },
+ },
 ];
 ```
 

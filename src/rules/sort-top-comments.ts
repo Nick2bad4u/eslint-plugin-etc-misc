@@ -2,7 +2,7 @@
 
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
-import { arrayFirst, arrayJoin, arrayLast   } from "ts-extras";
+import { arrayFirst, arrayJoin, arrayLast } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -17,10 +17,13 @@ const buildReplacement = (
     sourceCode: Readonly<TSESLint.SourceCode>,
     comments: readonly es.Comment[]
 ): string =>
-    arrayJoin(comments
-        .map((comment) => sourceCode.getText(comment))
-        // eslint-disable-next-line unicorn/no-array-sort -- Node >=16.0 support baseline
-        .sort((a, b) => a.localeCompare(b)), "\n");
+    arrayJoin(
+        comments
+            .map((comment) => sourceCode.getText(comment))
+            // eslint-disable-next-line unicorn/no-array-sort -- Node >=16.0 support baseline
+            .sort((a, b) => a.localeCompare(b)),
+        "\n"
+    );
 
 /**
  * Enforce alphabetical ordering of top-of-file comments.
@@ -50,7 +53,6 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 return;
             }
 
-             
             const lastComment = arrayLast(comments) ?? firstComment;
 
             // eslint-disable-next-line unicorn/no-array-sort -- Node >=16.0 support baseline

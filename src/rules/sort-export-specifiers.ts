@@ -2,7 +2,7 @@
 
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
-import { arrayJoin } from "ts-extras";
+import { arrayFirst, arrayJoin, arrayLast } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -20,16 +20,18 @@ const buildFix = (
     node: Readonly<es.ExportNamedDeclaration>,
     sourceCode: Readonly<TSESLint.SourceCode>,
     sorted: readonly es.ExportSpecifier[]
-): TSESLint.RuleFix =>
-    fixer.replaceTextRange(
-        [
-            node.specifiers[0]?.range[0] ?? node.range[0],
-            // eslint-disable-next-line unicorn/prefer-at -- Node >=16.0 support baseline
-            node.specifiers[node.specifiers.length - 1]?.range[1] ??
-                node.range[1],
-        ],
-        arrayJoin(sorted.map((specifier) => sourceCode.getText(specifier)), ", ")
+): TSESLint.RuleFix => {
+    const startRange = arrayFirst(node.specifiers)?.range ?? node.range;
+    const endRange = arrayLast(node.specifiers)?.range ?? node.range;
+
+    return fixer.replaceTextRange(
+        [arrayFirst(startRange), arrayLast(endRange)],
+        arrayJoin(
+            sorted.map((specifier) => sourceCode.getText(specifier)),
+            ", "
+        )
     );
+};
 
 /**
  * Enforce alphabetical sorting of named export specifiers.

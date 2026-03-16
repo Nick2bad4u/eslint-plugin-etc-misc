@@ -10,7 +10,7 @@ rules that require TypeScript type information.
 ## Config key
 
 ```ts
-etcMisc.configs.strictTypeChecked
+etcMisc.configs.strictTypeChecked;
 ```
 
 ## Flat Config example

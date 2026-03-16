@@ -20,7 +20,7 @@ on a `this` context.
 
 ```ts
 class C {
-    static f() {}
+ static f() {}
 }
 ```
 
@@ -28,7 +28,7 @@ class C {
 
 ```ts
 class C {
-    static f(this: void) {}
+ static f(this: void) {}
 }
 ```
 
@@ -46,16 +46,16 @@ This rule has no options.
 
 ```ts
 class C {
-    static parse(this: C, value: string): C {
-        return new C();
-    }
+ static parse(this: C, value: string): C {
+  return new C();
+ }
 }
 // ❌ reported: first parameter is not `this: void`
 
 class D {
-    static parse(this: void, value: string): D {
-        return new D();
-    }
+ static parse(this: void, value: string): D {
+  return new D();
+ }
 }
 // ✅ valid
 ```
@@ -66,12 +66,12 @@ class D {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/require-this-void": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/require-this-void": "error",
+  },
+ },
 ];
 ```
 

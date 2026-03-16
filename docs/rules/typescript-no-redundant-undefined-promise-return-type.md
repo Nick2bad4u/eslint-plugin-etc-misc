@@ -40,13 +40,13 @@ keeping `| undefined` adds type noise and weakens API clarity.
 const read = async (): Promise<string | undefined> => "x";
 
 async function count(): Promise<number | undefined> {
-    return 1;
+ return 1;
 }
 
 class Box {
-    async label(): Promise<string | undefined> {
-        return "box";
-    }
+ async label(): Promise<string | undefined> {
+  return "box";
+ }
 }
 ```
 
@@ -56,13 +56,13 @@ class Box {
 const read = async (): Promise<string> => "x";
 
 async function count(): Promise<number> {
-    return 1;
+ return 1;
 }
 
 class Box {
-    async label(): Promise<string> {
-        return "box";
-    }
+ async label(): Promise<string> {
+  return "box";
+ }
 }
 ```
 
@@ -85,13 +85,13 @@ This rule has no options.
 
 ```ts
 async function read(): Promise<string | undefined> {
-    return maybe();
+ return maybe();
 }
 // ✅ valid (returned call may resolve to undefined)
 
 async function read(): Promise<string | undefined> {
-    const value = "x";
-    return value;
+ const value = "x";
+ return value;
 }
 // ✅ valid (multiple statements in block body are out of conservative scope)
 ```
@@ -102,12 +102,12 @@ async function read(): Promise<string | undefined> {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/no-redundant-undefined-promise-return-type": "warn",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/no-redundant-undefined-promise-return-type": "warn",
+  },
+ },
 ];
 ```
 

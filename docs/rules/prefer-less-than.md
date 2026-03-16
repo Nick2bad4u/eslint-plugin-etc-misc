@@ -23,7 +23,7 @@ visually consistent across a codebase.
 const isValid = value > min;
 
 if (value >= min && value <= max) {
-    run();
+ run();
 }
 ```
 
@@ -33,7 +33,7 @@ if (value >= min && value <= max) {
 const isValid = min < value;
 
 if (min <= value && value <= max) {
-    run();
+ run();
 }
 ```
 
@@ -51,12 +51,12 @@ operator:
 
 ```ts
 if (score >= threshold) {
-    pass();
+ pass();
 }
 // ❌ reported and auto-fixable to `threshold <= score`
 
 if (threshold <= score) {
-    pass();
+ pass();
 }
 // ✅ valid
 ```
@@ -67,12 +67,12 @@ if (threshold <= score) {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/prefer-less-than": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/prefer-less-than": "error",
+  },
+ },
 ];
 ```
 

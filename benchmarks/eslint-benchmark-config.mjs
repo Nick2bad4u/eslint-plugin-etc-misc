@@ -1,7 +1,9 @@
 import tsParser from "@typescript-eslint/parser";
 import * as path from "node:path";
 
-import plugin from "../plugin.mjs";
+import pluginExport from "../plugin.mjs";
+
+const plugin = pluginExport;
 
 /**
  * @typedef {Record<string, unknown>} UnknownRecord
@@ -174,7 +176,7 @@ export const typefestRuleSets = Object.freeze({
  *   API / CLI usage.
  */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- This .mjs module relies on JSDoc contracts instead of TS syntax.
-export function createTypefestFlatConfig (options) {
+export function createTypefestFlatConfig(options) {
     const { rules } = options;
     const pluginModule = /** @type {import("eslint").ESLint.Plugin} */ (
         /** @type {unknown} */ (plugin)

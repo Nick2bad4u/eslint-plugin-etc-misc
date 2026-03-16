@@ -57,13 +57,13 @@ Use the **Deprecated** section above for lifecycle details.
 
 ```ts
 class Counter {
-    count: number = 0;
-    // ❌ reported
+ count: number = 0;
+ // ❌ reported
 }
 
 class CounterFixed {
-    count = 0;
-    // ✅ valid
+ count = 0;
+ // ✅ valid
 }
 ```
 
@@ -73,12 +73,12 @@ class CounterFixed {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/no-inferrable-types": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/no-inferrable-types": "error",
+  },
+ },
 ];
 ```
 

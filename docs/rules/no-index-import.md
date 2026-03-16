@@ -40,8 +40,8 @@ Migration usually means replacing `"."` with a concrete relative path.
 
 ```ts
 type Options = {
-    allow?: string[];
-    disallow?: string[];
+ allow?: string[];
+ disallow?: string[];
 };
 ```
 
@@ -49,7 +49,7 @@ Default:
 
 ```json
 {
-    "disallow": ["."]
+ "disallow": ["."]
 }
 ```
 
@@ -72,12 +72,12 @@ const moduleRef = await import("./feature");
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-index-import": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-index-import": "error",
+  },
+ },
 ];
 ```
 

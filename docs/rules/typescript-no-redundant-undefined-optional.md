@@ -41,7 +41,7 @@ function parse(value?: string) {}
 
 type Pair = [value?: string];
 
-type MaybeName = [(string)?];
+type MaybeName = [string?];
 ```
 
 ## Behavior and migration notes
@@ -59,12 +59,12 @@ This rule has no options.
 
 ```ts
 function load(id?: string | number | undefined) {
-    return id;
+ return id;
 }
 // ❌ reported
 
 function load(id?: string | number) {
-    return id;
+ return id;
 }
 // ✅ valid
 ```
@@ -75,12 +75,12 @@ function load(id?: string | number) {
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/no-redundant-undefined-optional": "warn",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/no-redundant-undefined-optional": "warn",
+  },
+ },
 ];
 ```
 

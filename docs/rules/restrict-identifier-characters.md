@@ -59,12 +59,12 @@ function greetingMessage(): void {}
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/restrict-identifier-characters": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/restrict-identifier-characters": "error",
+  },
+ },
 ];
 ```
 

@@ -29,7 +29,7 @@ function loadTags(tags: Set<string>): void {}
 const resolver = (tags: Set<string> | null) => tags;
 
 class Registry {
-    constructor(private readonly tags: Set<string>) {}
+ constructor(private readonly tags: Set<string>) {}
 }
 ```
 
@@ -41,7 +41,7 @@ function loadTags(tags: ReadonlySet<string>): void {}
 const resolver = (tags: ReadonlySet<string> | null) => tags;
 
 class Registry {
-    constructor(private readonly tags: ReadonlySet<string>) {}
+ constructor(private readonly tags: ReadonlySet<string>) {}
 }
 ```
 
@@ -69,12 +69,12 @@ function configure(tags?: ReadonlySet<string>): void {}
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/require-readonly-set-parameter-type": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/require-readonly-set-parameter-type": "error",
+  },
+ },
 ];
 ```
 

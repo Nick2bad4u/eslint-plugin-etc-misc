@@ -62,12 +62,12 @@ type Config = { lookup: Map<string, number> };
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/typescript/require-readonly-map-type-alias": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/typescript/require-readonly-map-type-alias": "error",
+  },
+ },
 ];
 ```
 
@@ -84,7 +84,7 @@ you already enforce immutability through a broader rule strategy.
 
 ## Further reading
 
-- [TypeScript: ReadonlyMap<K, V>](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+- [TypeScript: ReadonlyMap\<K, V>](https://www.typescriptlang.org/docs/handbook/utility-types.html)
 
 ## Adoption resources
 

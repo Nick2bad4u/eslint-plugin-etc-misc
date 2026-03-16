@@ -56,12 +56,12 @@ const password = process.env.APP_PASSWORD;
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-secret": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-secret": "error",
+  },
+ },
 ];
 ```
 

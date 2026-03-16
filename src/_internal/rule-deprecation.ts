@@ -1,6 +1,8 @@
 import type { TSESLint } from "@typescript-eslint/utils";
 import type { UnknownArray } from "type-fest";
 
+import { isDefined } from "ts-extras";
+
 type DeprecatedInfo = Exclude<
     TSESLint.RuleMetaData<string>["deprecated"],
     boolean | undefined
@@ -33,8 +35,8 @@ export const createReplacementRuleInfo = (
         }>;
     }>
 ): ReplacedByInfo => ({
-    ...(replacement.plugin === undefined ? {} : { plugin: replacement.plugin }),
-    ...(replacement.rule === undefined ? {} : { rule: replacement.rule }),
+    ...(isDefined(replacement.plugin) ? { plugin: replacement.plugin } : {}),
+    ...(isDefined(replacement.rule) ? { rule: replacement.rule } : {}),
 });
 
 /**
