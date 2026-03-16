@@ -21,8 +21,8 @@ export default [
 ];
 ```
 
-Use `recommended` first, then move through stricter presets as your baseline
-stabilizes.
+Use `minimal` or `recommended` first, then move through stricter presets as
+your baseline stabilizes.
 
 ## Alternative: manual scoped setup
 
@@ -58,9 +58,10 @@ Use this pattern when you only extend rules and want full control over parser se
 
 ## Recommended rollout
 
-1. Start with `recommended`.
-2. Promote to `strict` when you want the same rules to hard-fail.
-3. Move to `strictTypeChecked` once your lint config is fully type-aware.
-4. Adopt `allStrict` or `all` when you want full rule coverage.
+1. Start with `minimal` if you want to defer the `typescript/prefer-readonly*` rules.
+2. Move to `recommended` for the full baseline.
+3. Promote to `strict` when you want the same rules to hard-fail.
+4. Move to `strictTypeChecked` once your lint config is fully type-aware.
+5. Adopt `allStrict` or `all` when you want full rule coverage.
 
 See the **Presets** section in this sidebar for details and examples.

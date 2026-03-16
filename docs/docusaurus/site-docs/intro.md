@@ -20,7 +20,7 @@ projects.
 ```mermaid
 flowchart LR
     A[Rule Source\nsrc/rules/*.ts] --> B[Plugin Registry\nsrc/rules.ts]
-    B --> C[Presets\nconfigs/recommended + configs/all]
+    B --> C[Presets\nconfigs/minimal + configs/recommended + configs/all]
     A --> D[Rule Docs\ndocs/rules/*.md]
     D --> E[Docs Site\n/docs/rules]
     F[Architecture ADRs\n/docs/architecture/adr] --> E

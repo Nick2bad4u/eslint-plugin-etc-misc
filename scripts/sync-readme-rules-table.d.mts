@@ -61,6 +61,7 @@ export interface ReadmePlugin {
 export type PresetName =
     | "all"
     | "allStrict"
+    | "minimal"
     | "recommended"
     | "strict"
     | "strictTypeChecked";

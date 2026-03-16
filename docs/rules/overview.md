@@ -33,6 +33,7 @@ That is enough for TypeScript files (`**/*.{ts,tsx,mts,cts}`).
 
 | Preset                              | Purpose                                                                |
 | ----------------------------------- | ---------------------------------------------------------------------- |
+| 🟢 `etcMisc.configs.minimal`            | `recommended` minus the `typescript/prefer-readonly*` rules.          |
 | 🟡 `etcMisc.configs.recommended`        | Balanced starter preset for most projects.                             |
 | 🟠 `etcMisc.configs.strict`             | Same rule set as `recommended`, but every enabled rule is `error`.     |
 | 🔵 `etcMisc.configs.strictTypeChecked`  | `strict` plus additional non-deprecated type-aware rules at `error`.   |

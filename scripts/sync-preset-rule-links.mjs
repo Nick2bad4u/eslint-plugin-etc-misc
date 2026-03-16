@@ -4,7 +4,13 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-/** @typedef {"recommended" | "strict" | "strictTypeChecked" | "allStrict"} PresetName */
+/**
+ * @typedef {"minimal"
+ *     | "recommended"
+ *     | "strict"
+ *     | "strictTypeChecked"
+ *     | "allStrict"} PresetName
+ */
 
 /**
  * @typedef {Readonly<{
@@ -58,6 +64,13 @@ const recommendedPresetDocPath = path.join(
     "rules",
     "presets",
     "recommended.md"
+);
+const minimalPresetDocPath = path.join(
+    repositoryRootPath,
+    "docs",
+    "rules",
+    "presets",
+    "minimal.md"
 );
 const strictPresetDocPath = path.join(
     repositoryRootPath,
@@ -213,6 +226,7 @@ const normalizeConfiguredRuleName = (configuredRuleName, namespace) => {
 
 /** @type {readonly PresetName[]} */
 const presetOrder = [
+    "minimal",
     "recommended",
     "strict",
     "strictTypeChecked",
@@ -232,6 +246,7 @@ const namespace = plugin.meta?.namespace ?? "etc-misc";
 /** @type {Record<PresetName, readonly string[]>} */
 const presetRuleLinksByPresetName = {
     allStrict: [],
+    minimal: [],
     recommended: [],
     strict: [],
     strictTypeChecked: [],
@@ -280,6 +295,7 @@ const allTypeScriptRuleLinks = ruleCatalogMap
     .map((entry) => toPresetRuleLinkLine(entry));
 
 const allStrictPresetContent = await readFile(allStrictPresetDocPath, "utf8");
+const minimalPresetContent = await readFile(minimalPresetDocPath, "utf8");
 const recommendedPresetContent = await readFile(
     recommendedPresetDocPath,
     "utf8"
@@ -295,6 +311,12 @@ const updatedAllStrictPresetContent = replaceSection(
     allStrictPresetContent,
     "Rules in this preset",
     presetRuleLinksByPresetName["allStrict"].join("\n")
+);
+
+const updatedMinimalPresetContent = replaceSection(
+    minimalPresetContent,
+    "Rules in this preset",
+    presetRuleLinksByPresetName["minimal"].join("\n")
 );
 
 const updatedRecommendedPresetContent = replaceSection(
@@ -330,6 +352,7 @@ const updatedAllPresetContent = replaceSection(
 );
 
 await writeFile(allStrictPresetDocPath, updatedAllStrictPresetContent, "utf8");
+await writeFile(minimalPresetDocPath, updatedMinimalPresetContent, "utf8");
 await writeFile(
     recommendedPresetDocPath,
     updatedRecommendedPresetContent,

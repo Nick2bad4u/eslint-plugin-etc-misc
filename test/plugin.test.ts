@@ -58,6 +58,33 @@ const recommendedRuleIds = [
     "typescript/require-this-void",
 ] as const;
 
+const minimalRuleIds = [
+    "consistent-optional-props",
+    "no-assign-mutated-array",
+    "no-const-enum",
+    "no-implicit-any-catch",
+    "no-internal",
+    "no-t",
+    "no-unnecessary-as-const",
+    "no-unnecessary-break",
+    "no-unnecessary-initialization",
+    "no-unnecessary-template-literal",
+    "throw-error",
+    "typescript/no-boolean-literal-type",
+    "typescript/require-readonly-array-return-type",
+    "typescript/require-this-void",
+] as const;
+
+const preferReadonlyRuleIds = [
+    "typescript/prefer-readonly-array",
+    "typescript/prefer-readonly-array-parameter",
+    "typescript/prefer-readonly-index-signature",
+    "typescript/prefer-readonly-map",
+    "typescript/prefer-readonly-property",
+    "typescript/prefer-readonly-record",
+    "typescript/prefer-readonly-set",
+] as const;
+
 const recommendedRuleLevels = {
     "etc-misc/consistent-optional-props": "warn",
     "etc-misc/no-assign-mutated-array": "error",
@@ -78,6 +105,23 @@ const recommendedRuleLevels = {
     "etc-misc/typescript/prefer-readonly-property": "warn",
     "etc-misc/typescript/prefer-readonly-record": "warn",
     "etc-misc/typescript/prefer-readonly-set": "warn",
+    "etc-misc/typescript/require-readonly-array-return-type": "warn",
+    "etc-misc/typescript/require-this-void": "warn",
+} as const satisfies Readonly<Record<`etc-misc/${string}`, "error" | "warn">>;
+
+const minimalRuleLevels = {
+    "etc-misc/consistent-optional-props": "warn",
+    "etc-misc/no-assign-mutated-array": "error",
+    "etc-misc/no-const-enum": "warn",
+    "etc-misc/no-implicit-any-catch": "error",
+    "etc-misc/no-internal": "error",
+    "etc-misc/no-t": "error",
+    "etc-misc/no-unnecessary-as-const": "warn",
+    "etc-misc/no-unnecessary-break": "warn",
+    "etc-misc/no-unnecessary-initialization": "warn",
+    "etc-misc/no-unnecessary-template-literal": "warn",
+    "etc-misc/throw-error": "error",
+    "etc-misc/typescript/no-boolean-literal-type": "error",
     "etc-misc/typescript/require-readonly-array-return-type": "warn",
     "etc-misc/typescript/require-this-void": "warn",
 } as const satisfies Readonly<Record<`etc-misc/${string}`, "error" | "warn">>;
@@ -113,6 +157,7 @@ describe("plugin export", () => {
         expect(plugin.configs).toBeDefined();
         expect(plugin.configs.allStrict.plugins["etc-misc"]).toBeDefined();
         expect(plugin.configs.all.plugins["etc-misc"]).toBeDefined();
+        expect(plugin.configs.minimal.plugins["etc-misc"]).toBeDefined();
         expect(plugin.configs.recommended.plugins["etc-misc"]).toBeDefined();
         expect(plugin.configs.strict.plugins["etc-misc"]).toBeDefined();
         expect(
@@ -122,6 +167,12 @@ describe("plugin export", () => {
             plugin.meta
         );
         expect(plugin.configs.recommended.plugins["etc-misc"].rules).toBe(
+            plugin.rules
+        );
+        expect(plugin.configs.minimal.plugins["etc-misc"].meta).toEqual(
+            plugin.meta
+        );
+        expect(plugin.configs.minimal.plugins["etc-misc"].rules).toBe(
             plugin.rules
         );
         expect(plugin.configs.strict.plugins["etc-misc"].meta).toEqual(
@@ -320,6 +371,16 @@ describe("plugin export", () => {
             recommendedRuleLevels
         ) as readonly (keyof typeof recommendedRuleLevels)[];
 
+        const minimalRuleLevelKeys = Object.keys(
+            minimalRuleLevels
+        ) as readonly (keyof typeof minimalRuleLevels)[];
+
+        for (const ruleName of minimalRuleLevelKeys) {
+            const level = minimalRuleLevels[ruleName];
+
+            expect(plugin.configs.minimal.rules[ruleName]).toBe(level);
+        }
+
         for (const ruleName of recommendedRuleLevelKeys) {
             const level = recommendedRuleLevels[ruleName];
 
@@ -345,7 +406,18 @@ describe("plugin export", () => {
         }
 
         const deprecatedRuleIdSet = new Set<string>(deprecatedRuleIds);
+        const minimalRuleIdSet = new Set<string>(minimalRuleIds);
+        const preferReadonlyRuleIdSet = new Set<string>(preferReadonlyRuleIds);
         const recommendedRuleIdSet = new Set<string>(recommendedRuleIds);
+
+        for (const minimalRuleId of minimalRuleIdSet) {
+            expect(recommendedRuleIdSet.has(minimalRuleId)).toBeTruthy();
+        }
+
+        for (const preferReadonlyRuleId of preferReadonlyRuleIdSet) {
+            expect(minimalRuleIdSet.has(preferReadonlyRuleId)).toBeFalsy();
+            expect(recommendedRuleIdSet.has(preferReadonlyRuleId)).toBeTruthy();
+        }
 
         for (const [ruleId, rule] of Object.entries(plugin.rules)) {
             const docs = rule.meta?.docs as RuleDocsMetadata | undefined;
@@ -375,6 +447,27 @@ describe("plugin export", () => {
     });
 
     it("keeps strict presets as progressive supersets", () => {
+        const minimalRuleLevelKeys = Object.keys(
+            minimalRuleLevels
+        ) as readonly (keyof typeof minimalRuleLevels)[];
+
+        for (const ruleName of minimalRuleLevelKeys) {
+            expect(plugin.configs.recommended.rules[ruleName]).toBe(
+                plugin.configs.minimal.rules[ruleName]
+            );
+        }
+
+        for (const preferReadonlyRuleId of preferReadonlyRuleIds) {
+            const qualifiedRuleName = `etc-misc/${preferReadonlyRuleId}`;
+
+            expect(qualifiedRuleName in plugin.configs.minimal.rules).toBe(
+                false
+            );
+            expect(qualifiedRuleName in plugin.configs.recommended.rules).toBe(
+                true
+            );
+        }
+
         const recommendedRuleLevelKeys = Object.keys(
             recommendedRuleLevels
         ) as readonly (keyof typeof recommendedRuleLevels)[];

@@ -23,7 +23,6 @@ const projectName = "eslint-plugin-etc-misc";
 const modernEnhancementsClientModule = fileURLToPath(
     new URL("src/js/modernEnhancements.ts", import.meta.url)
 );
-
 /** PWA theme-color meta value for Chromium-based browsers. */
 const pwaThemeColor = "#8D0CE8";
 /** Windows tile color for pinned-site metadata. */
@@ -285,7 +284,7 @@ const config: Config = {
                         },
                         {
                             label: "🎛 Presets",
-                            to: "/docs/rules/presets/recommended",
+                            to: "/docs/rules/presets/minimal",
                         },
                         {
                             label: "📏 Rule Reference",
@@ -365,7 +364,7 @@ const config: Config = {
                     activeBaseRegex: "^/docs/rules/presets(?:/.*)?$",
                     label: "🎛️ Presets",
                     position: "left",
-                    to: "/docs/rules/presets/recommended",
+                    to: "/docs/rules/presets/minimal",
                 },
                 {
                     label: "📰 Blog",

@@ -238,6 +238,14 @@ if (guideItems.length > 0) {
 
 const presetItems: SidebarsConfig["rules"] = [];
 
+if (hasRulesPluginDocId("presets/minimal")) {
+    presetItems.push({
+        id: "presets/minimal",
+        label: "🟢 Minimal",
+        type: "doc",
+    });
+}
+
 if (hasRulesPluginDocId("presets/recommended")) {
     presetItems.push({
         id: "presets/recommended",

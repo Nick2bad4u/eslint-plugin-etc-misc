@@ -3,6 +3,7 @@
 import { pluginMeta } from "./_internal/plugin-meta.js";
 import { allStrict as allStrictConfig } from "./configs/all-strict.js";
 import { all as allConfig } from "./configs/all.js";
+import { minimal as minimalConfig } from "./configs/minimal.js";
 import { recommended as recommendedConfig } from "./configs/recommended.js";
 import { strictTypeChecked as strictTypeCheckedConfig } from "./configs/strict-type-checked.js";
 import { strict as strictConfig } from "./configs/strict.js";
@@ -44,6 +45,7 @@ const withPluginReference = <
 export type PluginConfigs = {
     readonly all: PresetWithPlugin<typeof allConfig.rules>;
     readonly allStrict: PresetWithPlugin<typeof allStrictConfig.rules>;
+    readonly minimal: PresetWithPlugin<typeof minimalConfig.rules>;
     readonly recommended: PresetWithPlugin<typeof recommendedConfig.rules>;
     readonly strict: PresetWithPlugin<typeof strictConfig.rules>;
     readonly strictTypeChecked: PresetWithPlugin<
@@ -59,6 +61,7 @@ export type PluginConfigs = {
 export const configs: PluginConfigs = {
     all: withPluginReference(allConfig),
     allStrict: withPluginReference(allStrictConfig),
+    minimal: withPluginReference(minimalConfig),
     recommended: withPluginReference(recommendedConfig),
     strict: withPluginReference(strictConfig),
     strictTypeChecked: {

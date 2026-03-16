@@ -47,6 +47,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 /**
  * @typedef {"all"
  *     | "allStrict"
+ *     | "minimal"
  *     | "recommended"
  *     | "strict"
  *     | "strictTypeChecked"} PresetName
@@ -84,6 +85,12 @@ import { fileURLToPath, pathToFileURL } from "node:url";
  * >}
  */
 const presetMetadataByName = {
+    minimal: {
+        configKey: "etcMisc.configs.minimal",
+        docsUrl:
+            "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/minimal",
+        icon: "🟢",
+    },
     recommended: {
         configKey: "etcMisc.configs.recommended",
         docsUrl:
@@ -118,6 +125,7 @@ const presetMetadataByName = {
 
 /** @type {readonly PresetName[]} */
 const presetOrder = [
+    "minimal",
     "recommended",
     "strict",
     "strictTypeChecked",
@@ -141,6 +149,7 @@ const detectLineEnding = (markdownText) =>
 const createEmptyPresetRuleNamesByPreset = () => ({
     all: new Set(),
     allStrict: new Set(),
+    minimal: new Set(),
     recommended: new Set(),
     strict: new Set(),
     strictTypeChecked: new Set(),

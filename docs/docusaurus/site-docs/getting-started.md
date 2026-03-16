@@ -22,6 +22,7 @@ export default [
 
 ## Recommended approach
 
+- Start with `etcMisc.configs.minimal` if you want to defer readonly-style constraints.
 - Start with `etcMisc.configs.recommended`.
 - Fix violations in small batches.
 - Move to `etcMisc.configs.all` when you want every available rule enabled.
