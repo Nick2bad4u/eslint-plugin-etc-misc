@@ -546,6 +546,31 @@ const config = [
         },
         rules: {
             "tsdoc-require-2/require": "warn",
+            "tsdoc-require-2/require-alpha": "off",
+            "tsdoc-require-2/require-beta": "off",
+            "tsdoc-require-2/require-decorator": "off",
+            "tsdoc-require-2/require-default-value": "off",
+            "tsdoc-require-2/require-deprecated": "off",
+            "tsdoc-require-2/require-event-property": "off",
+            "tsdoc-require-2/require-example": "off",
+            "tsdoc-require-2/require-experimental": "off",
+            "tsdoc-require-2/require-inherit-doc": "off",
+            "tsdoc-require-2/require-internal": "off",
+            "tsdoc-require-2/require-label": "off",
+            "tsdoc-require-2/require-link": "off",
+            "tsdoc-require-2/require-override": "off",
+            "tsdoc-require-2/require-package-documentation": "off",
+            "tsdoc-require-2/require-param": "off",
+            "tsdoc-require-2/require-private-remarks": "off",
+            "tsdoc-require-2/require-public": "off",
+            "tsdoc-require-2/require-readonly": "off",
+            "tsdoc-require-2/require-remarks": "off",
+            "tsdoc-require-2/require-returns": "off",
+            "tsdoc-require-2/require-sealed": "off",
+            "tsdoc-require-2/require-see": "off",
+            "tsdoc-require-2/require-throws": "off",
+            "tsdoc-require-2/require-type-param": "off",
+            "tsdoc-require-2/require-virtual": "off",
         },
     },
     // #endregion
@@ -569,7 +594,7 @@ const config = [
         rules: {
             ...css.configs.recommended.rules,
             ...readPluginConfigRules(pluginUndefinedCss, "recommended"),
-            ...readPluginConfigRules(pluginCssModules, "recommended"),
+            ...pluginCssModules.configs.recommended.rules,
             // CSS Eslint Rules (css/*)
             "css/no-empty-blocks": "error",
             "css/no-invalid-at-rules": "warn",
@@ -630,31 +655,44 @@ const config = [
             "@docusaurus/prefer-docusaurus-heading": "warn",
             "@docusaurus/string-literal-i18n-messages": "off",
             "@eslint-react/dom/prefer-namespace-import": "warn",
+            "@eslint-react/immutability": "warn",
             "@eslint-react/jsx-dollar": "warn",
             "@eslint-react/jsx-shorthand-boolean": "warn",
             "@eslint-react/jsx-shorthand-fragment": "warn",
-            "@eslint-react/naming-convention/component-name": "warn",
-            // Docusaurus relies on canonical non-PascalCase filenames
-            // (for example: docusaurus.config.ts, sidebars.ts), so this
-            // React filename convention rule does not match repository
-            // conventions for docs tooling files.
-            "@eslint-react/naming-convention/filename": "off",
-            "@eslint-react/naming-convention/filename-extension": "warn",
             "@eslint-react/no-duplicate-key": "warn",
+            "@eslint-react/no-implicit-children": "warn",
+            "@eslint-react/no-implicit-key": "warn",
+            "@eslint-react/no-implicit-ref": "warn",
             "@eslint-react/no-missing-component-display-name": "warn",
             "@eslint-react/no-missing-context-display-name": "warn",
-            "@eslint-react/no-unnecessary-key": "warn",
-            "@eslint-react/no-unnecessary-use-ref": "warn",
             "@eslint-react/prefer-namespace-import": "warn",
-            // JS-only docs components do not consistently model props via
-            // readonly TS types, so keep this disabled in docs scope.
-            "@eslint-react/prefer-read-only-props": "off",
+            "@eslint-react/refs": "warn",
+            "@eslint-react/unstable-rules-of-props": "warn",
+            "@eslint-react/unstable-rules-of-state": "warn",
             "jsx-a11y/lang": "warn",
             "jsx-a11y/no-aria-hidden-on-focusable": "warn",
             "jsx-a11y/prefer-tag-over-role": "warn",
         },
         settings: {
             ...eslintReactStrictTypeCheckedConfig.settings,
+        },
+    },
+    // #endregion
+    // #region ⌨️ Typefest
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // SECTION: ⌨️ Typefest (typefest/*)
+    // ═══════════════════════════════════════════════════════════════════════════════
+    {
+        files: [
+            "src/**/*.{ts,tsx,mts,cts}",
+            //    "test/**/*.{ts,tsx,mts,cts}"
+        ],
+        name: "Typefest Rules for Source",
+        plugins: {
+            typefest: typefest,
+        },
+        rules: {
+            ...typefest.configs.all.rules,
         },
     },
     // #endregion
