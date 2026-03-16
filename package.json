@@ -190,11 +190,17 @@
         "update-deps": "npx ncu -i --install never && npm run sync:peer-eslint-range && npm install --force"
     },
     "dependencies": {
+        "@eslint-community/eslint-utils": "^4.9.1",
         "@typescript-eslint/parser": "^8.57.0",
         "@typescript-eslint/type-utils": "^8.57.0",
         "@typescript-eslint/utils": "^8.57.0",
+        "debug": "^4.4.3",
+        "eslint-visitor-keys": "^5.0.1",
         "minimatch": "^10.2.4",
+        "semver": "^7.7.4",
+        "tinyglobby": "^0.2.15",
         "ts-extras": "^0.17.0",
+        "tslib": "^2.8.1",
         "tsutils": "^3.21.0",
         "type-fest": "^5.4.4"
     },
