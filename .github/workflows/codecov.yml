@@ -45,9 +45,9 @@ jobs:
             - name: Setup Node.js
               uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
               with:
+                  node-version-file: .node-version
                   cache: npm
                   cache-dependency-path: package-lock.json
-                  node-version-file: .node-version
 
             - name: Install dependencies
               run: npm ci --force
@@ -56,10 +56,12 @@ jobs:
               run: npm run build
 
             - name: Run tests with coverage and emit JUnit report
-              run: npx vitest run --coverage --reporter=default --reporter=junit --outputFile=test-report.junit.xml --silent
+              run: npx vitest run --coverage --reporter=github-actions --reporter=dot --reporter=junit --outputFile=test-report.junit.xml --silent
               env:
                   CI: "true"
                   MAX_THREADS: "1"
+                  TYPEFEST_VITEST_HANGING_PROCESS_REPORTER: "true"
+                  VITEST_HANGING_PROCESS_REPORTER: "true"
 
             - name: Verify coverage artifact
               run: python -c "from pathlib import Path; assert Path('coverage/lcov.info').is_file(), 'coverage/lcov.info was not generated'"
@@ -69,12 +71,17 @@ jobs:
 
             - name: Upload test results to Codecov
               if: ${{ !cancelled() }}
-              uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3 # v1.2.1
+              uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
               with:
                   token: ${{ secrets.CODECOV_TOKEN }}
+                  slug: Nick2bad4u/eslint-plugin-etc-misc
                   files: test-report.junit.xml
                   flags: unit,${{ matrix.codecov_flag }}
                   name: vitest-junit-${{ matrix.codecov_flag }}
+                  report_type: test_results
+                  fail_ci_if_error: true
+                  disable_search: true
+                  verbose: true
 
             - name: Upload coverage to Codecov
               uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
@@ -84,6 +91,7 @@ jobs:
                   files: ./coverage/lcov.info
                   flags: unit,${{ matrix.codecov_flag }}
                   name: vitest-unit-coverage-${{ matrix.codecov_flag }}
+                  report_type: coverage
                   fail_ci_if_error: true
                   disable_search: true
                   verbose: true
