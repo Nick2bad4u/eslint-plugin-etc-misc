@@ -158,6 +158,18 @@ const resolveRuleSet = (presetName) => {
 /**
  * Plugin rule sets used by benchmark scenarios.
  */
+/**
+ * @typedef {Readonly<{
+ *     all: Readonly<BenchmarkRules>;
+ *     minimal: Readonly<BenchmarkRules>;
+ *     recommended: Readonly<BenchmarkRules>;
+ *     strict: Readonly<BenchmarkRules>;
+ *     tsExtrasTypeGuards: Readonly<BenchmarkRules>;
+ *     typeFestTypes: Readonly<BenchmarkRules>;
+ * }>} TypefestRuleSets
+ */
+
+/** @type {TypefestRuleSets} */
 export const typefestRuleSets = Object.freeze({
     all: resolveRuleSet("all"),
     minimal: resolveRuleSet("minimal"),
