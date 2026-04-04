@@ -95,7 +95,6 @@ export const createImportPatternRule = ({
     ruleCreator<ImportPatternRuleOptions, ImportPatternMessageIds>({
         create: (context) =>
             createImportVisitors(context, defaultDisallowPatterns),
-        defaultOptions: [{}],
         meta: {
             defaultOptions: [{}],
             docs: {

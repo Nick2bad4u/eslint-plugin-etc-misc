@@ -27,7 +27,6 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             });
         },
     }),
-    defaultOptions: [],
     meta: {
         deprecated: true,
         docs: {

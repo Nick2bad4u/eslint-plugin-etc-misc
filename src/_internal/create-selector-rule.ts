@@ -30,7 +30,6 @@ export const createSelectorRule = (
                 });
             },
         }),
-        defaultOptions: [],
         meta: {
             docs: {
                 description: input.description,

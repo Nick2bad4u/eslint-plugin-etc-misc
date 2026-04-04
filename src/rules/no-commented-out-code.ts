@@ -271,7 +271,6 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                 },
             };
         },
-        defaultOptions: [],
         meta: {
             deprecated: true,
             docs: {

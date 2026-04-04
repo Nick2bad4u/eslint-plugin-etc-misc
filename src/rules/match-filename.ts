@@ -87,7 +87,6 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 
         return listeners;
     },
-    defaultOptions: [{ format: "kebab-case", match: true }],
     meta: {
         defaultOptions: [{ format: "kebab-case", match: true }],
         deprecated: false,

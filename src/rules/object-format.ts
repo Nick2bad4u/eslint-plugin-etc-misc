@@ -42,7 +42,6 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             });
         },
     }),
-    defaultOptions: [{ maxProperties: 1 }],
     meta: {
         defaultOptions: [{ maxProperties: 1 }],
         deprecated: false,

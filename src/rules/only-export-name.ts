@@ -105,7 +105,6 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             },
         };
     },
-    defaultOptions: [{ names: ["default"] }],
     meta: {
         defaultOptions: [{ names: ["default"] }],
         deprecated: false,

@@ -83,7 +83,6 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             },
         };
     },
-    defaultOptions: [{ allowDirectiveComments: true }],
     meta: {
         defaultOptions: [{ allowDirectiveComments: true }],
         deprecated: false,

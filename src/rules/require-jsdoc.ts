@@ -124,7 +124,6 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             },
         };
     },
-    defaultOptions: [{ kinds: defaultKinds }],
     meta: {
         defaultOptions: [{ kinds: defaultKinds }],
         deprecated: true,

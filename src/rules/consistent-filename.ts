@@ -50,7 +50,6 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             });
         },
     }),
-    defaultOptions: [defaultOptions],
     meta: {
         defaultOptions: [defaultOptions],
         deprecated: true,

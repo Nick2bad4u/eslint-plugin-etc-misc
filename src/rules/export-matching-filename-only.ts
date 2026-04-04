@@ -102,7 +102,6 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             },
         };
     },
-    defaultOptions: [{ format: "PascalCase" }],
     meta: {
         defaultOptions: [{ format: "PascalCase" }],
         deprecated: false,

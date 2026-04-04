@@ -232,7 +232,6 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             TSPropertySignature: checkSignature,
         };
     },
-    defaultOptions: [],
     meta: {
         deprecated: false,
         docs: {
