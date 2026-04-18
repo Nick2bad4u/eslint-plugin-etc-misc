@@ -36,7 +36,7 @@ This rule forwards options and behavior to
 - **Lifecycle:** Deprecated and frozen.
 - **Deprecated since:** `v1.0.0`
 - **Available until:** `v2.0.0`
-- **Use instead:** [`write-good-comments/write-good-comments`](https://github.com/kantord/eslint-plugin-write-good-comments)
+- **Use instead:** [`write-good-comments/write-good-comments`](https://github.com/Nick2bad4u/eslint-plugin-write-good-comments-2)
 
 ## Additional examples
 
@@ -75,7 +75,7 @@ Disable this rule if your team does not want prose-quality checks for comments.
 
 ## Further reading
 
-- [eslint-plugin-write-good-comments](https://github.com/kantord/eslint-plugin-write-good-comments)
+- [eslint-plugin-write-good-comments-2](https://github.com/Nick2bad4u/eslint-plugin-write-good-comments-2)
 
 ## Adoption resources
 

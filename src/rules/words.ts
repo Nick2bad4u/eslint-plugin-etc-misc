@@ -1,4 +1,4 @@
-import writeGoodCommentsPlugin from "eslint-plugin-write-good-comments";
+import writeGoodCommentsPlugin from "eslint-plugin-write-good-comments-2";
 
 import {
     adaptExternalRule,
@@ -16,7 +16,7 @@ const rule: ReturnType<typeof adaptExternalRule> = adaptExternalRule(
     getExternalRuleFromPlugin(
         writeGoodCommentsPlugin,
         "write-good-comments",
-        "eslint-plugin-write-good-comments"
+        "eslint-plugin-write-good-comments-2"
     ),
     "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/words"
 );
@@ -30,11 +30,11 @@ const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
         createReplacementRuleInfo({
             plugin: {
                 name: "write-good-comments",
-                url: "https://github.com/kantord/eslint-plugin-write-good-comments",
+                url: "https://github.com/Nick2bad4u/eslint-plugin-write-good-comments-2",
             },
             rule: {
                 name: "write-good-comments",
-                url: "https://github.com/kantord/eslint-plugin-write-good-comments",
+                url: "https://github.com/Nick2bad4u/eslint-plugin-write-good-comments-2",
             },
         }),
     ],

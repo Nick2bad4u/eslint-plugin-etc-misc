@@ -75,7 +75,7 @@ import typefest from "eslint-plugin-typefest";
 import pluginUndefinedCss from "eslint-plugin-undefined-css-classes";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import pluginUnusedImports from "eslint-plugin-unused-imports";
-import pluginWriteGood from "eslint-plugin-write-good-comments";
+import pluginWriteGood from "eslint-plugin-write-good-comments-2";
 import eslintPluginYml from "eslint-plugin-yml";
 import globals from "globals";
 import * as jsoncEslintParser from "jsonc-eslint-parser";
