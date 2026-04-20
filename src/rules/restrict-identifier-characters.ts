@@ -6,7 +6,6 @@ type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-// eslint-disable-next-line etc-misc/no-unnecessary-template-literal -- Keep String.raw to preserve backslashes required by AST selector regex parsing.
 const disallowedSelector = String.raw`Identifier[name=/[^$\w]/u]`;
 
 /**

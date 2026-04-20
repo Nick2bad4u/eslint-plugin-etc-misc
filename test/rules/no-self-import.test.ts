@@ -35,6 +35,8 @@ const getNoSelfImportRuleFromPlugin = (): NonNullable<
 
 describe("no-self-import fixture structure", () => {
     it("contains import/export forms consumed by rule selectors", () => {
+        expect.hasAssertions();
+
         const program = parseFixtureProgram();
 
         expect(
@@ -72,6 +74,8 @@ describe("no-self-import fixture structure", () => {
     });
 
     it("parses generated relative import snippets from fast-check", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(fc.nat(999), (suffix) => {
                 const code = [

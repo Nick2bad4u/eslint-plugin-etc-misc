@@ -11,6 +11,8 @@ const ignoredPatternMapArbitrary = fc.dictionary(
 
 describe("ignore pattern compilation", () => {
     it("splits valid patterns by mode and captures invalid expressions", () => {
+        expect.hasAssertions();
+
         const compiledPatterns = compileIgnorePatterns({
             "[invalid": "path",
             "^internal$": "name",
@@ -23,10 +25,12 @@ describe("ignore pattern compilation", () => {
         expect(compiledPatterns.patterns.path[0]?.source).toBe(
             String.raw`^src\/.*$`
         );
-        expect(compiledPatterns.invalidPatterns).toEqual(["[invalid"]);
+        expect(compiledPatterns.invalidPatterns).toStrictEqual(["[invalid"]);
     });
 
     it("preserves compilation semantics for arbitrary input maps", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(ignoredPatternMapArbitrary, (ignored) => {
                 const compiledPatterns = compileIgnorePatterns(ignored);
@@ -61,7 +65,7 @@ describe("ignore pattern compilation", () => {
                     compiledPatterns.invalidPatterns.toSorted((left, right) =>
                         left.localeCompare(right)
                     )
-                ).toEqual(
+                ).toStrictEqual(
                     expectedInvalidPatterns.toSorted((left, right) =>
                         left.localeCompare(right)
                     )

@@ -93,6 +93,8 @@ const getSortExportSpecifiersRuleFromPlugin = (): NonNullable<
 
 describe("sort-export-specifiers fixture structure", () => {
     it("contains identifier, alias, and string-literal export specifier forms", () => {
+        expect.hasAssertions();
+
         const declarations = collectExportNamedDeclarations(
             parseFixtureProgram()
         );
@@ -131,6 +133,8 @@ describe("sort-export-specifiers fixture structure", () => {
     });
 
     it("parses generated export lists from fast-check", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(
                 fc.uniqueArray(

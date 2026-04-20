@@ -115,21 +115,22 @@ const assertDefaultExportIdentifier = (
 
 describe("plugin.mjs entrypoint", () => {
     it("re-exports the built plugin with the same nested plugin references", () => {
-        expect(plugin.meta).toEqual(pluginMeta);
-        expect(plugin.processors).toEqual({});
+        expect.hasAssertions();
+        expect(plugin.meta).toStrictEqual(pluginMeta);
+        expect(plugin.processors).toStrictEqual({});
 
-        expect(Object.keys(plugin.rules)).toEqual(Object.keys(rules));
-        expect(plugin.configs.allStrict.rules).toEqual(configs.allStrict.rules);
-        expect(plugin.configs.all.rules).toEqual(configs.all.rules);
-        expect(plugin.configs.minimal.rules).toEqual(configs.minimal.rules);
-        expect(plugin.configs.recommended.rules).toEqual(
+        expect(Object.keys(plugin.rules)).toStrictEqual(Object.keys(rules));
+        expect(plugin.configs.allStrict.rules).toStrictEqual(configs.allStrict.rules);
+        expect(plugin.configs.all.rules).toStrictEqual(configs.all.rules);
+        expect(plugin.configs.minimal.rules).toStrictEqual(configs.minimal.rules);
+        expect(plugin.configs.recommended.rules).toStrictEqual(
             configs.recommended.rules
         );
-        expect(plugin.configs.strict.rules).toEqual(configs.strict.rules);
-        expect(plugin.configs.strictTypeChecked.rules).toEqual(
+        expect(plugin.configs.strict.rules).toStrictEqual(configs.strict.rules);
+        expect(plugin.configs.strictTypeChecked.rules).toStrictEqual(
             configs.strictTypeChecked.rules
         );
-        expect(plugin.configs.strictTypeChecked.languageOptions).toEqual(
+        expect(plugin.configs.strictTypeChecked.languageOptions).toStrictEqual(
             configs.strictTypeChecked.languageOptions
         );
 
@@ -144,12 +145,12 @@ describe("plugin.mjs entrypoint", () => {
         const strictTypeCheckedPluginReference =
             plugin.configs.strictTypeChecked.plugins["etc-misc"];
 
-        expect(allStrictPluginReference.meta).toEqual(plugin.meta);
-        expect(allPluginReference.meta).toEqual(plugin.meta);
-        expect(minimalPluginReference.meta).toEqual(plugin.meta);
-        expect(recommendedPluginReference.meta).toEqual(plugin.meta);
-        expect(strictPluginReference.meta).toEqual(plugin.meta);
-        expect(strictTypeCheckedPluginReference.meta).toEqual(plugin.meta);
+        expect(allStrictPluginReference.meta).toStrictEqual(plugin.meta);
+        expect(allPluginReference.meta).toStrictEqual(plugin.meta);
+        expect(minimalPluginReference.meta).toStrictEqual(plugin.meta);
+        expect(recommendedPluginReference.meta).toStrictEqual(plugin.meta);
+        expect(strictPluginReference.meta).toStrictEqual(plugin.meta);
+        expect(strictTypeCheckedPluginReference.meta).toStrictEqual(plugin.meta);
 
         expect(allStrictPluginReference.rules).toBe(plugin.rules);
         expect(allPluginReference.rules).toBe(plugin.rules);
@@ -164,6 +165,8 @@ describe("plugin.mjs entrypoint", () => {
     });
 
     it("keeps the entrypoint module structure stable", () => {
+        expect.hasAssertions();
+
         const ast = parsePluginEntrypoint();
 
         const importNode = assertImportDeclaration(ast.body[0]);
@@ -188,6 +191,8 @@ describe("plugin.mjs entrypoint", () => {
     });
 
     it("maps every all-config rule key back to a real exported rule", () => {
+        expect.hasAssertions();
+
         const allConfigRuleEntries = Object.entries(plugin.configs.all.rules);
 
         fc.assert(

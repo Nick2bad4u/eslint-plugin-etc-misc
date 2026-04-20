@@ -73,6 +73,8 @@ const getNoParamReassignRuleFromPlugin = (): NonNullable<
 
 describe("no-param-reassign fixture structure", () => {
     it("contains identifier/member assignments and identifier/member updates", () => {
+        expect.hasAssertions();
+
         const nodes = collectNodes(parseFixtureProgram());
 
         expect(
@@ -109,6 +111,8 @@ describe("no-param-reassign fixture structure", () => {
     });
 
     it("parses generated parameter-reassignment snippets from fast-check", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(
                 fc.constantFrom("alpha", "beta", "value", "param"),

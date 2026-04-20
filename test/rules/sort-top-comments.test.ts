@@ -42,6 +42,8 @@ const getSortTopCommentsRuleFromPlugin = (): NonNullable<
 
 describe("sort-top-comments fixture structure", () => {
     it("contains mixed top comments and an inline comment near code", () => {
+        expect.hasAssertions();
+
         const ast = parseFixtureProgram();
         const firstNode = ast.body[0];
 
@@ -73,6 +75,8 @@ describe("sort-top-comments fixture structure", () => {
     });
 
     it("parses generated top-comment snippets from fast-check", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(
                 fc.uniqueArray(

@@ -58,7 +58,6 @@ export const buildRestrictedSyntaxListeners = (
     entries: readonly SyntaxSelectorEntry[],
     report: (node: Readonly<es.Node>, entry: SyntaxSelectorEntry) => void
 ): Readonly<Record<string, (node: Readonly<es.Node>) => void>> => {
-    // eslint-disable-next-line etc-misc/typescript/prefer-readonly-record -- Local builder object is mutated during listener collection before returning readonly view.
     const listeners: Record<string, (node: Readonly<es.Node>) => void> = {};
 
     for (const entry of entries) {

@@ -36,6 +36,8 @@ const getExportMatchingFilenameOnlyRuleFromPlugin = (): NonNullable<
 
 describe("export-matching-filename-only fixture structure", () => {
     it("contains declaration/specifier/default export forms used by the rule", () => {
+        expect.hasAssertions();
+
         const program = parseFixtureProgram();
 
         expect(
@@ -76,6 +78,8 @@ describe("export-matching-filename-only fixture structure", () => {
     });
 
     it("parses generated export snippets from fast-check", () => {
+        expect.hasAssertions();
+
         const exportedNameArbitrary = fc.constantFrom(
             "Alpha1",
             "Beta2",

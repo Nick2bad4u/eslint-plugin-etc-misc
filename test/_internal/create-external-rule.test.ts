@@ -10,6 +10,8 @@ import { ruleTester } from "./ruleTester";
 
 describe("external rule resolution", () => {
     it("returns the exact rule module when present", () => {
+        expect.hasAssertions();
+
         const externalRule: Readonly<Record<string, unknown>> = {
             create: (): Readonly<Record<string, never>> => ({}),
         };
@@ -24,6 +26,7 @@ describe("external rule resolution", () => {
     });
 
     it("throws when plugin does not expose a valid rules map", () => {
+        expect.hasAssertions();
         expect(() =>
             getExternalRuleFromPlugin(null, "my-rule", "example-plugin")
         ).toThrow(
@@ -46,6 +49,8 @@ describe("external rule resolution", () => {
     });
 
     it("throws for arbitrary missing rule names", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(
                 fc.string({ maxLength: 16, minLength: 1 }),
@@ -72,6 +77,7 @@ describe("external rule resolution", () => {
 
 describe("external rule adaptation", () => {
     it("throws when the external module does not expose create", () => {
+        expect.hasAssertions();
         expect(() =>
             adaptExternalRule({}, "https://example.com/rules/my-rule")
         ).toThrow(
@@ -80,6 +86,8 @@ describe("external rule adaptation", () => {
     });
 
     it("fills default options and docs metadata when absent", () => {
+        expect.hasAssertions();
+
         const adaptedRule = adaptExternalRule(
             {
                 create: (): Readonly<Record<string, never>> => ({}),

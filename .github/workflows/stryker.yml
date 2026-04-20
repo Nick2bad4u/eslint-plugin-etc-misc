@@ -1,4 +1,5 @@
-name: Mutation Testing (Stryker)
+name: Mutation Testing With Stryker
+run-name: Mutation Testing With Stryker · ${{ github.event_name }} · ${{ github.ref_name || github.sha }}
 
 on:
     schedule:
@@ -18,18 +19,22 @@ permissions:
     contents: read
 
 concurrency:
-    cancel-in-progress: false
+    cancel-in-progress: true
     group: stryker-${{ github.ref }}
 
-env:
-    NODE_ENV: test
-    STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY || '' }}
-    GITHUB_TOKEN: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
+defaults:
+    run:
+        shell: bash
 
 jobs:
     stryker:
+        name: Stryker Mutation Testing
         runs-on: ubuntu-latest
-        timeout-minutes: 180
+        timeout-minutes: 60
+        env:
+            NODE_ENV: test
+            STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY || '' }}
+            GITHUB_TOKEN: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
 
         steps:
             - name: Harden the runner (Audit all outbound calls)

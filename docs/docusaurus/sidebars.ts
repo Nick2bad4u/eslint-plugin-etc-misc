@@ -5,7 +5,7 @@
 import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
 
 /** Main sidebar configuration for the default docs plugin instance. */
-const sidebars: SidebarsConfig = {
+const sidebars = {
     docs: [
         {
             className: "sb-doc-intro",
@@ -131,6 +131,6 @@ const sidebars: SidebarsConfig = {
             ],
         },
     ],
-};
+} as const satisfies SidebarsConfig;
 
 export default sidebars;

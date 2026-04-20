@@ -5,6 +5,8 @@ import { getCoreRule } from "../../src/_internal/get-core-rule";
 
 describe("core rule resolver behavior", () => {
     it("returns a known core ESLint rule module", () => {
+        expect.hasAssertions();
+
         const coreRule = getCoreRule("no-undef");
 
         expect(coreRule.create).toBeTypeOf("function");
@@ -12,6 +14,8 @@ describe("core rule resolver behavior", () => {
     });
 
     it("throws for non-existent rule IDs", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(
                 fc.string({ maxLength: 16, minLength: 4 }),

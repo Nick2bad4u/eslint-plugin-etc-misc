@@ -77,6 +77,8 @@ const getSortClassMembersRuleFromPlugin = (): NonNullable<
 
 describe("sort-class-members fixture structure", () => {
     it("contains class members that exercise identifier, literal, and skipped keys", () => {
+        expect.hasAssertions();
+
         const classBodies = collectClassBodies(parseFixtureProgram());
 
         expect(
@@ -111,6 +113,8 @@ describe("sort-class-members fixture structure", () => {
     });
 
     it("parses generated sorted class member snippets from fast-check", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(
                 fc

@@ -147,12 +147,13 @@ const getSortedRuleNames = (
 
 describe("plugin export", () => {
     it("exposes rules and configs", () => {
-        expect(plugin.meta).toEqual({
+        expect.hasAssertions();
+        expect(plugin.meta).toStrictEqual({
             name: "eslint-plugin-etc-misc",
             namespace: "etc-misc",
             version: "1.0.0",
         });
-        expect(plugin.processors).toEqual({});
+        expect(plugin.processors).toStrictEqual({});
         expect(plugin.rules).toBeDefined();
         expect(plugin.configs).toBeDefined();
         expect(plugin.configs.allStrict.plugins["etc-misc"]).toBeDefined();
@@ -163,19 +164,19 @@ describe("plugin export", () => {
         expect(
             plugin.configs.strictTypeChecked.plugins["etc-misc"]
         ).toBeDefined();
-        expect(plugin.configs.recommended.plugins["etc-misc"].meta).toEqual(
-            plugin.meta
-        );
+        expect(
+            plugin.configs.recommended.plugins["etc-misc"].meta
+        ).toStrictEqual(plugin.meta);
         expect(plugin.configs.recommended.plugins["etc-misc"].rules).toBe(
             plugin.rules
         );
-        expect(plugin.configs.minimal.plugins["etc-misc"].meta).toEqual(
+        expect(plugin.configs.minimal.plugins["etc-misc"].meta).toStrictEqual(
             plugin.meta
         );
         expect(plugin.configs.minimal.plugins["etc-misc"].rules).toBe(
             plugin.rules
         );
-        expect(plugin.configs.strict.plugins["etc-misc"].meta).toEqual(
+        expect(plugin.configs.strict.plugins["etc-misc"].meta).toStrictEqual(
             plugin.meta
         );
         expect(plugin.configs.strict.plugins["etc-misc"].rules).toBe(
@@ -183,7 +184,7 @@ describe("plugin export", () => {
         );
         expect(
             plugin.configs.strictTypeChecked.plugins["etc-misc"].meta
-        ).toEqual(plugin.meta);
+        ).toStrictEqual(plugin.meta);
         expect(plugin.configs.strictTypeChecked.plugins["etc-misc"].rules).toBe(
             plugin.rules
         );
@@ -191,7 +192,7 @@ describe("plugin export", () => {
             plugin.configs.strictTypeChecked.languageOptions?.parserOptions
                 ?.projectService
         ).toBeTruthy();
-        expect(plugin.configs.allStrict.plugins["etc-misc"].meta).toEqual(
+        expect(plugin.configs.allStrict.plugins["etc-misc"].meta).toStrictEqual(
             plugin.meta
         );
         expect(plugin.configs.allStrict.plugins["etc-misc"].rules).toBe(
@@ -398,11 +399,15 @@ describe("plugin export", () => {
 
             expect(rule.meta?.docs?.frozen).toBeTruthy();
 
-            expect(hasRuleDeprecationInfo(rule.meta?.deprecated)).toBeTruthy();
+            const deprecatedMetadata = rule.meta?.deprecated;
+            const hasDeprecationMetadata =
+                hasRuleDeprecationInfo(deprecatedMetadata);
+            const availableUntil = hasDeprecationMetadata
+                ? deprecatedMetadata.availableUntil
+                : undefined;
 
-            if (hasRuleDeprecationInfo(rule.meta?.deprecated)) {
-                expect(rule.meta.deprecated.availableUntil).toBe("2.0.0");
-            }
+            expect(hasDeprecationMetadata).toBeTruthy();
+            expect(availableUntil).toBe("2.0.0");
         }
 
         const deprecatedRuleIdSet = new Set<string>(deprecatedRuleIds);
@@ -436,17 +441,17 @@ describe("plugin export", () => {
             expect(docs.frozen).toBe(deprecatedRuleIdSet.has(ruleId));
             expect(docs.recommended).toBe(recommendedRuleIdSet.has(ruleId));
 
-            if (deprecatedRuleIdSet.has(ruleId)) {
-                expect(
-                    hasRuleDeprecationInfo(rule.meta?.deprecated)
-                ).toBeTruthy();
-            } else {
-                expect(rule.meta?.deprecated).toBeFalsy();
-            }
+            const isDeprecatedRule = deprecatedRuleIdSet.has(ruleId);
+
+            expect(hasRuleDeprecationInfo(rule.meta?.deprecated)).toBe(
+                isDeprecatedRule
+            );
         }
     });
 
     it("keeps strict presets as progressive supersets", () => {
+        expect.hasAssertions();
+
         const minimalRuleLevelKeys = Object.keys(
             minimalRuleLevels
         ) as readonly (keyof typeof minimalRuleLevels)[];
@@ -481,7 +486,7 @@ describe("plugin export", () => {
         );
         const strictRuleNames = getSortedRuleNames(plugin.configs.strict.rules);
 
-        expect(strictRuleNames).toEqual(recommendedRuleNames);
+        expect(strictRuleNames).toStrictEqual(recommendedRuleNames);
 
         const typedRequiredNonDeprecatedRuleNames = toSortedStrings(
             Object.entries(plugin.rules)
@@ -508,7 +513,7 @@ describe("plugin export", () => {
             plugin.configs.strictTypeChecked.rules
         );
 
-        expect(strictTypeCheckedRuleNames).toEqual(
+        expect(strictTypeCheckedRuleNames).toStrictEqual(
             expectedStrictTypeCheckedRuleNames
         );
 
@@ -530,7 +535,7 @@ describe("plugin export", () => {
             plugin.configs.allStrict.rules
         );
 
-        expect(allStrictRuleNames).toEqual(allRuleNames);
+        expect(allStrictRuleNames).toStrictEqual(allRuleNames);
 
         for (const [qualifiedRuleName, configuredSeverity] of Object.entries(
             plugin.configs.allStrict.rules

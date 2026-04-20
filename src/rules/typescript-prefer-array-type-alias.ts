@@ -6,7 +6,6 @@ type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-// eslint-disable-next-line etc-misc/no-unnecessary-template-literal -- Keep String.raw to preserve backslashes required by AST selector regex parsing.
 const selector = String.raw`TSTypeAliasDeclaration > Identifier.id:matches([parent.typeAnnotation.type='TSArrayType'], [parent.typeAnnotation.type='TSTupleType']):not([name=/^(?:[A-Z][a-z\d]*)+(?:Array|s)$/u])`;
 
 /**

@@ -73,6 +73,8 @@ const getNoInternalRuleFromPlugin = (): NonNullable<
 
 describe("no-internal fixture parser shape", () => {
     it("contains import/export specifiers and internal declarations used in rule scenarios", () => {
+        expect.hasAssertions();
+
         const program = parseFixtureProgram();
         const nodes = collectNodes(program);
 
@@ -100,6 +102,8 @@ describe("no-internal fixture parser shape", () => {
     });
 
     it("parses generated internal API snippets from fast-check", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(
                 fc.constantFrom(

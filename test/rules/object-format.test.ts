@@ -83,6 +83,8 @@ const getObjectFormatRuleFromPlugin = (): NonNullable<
 
 describe("object-format fixture structure", () => {
     it("contains single-line and multi-line object literals", () => {
+        expect.hasAssertions();
+
         const program = parseFixtureProgram();
         const objectExpressions = collectObjectExpressions(program);
 
@@ -102,6 +104,8 @@ describe("object-format fixture structure", () => {
     });
 
     it("parses generated object literals from fast-check", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(
                 fc.array(fc.integer({ max: 99, min: 0 }), {

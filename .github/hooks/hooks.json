@@ -1,39 +1,45 @@
 {
     "hooks": {
-        "SessionStart": [
+        "sessionEnd": [
             {
+                "bash": ".github/hooks/scripts/remove-temp.sh",
                 "command": "\".github/hooks/scripts/remove-temp.ps1\"",
                 "env": {
                     "SUPPRESS_PWSH_DECORATIONS": "1"
                 },
                 "linux": ".github/hooks/scripts/remove-temp.sh",
                 "osx": ".github/hooks/scripts/remove-temp.sh",
+                "powershell": ".github/hooks/scripts/remove-temp.ps1",
                 "timeout": 10,
                 "type": "command",
                 "windows": "powershell -NoLogo -NonInteractive -NoProfile -ExecutionPolicy Bypass -File .github/hooks/scripts/remove-temp.ps1"
             }
         ],
-        "Stop": [
+        "sessionStart": [
             {
+                "bash": ".github/hooks/scripts/remove-temp.sh",
                 "command": "\".github/hooks/scripts/remove-temp.ps1\"",
                 "env": {
                     "SUPPRESS_PWSH_DECORATIONS": "1"
                 },
                 "linux": ".github/hooks/scripts/remove-temp.sh",
                 "osx": ".github/hooks/scripts/remove-temp.sh",
+                "powershell": ".github/hooks/scripts/remove-temp.ps1",
                 "timeout": 10,
                 "type": "command",
                 "windows": "powershell -NoLogo -NonInteractive -NoProfile -ExecutionPolicy Bypass -File .github/hooks/scripts/remove-temp.ps1"
             }
         ],
-        "UserPromptSubmit": [
+        "userPromptSubmitted": [
             {
+                "bash": ".github/hooks/scripts/log-prompt.sh",
                 "command": "\".github/hooks/scripts/log-prompt.ps1\"",
                 "env": {
                     "SUPPRESS_PWSH_DECORATIONS": "1"
                 },
                 "linux": ".github/hooks/scripts/log-prompt.sh",
                 "osx": ".github/hooks/scripts/log-prompt.sh",
+                "powershell": ".github/hooks/scripts/log-prompt.ps1",
                 "timeout": 10,
                 "type": "command",
                 "windows": "powershell -NoLogo -NonInteractive -NoProfile -ExecutionPolicy Bypass -File .github/hooks/scripts/log-prompt.ps1"

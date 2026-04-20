@@ -35,6 +35,8 @@ const getUnderscoreInternalRuleFromPlugin = (): NonNullable<
 
 describe("underscore-internal fixture structure", () => {
     it("contains declaration forms targeted by the rule selectors", () => {
+        expect.hasAssertions();
+
         const program = parseFixtureProgram();
 
         const exportNamedDeclarations: TSESTree.ExportNamedDeclaration[] = [];
@@ -96,6 +98,8 @@ describe("underscore-internal fixture structure", () => {
     });
 
     it("parses generated internal export snippets from fast-check", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(fc.integer({ max: 999, min: 1 }), (suffix) => {
                 const generatedIdentifier = `Generated${suffix}`;

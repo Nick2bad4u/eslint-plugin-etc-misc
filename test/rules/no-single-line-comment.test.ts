@@ -45,6 +45,8 @@ const getNoSingleLineCommentRuleFromPlugin = (): NonNullable<
 
 describe("no-single-line-comment fixture structure", () => {
     it("contains directive, non-directive, and block comments", () => {
+        expect.hasAssertions();
+
         const program = parseFixtureProgram();
         const comments = program.comments ?? [];
 
@@ -78,6 +80,8 @@ describe("no-single-line-comment fixture structure", () => {
     });
 
     it("parses generated single-line comments from fast-check", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(
                 fc.array(fc.integer({ max: 99, min: 0 }), {

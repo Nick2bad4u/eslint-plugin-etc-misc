@@ -47,7 +47,7 @@ const vitestConfig: ReturnType<typeof defineConfig> = defineConfig({
             fileName: "LICENSE",
         },
         outDir: ".cache/vite/eslint-plugin-etc-misc", // Output directory for built files, separate from source and coverage
-        rollupOptions: {
+        rolldownOptions: {
             context: "this", // Set Rollup context to 'this' for better compatibility with ESLint's expected environment
             external: [
                 // Exclude dependencies from the bundle to reduce size and avoid duplication in consuming projects
@@ -156,7 +156,6 @@ const vitestConfig: ReturnType<typeof defineConfig> = defineConfig({
 
             reportOnFailure: true,
             reportsDirectory: "./coverage",
-            skipFull: false, // Don't skip full coverage collection
             // NOTE: Coverage thresholds adjusted after empirical analysis of current
             // instrumentation (November 2025). JSX-heavy components and patched CSS
             // modules generate synthetic branches that Vitest counts but cannot be
@@ -232,7 +231,7 @@ const vitestConfig: ReturnType<typeof defineConfig> = defineConfig({
         // Always run test files in parallel locally for speed.
         // CI disables file-level parallelism for deterministic resource usage.
         fileParallelism: !isCiEnvironment,
-        globals: true,
+        hookTimeout: 15_000, // Set hook timeout to match testTimeout
         include: [...testFilePatterns],
         includeTaskLocation: true,
         isolate: true,
@@ -261,6 +260,7 @@ const vitestConfig: ReturnType<typeof defineConfig> = defineConfig({
             // "junit",
             // "html",
         ],
+        restoreMocks: true, // Restore all mocked implementations after each test
         retry: 0, // No retries to surface issues immediately
         sequence: {
             // Run projects sequentially to avoid resource contention
@@ -270,6 +270,7 @@ const vitestConfig: ReturnType<typeof defineConfig> = defineConfig({
         },
         setupFiles: [],
         slowTestThreshold: 300,
+        teardownTimeout: 15_000, // Set teardown timeout to match testTimeout
         testTimeout: 15_000, // Set Vitest timeout to 15 seconds
         typecheck: {
             allowJs: false,

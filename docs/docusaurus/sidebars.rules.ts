@@ -328,7 +328,7 @@ if (uncategorizedRuleDocIds.length > 0) {
 }
 
 /** Complete sidebar structure for docs site navigation. */
-const sidebars: SidebarsConfig = {
+const sidebars = {
     rules: [
         ...preRuleDocs,
         {
@@ -382,6 +382,6 @@ const sidebars: SidebarsConfig = {
             ],
         },
     ],
-};
+} as const satisfies SidebarsConfig;
 
 export default sidebars;

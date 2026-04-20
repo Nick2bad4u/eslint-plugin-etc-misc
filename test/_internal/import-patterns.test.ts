@@ -136,6 +136,8 @@ const assertImportAndExportNodes = (
 
 describe("import source extraction", () => {
     it("extracts source text for supported import/export node types", () => {
+        expect.hasAssertions();
+
         const program = parseFixtureProgram();
         const {
             exportAllDeclaration,
@@ -159,6 +161,7 @@ describe("import source extraction", () => {
 
 describe("import source reporting decisions", () => {
     it("reports only when disallowed and not explicitly allowed", () => {
+        expect.hasAssertions();
         expect(
             shouldReportImportSource(
                 "@internal/secret",
@@ -185,6 +188,8 @@ describe("import source reporting decisions", () => {
     });
 
     it("respects disallow and allow precedence for arbitrary module names", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(globSafeModuleNameArbitrary, (sourceText) => {
                 expect(

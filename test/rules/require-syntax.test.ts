@@ -73,6 +73,8 @@ const getRequireSyntaxRuleFromPlugin = (): NonNullable<
 
 describe("require-syntax fixture parser shape", () => {
     it("contains import/export/class and import-expression forms without default export", () => {
+        expect.hasAssertions();
+
         const program = parseFixtureProgram();
         const nodes = collectNodes(program);
 
@@ -117,6 +119,8 @@ describe("require-syntax fixture parser shape", () => {
     });
 
     it("parses generated selector-heavy module snippets from fast-check", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(
                 fc.uniqueArray(

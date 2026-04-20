@@ -73,6 +73,8 @@ const getNoRestrictedSyntaxRuleFromPlugin = (): NonNullable<
 
 describe("no-restricted-syntax fixture structure", () => {
     it("contains if/while/switch/for forms used by selector-based cases", () => {
+        expect.hasAssertions();
+
         const nodes = collectNodes(parseFixtureProgram());
 
         expect(
@@ -93,6 +95,8 @@ describe("no-restricted-syntax fixture structure", () => {
     });
 
     it("parses generated statement snippets from fast-check", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(
                 fc.constantFrom(

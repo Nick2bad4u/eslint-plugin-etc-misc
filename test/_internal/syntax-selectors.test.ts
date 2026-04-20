@@ -35,20 +35,23 @@ const assertForStatement = (
 
 describe("syntax selector normalization", () => {
     it("normalizes string selectors into selector entry objects", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(fc.string(), (selector) => {
-                expect(normalizeSyntaxSelector(selector)).toEqual({ selector });
+                expect(normalizeSyntaxSelector(selector)).toStrictEqual({ selector });
             })
         );
     });
 
     it("keeps object selectors with custom messages", () => {
+        expect.hasAssertions();
         expect(
             normalizeSyntaxSelector({
                 message: "Avoid while loops.",
                 selector: "WhileStatement",
             })
-        ).toEqual({
+        ).toStrictEqual({
             message: "Avoid while loops.",
             selector: "WhileStatement",
         });
@@ -57,7 +60,7 @@ describe("syntax selector normalization", () => {
             normalizeSyntaxSelector({
                 selector: "ForStatement",
             })
-        ).toEqual({
+        ).toStrictEqual({
             selector: "ForStatement",
         });
     });
@@ -65,6 +68,8 @@ describe("syntax selector normalization", () => {
 
 describe("restricted syntax listeners", () => {
     it("builds listeners that report with the matched entry payload", () => {
+        expect.hasAssertions();
+
         const report =
             vi.fn<
                 (node: Readonly<TSESTree.Node>, entry: SelectorEntry) => void
@@ -88,9 +93,8 @@ describe("restricted syntax listeners", () => {
             Object.keys(listeners).toSorted((left, right) =>
                 left.localeCompare(right)
             )
-        ).toEqual(["ForStatement", "WhileStatement"]);
-        expect(report).toHaveBeenCalledTimes(1);
-        expect(report).toHaveBeenCalledWith(forStatement, {
+        ).toStrictEqual(["ForStatement", "WhileStatement"]);
+        expect(report).toHaveBeenCalledExactlyOnceWith(forStatement, {
             selector: "ForStatement",
         });
     });

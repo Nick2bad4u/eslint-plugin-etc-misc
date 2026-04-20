@@ -102,6 +102,8 @@ const getSortArrayRuleFromPlugin = (): NonNullable<
 
 describe("sort-array fixture structure", () => {
     it("contains literal arrays plus spread and hole edge cases", () => {
+        expect.hasAssertions();
+
         const arrays = collectArrayExpressions(parseFixtureProgram());
 
         expect(
@@ -134,6 +136,8 @@ describe("sort-array fixture structure", () => {
     });
 
     it("parses generated literal arrays from fast-check", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(
                 fc.array(fc.integer({ max: 50, min: 0 }), {

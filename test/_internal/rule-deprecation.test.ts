@@ -10,6 +10,8 @@ import {
 
 describe("replacement metadata helpers", () => {
     it("keeps plugin and rule payloads when provided", () => {
+        expect.hasAssertions();
+
         const replacementInfo = createReplacementRuleInfo({
             plugin: {
                 name: "@typescript-eslint/eslint-plugin",
@@ -21,7 +23,7 @@ describe("replacement metadata helpers", () => {
             },
         });
 
-        expect(replacementInfo).toEqual({
+        expect(replacementInfo).toStrictEqual({
             plugin: {
                 name: "@typescript-eslint/eslint-plugin",
                 url: "https://typescript-eslint.io",
@@ -34,6 +36,8 @@ describe("replacement metadata helpers", () => {
     });
 
     it("omits undefined plugin and rule keys across all optional combinations", () => {
+        expect.hasAssertions();
+
         const pluginReplacement = {
             name: "eslint-plugin-example",
             url: "https://example.com/plugin",
@@ -83,6 +87,8 @@ describe("replacement metadata helpers", () => {
 
 describe("deprecated rule metadata helpers", () => {
     it("includes lifecycle metadata and normalized docs URL", () => {
+        expect.hasAssertions();
+
         const deprecationInfo = createDeprecatedRuleInfo({
             message: "Use typescript/prefer-readonly-array instead.",
             ruleId: "typescript/no-multi-type-tuples",
@@ -100,6 +106,8 @@ describe("deprecated rule metadata helpers", () => {
 
 describe("deprecated rule lifecycle decoration", () => {
     it("adds deprecated metadata and freezes docs when docs are present", () => {
+        expect.hasAssertions();
+
         const ruleWithDocs: TSESLint.RuleModule<string, readonly unknown[]> = {
             create: (): Readonly<Record<string, never>> => ({}),
             defaultOptions: [],
@@ -130,6 +138,8 @@ describe("deprecated rule lifecycle decoration", () => {
     });
 
     it("does not create docs metadata when the original rule had no docs object", () => {
+        expect.hasAssertions();
+
         const ruleWithoutDocs: TSESLint.RuleModule<string, readonly unknown[]> =
             {
                 create: (): Readonly<Record<string, never>> => ({}),

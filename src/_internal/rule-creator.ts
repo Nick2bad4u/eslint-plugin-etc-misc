@@ -1,5 +1,3 @@
-/* eslint-disable total-functions/no-hidden-type-assertions -- @typescript-eslint RuleCreator requires an explicit docs metadata generic for typed docs fields. */
-
 import type { TSESLint } from "@typescript-eslint/utils";
 import type { UnknownArray } from "type-fest";
 
@@ -37,5 +35,3 @@ export const ruleCreator: RuleCreatorFactory =
 
         return `https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/${docsPathName}`;
     });
-
-/* eslint-enable total-functions/no-hidden-type-assertions -- Re-enable hidden assertion checks outside this required generic factory declaration. */

@@ -94,6 +94,8 @@ const getSortKeysRuleFromPlugin = (): NonNullable<
 
 describe("sort-keys fixture structure", () => {
     it("contains identifier, computed, spread, and numeric-key object properties", () => {
+        expect.hasAssertions();
+
         const objects = collectObjectExpressions(parseFixtureProgram());
 
         expect(
@@ -137,6 +139,8 @@ describe("sort-keys fixture structure", () => {
     });
 
     it("parses generated object literals from fast-check", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(
                 fc.uniqueArray(

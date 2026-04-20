@@ -5,12 +5,15 @@ import { filenameStem, toCasing } from "../../src/_internal/casing";
 
 describe("casing utilities", () => {
     it("converts common identifier styles to target casings", () => {
+        expect.hasAssertions();
         expect(toCasing("my_value-name", "camelCase")).toBe("myValueName");
         expect(toCasing("my_value-name", "PascalCase")).toBe("MyValueName");
         expect(toCasing("my_value-name", "kebab-case")).toBe("my-value-name");
     });
 
     it("always emits lowercase output for kebab-case conversion", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(fc.string(), (value) => {
                 const kebabCaseValue = toCasing(value, "kebab-case");
@@ -21,6 +24,8 @@ describe("casing utilities", () => {
     });
 
     it("keeps camelCase and PascalCase bodies aligned", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(fc.string(), (value) => {
                 const pascalCaseValue = toCasing(value, "PascalCase");
@@ -37,6 +42,7 @@ describe("casing utilities", () => {
     });
 
     it("extracts filename stems from Windows and POSIX-like paths", () => {
+        expect.hasAssertions();
         expect(
             filenameStem(String.raw`C:\workspace\project\module-name.ts`)
         ).toBe("module-name");
@@ -49,6 +55,8 @@ describe("casing utilities", () => {
     });
 
     it("removes only the last extension segment", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(fc.string(), fc.string(), (base, extension) => {
                 const normalizedBase =

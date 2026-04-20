@@ -88,6 +88,8 @@ const getNoTRuleFromPlugin = (): NonNullable<(typeof plugin.rules)["no-t"]> => {
 
 describe("no-t fixture structure", () => {
     it("contains both single-character and descriptive type parameters", () => {
+        expect.hasAssertions();
+
         const names = collectTypeParameterNames(parseFixtureProgram());
 
         expect(names.some((name) => name.length === 1)).toBeTruthy();
@@ -95,6 +97,8 @@ describe("no-t fixture structure", () => {
     });
 
     it("parses generated generic declarations from fast-check", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(
                 fc.array(fc.integer({ max: 25, min: 0 }), {

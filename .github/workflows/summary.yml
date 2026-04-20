@@ -1,19 +1,32 @@
 # yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
-name: Summarize new issues and pull requests
+name: Summarize New Issues And Pull Requests
+run-name: Summarize New Issues And Pull Requests · ${{ github.event_name }} · ${{ github.ref_name || github.sha }}
+
+concurrency:
+    group: summary-${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
 
 on:
     issues:
         types: [opened, edited]
     pull_request:
         types: [opened, edited, synchronize]
+    merge_group:
+        types: [checks_requested]
 
 permissions:
     models: read
     contents: read
 
+defaults:
+    run:
+        shell: bash
+
 jobs:
     inference:
+        name: AI Summary Inference
         runs-on: ubuntu-latest
+        timeout-minutes: 10
         if: github.event_name == 'issues' || (github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]')
         permissions:
             issues: write

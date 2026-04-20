@@ -73,6 +73,8 @@ const getTypescriptPreferEnumRuleFromPlugin = (): NonNullable<
 
 describe("typescript-prefer-enum fixture structure", () => {
     it("contains enum comparisons, enum-return strings, and string-literal unions", () => {
+        expect.hasAssertions();
+
         const nodes = collectNodes(parseFixtureProgram());
 
         expect(
@@ -109,6 +111,8 @@ describe("typescript-prefer-enum fixture structure", () => {
     });
 
     it("parses generated string-literal unions from fast-check", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(
                 fc.uniqueArray(

@@ -13,6 +13,7 @@ import {
 
 describe("symbol-usage helpers", () => {
     it("detects import/export specifier parent nodes", () => {
+        expect.hasAssertions();
         expect(
             isImportOrExportSpecifier({
                 type: AST_NODE_TYPES.ImportSpecifier,
@@ -42,6 +43,8 @@ describe("symbol-usage helpers", () => {
     });
 
     it("detects declaration identifiers across supported declaration node types", () => {
+        expect.hasAssertions();
+
         const tsInterfaceIdentifier = {} as es.Identifier;
         tsInterfaceIdentifier.parent = {
             id: tsInterfaceIdentifier,
@@ -103,6 +106,8 @@ describe("symbol-usage helpers", () => {
     });
 
     it("extracts and normalizes JSDoc tag comments", () => {
+        expect.hasAssertions();
+
         const comments = getJsDocTagComments(
             {
                 getJsDocTags: () => [
@@ -129,6 +134,7 @@ describe("symbol-usage helpers", () => {
     });
 
     it("returns no JSDoc comments for non-symbol values", () => {
+        expect.hasAssertions();
         expect(
             getJsDocTagComments(undefined, undefined, "internal")
         ).toStrictEqual([]);
@@ -138,6 +144,7 @@ describe("symbol-usage helpers", () => {
     });
 
     it("matches text against any provided regex pattern", () => {
+        expect.hasAssertions();
         expect(matchesAnyPattern("MySymbol", [/^My/v, /Other$/v])).toBeTruthy();
         expect(
             matchesAnyPattern("MySymbol", [/^Other/v, /Else$/v])
@@ -145,6 +152,8 @@ describe("symbol-usage helpers", () => {
     });
 
     it("returns symbol from parserServices location lookup when available", () => {
+        expect.hasAssertions();
+
         const expectedSymbol = { getName: () => "Example" };
 
         const parserServices = {

@@ -8,6 +8,7 @@ import {
 
 describe("identifier block utilities", () => {
     it("splits camelCase, PascalCase, snake_case, and kebab-case consistently", () => {
+        expect.hasAssertions();
         expect(splitIdentifierBlocks("myValueName")).toStrictEqual([
             "my",
             "Value",
@@ -26,11 +27,14 @@ describe("identifier block utilities", () => {
     });
 
     it("returns zero blocks for empty or punctuation-only input", () => {
+        expect.hasAssertions();
         expect(countIdentifierBlocks("")).toBe(0);
         expect(countIdentifierBlocks("---___***")).toBe(0);
     });
 
     it("always matches split length to count for arbitrary strings", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(fc.string(), (value) => {
                 const blocks = splitIdentifierBlocks(value);
@@ -45,6 +49,8 @@ describe("identifier block utilities", () => {
     });
 
     it("never returns empty blocks", () => {
+        expect.hasAssertions();
+
         fc.assert(
             fc.property(fc.string(), (value) => {
                 const blocks = splitIdentifierBlocks(value);

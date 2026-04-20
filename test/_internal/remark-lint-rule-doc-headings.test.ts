@@ -89,6 +89,8 @@ const hasRuleId = (
 
 describe("remark-lint-rule-doc-headings catalog marker", () => {
     it("reports when the rule catalog marker is missing", () => {
+        expect.hasAssertions();
+
         const messages = runRuleDocHeadingLint("## Further reading\n\n- link");
 
         expect(
@@ -100,6 +102,8 @@ describe("remark-lint-rule-doc-headings catalog marker", () => {
     });
 
     it("reports when duplicate rule catalog markers are present", () => {
+        expect.hasAssertions();
+
         const messages = runRuleDocHeadingLint(
             ["> **Rule catalog ID:** R099", "> **Rule catalog ID:** R100"].join(
                 "\n"
@@ -121,6 +125,8 @@ describe("remark-lint-rule-doc-headings catalog marker", () => {
     });
 
     it("accepts exactly one rule catalog marker", () => {
+        expect.hasAssertions();
+
         const messages = runRuleDocHeadingLint("> **Rule catalog ID:** R099");
 
         expect(

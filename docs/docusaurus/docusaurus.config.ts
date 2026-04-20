@@ -65,7 +65,7 @@ const futureConfig = {
 } satisfies Config["future"];
 
 /** Full Docusaurus site configuration exported to the build/runtime. */
-const config: Config = {
+const config = {
     baseUrl,
     baseUrlIssueBanner: true,
     deploymentBranch: "gh-pages",
@@ -82,17 +82,17 @@ const config: Config = {
             maintainCase: true,
         },
         emoji: true,
-        format: "detect",
+        format: "detect" as const,
         hooks: {
-            onBrokenMarkdownImages: "warn",
-            onBrokenMarkdownLinks: "warn",
+            onBrokenMarkdownImages: "warn" as const,
+            onBrokenMarkdownLinks: "warn" as const,
         },
         mermaid: true,
     },
     noIndex: false,
-    onBrokenAnchors: "warn",
-    onBrokenLinks: "warn",
-    onDuplicateRoutes: "warn",
+    onBrokenAnchors: "warn" as const,
+    onBrokenLinks: "warn" as const,
+    onDuplicateRoutes: "warn" as const,
     organizationName,
     plugins: [
         "docusaurus-plugin-image-zoom",
@@ -459,4 +459,4 @@ const config: Config = {
     url: "https://nick2bad4u.github.io",
 };
 
-export default config;
+export default config satisfies Config;

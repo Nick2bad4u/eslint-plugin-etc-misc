@@ -1,5 +1,6 @@
 # yaml-language-server: $schema=https://www.schemastore.org/github-workflow.json
 name: Codecov
+run-name: Codecov · ${{ github.event_name }} · ${{ github.ref_name || github.sha }}
 
 concurrency:
     group: codecov-${{ github.workflow }}-${{ github.ref }}
@@ -11,13 +12,17 @@ on:
 permissions:
     contents: read
 
+defaults:
+    run:
+        shell: bash
+
 jobs:
     coverage:
         name: Run coverage and upload (${{ matrix.label }})
         runs-on: ${{ matrix.os }}
         timeout-minutes: 20
         strategy:
-            fail-fast: false
+            fail-fast: true
             matrix:
                 include:
                     - label: linux
