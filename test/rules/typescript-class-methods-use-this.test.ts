@@ -13,6 +13,12 @@ ruleTester.run("typescript-class-methods-use-this", deprecatedRule, {
             code: "class C { method() { return this; } }",
         },
         {
+            code: "class C { static method() { return 1; } }",
+        },
+        {
+            code: "class C { get value() { return 1; } }",
+        },
+        {
             code: "class C { method(this: void) { return 1; } }",
         },
     ],

@@ -73,6 +73,9 @@ web_modules/
 # Optional stylelint cache
 .stylelintcache
 
+# SonarScanner working directory / generated architecture UDG artifacts
+.scannerwork/
+
 # Microbundle cache
 .rpt2_cache/
 .rts2_cache_cjs/

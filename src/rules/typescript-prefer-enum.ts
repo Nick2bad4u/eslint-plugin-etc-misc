@@ -68,11 +68,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     return;
                 }
 
-                const literalNode = isStringLiteral(node.left)
-                    ? node.left
-                    : isStringLiteral(node.right)
-                      ? node.right
-                      : undefined;
+                let literalNode: es.Literal | undefined = undefined;
+                if (isStringLiteral(node.left)) {
+                    literalNode = node.left;
+                } else if (isStringLiteral(node.right)) {
+                    literalNode = node.right;
+                }
                 const expressionNode =
                     literalNode === node.left ? node.right : node.left;
                 if (literalNode === undefined) {

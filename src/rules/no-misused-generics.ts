@@ -11,6 +11,12 @@ type MessageIds = "cannotInfer" | "canReplace";
 
 type Options = readonly [];
 
+type TypeParameterUsageAnalysis = {
+    readonly appearsInMultipleParameters: boolean;
+    readonly usedInParameters: boolean;
+    readonly usedInReturnOrExtends: boolean;
+};
+
 type VariableInfo = NonNullable<ReturnType<VariableUsageMap["get"]>>;
 
 type VariableUsageMap = ReturnType<typeof tsutils.collectVariableUsage>;
@@ -102,6 +108,42 @@ const getTypeParameterReplacement = (
     return constraint.getText(sourceFile);
 };
 
+const analyzeTypeParameterUses = (
+    uses: readonly Readonly<VariableUse>[],
+    signature: Readonly<ts.SignatureDeclaration>,
+    typeParameters: readonly Readonly<ts.TypeParameterDeclaration>[]
+): TypeParameterUsageAnalysis => {
+    let appearsInMultipleParameters = false;
+    let usedInParameters = false;
+    let usedInReturnOrExtends = tsutils.isFunctionWithBody(signature);
+
+    for (const use of uses) {
+        if (isUseWithinParameterRange(use.location.pos, signature)) {
+            if (usedInParameters) {
+                appearsInMultipleParameters = true;
+                break;
+            }
+
+            usedInParameters = true;
+            continue;
+        }
+
+        if (usedInReturnOrExtends) {
+            continue;
+        }
+
+        usedInReturnOrExtends =
+            use.location.pos > signature.parameters.end ||
+            isTypeUseInsideConstraint(use.location, typeParameters);
+    }
+
+    return {
+        appearsInMultipleParameters,
+        usedInParameters,
+        usedInReturnOrExtends,
+    };
+};
+
 /**
  * Disallow type parameters that cannot be inferred or do not enforce
  * constraints.
@@ -118,48 +160,25 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             typeParameters: readonly Readonly<ts.TypeParameterDeclaration>[],
             signature: Readonly<ts.SignatureDeclaration>
         ): void => {
-            if (usageMap === null) {
-                usageMap = tsutils.collectVariableUsage(
-                    signature.getSourceFile()
-                );
-            }
+            usageMap ??= tsutils.collectVariableUsage(
+                signature.getSourceFile()
+            );
 
             const sourceFile = signature.getSourceFile();
 
             for (const typeParameter of typeParameters) {
                 const uses = getVariableUses(usageMap, typeParameter.name);
-                let appearsInMultipleParameters = false;
-                let usedInParameters = false;
-                let usedInReturnOrExtends =
-                    tsutils.isFunctionWithBody(signature);
+                const usageAnalysis = analyzeTypeParameterUses(
+                    uses,
+                    signature,
+                    typeParameters
+                );
 
-                for (const use of uses) {
-                    if (
-                        isUseWithinParameterRange(use.location.pos, signature)
-                    ) {
-                        if (usedInParameters) {
-                            appearsInMultipleParameters = true;
-                            break;
-                        }
-
-                        usedInParameters = true;
-                        continue;
-                    }
-
-                    if (usedInReturnOrExtends) {
-                        continue;
-                    }
-
-                    usedInReturnOrExtends =
-                        use.location.pos > signature.parameters.end ||
-                        isTypeUseInsideConstraint(use.location, typeParameters);
-                }
-
-                if (appearsInMultipleParameters) {
+                if (usageAnalysis.appearsInMultipleParameters) {
                     continue;
                 }
 
-                if (!usedInParameters) {
+                if (!usageAnalysis.usedInParameters) {
                     context.report({
                         data: {
                             name: typeParameter.name.text,
@@ -175,7 +194,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 }
 
                 if (
-                    !usedInReturnOrExtends &&
+                    !usageAnalysis.usedInReturnOrExtends &&
                     usageMap !== null &&
                     !isConstrainedByAnotherTypeParameter(
                         typeParameter,

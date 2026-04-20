@@ -389,10 +389,7 @@ const withCatalogDocsMetadata = (
         rulesWithRequiredTypeChecking,
         ruleName
     );
-    const deprecatedMetadata =
-        ruleModule.meta.deprecated === undefined
-            ? false
-            : ruleModule.meta.deprecated;
+    const deprecatedMetadata = ruleModule.meta.deprecated ?? false;
     const isDeprecatedRule = deprecatedMetadata !== false;
     const docsWithCatalogMetadata = {
         ...currentDocsMetadata,

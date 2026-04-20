@@ -60,6 +60,9 @@ ruleTester.run("no-misused-generics", rule, {
             code: "declare function identity<T>(value: T): T;",
         },
         {
+            code: "function log(value: string): void { console.log(value); }",
+        },
+        {
             code: "declare function compare<T>(left: T, right: T): boolean;",
         },
         {

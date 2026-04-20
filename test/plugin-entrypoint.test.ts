@@ -120,9 +120,13 @@ describe("plugin.mjs entrypoint", () => {
         expect(plugin.processors).toStrictEqual({});
 
         expect(Object.keys(plugin.rules)).toStrictEqual(Object.keys(rules));
-        expect(plugin.configs.allStrict.rules).toStrictEqual(configs.allStrict.rules);
+        expect(plugin.configs.allStrict.rules).toStrictEqual(
+            configs.allStrict.rules
+        );
         expect(plugin.configs.all.rules).toStrictEqual(configs.all.rules);
-        expect(plugin.configs.minimal.rules).toStrictEqual(configs.minimal.rules);
+        expect(plugin.configs.minimal.rules).toStrictEqual(
+            configs.minimal.rules
+        );
         expect(plugin.configs.recommended.rules).toStrictEqual(
             configs.recommended.rules
         );
@@ -150,7 +154,9 @@ describe("plugin.mjs entrypoint", () => {
         expect(minimalPluginReference.meta).toStrictEqual(plugin.meta);
         expect(recommendedPluginReference.meta).toStrictEqual(plugin.meta);
         expect(strictPluginReference.meta).toStrictEqual(plugin.meta);
-        expect(strictTypeCheckedPluginReference.meta).toStrictEqual(plugin.meta);
+        expect(strictTypeCheckedPluginReference.meta).toStrictEqual(
+            plugin.meta
+        );
 
         expect(allStrictPluginReference.rules).toBe(plugin.rules);
         expect(allPluginReference.rules).toBe(plugin.rules);

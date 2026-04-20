@@ -207,6 +207,14 @@ ruleTester.run(
                 code: [
                     "enum Status { Open = 'open', Closed = 'closed' }",
                     "declare const status: Status;",
+                    "const isOpen = status === Status.Open;",
+                    "void isOpen;",
+                ].join("\n"),
+            },
+            {
+                code: [
+                    "enum Status { Open = 'open', Closed = 'closed' }",
+                    "declare const status: Status;",
                     "const isOpen = status === 'open';",
                     "void isOpen;",
                 ].join("\n"),

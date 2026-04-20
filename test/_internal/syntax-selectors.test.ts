@@ -39,7 +39,9 @@ describe("syntax selector normalization", () => {
 
         fc.assert(
             fc.property(fc.string(), (selector) => {
-                expect(normalizeSyntaxSelector(selector)).toStrictEqual({ selector });
+                expect(normalizeSyntaxSelector(selector)).toStrictEqual({
+                    selector,
+                });
             })
         );
     });
