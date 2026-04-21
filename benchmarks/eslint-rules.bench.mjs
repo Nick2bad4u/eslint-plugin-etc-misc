@@ -3,8 +3,8 @@ import { bench, describe } from "vitest";
 
 import {
     benchmarkFileGlobs,
-    createTypefestFlatConfig,
-    typefestRuleSets,
+    benchmarkRuleSets,
+    createBenchmarkFlatConfig,
 } from "./eslint-benchmark-config.mjs";
 
 /**
@@ -26,14 +26,6 @@ import {
  *     rules: BenchmarkRules;
  * }>} LintScenarioOptions
  */
-
-const singleRuleBenchmarks = Object.freeze({
-    "typefest/prefer-ts-extras-is-present": "error",
-    "typefest/prefer-ts-extras-safe-cast-to": "error",
-    "typefest/prefer-ts-extras-set-has": "error",
-    "typefest/prefer-ts-extras-string-split": "error",
-    "typefest/prefer-type-fest-arrayable": "error",
-});
 
 const standardBenchmarkOptions = Object.freeze({
     iterations: 3,
@@ -202,7 +194,7 @@ const lintScenario = async ({ filePatterns, fix, rules }) => {
     const eslint = new ESLint({
         cache: false,
         fix,
-        overrideConfig: createTypefestFlatConfig({ rules }),
+        overrideConfig: createBenchmarkFlatConfig({ rules }),
         overrideConfigFile: true,
         stats: true,
     });
@@ -210,7 +202,7 @@ const lintScenario = async ({ filePatterns, fix, rules }) => {
     return eslint.lintFiles([...filePatterns]);
 };
 
-describe("eslint-plugin-typefest meaningful benchmarks", () => {
+describe("eslint-plugin-etc-misc meaningful benchmarks", () => {
     bench(
         "recommended preset on full invalid typed fixture corpus",
         async () => {
@@ -219,7 +211,7 @@ describe("eslint-plugin-typefest meaningful benchmarks", () => {
             const lintResults = await lintScenario({
                 filePatterns: benchmarkFileGlobs.typedInvalidFixtures,
                 fix: false,
-                rules: typefestRuleSets.recommended,
+                rules: benchmarkRuleSets.recommended,
             });
 
             assertMeaningfulBenchmarkSignal(
@@ -238,7 +230,7 @@ describe("eslint-plugin-typefest meaningful benchmarks", () => {
             const lintResults = await lintScenario({
                 filePatterns: benchmarkFileGlobs.typedInvalidFixtures,
                 fix: false,
-                rules: typefestRuleSets.strict,
+                rules: benchmarkRuleSets.strict,
             });
 
             assertMeaningfulBenchmarkSignal(
@@ -257,7 +249,7 @@ describe("eslint-plugin-typefest meaningful benchmarks", () => {
             const lintResults = await lintScenario({
                 filePatterns: benchmarkFileGlobs.typedValidFixtures,
                 fix: false,
-                rules: typefestRuleSets.recommended,
+                rules: benchmarkRuleSets.recommended,
             });
 
             assertMeaningfulBenchmarkSignal(
@@ -277,7 +269,7 @@ describe("eslint-plugin-typefest meaningful benchmarks", () => {
             const lintResults = await lintScenario({
                 filePatterns: benchmarkFileGlobs.recommendedZeroMessageFixture,
                 fix: false,
-                rules: typefestRuleSets.recommended,
+                rules: benchmarkRuleSets.recommended,
             });
 
             assertMeaningfulBenchmarkSignal(
@@ -290,204 +282,21 @@ describe("eslint-plugin-typefest meaningful benchmarks", () => {
     );
 
     bench(
-        "ts-extras type-guards preset on ts-extras invalid fixtures",
+        "recommended preset (fix=true) on full invalid typed fixture corpus",
         async () => {
             expect.hasAssertions();
 
             const lintResults = await lintScenario({
-                filePatterns: benchmarkFileGlobs.tsExtrasInvalidFixtures,
-                fix: false,
-                rules: typefestRuleSets.tsExtrasTypeGuards,
-            });
-
-            assertMeaningfulBenchmarkSignal(
-                "ts-extras type-guards preset on ts-extras invalid fixtures",
-                lintResults
-            );
-        },
-        standardBenchmarkOptions
-    );
-
-    bench(
-        "type-fest types preset on type-fest invalid fixtures",
-        async () => {
-            expect.hasAssertions();
-
-            const lintResults = await lintScenario({
-                filePatterns: benchmarkFileGlobs.typeFestInvalidFixtures,
-                fix: false,
-                rules: typefestRuleSets.typeFestTypes,
-            });
-
-            assertMeaningfulBenchmarkSignal(
-                "type-fest types preset on type-fest invalid fixtures",
-                lintResults
-            );
-        },
-        standardBenchmarkOptions
-    );
-
-    bench(
-        "recommended preset (fix=true) on ts-extras invalid fixtures",
-        async () => {
-            expect.hasAssertions();
-
-            const lintResults = await lintScenario({
-                filePatterns: benchmarkFileGlobs.tsExtrasInvalidFixtures,
+                filePatterns: benchmarkFileGlobs.typedInvalidFixtures,
                 fix: true,
-                rules: typefestRuleSets.recommended,
+                rules: benchmarkRuleSets.recommended,
             });
 
             assertMeaningfulBenchmarkSignal(
-                "recommended preset (fix=true) on ts-extras invalid fixtures",
+                "recommended preset (fix=true) on full invalid typed fixture corpus",
                 lintResults
             );
         },
         expensiveBenchmarkOptions
-    );
-
-    bench(
-        "single rule prefer-ts-extras-is-present on stress fixture",
-        async () => {
-            expect.hasAssertions();
-
-            const lintResults = await lintScenario({
-                filePatterns: benchmarkFileGlobs.isPresentStressFixture,
-                fix: false,
-                rules: {
-                    "typefest/prefer-ts-extras-is-present":
-                        singleRuleBenchmarks[
-                            "typefest/prefer-ts-extras-is-present"
-                        ],
-                },
-            });
-
-            assertMeaningfulBenchmarkSignal(
-                "single rule prefer-ts-extras-is-present on stress fixture",
-                lintResults
-            );
-        },
-        standardBenchmarkOptions
-    );
-
-    bench(
-        "single rule prefer-ts-extras-safe-cast-to on stress fixture",
-        async () => {
-            expect.hasAssertions();
-
-            const lintResults = await lintScenario({
-                filePatterns: benchmarkFileGlobs.safeCastToStressFixture,
-                fix: false,
-                rules: {
-                    "typefest/prefer-ts-extras-safe-cast-to":
-                        singleRuleBenchmarks[
-                            "typefest/prefer-ts-extras-safe-cast-to"
-                        ],
-                },
-            });
-
-            assertMeaningfulBenchmarkSignal(
-                "single rule prefer-ts-extras-safe-cast-to on stress fixture",
-                lintResults
-            );
-        },
-        standardBenchmarkOptions
-    );
-
-    bench(
-        "single rule prefer-ts-extras-set-has on stress fixture",
-        async () => {
-            expect.hasAssertions();
-
-            const lintResults = await lintScenario({
-                filePatterns: benchmarkFileGlobs.setHasStressFixture,
-                fix: false,
-                rules: {
-                    "typefest/prefer-ts-extras-set-has":
-                        singleRuleBenchmarks[
-                            "typefest/prefer-ts-extras-set-has"
-                        ],
-                },
-            });
-
-            assertMeaningfulBenchmarkSignal(
-                "single rule prefer-ts-extras-set-has on stress fixture",
-                lintResults
-            );
-        },
-        standardBenchmarkOptions
-    );
-
-    bench(
-        "single rule prefer-ts-extras-string-split on stress fixture",
-        async () => {
-            expect.hasAssertions();
-
-            const lintResults = await lintScenario({
-                filePatterns: benchmarkFileGlobs.stringSplitStressFixture,
-                fix: false,
-                rules: {
-                    "typefest/prefer-ts-extras-string-split":
-                        singleRuleBenchmarks[
-                            "typefest/prefer-ts-extras-string-split"
-                        ],
-                },
-            });
-
-            assertMeaningfulBenchmarkSignal(
-                "single rule prefer-ts-extras-string-split on stress fixture",
-                lintResults
-            );
-        },
-        standardBenchmarkOptions
-    );
-
-    bench(
-        "single rule prefer-ts-extras-safe-cast-to on stress fixture (fix=true)",
-        async () => {
-            expect.hasAssertions();
-
-            const lintResults = await lintScenario({
-                filePatterns: benchmarkFileGlobs.safeCastToStressFixture,
-                fix: true,
-                rules: {
-                    "typefest/prefer-ts-extras-safe-cast-to":
-                        singleRuleBenchmarks[
-                            "typefest/prefer-ts-extras-safe-cast-to"
-                        ],
-                },
-            });
-
-            assertMeaningfulBenchmarkSignal(
-                "single rule prefer-ts-extras-safe-cast-to on stress fixture (fix=true)",
-                lintResults,
-                { maximumReportedProblems: 0, minimumReportedProblems: 0 }
-            );
-        },
-        expensiveBenchmarkOptions
-    );
-
-    bench(
-        "single rule prefer-type-fest-arrayable on stress fixture",
-        async () => {
-            expect.hasAssertions();
-
-            const lintResults = await lintScenario({
-                filePatterns: benchmarkFileGlobs.arrayableStressFixture,
-                fix: false,
-                rules: {
-                    "typefest/prefer-type-fest-arrayable":
-                        singleRuleBenchmarks[
-                            "typefest/prefer-type-fest-arrayable"
-                        ],
-                },
-            });
-
-            assertMeaningfulBenchmarkSignal(
-                "single rule prefer-type-fest-arrayable on stress fixture",
-                lintResults
-            );
-        },
-        standardBenchmarkOptions
     );
 });

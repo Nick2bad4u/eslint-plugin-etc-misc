@@ -15,21 +15,14 @@ const plugin = pluginExport;
 
 /**
  * @typedef {{
- *     arrayableStressFixture: readonly string[];
- *     isPresentStressFixture: readonly string[];
  *     recommendedZeroMessageFixture: readonly string[];
- *     setHasStressFixture: readonly string[];
- *     safeCastToStressFixture: readonly string[];
- *     stringSplitStressFixture: readonly string[];
- *     tsExtrasInvalidFixtures: readonly string[];
  *     typedInvalidFixtures: readonly string[];
  *     typedValidFixtures: readonly string[];
- *     typeFestInvalidFixtures: readonly string[];
  * }} BenchmarkFileGlobs
  */
 
 /**
- * @typedef {{ rules: BenchmarkRules }} CreateTypefestFlatConfigOptions
+ * @typedef {{ rules: BenchmarkRules }} CreateBenchmarkFlatConfigOptions
  */
 
 /**
@@ -51,31 +44,14 @@ export const repositoryRoot = path.resolve(process.cwd());
  */
 /** @type {Readonly<BenchmarkFileGlobs>} */
 export const benchmarkFileGlobs = Object.freeze({
-    arrayableStressFixture: Object.freeze([
-        "benchmarks/fixtures/arrayable.stress.ts",
-    ]),
-    isPresentStressFixture: Object.freeze([
-        "benchmarks/fixtures/is-present.stress.ts",
-    ]),
     recommendedZeroMessageFixture: Object.freeze([
         "benchmarks/fixtures/recommended-zero-message.baseline.ts",
     ]),
-    safeCastToStressFixture: Object.freeze([
-        "benchmarks/fixtures/safe-cast-to.stress.ts",
+    typedInvalidFixtures: Object.freeze([
+        "benchmarks/fixtures/recommended-invalid.fixture.ts",
     ]),
-    setHasStressFixture: Object.freeze([
-        "benchmarks/fixtures/set-has.stress.ts",
-    ]),
-    stringSplitStressFixture: Object.freeze([
-        "benchmarks/fixtures/string-split.stress.ts",
-    ]),
-    tsExtrasInvalidFixtures: Object.freeze([
-        "test/fixtures/typed/prefer-ts-extras-*.invalid.ts",
-    ]),
-    typedInvalidFixtures: Object.freeze(["test/fixtures/typed/*.invalid.ts"]),
-    typedValidFixtures: Object.freeze(["test/fixtures/typed/*.valid.ts"]),
-    typeFestInvalidFixtures: Object.freeze([
-        "test/fixtures/typed/prefer-type-fest-*.invalid.ts",
+    typedValidFixtures: Object.freeze([
+        "benchmarks/fixtures/recommended-valid.fixture.ts",
     ]),
 });
 
@@ -137,7 +113,7 @@ const ensureRulesRecord = (value, label) => {
 /**
  * Resolve rules from a plugin preset by name.
  *
- * @param {string} presetName - Key under `typefestPlugin.configs`.
+ * @param {string} presetName - Key under `plugin.configs`.
  *
  * @returns {Readonly<BenchmarkRules>} Frozen rule map suitable for flat config.
  */
@@ -164,31 +140,27 @@ const resolveRuleSet = (presetName) => {
  *     minimal: Readonly<BenchmarkRules>;
  *     recommended: Readonly<BenchmarkRules>;
  *     strict: Readonly<BenchmarkRules>;
- *     tsExtrasTypeGuards: Readonly<BenchmarkRules>;
- *     typeFestTypes: Readonly<BenchmarkRules>;
- * }>} TypefestRuleSets
+ * }>} BenchmarkRuleSets
  */
 
-/** @type {TypefestRuleSets} */
-export const typefestRuleSets = Object.freeze({
+/** @type {BenchmarkRuleSets} */
+export const benchmarkRuleSets = Object.freeze({
     all: resolveRuleSet("all"),
     minimal: resolveRuleSet("minimal"),
     recommended: resolveRuleSet("recommended"),
     strict: resolveRuleSet("strict"),
-    tsExtrasTypeGuards: resolveRuleSet("ts-extras/type-guards"),
-    typeFestTypes: resolveRuleSet("type-fest/types"),
 });
 
 /**
- * Create a flat ESLint config array for typefest benchmark scenarios.
+ * Create a flat ESLint config array for benchmark scenarios.
  *
- * @param {CreateTypefestFlatConfigOptions} options - Config creation options.
+ * @param {CreateBenchmarkFlatConfigOptions} options - Config creation options.
  *
  * @returns {import("eslint").Linter.Config[]} Flat config array for ESLint Node
  *   API / CLI usage.
  */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- This .mjs module relies on JSDoc contracts instead of TS syntax.
-export function createTypefestFlatConfig(options) {
+export function createBenchmarkFlatConfig(options) {
     const { rules } = options;
     const pluginModule = /** @type {import("eslint").ESLint.Plugin} */ (
         /** @type {unknown} */ (plugin)
@@ -206,9 +178,9 @@ export function createTypefestFlatConfig(options) {
                     tsconfigRootDir: repositoryRoot,
                 },
             },
-            name: "benchmark:typefest",
+            name: "benchmark:etc-misc",
             plugins: {
-                typefest: pluginModule,
+                "etc-misc": pluginModule,
             },
             rules,
         },

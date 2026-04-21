@@ -6,9 +6,9 @@ import pc from "picocolors";
 
 import {
     benchmarkFileGlobs,
-    createTypefestFlatConfig,
+    benchmarkRuleSets,
+    createBenchmarkFlatConfig,
     repositoryRoot,
-    typefestRuleSets,
 } from "./eslint-benchmark-config.mjs";
 
 /**
@@ -118,18 +118,6 @@ const defaultMaximumMessageCount = Number.POSITIVE_INFINITY;
 const defaultWarmupIterations = 1;
 const defaultMinimumMessageCount = 1;
 
-const singleRuleSafeCastToBenchmarkRules = Object.freeze({
-    "typefest/prefer-ts-extras-safe-cast-to": "error",
-});
-
-const singleRuleSetHasBenchmarkRules = Object.freeze({
-    "typefest/prefer-ts-extras-set-has": "error",
-});
-
-const singleRuleStringSplitBenchmarkRules = Object.freeze({
-    "typefest/prefer-ts-extras-string-split": "error",
-});
-
 /**
  * Ensure a value is a readonly array of strings.
  *
@@ -164,18 +152,6 @@ const recommendedZeroMessageFixtureGlobs = ensureStringArray(
     benchmarkFileGlobs.recommendedZeroMessageFixture,
     "benchmarkFileGlobs.recommendedZeroMessageFixture"
 );
-const safeCastToStressFixtureGlobs = ensureStringArray(
-    benchmarkFileGlobs.safeCastToStressFixture,
-    "benchmarkFileGlobs.safeCastToStressFixture"
-);
-const setHasStressFixtureGlobs = ensureStringArray(
-    benchmarkFileGlobs.setHasStressFixture,
-    "benchmarkFileGlobs.setHasStressFixture"
-);
-const stringSplitStressFixtureGlobs = ensureStringArray(
-    benchmarkFileGlobs.stringSplitStressFixture,
-    "benchmarkFileGlobs.stringSplitStressFixture"
-);
 
 /** @type {readonly BenchmarkScenario[]} */
 const benchmarkScenarios = Object.freeze([
@@ -183,14 +159,14 @@ const benchmarkScenarios = Object.freeze([
         filePatterns: benchmarkFileGlobs.typedInvalidFixtures,
         fix: false,
         name: "recommended-invalid-corpus",
-        rules: typefestRuleSets.recommended,
+        rules: benchmarkRuleSets.recommended,
     },
     {
         filePatterns: typedValidFixtureGlobs,
         fix: false,
         minimumMessageCount: 0,
         name: "recommended-valid-corpus",
-        rules: typefestRuleSets.recommended,
+        rules: benchmarkRuleSets.recommended,
     },
     {
         filePatterns: recommendedZeroMessageFixtureGlobs,
@@ -198,57 +174,20 @@ const benchmarkScenarios = Object.freeze([
         maximumMessageCount: 0,
         minimumMessageCount: 0,
         name: "recommended-zero-message-corpus",
-        rules: typefestRuleSets.recommended,
+        rules: benchmarkRuleSets.recommended,
     },
     {
         filePatterns: benchmarkFileGlobs.typedInvalidFixtures,
         fix: false,
         name: "strict-invalid-corpus",
-        rules: typefestRuleSets.strict,
+        rules: benchmarkRuleSets.strict,
     },
     {
-        filePatterns: benchmarkFileGlobs.tsExtrasInvalidFixtures,
-        fix: false,
-        name: "ts-extras-type-guards-invalid-corpus",
-        rules: typefestRuleSets.tsExtrasTypeGuards,
-    },
-    {
-        filePatterns: benchmarkFileGlobs.typeFestInvalidFixtures,
-        fix: false,
-        name: "type-fest-types-invalid-corpus",
-        rules: typefestRuleSets.typeFestTypes,
-    },
-    {
-        filePatterns: benchmarkFileGlobs.tsExtrasInvalidFixtures,
+        filePatterns: benchmarkFileGlobs.typedInvalidFixtures,
         fix: true,
-        name: "recommended-fix-on-ts-extras-invalid-corpus",
-        rules: typefestRuleSets.recommended,
-    },
-    {
-        filePatterns: safeCastToStressFixtureGlobs,
-        fix: false,
-        name: "single-rule-safe-cast-to-stress",
-        rules: singleRuleSafeCastToBenchmarkRules,
-    },
-    {
-        filePatterns: safeCastToStressFixtureGlobs,
-        fix: true,
-        maximumMessageCount: 0,
         minimumMessageCount: 0,
-        name: "single-rule-safe-cast-to-stress-fix",
-        rules: singleRuleSafeCastToBenchmarkRules,
-    },
-    {
-        filePatterns: setHasStressFixtureGlobs,
-        fix: false,
-        name: "single-rule-set-has-stress",
-        rules: singleRuleSetHasBenchmarkRules,
-    },
-    {
-        filePatterns: stringSplitStressFixtureGlobs,
-        fix: false,
-        name: "single-rule-string-split-stress",
-        rules: singleRuleStringSplitBenchmarkRules,
+        name: "recommended-fix-on-invalid-corpus",
+        rules: benchmarkRuleSets.recommended,
     },
 ]);
 
@@ -316,7 +255,7 @@ const createBenchmarkEslint = ({ fix, rules }) =>
     new ESLint({
         cache: false,
         fix,
-        overrideConfig: createTypefestFlatConfig({ rules }),
+        overrideConfig: createBenchmarkFlatConfig({ rules }),
         overrideConfigFile: true,
         stats: true,
     });

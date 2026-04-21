@@ -1,5 +1,5 @@
 /**
- * Commitlint configuration for eslint-plugin-typefest.
+ * Commitlint configuration for eslint-plugin-etc-misc.
  *
  * Enforces conventional commit format with emoji and bracketed type, e.g., "✨
  * [feat] Add dark mode toggle". Each commit bullet point should start with one
