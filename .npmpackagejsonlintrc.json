@@ -73,6 +73,7 @@
                 ]
             }
         ],
+        "prefer-no-bin": "error",
         "prefer-no-engineStrict": "error",
         "prefer-no-version-zero-dependencies": "off",
         "prefer-no-version-zero-devDependencies": "off",
@@ -170,7 +171,8 @@
                 "MIT",
                 "Unlicense",
                 "UnLicense",
-                "UNLICENSED"
+                "UNLICENSED",
+                "Apache-2.0"
             ]
         ],
         "valid-values-name-scope": "off",
