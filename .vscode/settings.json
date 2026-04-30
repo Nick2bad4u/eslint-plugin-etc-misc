@@ -1,3 +1,7 @@
 {
-    "github.copilot.chat.summarizeAgentConversationHistory.enabled": true
+    "github.copilot.chat.summarizeAgentConversationHistory.enabled": true,
+    "sonarlint.connectedMode.project": {
+        "connectionId": "nick2bad4u",
+        "projectKey": "Nick2bad4u_eslint-plugin-etc-misc"
+    }
 }

@@ -868,3 +868,6 @@ eslint.config.bundled_**
 # old source plugins
 eslint-plugin-etc/
 eslint-plugin-misc/
+# Ignore generated doc coverage badges
+docs/docusaurus/static/img/coverage.json
+docs/docusaurus/static/img/coverage.svg
