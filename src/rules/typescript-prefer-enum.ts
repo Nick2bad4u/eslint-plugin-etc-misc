@@ -68,7 +68,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     return;
                 }
 
-                let literalNode: es.Literal | undefined = undefined;
+                let literalNode: es.Literal | null = null;
                 if (isStringLiteral(node.left)) {
                     literalNode = node.left;
                 } else if (isStringLiteral(node.right)) {
@@ -76,7 +76,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 }
                 const expressionNode =
                     literalNode === node.left ? node.right : node.left;
-                if (literalNode === undefined) {
+                if (literalNode === null) {
                     return;
                 }
 

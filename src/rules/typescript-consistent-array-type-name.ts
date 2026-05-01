@@ -6,6 +6,7 @@ type MessageIds = "forbidden";
 
 type Options = readonly [];
 
+// eslint-disable-next-line etc-misc/no-unnecessary-template-literal -- String.raw preserves selector escapes.
 const selector = String.raw`:matches(TSTypeAliasDeclaration[typeAnnotation.type='TSArrayType'], TSTypeAliasDeclaration[typeAnnotation.type='TSTupleType'], TSTypeAliasDeclaration[typeAnnotation.type='TSTypeReference']:has(TSTypeReference > Identifier[name='Array'])) > Identifier.id:not([name=/^(?:[A-Z][a-z\d]*)+(?:Array|s)$/u])`;
 
 /**

@@ -6,6 +6,7 @@ type MessageIds = "forbidden";
 
 type Options = readonly [];
 
+// eslint-disable-next-line etc-misc/no-unnecessary-template-literal -- String.raw preserves selector escapes.
 const disallowedSelector = String.raw`Identifier[name=/[^$\w]/u]`;
 
 /**
