@@ -89,7 +89,6 @@
         "contrib:generate": "all-contributors generate",
         "coverage": "vitest run --coverage",
         "docs:api": "npm run --workspace docs/docusaurus docs:api",
-        "docs:api:local": "npm run --workspace docs/docusaurus docs:api:local",
         "docs:build": "npm run --workspace docs/docusaurus build",
         "docs:build:local": "npm run --workspace docs/docusaurus build:local",
         "docs:check-links": "node ./scripts/check-doc-links.mjs",
@@ -98,7 +97,6 @@
         "docs:toc": "remark docs --use remark-toc --output",
         "docs:typecheck": "npm run --workspace docs/docusaurus typecheck",
         "docs:typedoc": "npm run --workspace docs/docusaurus docs:api",
-        "docs:typedoc:local": "npm run --workspace docs/docusaurus docs:api:local",
         "docs:validate-links": "remark docs --use remark-validate-links --frail",
         "knip": "cross-env NODE_OPTIONS=--max_old_space_size=4096 NODE_NO_WARNINGS=1 npx knip -c knip.config.ts --include-libs --cache --cache-location .cache/knip --tsConfig tsconfig.json",
         "prelint": "npm run build",
@@ -163,6 +161,7 @@
         "sync:node-version-files": "node scripts/sync-node-version-files.mjs",
         "sync:peer-eslint-range": "node scripts/sync-peer-eslint-range.mjs",
         "sync:readme-rules-table": "node scripts/sync-readme-rules-table.mjs",
+        "sync:rules:write": "npm run sync:readme-rules-table && npm run sync:peer-eslint-range && npm run sync:node-version-files",
         "pretest": "npm run build",
         "test": "vitest run",
         "test:ci": "cross-env CI=true vitest run --reporter=default",
@@ -186,7 +185,7 @@
         "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.build.json --noEmit && tsc -p tsconfig.eslint.json --noEmit && tsc -p tsconfig.js.json --noEmit && npm run --workspace docs/docusaurus typecheck",
         "typecheck:all": "npm run typecheck",
         "types:update": "typesync",
-        "update-deps": "npx ncu -i --install never && npm update --workspaces --force && npm install --force && npm run sync:peer-eslint-range && npm run sync:node-version-files && npm run sync:readme-rules-table"
+        "update-deps": "npx ncu -i --install never && npm update --workspaces --force && npm install --force && npm run sync:rules:write"
     },
     "dependencies": {
         "@eslint-community/eslint-plugin-eslint-comments": "^4.7.1",
