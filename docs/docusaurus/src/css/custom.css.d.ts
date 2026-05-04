@@ -1,10 +1,12 @@
 declare const styles: {
     readonly markdown: string;
     readonly menu__link: string;
+    readonly menu__list: string;
     readonly "menu__list-item--collapsed": string;
     readonly "menu__list-item-collapsible": string;
     readonly "sb-cat-api-runtime": string;
     readonly "sb-cat-api-types": string;
+    readonly "sb-cat-dev-charts": string;
     readonly "sb-cat-developer": string;
     readonly "sb-cat-developer-adr": string;
     readonly "sb-cat-presets": string;
@@ -17,6 +19,7 @@ declare const styles: {
     readonly "theme-doc-sidebar-item-link-level-1": string;
     readonly "theme-doc-sidebar-item-link-level-2": string;
     readonly "theme-doc-sidebar-item-link-level-3": string;
+    readonly "theme-doc-sidebar-item-link-level-4": string;
     readonly "theme-doc-sidebar-menu": string;
 };
 export = styles;

@@ -40,7 +40,8 @@ const liveBadges = [
  *
  * @param {{ className?: string }} [props] - Optional list class override.
  *
- * @returns {JSX.Element} Badge strip with links to package/repository metadata.
+ * @returns {import("react").JSX.Element} Badge strip with links to
+ *   package/repository metadata.
  */
 export default function GitHubStats({ className = "" } = {}) {
     const badgeListClassName = [styles.liveBadgeList, className]
