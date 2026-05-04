@@ -14,30 +14,14 @@
         ".cache/**",
         "coverage/**",
         "dist/**",
+        "docs/docusaurus/typedoc-plugins/*.d.mts",
         "eslint.config.bundled_*.mjs",
         "node_modules/**",
         "test/fixtures/**"
     ],
     "extends": "./tsconfig.json",
     "include": [
-        ".remarkrc.mjs",
-        "*.mjs",
-        "benchmarks/**/*.ts",
-        "benchmarks/**/*.mjs",
-        "knip.config.ts",
-        "src/**/*.ts",
-        "src/**/*.mjs",
-        "scripts/**/*.ts",
-        "scripts/**/*.mjs",
-        "test/**/*.d.ts",
-        "test/**/*.ts",
-        "test/**/*.mjs",
-        "prettier.config.ts",
-        "vitest.stryker.config.ts",
-        "vite.config.ts",
-        "docs/**/*.mjs",
-        "docs/**/*.mts",
-        "docs/**/*.ts",
-        "docs/**/*.tsx"
+        "**/*",
+        "**/.*"
     ]
 }

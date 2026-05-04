@@ -316,6 +316,16 @@
 }
 
 .mainContent {
+    --index-color-emphasis-700: var(--ifm-color-emphasis-700);
+    --index-color-emphasis-800: var(--ifm-color-emphasis-800);
+    --index-color-emphasis-300: var(--ifm-color-emphasis-300);
+    --index-color-emphasis-200: var(--ifm-color-emphasis-200);
+    --index-color-primary: var(--ifm-color-primary);
+    --index-background-surface-color: var(--ifm-background-surface-color);
+    --index-card-background-color: var(--ifm-card-background-color);
+    --index-global-shadow-lw: var(--ifm-global-shadow-lw);
+    --index-global-shadow-md: var(--ifm-global-shadow-md);
+    --index-font-family-base: var(--ifm-font-family-base);
     padding: 1.75rem 0 3rem;
 }
 
@@ -327,7 +337,7 @@
 
 .sectionSubtitle {
     margin: 0.55rem 0 1rem;
-    color: var(--ifm-color-emphasis-700);
+    color: var(--index-color-emphasis-700);
     line-height: 1.625;
     max-inline-size: 52rem;
 }
@@ -335,7 +345,7 @@
 .liveStatsSection {
     display: grid;
     padding: 1rem;
-    border: 1px solid var(--ifm-color-emphasis-300);
+    border: 1px solid var(--index-color-emphasis-300);
     border-radius: 0.95rem;
     background:
         linear-gradient(
@@ -344,8 +354,8 @@
             rgb(14 165 233 / 8%) 56%,
             transparent
         ),
-        var(--ifm-background-surface-color);
-    box-shadow: var(--ifm-global-shadow-lw);
+        var(--index-background-surface-color);
+    box-shadow: var(--index-global-shadow-lw);
     gap: 0.85rem;
     margin-block-end: 1.05rem;
 }
@@ -362,7 +372,7 @@
     border-radius: 999rem;
     margin: 0;
     background: rgb(79 70 229 / 10%);
-    color: var(--ifm-color-primary);
+    color: var(--index-color-primary);
     font-size: 0.75rem;
     font-weight: 700;
     inline-size: fit-content;
@@ -372,7 +382,7 @@
 
 .liveStatsDescription {
     margin: 0;
-    color: var(--ifm-color-emphasis-700);
+    color: var(--index-color-emphasis-700);
     font-size: 0.92rem;
 }
 
@@ -432,7 +442,7 @@
 .card {
     position: relative;
     padding: 1.1rem;
-    border: 1px solid var(--ifm-color-emphasis-200);
+    border: 1px solid var(--index-color-emphasis-200);
     border-radius: 0.95rem;
     background:
         linear-gradient(
@@ -441,8 +451,8 @@
             rgb(14 165 233 / 6%) 48%,
             transparent
         ),
-        var(--ifm-card-background-color);
-    box-shadow: var(--ifm-global-shadow-lw);
+        var(--index-card-background-color);
+    box-shadow: var(--index-global-shadow-lw);
     transition:
         transform 140ms ease,
         box-shadow 140ms ease,
@@ -460,7 +470,7 @@
     &:hover,
     &:focus {
         border-color: rgb(99 102 241 / 35%);
-        box-shadow: var(--ifm-global-shadow-md);
+        box-shadow: var(--index-global-shadow-md);
         transform: translateY(-2px);
     }
 }
@@ -487,7 +497,7 @@
     block-size: 1.9rem;
     font-family:
         "Nerd Font Symbols", "Symbols Nerd Font Mono", "Symbols Nerd Font",
-        "FiraCode Nerd Font", var(--ifm-font-family-base);
+        "FiraCode Nerd Font", var(--index-font-family-base);
     font-size: 1.12rem;
     font-variant-ligatures: none;
     inline-size: 1.9rem;
@@ -495,7 +505,7 @@
 }
 
 .cardDescription {
-    color: var(--ifm-color-emphasis-800);
+    color: var(--index-color-emphasis-800);
     margin-block-end: 0.8rem;
 }
 

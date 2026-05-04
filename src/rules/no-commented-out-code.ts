@@ -29,7 +29,9 @@ const parseCommentProgram = (
     content: string
 ): readonly [
     ReadonlyMap<string, es.Program | null>,
-    es.Program | undefined,
+    (
+        es.Program | undefined
+    ),
 ] => {
     const cached = cache.get(content);
     if (cached !== undefined) {
