@@ -1,7 +1,7 @@
 {
     "$schema": "https://www.schemastore.org/package.json",
     "name": "eslint-plugin-etc-misc",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "private": false,
     "description": "ESLint Plugin combining eslint-plugin-etc and eslint-plugin-misc!",
     "keywords": [
