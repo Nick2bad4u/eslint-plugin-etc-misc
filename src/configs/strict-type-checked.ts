@@ -15,6 +15,7 @@ type StrictTypeCheckedConfig = {
             readonly projectService: true;
         }>;
     }>;
+    readonly name: "etc-misc/strict-type-checked";
     readonly rules: Readonly<Record<string, "error">>;
 };
 
@@ -56,6 +57,7 @@ export const strictTypeChecked: StrictTypeCheckedConfig = {
             projectService: true,
         },
     },
+    name: "etc-misc/strict-type-checked",
     rules: strictTypeCheckedRules,
 };
 

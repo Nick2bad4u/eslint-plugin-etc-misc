@@ -123,16 +123,24 @@ describe("plugin.mjs entrypoint", () => {
         expect(plugin.configs.allStrict.rules).toStrictEqual(
             configs.allStrict.rules
         );
+        expect(plugin.configs.allStrict.name).toBe(configs.allStrict.name);
         expect(plugin.configs.all.rules).toStrictEqual(configs.all.rules);
+        expect(plugin.configs.all.name).toBe(configs.all.name);
         expect(plugin.configs.minimal.rules).toStrictEqual(
             configs.minimal.rules
         );
+        expect(plugin.configs.minimal.name).toBe(configs.minimal.name);
         expect(plugin.configs.recommended.rules).toStrictEqual(
             configs.recommended.rules
         );
+        expect(plugin.configs.recommended.name).toBe(configs.recommended.name);
         expect(plugin.configs.strict.rules).toStrictEqual(configs.strict.rules);
+        expect(plugin.configs.strict.name).toBe(configs.strict.name);
         expect(plugin.configs.strictTypeChecked.rules).toStrictEqual(
             configs.strictTypeChecked.rules
+        );
+        expect(plugin.configs.strictTypeChecked.name).toBe(
+            configs.strictTypeChecked.name
         );
         expect(plugin.configs.strictTypeChecked.languageOptions).toStrictEqual(
             configs.strictTypeChecked.languageOptions

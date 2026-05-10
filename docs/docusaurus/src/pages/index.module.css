@@ -497,7 +497,8 @@
     block-size: 1.9rem;
     font-family:
         "Nerd Font Symbols", "Symbols Nerd Font Mono", "Symbols Nerd Font",
-        "FiraCode Nerd Font", var(--index-font-family-base);
+        "FiraCode Nerd Font", "Segoe UI Symbol", var(--index-font-family-base),
+        sans-serif, system-ui;
     font-size: 1.12rem;
     font-variant-ligatures: none;
     inline-size: 1.9rem;

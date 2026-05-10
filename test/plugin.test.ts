@@ -38,9 +38,11 @@ const recommendedRuleIds = [
     "consistent-optional-props",
     "no-assign-mutated-array",
     "no-const-enum",
+    "no-function-declare-after-return",
     "no-implicit-any-catch",
     "no-internal",
     "no-t",
+    "no-vulnerable",
     "no-unnecessary-as-const",
     "no-unnecessary-break",
     "no-unnecessary-initialization",
@@ -62,9 +64,11 @@ const minimalRuleIds = [
     "consistent-optional-props",
     "no-assign-mutated-array",
     "no-const-enum",
+    "no-function-declare-after-return",
     "no-implicit-any-catch",
     "no-internal",
     "no-t",
+    "no-vulnerable",
     "no-unnecessary-as-const",
     "no-unnecessary-break",
     "no-unnecessary-initialization",
@@ -89,6 +93,7 @@ const recommendedRuleLevels = {
     "etc-misc/consistent-optional-props": "warn",
     "etc-misc/no-assign-mutated-array": "error",
     "etc-misc/no-const-enum": "warn",
+    "etc-misc/no-function-declare-after-return": "warn",
     "etc-misc/no-implicit-any-catch": "error",
     "etc-misc/no-internal": "error",
     "etc-misc/no-t": "error",
@@ -96,6 +101,7 @@ const recommendedRuleLevels = {
     "etc-misc/no-unnecessary-break": "warn",
     "etc-misc/no-unnecessary-initialization": "warn",
     "etc-misc/no-unnecessary-template-literal": "warn",
+    "etc-misc/no-vulnerable": "error",
     "etc-misc/throw-error": "error",
     "etc-misc/typescript/no-boolean-literal-type": "error",
     "etc-misc/typescript/prefer-readonly-array": "warn",
@@ -113,6 +119,7 @@ const minimalRuleLevels = {
     "etc-misc/consistent-optional-props": "warn",
     "etc-misc/no-assign-mutated-array": "error",
     "etc-misc/no-const-enum": "warn",
+    "etc-misc/no-function-declare-after-return": "warn",
     "etc-misc/no-implicit-any-catch": "error",
     "etc-misc/no-internal": "error",
     "etc-misc/no-t": "error",
@@ -120,6 +127,7 @@ const minimalRuleLevels = {
     "etc-misc/no-unnecessary-break": "warn",
     "etc-misc/no-unnecessary-initialization": "warn",
     "etc-misc/no-unnecessary-template-literal": "warn",
+    "etc-misc/no-vulnerable": "error",
     "etc-misc/throw-error": "error",
     "etc-misc/typescript/no-boolean-literal-type": "error",
     "etc-misc/typescript/require-readonly-array-return-type": "warn",
@@ -164,6 +172,14 @@ describe("plugin export", () => {
         expect(
             plugin.configs.strictTypeChecked.plugins["etc-misc"]
         ).toBeDefined();
+        expect(plugin.configs.all.name).toBe("etc-misc/all");
+        expect(plugin.configs.allStrict.name).toBe("etc-misc/all-strict");
+        expect(plugin.configs.minimal.name).toBe("etc-misc/minimal");
+        expect(plugin.configs.recommended.name).toBe("etc-misc/recommended");
+        expect(plugin.configs.strict.name).toBe("etc-misc/strict");
+        expect(plugin.configs.strictTypeChecked.name).toBe(
+            "etc-misc/strict-type-checked"
+        );
         expect(
             plugin.configs.recommended.plugins["etc-misc"].meta
         ).toStrictEqual(plugin.meta);
@@ -240,9 +256,11 @@ describe("plugin export", () => {
         expect(plugin.rules["no-single-line-comment"]).toBeDefined();
         expect(plugin.rules["no-sibling-import"]).toBeDefined();
         expect(plugin.rules["no-t"]).toBeDefined();
+        expect(plugin.rules["no-use-extend-native"]).toBeDefined();
         expect(plugin.rules["no-unused-disable"]).toBeDefined();
         expect(plugin.rules["no-useless-generics"]).toBeDefined();
         expect(plugin.rules["no-value-tostring"]).toBeDefined();
+        expect(plugin.rules["no-vulnerable"]).toBeDefined();
         expect(plugin.rules["no-writeonly"]).toBeDefined();
         expect(plugin.rules["no-unnecessary-template-literal"]).toBeDefined();
         expect(plugin.rules["no-expression-empty-lines"]).toBeDefined();

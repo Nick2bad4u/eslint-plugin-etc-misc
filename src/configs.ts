@@ -14,7 +14,11 @@ type PluginReference = {
     readonly rules: typeof rules;
 };
 
-type PresetWithPlugin<TRules extends Readonly<Record<string, RuleSeverity>>> = {
+type PresetWithPlugin<
+    TName extends string,
+    TRules extends Readonly<Record<string, RuleSeverity>>,
+> = {
+    readonly name: TName;
     readonly plugins: Readonly<
         Record<typeof pluginMeta.namespace, PluginReference>
     >;
@@ -29,10 +33,12 @@ const pluginReference: PluginReference = {
 };
 
 const withPluginReference = <
+    TName extends string,
     TRules extends Readonly<Record<string, RuleSeverity>>,
 >(
-    config: Readonly<{ readonly rules: TRules }>
-): PresetWithPlugin<TRules> => ({
+    config: Readonly<{ readonly name: TName; readonly rules: TRules }>
+): PresetWithPlugin<TName, TRules> => ({
+    name: config.name,
     plugins: {
         [pluginMeta.namespace]: pluginReference,
     },
@@ -43,12 +49,28 @@ const withPluginReference = <
  * Available flat-config presets exported by the plugin.
  */
 export type PluginConfigs = {
-    readonly all: PresetWithPlugin<typeof allConfig.rules>;
-    readonly allStrict: PresetWithPlugin<typeof allStrictConfig.rules>;
-    readonly minimal: PresetWithPlugin<typeof minimalConfig.rules>;
-    readonly recommended: PresetWithPlugin<typeof recommendedConfig.rules>;
-    readonly strict: PresetWithPlugin<typeof strictConfig.rules>;
+    readonly all: PresetWithPlugin<
+        typeof allConfig.name,
+        typeof allConfig.rules
+    >;
+    readonly allStrict: PresetWithPlugin<
+        typeof allStrictConfig.name,
+        typeof allStrictConfig.rules
+    >;
+    readonly minimal: PresetWithPlugin<
+        typeof minimalConfig.name,
+        typeof minimalConfig.rules
+    >;
+    readonly recommended: PresetWithPlugin<
+        typeof recommendedConfig.name,
+        typeof recommendedConfig.rules
+    >;
+    readonly strict: PresetWithPlugin<
+        typeof strictConfig.name,
+        typeof strictConfig.rules
+    >;
     readonly strictTypeChecked: PresetWithPlugin<
+        typeof strictTypeCheckedConfig.name,
         typeof strictTypeCheckedConfig.rules
     > & {
         readonly languageOptions: typeof strictTypeCheckedConfig.languageOptions;

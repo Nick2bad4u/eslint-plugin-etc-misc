@@ -5,6 +5,7 @@ import { objectEntries, objectFromEntries } from "ts-extras";
 import { rules as pluginRules } from "../rules.js";
 
 type AllConfig = {
+    readonly name: "etc-misc/all";
     readonly rules: Readonly<Record<string, RuleSeverity>>;
 };
 
@@ -33,6 +34,7 @@ const allRules = objectFromEntries(allRuleEntries) as Readonly<
  * Flat config preset enabling every available plugin rule.
  */
 export const all: AllConfig = {
+    name: "etc-misc/all",
     rules: allRules,
 };
 

@@ -31,6 +31,7 @@ import noDeprecated from "./rules/no-deprecated.js";
 import noEnum from "./rules/no-enum.js";
 import noExpressionEmptyLines from "./rules/no-expression-empty-lines.js";
 import noForeach from "./rules/no-foreach.js";
+import noFunctionDeclareAfterReturn from "./rules/no-function-declare-after-return.js";
 import noImplicitAnyCatch from "./rules/no-implicit-any-catch.js";
 import noIndexImport from "./rules/no-index-import.js";
 import noInternalModules from "./rules/no-internal-modules.js";
@@ -55,8 +56,10 @@ import noUnnecessaryBreak from "./rules/no-unnecessary-break.js";
 import noUnnecessaryInitialization from "./rules/no-unnecessary-initialization.js";
 import noUnnecessaryTemplateLiteral from "./rules/no-unnecessary-template-literal.js";
 import noUnusedDisable from "./rules/no-unused-disable.js";
+import noUseExtendNative from "./rules/no-use-extend-native.js";
 import noUselessGenerics from "./rules/no-useless-generics.js";
 import noValueToString from "./rules/no-value-tostring.js";
+import noVulnerable from "./rules/no-vulnerable.js";
 import noWriteonly from "./rules/no-writeonly.js";
 import objectFormat from "./rules/object-format.js";
 import onlyExportName from "./rules/only-export-name.js";
@@ -170,6 +173,7 @@ const recommendedRuleNames = new Set<string>([
     "consistent-optional-props",
     "no-assign-mutated-array",
     "no-const-enum",
+    "no-function-declare-after-return",
     "no-implicit-any-catch",
     "no-internal",
     "no-t",
@@ -177,6 +181,7 @@ const recommendedRuleNames = new Set<string>([
     "no-unnecessary-break",
     "no-unnecessary-initialization",
     "no-unnecessary-template-literal",
+    "no-vulnerable",
     "throw-error",
     "typescript/no-boolean-literal-type",
     "typescript/prefer-readonly-array",
@@ -219,6 +224,7 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
     "no-enum": noEnum,
     "no-expression-empty-lines": noExpressionEmptyLines,
     "no-foreach": noForeach,
+    "no-function-declare-after-return": noFunctionDeclareAfterReturn,
     "no-implicit-any-catch": noImplicitAnyCatch,
     "no-index-import": noIndexImport,
     "no-internal": noInternal,
@@ -243,8 +249,10 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
     "no-unnecessary-initialization": noUnnecessaryInitialization,
     "no-unnecessary-template-literal": noUnnecessaryTemplateLiteral,
     "no-unused-disable": noUnusedDisable,
+    "no-use-extend-native": noUseExtendNative,
     "no-useless-generics": noUselessGenerics,
     "no-value-tostring": noValueToString,
+    "no-vulnerable": noVulnerable,
     "no-writeonly": noWriteonly,
     "object-format": objectFormat,
     "only-export-name": onlyExportName,

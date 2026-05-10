@@ -3,6 +3,7 @@ import { objectFromEntries, objectKeys, safeCastTo } from "ts-extras";
 import { recommended } from "./recommended.js";
 
 type StrictConfig = {
+    readonly name: "etc-misc/strict";
     readonly rules: StrictRules;
 };
 
@@ -22,5 +23,6 @@ const strictRules = objectFromEntries(
  * Strict preset that promotes every recommended rule to `error`.
  */
 export const strict: StrictConfig = {
+    name: "etc-misc/strict",
     rules: strictRules,
 };

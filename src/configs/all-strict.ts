@@ -5,6 +5,7 @@ import { objectEntries, objectFromEntries } from "ts-extras";
 import { rules as pluginRules } from "../rules.js";
 
 type AllStrictConfig = {
+    readonly name: "etc-misc/all-strict";
     readonly rules: Readonly<Record<string, RuleSeverity>>;
 };
 
@@ -27,6 +28,7 @@ const allStrictRules = objectFromEntries(allStrictRuleEntries) as Readonly<
  * rules which remain at `warn`.
  */
 export const allStrict: AllStrictConfig = {
+    name: "etc-misc/all-strict",
     rules: allStrictRules,
 };
 
