@@ -85,6 +85,7 @@ jobs:
                   CI: "true"
                   MAX_THREADS: "1"
                   VITEST_HANGING_PROCESS_REPORTER: "true"
+                  FAST_CHECK_NUM_RUNS: "10"
 
             - name: Verify coverage artifact
               run: python -c "from pathlib import Path; assert Path('coverage/lcov.info').is_file(), 'coverage/lcov.info was not generated'"

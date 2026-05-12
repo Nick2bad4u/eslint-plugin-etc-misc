@@ -15,6 +15,11 @@ ruleTester.run("no-vulnerable", rule, {
             code: "const pattern = new RegExp('(a+)+$', 'u');",
             errors: [{ messageId: "vulnerable" }],
         },
+        {
+            code: "const pattern = RegExp('(');",
+            errors: [{ messageId: "checkerError" }],
+            options: [{ ignoreErrors: false }],
+        },
     ],
     valid: [
         {
@@ -30,6 +35,9 @@ ruleTester.run("no-vulnerable", rule, {
         },
         {
             code: "const safe = RegExp('^a+$');",
+        },
+        {
+            code: "const pattern = RegExp('(');",
         },
         {
             code: "const source = '(a+)+$'; const maybeUnsafe = RegExp(source);",

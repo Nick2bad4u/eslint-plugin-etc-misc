@@ -76,6 +76,12 @@ type Options = [
 When `true` (default), analysis failures from `recheck` are ignored.
 When `false`, analysis failures are reported.
 
+Analyzer failures include invalid regular expression syntax and backend startup
+errors from the `recheck` runtime. On Windows, this rule normalizes the
+temporary `RECHECK_JAR` and `RECHECK_BIN` values while invoking `recheck` so an
+upstream path-separator bug cannot make Java execute `package.json` instead of
+`recheck.jar`.
+
 ### `permittableComplexities`
 
 Allows selected vulnerable complexity classes to pass.

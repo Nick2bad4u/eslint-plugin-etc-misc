@@ -1,6 +1,10 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 import type { Parameters as RecheckParameters } from "recheck";
+import type { UnknownRecord } from "type-fest";
 
+import { statSync } from "node:fs";
+import { createRequire } from "node:module";
+import { basename, dirname, join } from "node:path";
 import { checkSync } from "recheck";
 import { arrayFirst, isDefined, keyIn, setHas } from "ts-extras";
 
@@ -12,12 +16,207 @@ type MessageIds = "checkerError" | "vulnerable";
 
 type Options = readonly [RuleOption?];
 
+type RecheckDiagnostics = ReturnType<typeof checkSync>;
+
+type RecheckEnvironmentKey = "RECHECK_BIN" | "RECHECK_JAR";
+
+type RecheckEnvironmentOverrides = Readonly<
+    Partial<Record<RecheckEnvironmentKey, string>>
+>;
+
 type RuleOption = Readonly<
     RecheckParameters & {
         readonly ignoreErrors?: boolean;
         readonly permittableComplexities?: readonly ComplexityType[];
     }
 >;
+
+const requireFromWorkingDirectory = createRequire(
+    join(process.cwd(), "package.json")
+);
+
+const isUnknownRecord = (value: unknown): value is UnknownRecord =>
+    typeof value === "object" && value !== null && !Array.isArray(value);
+
+const isModuleNotFoundError = (error: unknown): boolean => {
+    if (!isUnknownRecord(error)) {
+        return false;
+    }
+
+    return keyIn(error, "code") && error["code"] === "MODULE_NOT_FOUND";
+};
+
+const createRequireFromPluginPackage = (): ReturnType<typeof createRequire> => {
+    try {
+        return createRequire(
+            requireFromWorkingDirectory.resolve(
+                "eslint-plugin-etc-misc/package.json"
+            )
+        );
+    } catch (error) {
+        if (isModuleNotFoundError(error)) {
+            return requireFromWorkingDirectory;
+        }
+
+        throw error;
+    }
+};
+
+const requireFromPluginPackage = createRequireFromPluginPackage();
+
+const isExistingFile = (filePath: string): boolean => {
+    try {
+        return statSync(filePath).isFile();
+    } catch {
+        return false;
+    }
+};
+
+const shouldOverrideRuntimePath = (currentPath: string | undefined): boolean =>
+    !isDefined(currentPath) ||
+    !isExistingFile(currentPath) ||
+    basename(currentPath).toLowerCase() === "package.json";
+
+const resolvePackageSiblingFile = (
+    packageJsonSpecifier: string,
+    siblingFileName: string
+): null | string => {
+    try {
+        const packageJsonPath =
+            requireFromPluginPackage.resolve(packageJsonSpecifier);
+
+        return join(dirname(packageJsonPath), siblingFileName);
+    } catch (error) {
+        if (isModuleNotFoundError(error)) {
+            return null;
+        }
+
+        throw error;
+    }
+};
+
+const resolveRecheckJarPath = (): null | string =>
+    resolvePackageSiblingFile("recheck-jar/package.json", "recheck.jar");
+
+const resolveRecheckWindowsBinaryPath = (): null | string => {
+    if (process.platform !== "win32" || process.arch !== "x64") {
+        return null;
+    }
+
+    return resolvePackageSiblingFile(
+        "recheck-windows-x64/package.json",
+        "recheck.exe"
+    );
+};
+
+const recheckJarPath =
+    process.platform === "win32" ? resolveRecheckJarPath() : null;
+
+const recheckWindowsBinaryPath =
+    process.platform === "win32" ? resolveRecheckWindowsBinaryPath() : null;
+
+/* eslint-disable n/no-process-env -- recheck exposes backend runtime paths only through environment variables, so the rule temporarily normalizes them while invoking the analyzer. */
+
+const deleteRecheckEnvironmentValue = (key: RecheckEnvironmentKey): void => {
+    if (key === "RECHECK_BIN") {
+        delete process.env["RECHECK_BIN"];
+
+        return;
+    }
+
+    delete process.env["RECHECK_JAR"];
+};
+
+const getRecheckEnvironmentValue = (
+    key: RecheckEnvironmentKey
+): string | undefined =>
+    key === "RECHECK_BIN"
+        ? process.env["RECHECK_BIN"]
+        : process.env["RECHECK_JAR"];
+
+const setRecheckEnvironmentValue = (
+    key: RecheckEnvironmentKey,
+    value: string
+): void => {
+    if (key === "RECHECK_BIN") {
+        process.env["RECHECK_BIN"] = value;
+
+        return;
+    }
+
+    process.env["RECHECK_JAR"] = value;
+};
+
+const getRecheckEnvironmentOverrides = (): RecheckEnvironmentOverrides => {
+    if (process.platform !== "win32") {
+        return {};
+    }
+
+    const overrides: Partial<Record<RecheckEnvironmentKey, string>> = {};
+
+    if (
+        recheckJarPath !== null &&
+        isExistingFile(recheckJarPath) &&
+        shouldOverrideRuntimePath(getRecheckEnvironmentValue("RECHECK_JAR"))
+    ) {
+        overrides.RECHECK_JAR = recheckJarPath;
+    }
+
+    if (
+        recheckWindowsBinaryPath !== null &&
+        isExistingFile(recheckWindowsBinaryPath) &&
+        shouldOverrideRuntimePath(getRecheckEnvironmentValue("RECHECK_BIN"))
+    ) {
+        overrides.RECHECK_BIN = recheckWindowsBinaryPath;
+    }
+
+    return overrides;
+};
+
+const restoreEnvironmentValue = (
+    key: RecheckEnvironmentKey,
+    value: string | undefined
+): void => {
+    if (!isDefined(value)) {
+        deleteRecheckEnvironmentValue(key);
+
+        return;
+    }
+
+    setRecheckEnvironmentValue(key, value);
+};
+
+const withRecheckEnvironmentOverrides = <TResult>(
+    callback: () => TResult
+): TResult => {
+    const overrides = getRecheckEnvironmentOverrides();
+    const previousBin = getRecheckEnvironmentValue("RECHECK_BIN");
+    const previousJar = getRecheckEnvironmentValue("RECHECK_JAR");
+
+    if (isDefined(overrides.RECHECK_BIN)) {
+        setRecheckEnvironmentValue("RECHECK_BIN", overrides.RECHECK_BIN);
+    }
+
+    if (isDefined(overrides.RECHECK_JAR)) {
+        setRecheckEnvironmentValue("RECHECK_JAR", overrides.RECHECK_JAR);
+    }
+
+    try {
+        return callback();
+    } finally {
+        restoreEnvironmentValue("RECHECK_BIN", previousBin);
+        restoreEnvironmentValue("RECHECK_JAR", previousJar);
+    }
+};
+
+const runRecheck = (
+    source: string,
+    flags: string,
+    parameters: Readonly<RecheckParameters>
+): RecheckDiagnostics =>
+    withRecheckEnvironmentOverrides(() => checkSync(source, flags, parameters));
+
+/* eslint-enable n/no-process-env -- Re-enable after the recheck environment wrapper helpers. */
 
 const getStaticStringValue = (node: Readonly<es.Expression>): null | string => {
     if (node.type === "Literal" && typeof node.value === "string") {
@@ -102,6 +301,18 @@ const getDiagnosticsErrorMessage = (
     return "No additional details provided.";
 };
 
+const getThrownErrorMessage = (error: unknown): string => {
+    if (error instanceof Error && error.message.length > 0) {
+        return error.message;
+    }
+
+    if (typeof error === "string" && error.length > 0) {
+        return error;
+    }
+
+    return "No additional details provided.";
+};
+
 /**
  * Detect ReDoS-vulnerable regular expressions using `recheck`.
  */
@@ -123,7 +334,30 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             source: string,
             flags: string
         ): void => {
-            const diagnostics = checkSync(source, flags, recheckParameters);
+            const diagnostics = (() => {
+                try {
+                    return runRecheck(source, flags, recheckParameters);
+                } catch (error) {
+                    if (ignoreErrors) {
+                        return null;
+                    }
+
+                    context.report({
+                        data: {
+                            kind: "unexpected",
+                            message: getThrownErrorMessage(error),
+                        },
+                        messageId: "checkerError",
+                        node,
+                    });
+
+                    return null;
+                }
+            })();
+
+            if (diagnostics === null) {
+                return;
+            }
 
             if (diagnostics.status === "safe") {
                 return;
