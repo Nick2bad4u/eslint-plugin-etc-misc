@@ -775,3 +775,5 @@ docs/docusaurus/site-docs/developer/api/
 # Vendored/legacy subprojects not part of the root plugin package.
 eslint-plugin-etc/
 eslint-plugin-misc/
+**/AGENTS.md
+AGENTS.md

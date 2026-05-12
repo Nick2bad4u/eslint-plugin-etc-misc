@@ -25,6 +25,11 @@ const config = [
         },
     },
     // Add repository-specific config entries below as needed.
+    {
+        rules: {
+            "copilot/require-repository-instructions-file": "off",
+        },
+    },
 ];
 
 export default config;
