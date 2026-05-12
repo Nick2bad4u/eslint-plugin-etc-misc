@@ -2,6 +2,12 @@
 
 Disallow regular expressions that are potentially vulnerable to ReDoS (Regular Expression Denial of Service).
 
+## Why this rule is included here
+
+This rule was integrated into `eslint-plugin-etc-misc` to avoid requiring a separate single-rule plugin dependency.
+
+Original plugin source: [`eslint-plugin-redos-detector`](https://github.com/tjenkinson/eslint-plugin-redos-detector).
+
 ## Rule details
 
 This rule analyzes regular expression literals and statically-resolvable `RegExp(...)` constructor calls using [`recheck`](https://www.npmjs.com/package/recheck).

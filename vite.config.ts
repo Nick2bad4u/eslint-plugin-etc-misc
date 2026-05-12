@@ -21,6 +21,8 @@ const maxWorkerCount =
     Number.isFinite(parsedMaxWorkers) && parsedMaxWorkers > 0
         ? parsedMaxWorkers
         : 1;
+/** CI-specific fast-check run count override; undefined keeps local defaults. */
+const ciFastCheckNumRuns = isCiEnvironment ? "25" : undefined;
 /** Shared glob exclusions for generated/cache directories. */
 const testExcludePatterns = [
     "**/.cache/**",
@@ -200,6 +202,7 @@ const vitestConfig: ReturnType<typeof defineConfig> = defineConfig({
             truncateThreshold: 250,
         },
         env: {
+            FAST_CHECK_NUM_RUNS: ciFastCheckNumRuns,
             NODE_ENV: "test",
 
             PACKAGE_VERSION: process.env["PACKAGE_VERSION"] ?? "unknown",
@@ -268,7 +271,7 @@ const vitestConfig: ReturnType<typeof defineConfig> = defineConfig({
             groupOrder: 0,
             setupFiles: "parallel",
         },
-        setupFiles: [],
+        setupFiles: ["./test/setup-fast-check.ts"],
         slowTestThreshold: 300,
         teardownTimeout: 15_000, // Set teardown timeout to match testTimeout
         testTimeout: 15_000, // Set Vitest timeout to 15 seconds

@@ -2,6 +2,12 @@
 
 Disallow usage of non-native members on built-in JavaScript objects.
 
+## Why this rule is included here
+
+This rule was integrated into `eslint-plugin-etc-misc` to avoid requiring a separate single-rule plugin dependency.
+
+Original plugin source: [`eslint-plugin-no-use-extend-native`](https://github.com/dustinspecker/eslint-plugin-no-use-extend-native).
+
 ## Rule details
 
 This rule helps prevent implicit reliance on monkey-patched native prototypes (for example from legacy libraries that add methods like `String.prototype.green`).

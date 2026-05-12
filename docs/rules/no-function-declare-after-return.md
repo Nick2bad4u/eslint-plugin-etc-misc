@@ -2,6 +2,12 @@
 
 Disallow function declarations that appear after a `return` statement in the same block scope.
 
+## Why this rule is included here
+
+This rule was integrated into `eslint-plugin-etc-misc` to avoid requiring a separate single-rule plugin dependency.
+
+Original plugin source: [`eslint-plugin-no-function-declare-after-return`](https://github.com/bhumijgupta/eslint-plugin-no-function-declare-after-return).
+
 ## Rule details
 
 JavaScript hoists `function` declarations to the top of their enclosing scope,

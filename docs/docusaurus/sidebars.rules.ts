@@ -174,7 +174,7 @@ const createRuleItems = (ruleDocIds: readonly string[]): SidebarDocItem[] =>
                 return ruleDocId;
             }
 
-            return `${entry.catalogId} · ${entry.ruleName}`;
+            return entry.ruleName;
         })(),
         type: "doc",
     }));
