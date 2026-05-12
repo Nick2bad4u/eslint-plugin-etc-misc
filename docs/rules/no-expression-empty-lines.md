@@ -23,7 +23,9 @@ formatting noise.
 ## ❌ Incorrect
 
 ```ts
-someCall(1);
+someCall(
+
+    1);
 ```
 
 ## ✅ Correct
