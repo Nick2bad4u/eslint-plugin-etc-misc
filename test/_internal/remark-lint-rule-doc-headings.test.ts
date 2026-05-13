@@ -43,13 +43,13 @@ class MockVFile {
 }
 
 const requiredH2Headings = [
+    "✅ Correct",
+    "❌ Incorrect",
+    "Further reading",
+    "Package documentation",
     "Targeted pattern scope",
     "What this rule reports",
     "Why this rule exists",
-    "❌ Incorrect",
-    "✅ Correct",
-    "Package documentation",
-    "Further reading",
 ] as const;
 
 const createHeading = (depth: 1 | 2, text: string): HeadingNode => ({

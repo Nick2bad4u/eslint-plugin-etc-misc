@@ -1,5 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayFirst } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -29,8 +30,8 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     create: (context) => ({
         [selector]: (node: Readonly<es.Node>): void => {
             const templateLiteral =
-                node.type === "TemplateElement" &&
-                node.parent?.type === "TemplateLiteral"
+                node.type === AST_NODE_TYPES.TemplateElement &&
+                node.parent.type === AST_NODE_TYPES.TemplateLiteral
                     ? node.parent
                     : undefined;
 

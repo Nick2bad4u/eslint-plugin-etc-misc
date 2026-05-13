@@ -1,5 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
@@ -17,7 +19,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 >({
     create: (context) => ({
         [selector]: (node: Readonly<es.Node>): void => {
-            if (node.type !== "TSIndexSignature" || node.readonly) {
+            if (
+                node.type !== AST_NODE_TYPES.TSIndexSignature ||
+                node.readonly
+            ) {
                 return;
             }
 

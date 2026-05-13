@@ -1,5 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { isDefined } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -15,11 +16,14 @@ type Options = readonly [];
 const memberName = (
     member: Readonly<es.MethodDefinition | es.PropertyDefinition>
 ): string | undefined => {
-    if (member.key.type === "Identifier") {
+    if (member.key.type === AST_NODE_TYPES.Identifier) {
         return member.key.name;
     }
 
-    if (member.key.type === "Literal" && typeof member.key.value === "string") {
+    if (
+        member.key.type === AST_NODE_TYPES.Literal &&
+        typeof member.key.value === "string"
+    ) {
         return member.key.value;
     }
 
@@ -41,8 +45,8 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             )[] = [];
             for (const member of node.body) {
                 if (
-                    member.type === "PropertyDefinition" ||
-                    member.type === "MethodDefinition"
+                    member.type === AST_NODE_TYPES.PropertyDefinition ||
+                    member.type === AST_NODE_TYPES.MethodDefinition
                 ) {
                     members = [...members, member];
                 }

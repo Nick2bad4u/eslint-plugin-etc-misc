@@ -1,5 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { isDefined } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -21,8 +22,8 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     create: (context) => ({
         [selector]: (node: Readonly<es.Node>): void => {
             if (
-                node.type !== "PropertyDefinition" &&
-                node.type !== "TSPropertySignature"
+                node.type !== AST_NODE_TYPES.PropertyDefinition &&
+                node.type !== AST_NODE_TYPES.TSPropertySignature
             ) {
                 return;
             }
@@ -30,9 +31,9 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             const keyNode = node.key;
 
             const fix =
-                keyNode.type === "Identifier" ||
-                keyNode.type === "PrivateIdentifier" ||
-                keyNode.type === "Literal"
+                keyNode.type === AST_NODE_TYPES.Identifier ||
+                keyNode.type === AST_NODE_TYPES.PrivateIdentifier ||
+                keyNode.type === AST_NODE_TYPES.Literal
                     ? (fixer: Readonly<TSESLint.RuleFixer>): TSESLint.RuleFix =>
                           fixer.insertTextBefore(keyNode, "readonly ")
                     : undefined;

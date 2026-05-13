@@ -1,5 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayFirst } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -16,7 +17,7 @@ const defaultOptions: Options = [{}];
 
 const isExportedEnumDeclaration = (
     node: Readonly<es.TSEnumDeclaration>
-): boolean => node.parent?.type === "ExportNamedDeclaration";
+): boolean => node.parent.type === AST_NODE_TYPES.ExportNamedDeclaration;
 
 const getConstToken = (
     sourceCode: Readonly<TSESLint.SourceCode>,

@@ -1,5 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayFirst, isDefined } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -29,7 +30,7 @@ const createTrailingBreakRemovalFix = (
         arrayFirst(node.range)
     );
     const leadingWhitespaceLength =
-        /^[\t ]*/u.exec(leadingText)?.[0].length ?? 0;
+        /^[\t ]*/v.exec(leadingText)?.[0].length ?? 0;
 
     return (fixer) =>
         fixer.removeRange([
@@ -50,7 +51,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 
         return {
             [disallowedSelector]: (node: Readonly<es.Node>): void => {
-                if (node.type !== "BreakStatement" || node.label !== null) {
+                if (
+                    node.type !== AST_NODE_TYPES.BreakStatement ||
+                    node.label !== null
+                ) {
                     return;
                 }
 

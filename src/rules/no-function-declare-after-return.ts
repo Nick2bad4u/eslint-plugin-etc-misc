@@ -1,5 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayFirst, arrayLast } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -15,7 +16,8 @@ type Options = readonly [];
 const isStatementList = (
     node: Readonly<es.Node>
 ): node is es.BlockStatement | es.Program =>
-    node.type === "BlockStatement" || node.type === "Program";
+    node.type === AST_NODE_TYPES.BlockStatement ||
+    node.type === AST_NODE_TYPES.Program;
 
 const getLineStartIndex = (sourceText: string, index: number): number =>
     sourceText.lastIndexOf("\n", index - 1) + 1;
@@ -24,26 +26,26 @@ const getSafeFixRangeStart = (
     sourceCode: Readonly<TSESLint.SourceCode>,
     node: Readonly<es.FunctionDeclaration>
 ): number => {
-    const declarationStart = arrayFirst(node.range) ?? 0;
+    const declarationStart = arrayFirst(node.range);
     const tokenBeforeDeclaration = sourceCode.getTokenBefore(node);
     const tokenBeforeEnd =
         tokenBeforeDeclaration === null
             ? 0
-            : (arrayLast(tokenBeforeDeclaration.range) ?? 0);
+            : arrayLast(tokenBeforeDeclaration.range);
 
     const commentsBeforeDeclaration = sourceCode
         .getCommentsBefore(node)
         .filter(
             (comment) =>
-                (arrayFirst(comment.range) ?? 0) >= tokenBeforeEnd &&
-                (arrayLast(comment.range) ?? 0) <= declarationStart
+                arrayFirst(comment.range) >= tokenBeforeEnd &&
+                arrayLast(comment.range) <= declarationStart
         );
 
     const firstLeadingComment = arrayFirst(commentsBeforeDeclaration);
     const firstMovableNodeStart =
         firstLeadingComment === undefined
             ? declarationStart
-            : (arrayFirst(firstLeadingComment.range) ?? declarationStart);
+            : arrayFirst(firstLeadingComment.range);
 
     return getLineStartIndex(sourceCode.text, firstMovableNodeStart);
 };
@@ -52,7 +54,7 @@ const getSafeFixRangeEnd = (
     sourceCode: Readonly<TSESLint.SourceCode>,
     node: Readonly<es.FunctionDeclaration>
 ): number => {
-    const declarationEnd = arrayLast(node.range) ?? 0;
+    const declarationEnd = arrayLast(node.range);
     const tokenAfterDeclaration = sourceCode.getTokenAfter(node);
 
     if (tokenAfterDeclaration === null) {
@@ -61,7 +63,7 @@ const getSafeFixRangeEnd = (
 
     return getLineStartIndex(
         sourceCode.text,
-        arrayFirst(tokenAfterDeclaration.range) ?? declarationEnd
+        arrayFirst(tokenAfterDeclaration.range)
     );
 };
 
@@ -101,7 +103,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             for (let i = returnIndex + 1; i < siblings.length; i++) {
                 const sibling = siblings[i];
 
-                if (sibling?.type !== "FunctionDeclaration") {
+                if (sibling?.type !== AST_NODE_TYPES.FunctionDeclaration) {
                     continue;
                 }
 
@@ -111,14 +113,15 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 
                 context.report({
                     data: {
-                        name: functionDeclaration.id?.name ?? "(anonymous)",
+                        name: functionDeclaration.id.name,
                     },
                     fix(fixer) {
                         const sourceCode = context.sourceCode;
 
                         // Text of the function declaration to move.
-                        const declarationEnd =
-                            arrayLast(functionDeclaration.range) ?? 0;
+                        const declarationEnd = arrayLast(
+                            functionDeclaration.range
+                        );
                         const fixRangeStart = getSafeFixRangeStart(
                             sourceCode,
                             functionDeclaration
@@ -144,8 +147,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         // token that starts the return statement.
                         const returnToken =
                             sourceCode.getFirstToken(returnStatement);
-                        const indentationEnd =
-                            arrayFirst(returnToken?.range ?? [0]) ?? 0;
+                        if (returnToken === null) {
+                            return null;
+                        }
+                        const indentationEnd = arrayFirst(returnToken.range);
                         const returnLineStart = getLineStartIndex(
                             sourceCode.text,
                             indentationEnd

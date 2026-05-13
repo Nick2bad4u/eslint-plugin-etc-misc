@@ -1,6 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
-import { resolve } from "node:path";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import path from "node:path";
 import { isDefined } from "ts-extras";
 
 import { type Casing, filenameStem, toCasing } from "../_internal/casing.js";
@@ -58,12 +59,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 [selector]: (node: Readonly<es.Node>): void => {
                     if (
                         context.filename === "<input>" ||
-                        node.type !== "Identifier"
+                        node.type !== AST_NODE_TYPES.Identifier
                     ) {
                         return;
                     }
 
-                    const stem = filenameStem(resolve(context.filename));
+                    const stem = filenameStem(path.resolve(context.filename));
                     const expected = `${options.prefix ?? ""}${toCasing(
                         node.name,
                         options.format ?? "kebab-case"

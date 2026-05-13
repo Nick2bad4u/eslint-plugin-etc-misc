@@ -9,21 +9,21 @@ import { strictTypeChecked as strictTypeCheckedConfig } from "./configs/strict-t
 import { strict as strictConfig } from "./configs/strict.js";
 import { rules } from "./rules.js";
 
-type PluginReference = {
+interface PluginReference {
     readonly meta: typeof pluginMeta;
     readonly rules: typeof rules;
-};
+}
 
-type PresetWithPlugin<
+interface PresetWithPlugin<
     TName extends string,
     TRules extends Readonly<Record<string, RuleSeverity>>,
-> = {
+> {
     readonly name: TName;
     readonly plugins: Readonly<
         Record<typeof pluginMeta.namespace, PluginReference>
     >;
     readonly rules: TRules;
-};
+}
 
 type RuleSeverity = "error" | "warn";
 
@@ -48,7 +48,7 @@ const withPluginReference = <
 /**
  * Available flat-config presets exported by the plugin.
  */
-export type PluginConfigs = {
+export interface PluginConfigs {
     readonly all: PresetWithPlugin<
         typeof allConfig.name,
         typeof allConfig.rules
@@ -75,7 +75,7 @@ export type PluginConfigs = {
     > & {
         readonly languageOptions: typeof strictTypeCheckedConfig.languageOptions;
     };
-};
+}
 
 /**
  * Plugin configuration presets.

@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden" | "suggestRequireReadonlyArrayTypeAlias";
@@ -12,25 +14,30 @@ const isArrayTypeReference = (
     node: Readonly<es.TSTypeReference>
 ): node is Readonly<
     es.TSTypeReference & { readonly typeName: es.Identifier }
-> => node.typeName.type === "Identifier" && node.typeName.name === "Array";
+> =>
+    node.typeName.type === AST_NODE_TYPES.Identifier &&
+    node.typeName.name === "Array";
 
 const collectMutableArrayLikeTypeNodes = (
     typeNode: Readonly<es.TypeNode>
 ): readonly MutableArrayLikeTypeNode[] => {
-    if (typeNode.type === "TSArrayType" || typeNode.type === "TSTupleType") {
+    if (
+        typeNode.type === AST_NODE_TYPES.TSArrayType ||
+        typeNode.type === AST_NODE_TYPES.TSTupleType
+    ) {
         return [typeNode];
     }
 
     if (
-        typeNode.type === "TSIntersectionType" ||
-        typeNode.type === "TSUnionType"
+        typeNode.type === AST_NODE_TYPES.TSIntersectionType ||
+        typeNode.type === AST_NODE_TYPES.TSUnionType
     ) {
         return typeNode.types.flatMap((subTypeNode) =>
             collectMutableArrayLikeTypeNodes(subTypeNode)
         );
     }
 
-    if (typeNode.type === "TSTypeReference") {
+    if (typeNode.type === AST_NODE_TYPES.TSTypeReference) {
         if (!isArrayTypeReference(typeNode)) {
             return [];
         }
@@ -45,7 +52,7 @@ const buildReadonlyArrayLikeFix = (
     node: Readonly<MutableArrayLikeTypeNode>,
     sourceCode: Readonly<TSESLint.SourceCode>
 ): ((fixer: Readonly<TSESLint.RuleFixer>) => TSESLint.RuleFix) => {
-    if (node.type === "Identifier") {
+    if (node.type === AST_NODE_TYPES.Identifier) {
         return (fixer: Readonly<TSESLint.RuleFixer>): TSESLint.RuleFix =>
             fixer.replaceText(node, "ReadonlyArray");
     }

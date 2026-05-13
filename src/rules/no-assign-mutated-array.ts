@@ -5,7 +5,11 @@ import {
     getConstrainedTypeAtLocation,
     isTypeArrayTypeOrUnionOfArrayTypes,
 } from "@typescript-eslint/type-utils";
-import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
+import {
+    AST_NODE_TYPES,
+    type TSESTree as es,
+    ESLintUtils,
+} from "@typescript-eslint/utils";
 import { setHas } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -40,15 +44,15 @@ const creatorMethodNames = new Set([
 ]);
 
 const isArrayFactoryCallee = (callee: Readonly<es.Expression>): boolean => {
-    if (callee.type === "Identifier") {
+    if (callee.type === AST_NODE_TYPES.Identifier) {
         return callee.name === "Array";
     }
 
     if (
-        callee.type === "MemberExpression" &&
-        callee.object.type === "Identifier" &&
+        callee.type === AST_NODE_TYPES.MemberExpression &&
+        callee.object.type === AST_NODE_TYPES.Identifier &&
         callee.object.name === "Array" &&
-        callee.property.type === "Identifier"
+        callee.property.type === AST_NODE_TYPES.Identifier
     ) {
         return callee.property.name === "from" || callee.property.name === "of";
     }
@@ -57,11 +61,11 @@ const isArrayFactoryCallee = (callee: Readonly<es.Expression>): boolean => {
 };
 
 const isNewArray = (node: Readonly<es.Expression>): boolean => {
-    if (node.type === "ArrayExpression") {
+    if (node.type === AST_NODE_TYPES.ArrayExpression) {
         return true;
     }
 
-    if (node.type === "CallExpression") {
+    if (node.type === AST_NODE_TYPES.CallExpression) {
         return isArrayFactoryCallee(node.callee);
     }
 
@@ -71,14 +75,14 @@ const isNewArray = (node: Readonly<es.Expression>): boolean => {
 const mutatesReferencedArray = (
     callExpression: Readonly<es.CallExpression>
 ): boolean => {
-    if (callExpression.callee.type !== "MemberExpression") {
+    if (callExpression.callee.type !== AST_NODE_TYPES.MemberExpression) {
         return true;
     }
 
     const { object, property } = callExpression.callee;
 
     if (
-        property.type === "Identifier" &&
+        property.type === AST_NODE_TYPES.Identifier &&
         setHas(creatorMethodNames, property.name)
     ) {
         return false;
@@ -88,7 +92,7 @@ const mutatesReferencedArray = (
         return false;
     }
 
-    if (object.type === "CallExpression") {
+    if (object.type === AST_NODE_TYPES.CallExpression) {
         return mutatesReferencedArray(object);
     }
 
@@ -109,18 +113,18 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                 "CallExpression[callee.type='MemberExpression'][callee.property.type='Identifier'][callee.property.name=/^(?:fill|reverse|sort)$/]":
                     (callExpression: Readonly<es.CallExpression>) => {
                         const { callee } = callExpression;
-                        if (callee.type !== "MemberExpression") {
+                        if (callee.type !== AST_NODE_TYPES.MemberExpression) {
                             return;
                         }
 
                         const { property } = callee;
-                        if (property.type !== "Identifier") {
+                        if (property.type !== AST_NODE_TYPES.Identifier) {
                             return;
                         }
 
                         if (
-                            callExpression.parent?.type ===
-                            "ExpressionStatement"
+                            callExpression.parent.type ===
+                            AST_NODE_TYPES.ExpressionStatement
                         ) {
                             return;
                         }

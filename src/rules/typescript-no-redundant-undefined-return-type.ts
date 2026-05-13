@@ -1,5 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayAt, arrayFirst, arrayJoin, isDefined, isEmpty } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -20,7 +21,7 @@ const buildFixedTypeText = (
     let nonUndefinedTypeTexts: readonly string[] = [];
 
     for (const typeNode of unionType.types) {
-        if (typeNode.type === "TSUndefinedKeyword") {
+        if (typeNode.type === AST_NODE_TYPES.TSUndefinedKeyword) {
             continue;
         }
 
@@ -44,10 +45,10 @@ const unwrapExpression = (
     expression: Readonly<es.Expression>
 ): Readonly<es.Expression> => {
     if (
-        expression.type === "TSAsExpression" ||
-        expression.type === "TSSatisfiesExpression" ||
-        expression.type === "TSNonNullExpression" ||
-        expression.type === "TSTypeAssertion"
+        expression.type === AST_NODE_TYPES.TSAsExpression ||
+        expression.type === AST_NODE_TYPES.TSSatisfiesExpression ||
+        expression.type === AST_NODE_TYPES.TSNonNullExpression ||
+        expression.type === AST_NODE_TYPES.TSTypeAssertion
     ) {
         return unwrapExpression(expression.expression);
     }
@@ -60,49 +61,49 @@ const isDefinitelyDefinedExpression = (
 ): boolean => {
     const unwrappedExpression = unwrapExpression(expression);
 
-    if (unwrappedExpression.type === "ArrayExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.ArrayExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "ArrowFunctionExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.ArrowFunctionExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "ClassExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.ClassExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "ConditionalExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.ConditionalExpression) {
         return (
             isDefinitelyDefinedExpression(unwrappedExpression.consequent) &&
             isDefinitelyDefinedExpression(unwrappedExpression.alternate)
         );
     }
 
-    if (unwrappedExpression.type === "FunctionExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.FunctionExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "Literal") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.Literal) {
         return true;
     }
 
     if (
-        unwrappedExpression.type === "LogicalExpression" &&
+        unwrappedExpression.type === AST_NODE_TYPES.LogicalExpression &&
         unwrappedExpression.operator === "??"
     ) {
         return isDefinitelyDefinedExpression(unwrappedExpression.right);
     }
 
-    if (unwrappedExpression.type === "NewExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.NewExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "ObjectExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.ObjectExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "SequenceExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.SequenceExpression) {
         const lastExpression = arrayAt(unwrappedExpression.expressions, -1);
 
         return (
@@ -111,7 +112,7 @@ const isDefinitelyDefinedExpression = (
         );
     }
 
-    if (unwrappedExpression.type === "TemplateLiteral") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.TemplateLiteral) {
         return true;
     }
 
@@ -123,7 +124,7 @@ const hasDefinitelyDefinedReturnValue = (
 ): boolean => {
     const body = node.body;
 
-    if (body.type !== "BlockStatement") {
+    if (body.type !== AST_NODE_TYPES.BlockStatement) {
         return isDefinitelyDefinedExpression(body);
     }
 
@@ -137,7 +138,7 @@ const hasDefinitelyDefinedReturnValue = (
         return false;
     }
 
-    if (statement.type !== "ReturnStatement") {
+    if (statement.type !== AST_NODE_TYPES.ReturnStatement) {
         return false;
     }
 
@@ -163,9 +164,9 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             ":matches(ArrowFunctionExpression, FunctionDeclaration, FunctionExpression)":
                 (node: Readonly<es.Node>): void => {
                     if (
-                        node.type !== "ArrowFunctionExpression" &&
-                        node.type !== "FunctionDeclaration" &&
-                        node.type !== "FunctionExpression"
+                        node.type !== AST_NODE_TYPES.ArrowFunctionExpression &&
+                        node.type !== AST_NODE_TYPES.FunctionDeclaration &&
+                        node.type !== AST_NODE_TYPES.FunctionExpression
                     ) {
                         return;
                     }
@@ -176,7 +177,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         return;
                     }
 
-                    if (returnType.typeAnnotation.type !== "TSUnionType") {
+                    if (
+                        returnType.typeAnnotation.type !==
+                        AST_NODE_TYPES.TSUnionType
+                    ) {
                         return;
                     }
 

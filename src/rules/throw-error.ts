@@ -8,6 +8,7 @@ import {
     isTypeUnknownType,
 } from "@typescript-eslint/type-utils";
 import {
+    AST_NODE_TYPES,
     type TSESTree as es,
     ESLintUtils,
     type TSESLint,
@@ -50,13 +51,13 @@ const couldBePromiseConstructorType = (
         );
 
 const isPromiseIdentifier = (node: Readonly<es.Expression>): boolean =>
-    node.type === "Identifier" && node.name === "Promise";
+    node.type === AST_NODE_TYPES.Identifier && node.name === "Promise";
 
 const createWrapLiteralInErrorSuggestionFix = (
     sourceCode: Readonly<TSESLint.SourceCode>,
     node: Readonly<es.Node>
 ): TSESLint.ReportFixFunction | undefined => {
-    if (node.type !== "Literal") {
+    if (node.type !== AST_NODE_TYPES.Literal) {
         return undefined;
     }
 
@@ -124,8 +125,8 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 (callExpression: Readonly<es.CallExpression>) => {
                     const { callee } = callExpression;
                     if (
-                        callee.type !== "MemberExpression" ||
-                        callee.object.type === "Super"
+                        callee.type !== AST_NODE_TYPES.MemberExpression ||
+                        callee.object.type === AST_NODE_TYPES.Super
                     ) {
                         return;
                     }
@@ -150,7 +151,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         | Readonly<es.FunctionExpression>
                 ) => {
                     const rejectParameter = callback.params[1];
-                    if (rejectParameter?.type !== "Identifier") {
+                    if (rejectParameter?.type !== AST_NODE_TYPES.Identifier) {
                         return;
                     }
 
@@ -172,7 +173,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         const { identifier } = reference;
                         const parent = identifier.parent;
                         if (
-                            parent?.type === "CallExpression" &&
+                            parent.type === AST_NODE_TYPES.CallExpression &&
                             parent.callee === identifier
                         ) {
                             checkRejectionCall(parent);
@@ -181,9 +182,6 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 },
             ThrowStatement: (throwStatement: Readonly<es.ThrowStatement>) => {
                 const { argument } = throwStatement;
-                if (argument === null) {
-                    return;
-                }
 
                 reportIfNonErrorLike(argument, "Throwing");
             },

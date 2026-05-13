@@ -15,6 +15,34 @@ import { dirname, extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import pc from "picocolors";
 
+/**
+ * @typedef {Readonly<{
+ *     file: string;
+ *     link: string;
+ *     resolvedPath: string;
+ * }>} LinkIssue
+ */
+
+/**
+ * @typedef {{
+ *     anchorsIgnored: number;
+ *     appRouteLinksIgnored: number;
+ *     brokenLinks: number;
+ *     emptyLinks: number;
+ *     externalLinksIgnored: number;
+ *     totalLinksChecked: number;
+ * }} LinkValidationMetrics
+ */
+
+/**
+ * @typedef {LinkValidationMetrics & {
+ *     filesWithLinks: number;
+ *     filesWithNoLinks: number;
+ *     imageLinksIgnored: number;
+ *     totalFilesChecked: number;
+ * }} LinkCheckMetrics
+ */
+
 const argv = process.argv.slice(2);
 const isVerbose = argv.includes("--verbose") || argv.includes("-v");
 const failFast = argv.includes("--fail-fast") || argv.includes("-f");
@@ -85,10 +113,12 @@ const EXTERNAL_PROTOCOLS = [
 const LEADING_BANG = /^!/;
 
 /**
- * Truncate safely keeping last `max` codepoints
+ * Truncates text while preserving the final `max` code points.
  *
- * @param {any} str
- * @param {number} max
+ * @param {string} str - Input text to shorten for log output.
+ * @param {number} max - Maximum trailing code points to keep.
+ *
+ * @returns {string} Original string or an ellipsis-prefixed suffix.
  */
 function truncateEnd(str, max) {
     const chars = [...str];
@@ -224,18 +254,13 @@ const getPathCandidates = (
  * Validate a single link and push to issues if broken. Returns true if broken
  * (so caller can optionally fail-fast).
  *
- * @param {any} markdownPath
- * @param {string} link
- * @param {{ file: any; link: any; resolvedPath: string }[]} issues
- * @param {{ has: (arg0: string) => any; add: (arg0: string) => void }} issueSet
- * @param {{
- *     totalLinksChecked: number;
- *     emptyLinks: number;
- *     anchorsIgnored: number;
- *     externalLinksIgnored: number;
- *     appRouteLinksIgnored: number;
- *     brokenLinks: number;
- * }} metrics
+ * @param {string} markdownPath - Source markdown file path.
+ * @param {string} link - Raw link text from markdown.
+ * @param {LinkIssue[]} issues - Mutable collection of detected broken links.
+ * @param {Set<string>} issueSet - De-duplication key set.
+ * @param {LinkValidationMetrics} metrics - Aggregated link-validation counters.
+ *
+ * @returns {Promise<boolean>} `true` when the link is broken.
  */
 async function validateLink(markdownPath, link, issues, issueSet, metrics) {
     metrics.totalLinksChecked++;
@@ -280,22 +305,12 @@ async function validateLink(markdownPath, link, issues, issueSet, metrics) {
 }
 
 /**
- * @param {import("node:fs").PathLike
- *     | import("node:fs/promises").FileHandle} markdownPath
- * @param {{ file: string; link: string; resolvedPath: string }[]} issues
- * @param {Set<string>} issueSet
- * @param {{
- *     totalFilesChecked: number;
- *     totalLinksChecked: number;
- *     brokenLinks: number;
- *     externalLinksIgnored: number;
- *     anchorsIgnored: number;
- *     appRouteLinksIgnored: number;
- *     imageLinksIgnored: number;
- *     emptyLinks: number;
- *     filesWithLinks: number;
- *     filesWithNoLinks: number;
- * }} metrics
+ * @param {string} markdownPath - Markdown file to inspect.
+ * @param {LinkIssue[]} issues - Mutable collection of detected broken links.
+ * @param {Set<string>} issueSet - De-duplication key set.
+ * @param {LinkCheckMetrics} metrics - Aggregated link-check counters.
+ *
+ * @returns {Promise<void>} Resolves after all links are checked.
  */
 async function checkFile(markdownPath, issues, issueSet, metrics) {
     if (isVerbose) {
@@ -339,12 +354,12 @@ async function checkFile(markdownPath, issues, issueSet, metrics) {
 }
 
 /**
- * Split array into batches
+ * Splits an array into fixed-size chunks.
  *
- * @param {readonly string[]} array
- * @param {number} size
+ * @param {readonly string[]} array - Source array to chunk.
+ * @param {number} size - Chunk size.
  *
- * @returns {string[][]}
+ * @returns {string[][]} Chunked arrays preserving source order.
  */
 function batches(array, size) {
     const out = [];
@@ -365,9 +380,7 @@ function batches(array, size) {
  * @returns {Promise<void>}
  */
 async function main() {
-    /**
-     * @type {any[]}
-     */
+    /** @type {LinkIssue[]} */
     const issues = [];
     const issueSet = new Set();
 
@@ -377,20 +390,7 @@ async function main() {
      * All metrics properties must be initialized as numbers (not possibly
      * undefined) to satisfy validateLink's type requirements.
      */
-    /**
-     * @type {{
-     *     totalFilesChecked: number;
-     *     totalLinksChecked: number;
-     *     brokenLinks: number;
-     *     externalLinksIgnored: number;
-     *     anchorsIgnored: number;
-     *     appRouteLinksIgnored: number;
-     *     imageLinksIgnored: number;
-     *     emptyLinks: number;
-     *     filesWithLinks: number;
-     *     filesWithNoLinks: number;
-     * }}
-     */
+    /** @type {LinkCheckMetrics} */
     const metrics = {
         totalFilesChecked: 0,
         totalLinksChecked: 0,

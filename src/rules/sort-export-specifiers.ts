@@ -2,6 +2,7 @@
 
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayFirst, arrayJoin, arrayLast } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -11,7 +12,7 @@ type MessageIds = "incorrectSortingOrder";
 type Options = readonly [];
 
 const toName = (specifier: Readonly<es.ExportSpecifier>): string =>
-    specifier.exported.type === "Identifier"
+    specifier.exported.type === AST_NODE_TYPES.Identifier
         ? specifier.exported.name
         : specifier.exported.value;
 
@@ -46,9 +47,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         ): void => {
             let exportSpecifiers: readonly es.ExportSpecifier[] = [];
             for (const specifier of node.specifiers) {
-                if (specifier.type === "ExportSpecifier") {
-                    exportSpecifiers = [...exportSpecifiers, specifier];
-                }
+                exportSpecifiers = [...exportSpecifiers, specifier];
             }
             if (exportSpecifiers.length < 2) {
                 return;

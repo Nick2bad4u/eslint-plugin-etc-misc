@@ -1,11 +1,11 @@
-import nick2bad4u from "eslint-config-nick2bad4u";
+import nickTwoBadFourU from "eslint-config-nick2bad4u";
 
-import etcMisc from "./plugin.mjs";
+import pluginExport from "./plugin.mjs";
 
 /** @type {import("eslint").Linter.Config[]} */
 const config = [
     .../** @type {import("eslint").Linter.Config[]} */ (
-        /** @type {unknown} */ (nick2bad4u.configs.withoutEtcMisc)
+        /** @type {unknown} */ (nickTwoBadFourU.configs.withoutEtcMisc)
     ),
 
     // Local Plugin Config
@@ -15,12 +15,12 @@ const config = [
         name: "Local Etc Misc",
         plugins: {
             "etc-misc": /** @type {import("eslint").ESLint.Plugin} */ (
-                /** @type {unknown} */ (etcMisc)
+                /** @type {unknown} */ (pluginExport)
             ),
         },
         rules: {
             .../** @type {import("eslint").Linter.RulesRecord} */ (
-                /** @type {unknown} */ (etcMisc.configs.minimal.rules)
+                /** @type {unknown} */ (pluginExport.configs.minimal.rules)
             ),
         },
     },

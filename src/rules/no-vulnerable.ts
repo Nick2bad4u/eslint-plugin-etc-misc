@@ -2,10 +2,10 @@ import type { TSESTree as es } from "@typescript-eslint/utils";
 import type { Parameters as RecheckParameters } from "recheck";
 import type { UnknownRecord } from "type-fest";
 
-import { statSync } from "node:fs";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { createRequire } from "node:module";
-import { basename, dirname, join } from "node:path";
-import { checkSync } from "recheck";
+import path from "node:path";
+import { checkSync as runSynchronousRecheck } from "recheck";
 import { arrayFirst, isDefined, keyIn, setHas } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -16,7 +16,7 @@ type MessageIds = "checkerError" | "vulnerable";
 
 type Options = readonly [RuleOption?];
 
-type RecheckDiagnostics = ReturnType<typeof checkSync>;
+type RecheckDiagnostics = ReturnType<typeof runSynchronousRecheck>;
 
 type RecheckEnvironmentKey = "RECHECK_BIN" | "RECHECK_JAR";
 
@@ -32,7 +32,7 @@ type RuleOption = Readonly<
 >;
 
 const requireFromWorkingDirectory = createRequire(
-    join(process.cwd(), "package.json")
+    path.join(process.cwd(), "package.json")
 );
 
 const isUnknownRecord = (value: unknown): value is UnknownRecord =>
@@ -64,18 +64,9 @@ const createRequireFromPluginPackage = (): ReturnType<typeof createRequire> => {
 
 const requireFromPluginPackage = createRequireFromPluginPackage();
 
-const isExistingFile = (filePath: string): boolean => {
-    try {
-        return statSync(filePath).isFile();
-    } catch {
-        return false;
-    }
-};
-
 const shouldOverrideRuntimePath = (currentPath: string | undefined): boolean =>
     !isDefined(currentPath) ||
-    !isExistingFile(currentPath) ||
-    basename(currentPath).toLowerCase() === "package.json";
+    path.basename(currentPath).toLowerCase() === "package.json";
 
 const resolvePackageSiblingFile = (
     packageJsonSpecifier: string,
@@ -85,7 +76,7 @@ const resolvePackageSiblingFile = (
         const packageJsonPath =
             requireFromPluginPackage.resolve(packageJsonSpecifier);
 
-        return join(dirname(packageJsonPath), siblingFileName);
+        return path.join(path.dirname(packageJsonPath), siblingFileName);
     } catch (error) {
         if (isModuleNotFoundError(error)) {
             return null;
@@ -156,7 +147,6 @@ const getRecheckEnvironmentOverrides = (): RecheckEnvironmentOverrides => {
 
     if (
         recheckJarPath !== null &&
-        isExistingFile(recheckJarPath) &&
         shouldOverrideRuntimePath(getRecheckEnvironmentValue("RECHECK_JAR"))
     ) {
         overrides.RECHECK_JAR = recheckJarPath;
@@ -164,7 +154,6 @@ const getRecheckEnvironmentOverrides = (): RecheckEnvironmentOverrides => {
 
     if (
         recheckWindowsBinaryPath !== null &&
-        isExistingFile(recheckWindowsBinaryPath) &&
         shouldOverrideRuntimePath(getRecheckEnvironmentValue("RECHECK_BIN"))
     ) {
         overrides.RECHECK_BIN = recheckWindowsBinaryPath;
@@ -214,17 +203,22 @@ const runRecheck = (
     flags: string,
     parameters: Readonly<RecheckParameters>
 ): RecheckDiagnostics =>
-    withRecheckEnvironmentOverrides(() => checkSync(source, flags, parameters));
+    withRecheckEnvironmentOverrides(() =>
+        runSynchronousRecheck(source, flags, parameters)
+    );
 
 /* eslint-enable n/no-process-env -- Re-enable after the recheck environment wrapper helpers. */
 
 const getStaticStringValue = (node: Readonly<es.Expression>): null | string => {
-    if (node.type === "Literal" && typeof node.value === "string") {
+    if (
+        node.type === AST_NODE_TYPES.Literal &&
+        typeof node.value === "string"
+    ) {
         return node.value;
     }
 
     if (
-        node.type === "TemplateLiteral" &&
+        node.type === AST_NODE_TYPES.TemplateLiteral &&
         node.expressions.length === 0 &&
         node.quasis.length === 1
     ) {
@@ -236,12 +230,16 @@ const getStaticStringValue = (node: Readonly<es.Expression>): null | string => {
 
 const isNonSpreadArgument = (
     argument: Readonly<es.CallExpressionArgument>
-): argument is Readonly<es.Expression> => argument.type !== "SpreadElement";
+): argument is Readonly<es.Expression> =>
+    argument.type !== AST_NODE_TYPES.SpreadElement;
 
 const isRegExpConstructorCall = (
     node: Readonly<es.CallExpression | es.NewExpression>
 ): boolean => {
-    if (node.callee.type !== "Identifier" || node.callee.name !== "RegExp") {
+    if (
+        node.callee.type !== AST_NODE_TYPES.Identifier ||
+        node.callee.name !== "RegExp"
+    ) {
         return false;
     }
 
@@ -267,7 +265,7 @@ const isRegExpConstructorCall = (
         return true;
     }
 
-    if (flagsArgument.type === "SpreadElement") {
+    if (flagsArgument.type === AST_NODE_TYPES.SpreadElement) {
         return false;
     }
 

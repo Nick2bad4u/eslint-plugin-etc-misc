@@ -1,4 +1,4 @@
-import unicornPlugin from "eslint-plugin-unicorn";
+import eslintPluginUnicorn from "eslint-plugin-unicorn";
 
 import {
     adaptExternalRule,
@@ -14,7 +14,7 @@ import {
  */
 const rule: ReturnType<typeof adaptExternalRule> = adaptExternalRule(
     getExternalRuleFromPlugin(
-        unicornPlugin,
+        eslintPluginUnicorn,
         "no-unreadable-iife",
         "eslint-plugin-unicorn"
     ),

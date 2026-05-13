@@ -1,5 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayJoin, isDefined, isEmpty } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -23,7 +24,7 @@ const buildOptionalUnionFixText = (
     let nonUndefinedTypeTexts: readonly string[] = [];
 
     for (const typeNode of unionType.types) {
-        if (typeNode.type === "TSUndefinedKeyword") {
+        if (typeNode.type === AST_NODE_TYPES.TSUndefinedKeyword) {
             continue;
         }
 
@@ -55,7 +56,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 
         return {
             [selector]: (node: Readonly<es.Node>): void => {
-                if (node.type !== "TSUnionType") {
+                if (node.type !== AST_NODE_TYPES.TSUnionType) {
                     return;
                 }
 

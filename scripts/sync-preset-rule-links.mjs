@@ -32,19 +32,29 @@ import { fileURLToPath, pathToFileURL } from "node:url";
  */
 
 /**
+ * @typedef {object} BuiltPluginPresetConfig
+ *
+ * @property {Readonly<Record<string, unknown>>} [rules] - Rule entries for one
+ *   preset.
+ */
+
+/**
+ * @typedef {Readonly<Record<string, BuiltPluginPresetConfig>>} BuiltPluginConfigs
+ */
+
+/**
  * @typedef {Readonly<{
- *     configs?: Readonly<
- *         Record<
- *             string,
- *             Readonly<{
- *                 rules?: Readonly<Record<string, unknown>>;
- *             }>
- *         >
- *     >;
- *     meta?: Readonly<{
- *         namespace?: string;
- *     }>;
- * }>} BuiltPlugin
+ *     namespace?: string;
+ * }>} BuiltPluginMeta
+ */
+
+/**
+ * @typedef {object} BuiltPlugin
+ *
+ * @property {BuiltPluginConfigs} [configs] - Preset config map from plugin
+ *   build output.
+ * @property {BuiltPluginMeta} [meta] - Plugin metadata used to resolve
+ *   namespace-aware names.
  */
 
 const thisFilePath = fileURLToPath(import.meta.url);
@@ -142,6 +152,8 @@ const collectHeadings = (content) => {
  * @param {number} [headingLevel]
  *
  * @returns {string}
+ *
+ * @throws {Error} When the requested heading section cannot be found.
  */
 const replaceSection = (
     content,

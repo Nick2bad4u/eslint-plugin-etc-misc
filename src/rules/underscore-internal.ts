@@ -1,10 +1,12 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
 
-const internalTagPattern = /@internal\b/u;
+const internalTagPattern = /@internal\b/v;
 
 const isNonUnderscoreIdentifier = (
     identifier: Readonly<es.Identifier>
@@ -13,8 +15,8 @@ const isNonUnderscoreIdentifier = (
 const isExportDeclaration = (
     node: null | Readonly<es.Node> | undefined
 ): node is es.ExportDefaultDeclaration | es.ExportNamedDeclaration =>
-    node?.type === "ExportDefaultDeclaration" ||
-    node?.type === "ExportNamedDeclaration";
+    node?.type === AST_NODE_TYPES.ExportDefaultDeclaration ||
+    node?.type === AST_NODE_TYPES.ExportNamedDeclaration;
 
 /**
  * Enforce underscore prefixes for declarations marked with `@internal`.
@@ -77,7 +79,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                 "MethodDefinition[key.type='Identifier']": (
                     node: Readonly<es.MethodDefinition>
                 ) => {
-                    if (node.key.type !== "Identifier") {
+                    if (node.key.type !== AST_NODE_TYPES.Identifier) {
                         return;
                     }
 
@@ -86,7 +88,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                 "PropertyDefinition[key.type='Identifier']": (
                     node: Readonly<es.PropertyDefinition>
                 ) => {
-                    if (node.key.type !== "Identifier") {
+                    if (node.key.type !== AST_NODE_TYPES.Identifier) {
                         return;
                     }
 
@@ -100,7 +102,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                 "TSEnumMember[id.type='Identifier']": (
                     node: Readonly<es.TSEnumMember>
                 ) => {
-                    if (node.id.type !== "Identifier") {
+                    if (node.id.type !== AST_NODE_TYPES.Identifier) {
                         return;
                     }
 
@@ -114,7 +116,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                 "TSMethodSignature[key.type='Identifier']": (
                     node: Readonly<es.TSMethodSignature>
                 ) => {
-                    if (node.key.type !== "Identifier") {
+                    if (node.key.type !== AST_NODE_TYPES.Identifier) {
                         return;
                     }
 
@@ -123,7 +125,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                 "TSPropertySignature[key.type='Identifier']": (
                     node: Readonly<es.TSPropertySignature>
                 ) => {
-                    if (node.key.type !== "Identifier") {
+                    if (node.key.type !== AST_NODE_TYPES.Identifier) {
                         return;
                     }
 
@@ -137,15 +139,11 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                 "VariableDeclarator[id.type='Identifier']": (
                     node: Readonly<es.VariableDeclarator>
                 ) => {
-                    if (node.id.type !== "Identifier") {
+                    if (node.id.type !== AST_NODE_TYPES.Identifier) {
                         return;
                     }
 
                     const declaration = node.parent;
-                    if (declaration?.type !== "VariableDeclaration") {
-                        return;
-                    }
-
                     reportIfInternal(node.id, declaration);
                 },
             };

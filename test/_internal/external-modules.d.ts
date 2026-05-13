@@ -1,3 +1,7 @@
+import type { Linter } from "eslint";
+
+declare const eslintLinterMarker: Linter.Config | undefined;
+
 declare module "@microsoft/eslint-plugin-sdl" {
     const plugin: unknown;
 

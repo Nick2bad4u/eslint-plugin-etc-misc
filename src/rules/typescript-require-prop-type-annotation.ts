@@ -1,5 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { isDefined } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -19,13 +20,13 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 >({
     create: (context) => ({
         [selector]: (node: Readonly<es.Node>): void => {
-            if (node.type !== "PropertyDefinition") {
+            if (node.type !== AST_NODE_TYPES.PropertyDefinition) {
                 return;
             }
 
             const canProvideSafeSuggestion =
                 !node.computed &&
-                node.key.type === "Identifier" &&
+                node.key.type === AST_NODE_TYPES.Identifier &&
                 !node.optional &&
                 !node.definite;
 

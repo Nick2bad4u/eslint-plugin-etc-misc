@@ -1,6 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import parser from "@typescript-eslint/parser";
+import { AST_NODE_TYPES, AST_TOKEN_TYPES } from "@typescript-eslint/utils";
 import { arrayFirst, arrayJoin, isDefined, stringSplit } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -29,9 +30,7 @@ const parseCommentProgram = (
     content: string
 ): readonly [
     ReadonlyMap<string, es.Program | null>,
-    (
-        es.Program | undefined
-    ),
+    es.Program | undefined,
 ] => {
     const cached = cache.get(content);
     if (cached !== undefined) {
@@ -84,7 +83,7 @@ const toCommentBlocks = (
     let previousLineComment: es.LineComment | null = null;
 
     for (const comment of comments) {
-        if (comment.type === "Block") {
+        if (comment.type === AST_TOKEN_TYPES.Block) {
             blocks = [
                 ...blocks,
                 {
@@ -132,11 +131,14 @@ const toCommentBlocks = (
 const isExpressionOrIdentifierOrLiteral = (
     node: Readonly<es.Node>
 ): boolean => {
-    if (node.type === "Identifier" || node.type === "Literal") {
+    if (
+        node.type === AST_NODE_TYPES.Identifier ||
+        node.type === AST_NODE_TYPES.Literal
+    ) {
         return true;
     }
 
-    if (node.type !== "BinaryExpression") {
+    if (node.type !== AST_NODE_TYPES.BinaryExpression) {
         return false;
     }
 
@@ -153,14 +155,14 @@ const isTrivialProgram = (program: Readonly<es.Program>): boolean => {
 
     if (
         program.body.length === 1 &&
-        arrayFirst(program.body)?.type === "LabeledStatement"
+        arrayFirst(program.body)?.type === AST_NODE_TYPES.LabeledStatement
     ) {
         return true;
     }
 
     return program.body.every(
         (statement) =>
-            statement.type === "ExpressionStatement" &&
+            statement.type === AST_NODE_TYPES.ExpressionStatement &&
             isExpressionOrIdentifierOrLiteral(statement.expression)
     );
 };
@@ -173,35 +175,35 @@ const getWrappedContent = (
         return undefined;
     }
 
-    if (node.type === "ArrayExpression") {
+    if (node.type === AST_NODE_TYPES.ArrayExpression) {
         return `const wrapper = [${content}]`;
     }
 
-    if (node.type === "ClassBody") {
+    if (node.type === AST_NODE_TYPES.ClassBody) {
         return `class Wrapper { ${content} }`;
     }
 
-    if (node.type === "FunctionDeclaration") {
+    if (node.type === AST_NODE_TYPES.FunctionDeclaration) {
         return `function wrapper(${content}) {}`;
     }
 
-    if (node.type === "ImportDeclaration") {
+    if (node.type === AST_NODE_TYPES.ImportDeclaration) {
         return `import { ${content} } from "wrapper"`;
     }
 
-    if (node.type === "ObjectExpression") {
+    if (node.type === AST_NODE_TYPES.ObjectExpression) {
         return `const wrapper = { ${content} }`;
     }
 
-    if (node.type === "SwitchStatement") {
+    if (node.type === AST_NODE_TYPES.SwitchStatement) {
         return `switch (wrapper) { ${content} }`;
     }
 
-    if (node.type === "TSInterfaceBody") {
+    if (node.type === AST_NODE_TYPES.TSInterfaceBody) {
         return `interface Wrapper { ${content} }`;
     }
 
-    if (node.type === "TSTypeLiteral") {
+    if (node.type === AST_NODE_TYPES.TSTypeLiteral) {
         return `type Wrapper = { ${content} }`;
     }
 

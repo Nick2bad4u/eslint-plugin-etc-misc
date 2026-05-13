@@ -1,6 +1,6 @@
 /**
- * @packageDocumentation
- * Synchronize or validate the README rules matrix from canonical rule metadata.
+ * @file Synchronize or validate the README rules matrix from canonical rule
+ *   metadata.
  */
 // @ts-check
 
@@ -9,37 +9,42 @@ import { resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 /**
- * @typedef {Readonly<{
- *     plugin?: {
- *         name: string;
- *         url?: string;
- *     };
- *     rule?: {
- *         name: string;
- *         url?: string;
- *     };
- * }>} ReadmeReplacement
+ * @typedef {object} ReadmeReference
+ *
+ * @property {string} name - Human-readable label.
+ * @property {string} [url] - Optional target URL.
  */
 
 /**
- * @typedef {Readonly<{
- *     message?: string;
- *     replacedBy?: readonly ReadmeReplacement[];
- * }>} ReadmeDeprecatedInfo
+ * @typedef {object} ReadmeReplacement
+ *
+ * @property {ReadmeReference} [plugin] - Replacement plugin reference.
+ * @property {ReadmeReference} [rule] - Replacement rule reference.
  */
 
 /**
- * @typedef {Readonly<{
- *     meta?: {
- *         namespace?: string;
- *         deprecated?: boolean | ReadmeDeprecatedInfo;
- *         docs?: {
- *             url?: string;
- *         };
- *         fixable?: string;
- *         hasSuggestions?: boolean;
- *     };
- * }>} ReadmeRuleModule
+ * @typedef {object} ReadmeDeprecatedInfo
+ *
+ * @property {string} [message] - Deprecation message shown in docs metadata.
+ * @property {readonly ReadmeReplacement[]} [replacedBy] - Suggested
+ *   replacements for deprecated rules.
+ */
+
+/**
+ * @typedef {object} ReadmeRuleMeta
+ *
+ * @property {string} [namespace] - Rule namespace, such as `etc-misc`.
+ * @property {boolean | ReadmeDeprecatedInfo} [deprecated] - Deprecation
+ *   metadata or boolean flag.
+ * @property {ReadmeReference} [docs] - Documentation metadata for the rule.
+ * @property {string} [fixable] - ESLint `fixable` value.
+ * @property {boolean} [hasSuggestions] - Whether the rule provides suggestions.
+ */
+
+/**
+ * @typedef {object} ReadmeRuleModule
+ *
+ * @property {ReadmeRuleMeta} [meta] - Rule metadata payload.
  */
 
 /** @typedef {Readonly<Record<string, ReadmeRuleModule>>} ReadmeRulesMap */
@@ -54,20 +59,25 @@ import { fileURLToPath, pathToFileURL } from "node:url";
  */
 
 /**
- * @typedef {Readonly<{
- *     meta?: {
- *         namespace?: string;
- *     };
- *     rules: ReadmeRulesMap;
- *     configs?: Readonly<
- *         Record<
- *             string,
- *             {
- *                 rules?: Readonly<Record<string, unknown>>;
- *             }
- *         >
- *     >;
- * }>} ReadmePlugin
+ * @typedef {object} ReadmePresetConfig
+ *
+ * @property {Readonly<Record<string, unknown>>} [rules] - Flat-config rules
+ *   keyed by configured rule name.
+ */
+
+/**
+ * @typedef {object} ReadmePluginMeta
+ *
+ * @property {string} [namespace] - Plugin namespace used in configured names.
+ */
+
+/**
+ * @typedef {object} ReadmePlugin
+ *
+ * @property {ReadmePluginMeta} [meta] - Plugin-level metadata.
+ * @property {ReadmeRulesMap} rules - Rule modules keyed by rule name.
+ * @property {Readonly<Record<string, ReadmePresetConfig>>} [configs] - Preset
+ *   config entries keyed by preset name.
  */
 
 /** @typedef {Readonly<Record<PresetName, Set<string>>>} PresetRuleNamesByPreset */
@@ -344,6 +354,8 @@ const getRecommendedReplacementIndicator = (ruleModule) => {
  * @param {PresetRuleNamesByPreset} presetRuleNamesByPreset
  *
  * @returns {string}
+ *
+ * @throws {TypeError} When rule metadata does not provide a non-empty docs URL.
  */
 const toRuleTableRow = ([ruleName, ruleModule], presetRuleNamesByPreset) => {
     const docsUrl = ruleModule.meta?.docs?.url;

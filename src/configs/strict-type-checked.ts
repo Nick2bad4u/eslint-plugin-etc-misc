@@ -1,15 +1,18 @@
 /* eslint-disable canonical/no-reassign-imports -- Flat-config strict type-checked preset intentionally inspects imported plugin rule metadata. */
 
-import { keyIn, objectEntries, objectFromEntries } from "ts-extras";
+import {
+    objectEntries,
+    objectFromEntries,
+    objectHasOwn,
+    safeCastTo,
+} from "ts-extras";
+
+import type { RuleDocsMetadata } from "../_internal/rule-creator.js";
 
 import { rules as pluginRules } from "../rules.js";
 import { strict } from "./strict.js";
 
-type RuleDocsMetadata = Readonly<{
-    readonly requiresTypeChecking?: boolean;
-}>;
-
-type StrictTypeCheckedConfig = {
+interface StrictTypeCheckedConfig {
     readonly languageOptions: Readonly<{
         readonly parserOptions: Readonly<{
             readonly projectService: true;
@@ -17,7 +20,7 @@ type StrictTypeCheckedConfig = {
     }>;
     readonly name: "etc-misc/strict-type-checked";
     readonly rules: Readonly<Record<string, "error">>;
-};
+}
 
 const additionalTypeCheckedRuleEntries: readonly (readonly [
     string,
@@ -27,7 +30,9 @@ const additionalTypeCheckedRuleEntries: readonly (readonly [
         return [];
     }
 
-    const docsMetadata = ruleModule.meta.docs as RuleDocsMetadata | undefined;
+    const docsMetadata = safeCastTo<RuleDocsMetadata | undefined>(
+        ruleModule.meta.docs
+    );
 
     if (docsMetadata?.requiresTypeChecking !== true) {
         return [];
@@ -35,11 +40,13 @@ const additionalTypeCheckedRuleEntries: readonly (readonly [
 
     const qualifiedRuleName = `etc-misc/${ruleName}`;
 
-    if (keyIn(strict.rules, qualifiedRuleName)) {
+    if (objectHasOwn(strict.rules, qualifiedRuleName)) {
         return [];
     }
 
-    return [[qualifiedRuleName, "error"] as const];
+    const severity = "error" as const;
+
+    return [[qualifiedRuleName, severity] as const];
 });
 
 const strictTypeCheckedRules = {

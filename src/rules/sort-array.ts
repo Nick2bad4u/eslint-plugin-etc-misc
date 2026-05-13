@@ -2,6 +2,7 @@
 
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import {
     arrayAt,
     arrayFirst,
@@ -19,7 +20,7 @@ type Options = readonly [];
 const getSortableValue = (
     element: Readonly<es.Expression | es.SpreadElement>
 ): string | undefined => {
-    if (element.type === "Literal") {
+    if (element.type === AST_NODE_TYPES.Literal) {
         return String(element.value);
     }
 

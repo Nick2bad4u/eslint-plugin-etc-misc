@@ -25,7 +25,7 @@ const isSelectorObject = (
 ): value is Readonly<{
     readonly message?: string;
     readonly selector: string;
-}> => typeof value === "object" && value !== null && keyIn(value, "selector");
+}> => typeof value === "object" && keyIn(value, "selector");
 
 /**
  * Normalize a selector option into a selector entry object.

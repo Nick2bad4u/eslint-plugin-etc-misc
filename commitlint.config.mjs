@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types -- This is a JavaScript config file; function contracts are expressed via JSDoc instead of TypeScript syntax. */
+
 /**
  * Commitlint configuration for eslint-plugin-etc-misc.
  *
@@ -8,49 +10,27 @@
  * [feat] Add dark mode toggle" Indent any lines that refer to the statement
  * above with a " - ".
  *
- * @type {import("@commitlint/types").UserConfig}
- *
  * @typedef {import("@commitlint/types").UserConfig} CommitlintConfig
  *
  * @see {@link https://commitlint.js.org/ | Commitlint Documentation}
  * @see {@link https://www.conventionalcommits.org/ | Conventional Commits Specification}
  */
 
-/**
- * @param {string} commit
- *
- * @returns {boolean}
- */
-function isDependencyBumpCommit(commit) {
-    return /^build\(deps.*\): bump/v.test(commit);
-}
+const isDependencyBumpCommit =
+    /** @type {(commit: string) => boolean} */
+    ((commit) => /^build\(deps.*\): bump/v.test(commit));
 
-/**
- * @param {string} commit
- *
- * @returns {boolean}
- */
-function isMergeCommit(commit) {
-    return commit.includes("Merge");
-}
+const isMergeCommit =
+    /** @type {(commit: string) => boolean} */
+    ((commit) => commit.includes("Merge"));
 
-/**
- * @param {string} commit
- *
- * @returns {boolean}
- */
-function isReleaseCommit(commit) {
-    return commit.startsWith("chore(release)");
-}
+const isReleaseCommit =
+    /** @type {(commit: string) => boolean} */
+    ((commit) => commit.startsWith("chore(release)"));
 
-/**
- * @param {string} commit
- *
- * @returns {boolean}
- */
-function isRevertCommit(commit) {
-    return commit.includes("Revert");
-}
+const isRevertCommit =
+    /** @type {(commit: string) => boolean} */
+    ((commit) => commit.includes("Revert"));
 
 const commitlintConfig = /** @type {CommitlintConfig} */ ({
     $schema: "https://www.schemastore.org/commitlintrc.json",
@@ -357,3 +337,5 @@ const commitlintConfig = /** @type {CommitlintConfig} */ ({
 });
 
 export default commitlintConfig;
+
+/* eslint-enable @typescript-eslint/explicit-module-boundary-types -- Re-enable for subsequent files. */

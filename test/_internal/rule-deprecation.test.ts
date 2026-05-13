@@ -54,14 +54,14 @@ describe("replacement metadata helpers", () => {
                 input: {},
             },
             {
-                expectedHasPlugin: true,
-                expectedHasRule: false,
-                input: { plugin: pluginReplacement },
-            },
-            {
                 expectedHasPlugin: false,
                 expectedHasRule: true,
                 input: { rule: ruleReplacement },
+            },
+            {
+                expectedHasPlugin: true,
+                expectedHasRule: false,
+                input: { plugin: pluginReplacement },
             },
             {
                 expectedHasPlugin: true,

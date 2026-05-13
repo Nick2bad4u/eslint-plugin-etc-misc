@@ -62,6 +62,8 @@ export const benchmarkFileGlobs = Object.freeze({
  * @param {string} label - Error label for diagnostics.
  *
  * @returns {UnknownRecord} Normalized object record.
+ *
+ * @throws {TypeError} When value is not a non-null object.
  */
 const ensureRecord = (value, label) => {
     if (!isUnknownRecord(value)) {
@@ -91,6 +93,8 @@ const isRuleEntry = (value) =>
  * @param {string} label - Error label for diagnostics.
  *
  * @returns {BenchmarkRules} Normalized rules record.
+ *
+ * @throws {TypeError} When value includes non-rule-entry members.
  */
 const ensureRulesRecord = (value, label) => {
     const record = ensureRecord(value, label);
@@ -134,6 +138,7 @@ const resolveRuleSet = (presetName) => {
 /**
  * Plugin rule sets used by benchmark scenarios.
  */
+
 /**
  * @typedef {Readonly<{
  *     all: Readonly<BenchmarkRules>;

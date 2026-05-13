@@ -2,6 +2,7 @@ import type { TSESTree as es } from "@typescript-eslint/utils";
 import type { UnknownRecord } from "type-fest";
 
 import { getConstrainedTypeAtLocation } from "@typescript-eslint/type-utils";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayJoin, isDefined, keyIn } from "ts-extras";
 
 type JsDocTagInfo = Readonly<{
@@ -25,10 +26,10 @@ type SymbolWithJsDocTags = Readonly<{
 export const isImportOrExportSpecifier = (
     parent: Readonly<es.Node> | undefined
 ): boolean =>
-    parent?.type === "ExportSpecifier" ||
-    parent?.type === "ImportDefaultSpecifier" ||
-    parent?.type === "ImportNamespaceSpecifier" ||
-    parent?.type === "ImportSpecifier";
+    parent?.type === AST_NODE_TYPES.ExportSpecifier ||
+    parent?.type === AST_NODE_TYPES.ImportDefaultSpecifier ||
+    parent?.type === AST_NODE_TYPES.ImportNamespaceSpecifier ||
+    parent?.type === AST_NODE_TYPES.ImportSpecifier;
 
 /**
  * Whether an identifier is the declaration identifier for supported node types.
@@ -37,27 +38,27 @@ export const isDeclarationIdentifier = (
     node: Readonly<es.Identifier>
 ): boolean => {
     const { parent } = node;
-    if (parent === undefined) {
+    if (!isDefined(parent)) {
         return false;
     }
 
     if (
-        parent.type === "TSInterfaceDeclaration" ||
-        parent.type === "TSTypeAliasDeclaration"
+        parent.type === AST_NODE_TYPES.TSInterfaceDeclaration ||
+        parent.type === AST_NODE_TYPES.TSTypeAliasDeclaration
     ) {
         return parent.id === node;
     }
 
     if (
-        parent.type === "ClassDeclaration" ||
-        parent.type === "FunctionDeclaration" ||
-        parent.type === "TSDeclareFunction" ||
-        parent.type === "TSEnumDeclaration"
+        parent.type === AST_NODE_TYPES.ClassDeclaration ||
+        parent.type === AST_NODE_TYPES.FunctionDeclaration ||
+        parent.type === AST_NODE_TYPES.TSDeclareFunction ||
+        parent.type === AST_NODE_TYPES.TSEnumDeclaration
     ) {
         return parent.id === node;
     }
 
-    if (parent.type === "VariableDeclarator") {
+    if (parent.type === AST_NODE_TYPES.VariableDeclarator) {
         return parent.id === node;
     }
 
@@ -72,7 +73,7 @@ const normalizeTagComment = (
     }
 
     if (typeof text === "string") {
-        const normalized = text.trim().replaceAll(/\s+/gu, " ");
+        const normalized = text.trim().replaceAll(/\s+/gv, " ");
         return normalized.length > 0 ? normalized : undefined;
     }
 
@@ -80,7 +81,7 @@ const normalizeTagComment = (
         text.map((part) => part.text),
         ""
     )
-        .replaceAll(/\s+/gu, " ")
+        .replaceAll(/\s+/gv, " ")
         .trim();
 
     return normalized.length > 0 ? normalized : undefined;

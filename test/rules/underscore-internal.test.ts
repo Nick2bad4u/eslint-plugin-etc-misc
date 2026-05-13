@@ -2,12 +2,12 @@ import plugin from "../../src/plugin";
 import { ruleTester } from "../_internal/ruleTester";
 
 const generatedPublicIdentifiers = [
-    "Public14",
-    "Internal27",
     "Helper33",
-    "Public56",
-    "Internal61",
     "Helper88",
+    "Internal27",
+    "Internal61",
+    "Public14",
+    "Public56",
 ] as const;
 
 const underscoreInternalRule = plugin.rules["underscore-internal"];

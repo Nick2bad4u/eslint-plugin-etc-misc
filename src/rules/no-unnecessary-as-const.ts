@@ -1,5 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
@@ -13,9 +15,9 @@ const getAsConstExpression = (
     node: Readonly<es.Node>
 ): Readonly<es.TSAsExpression> | undefined => {
     if (
-        node.type !== "Identifier" ||
-        node.parent?.type !== "TSTypeReference" ||
-        node.parent.parent?.type !== "TSAsExpression"
+        node.type !== AST_NODE_TYPES.Identifier ||
+        node.parent.type !== AST_NODE_TYPES.TSTypeReference ||
+        node.parent.parent.type !== AST_NODE_TYPES.TSAsExpression
     ) {
         return undefined;
     }

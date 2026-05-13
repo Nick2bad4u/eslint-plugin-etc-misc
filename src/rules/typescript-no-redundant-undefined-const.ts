@@ -1,5 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayJoin, isDefined, isEmpty } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -15,7 +16,7 @@ const buildFixedTypeText = (
     let nonUndefinedTypeTexts: readonly string[] = [];
 
     for (const typeNode of unionType.types) {
-        if (typeNode.type === "TSUndefinedKeyword") {
+        if (typeNode.type === AST_NODE_TYPES.TSUndefinedKeyword) {
             continue;
         }
 
@@ -37,26 +38,16 @@ const buildFixedTypeText = (
 
 const getTypeAnnotationFromDeclarator = (
     declarator: Readonly<es.VariableDeclarator>
-): Readonly<es.TSTypeAnnotation> | undefined => {
-    if (
-        declarator.id.type === "Identifier" ||
-        declarator.id.type === "ArrayPattern" ||
-        declarator.id.type === "ObjectPattern"
-    ) {
-        return declarator.id.typeAnnotation;
-    }
-
-    return undefined;
-};
+): Readonly<es.TSTypeAnnotation> | undefined => declarator.id.typeAnnotation;
 
 const unwrapExpression = (
     expression: Readonly<es.Expression>
 ): Readonly<es.Expression> => {
     if (
-        expression.type === "TSAsExpression" ||
-        expression.type === "TSSatisfiesExpression" ||
-        expression.type === "TSNonNullExpression" ||
-        expression.type === "TSTypeAssertion"
+        expression.type === AST_NODE_TYPES.TSAsExpression ||
+        expression.type === AST_NODE_TYPES.TSSatisfiesExpression ||
+        expression.type === AST_NODE_TYPES.TSNonNullExpression ||
+        expression.type === AST_NODE_TYPES.TSTypeAssertion
     ) {
         return unwrapExpression(expression.expression);
     }
@@ -69,35 +60,35 @@ const isDefinitelyDefinedExpression = (
 ): boolean => {
     const unwrappedExpression = unwrapExpression(expression);
 
-    if (unwrappedExpression.type === "ArrayExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.ArrayExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "ArrowFunctionExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.ArrowFunctionExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "ClassExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.ClassExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "FunctionExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.FunctionExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "Literal") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.Literal) {
         return true;
     }
 
-    if (unwrappedExpression.type === "NewExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.NewExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "ObjectExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.ObjectExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "TemplateLiteral") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.TemplateLiteral) {
         return true;
     }
 
@@ -119,7 +110,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             'VariableDeclaration[kind="const"] > VariableDeclarator': (
                 node: Readonly<es.Node>
             ): void => {
-                if (node.type !== "VariableDeclarator") {
+                if (node.type !== AST_NODE_TYPES.VariableDeclarator) {
                     return;
                 }
 
@@ -137,7 +128,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     return;
                 }
 
-                if (typeAnnotation.typeAnnotation.type !== "TSUnionType") {
+                if (
+                    typeAnnotation.typeAnnotation.type !==
+                    AST_NODE_TYPES.TSUnionType
+                ) {
                     return;
                 }
 

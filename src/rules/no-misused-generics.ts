@@ -11,11 +11,11 @@ type MessageIds = "cannotInfer" | "canReplace";
 
 type Options = readonly [];
 
-type TypeParameterUsageAnalysis = {
+interface TypeParameterUsageAnalysis {
     readonly appearsInMultipleParameters: boolean;
     readonly usedInParameters: boolean;
     readonly usedInReturnOrExtends: boolean;
-};
+}
 
 type VariableInfo = NonNullable<ReturnType<VariableUsageMap["get"]>>;
 
@@ -195,7 +195,6 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 
                 if (
                     !usageAnalysis.usedInReturnOrExtends &&
-                    usageMap !== null &&
                     !isConstrainedByAnotherTypeParameter(
                         typeParameter,
                         typeParameters,

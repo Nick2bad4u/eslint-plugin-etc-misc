@@ -1,6 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
-import { resolve } from "node:path";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import path from "node:path";
 import { isEmpty } from "ts-extras";
 
 import { type Casing, filenameStem, toCasing } from "../_internal/casing.js";
@@ -18,21 +19,16 @@ const exportedNamesFromDeclaration = (
     node: Readonly<es.ExportNamedDeclaration>
 ): readonly string[] => {
     if (node.specifiers.length > 0) {
-        return node.specifiers
-            .filter(
-                (specifier): specifier is es.ExportSpecifier =>
-                    specifier.type === "ExportSpecifier"
-            )
-            .flatMap((specifier) =>
-                specifier.exported.type === "Identifier"
-                    ? [specifier.exported.name]
-                    : []
-            );
+        return node.specifiers.flatMap((specifier) =>
+            specifier.exported.type === AST_NODE_TYPES.Identifier
+                ? [specifier.exported.name]
+                : []
+        );
     }
 
     if (
-        node.declaration?.type === "ClassDeclaration" ||
-        node.declaration?.type === "FunctionDeclaration"
+        node.declaration?.type === AST_NODE_TYPES.ClassDeclaration ||
+        node.declaration?.type === AST_NODE_TYPES.FunctionDeclaration
     ) {
         return node.declaration.id === null ? [] : [node.declaration.id.name];
     }
@@ -48,7 +44,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     MessageIds
 >({
     create: (context, [options]) => {
-        let exports: readonly {
+        let namedExports: readonly {
             readonly name: string;
             readonly node: es.Node;
         }[] = [];
@@ -57,8 +53,8 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             ExportDefaultDeclaration: (
                 node: Readonly<es.ExportDefaultDeclaration>
             ): void => {
-                exports = [
-                    ...exports,
+                namedExports = [
+                    ...namedExports,
                     {
                         name: "default",
                         node,
@@ -69,7 +65,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 node: Readonly<es.ExportNamedDeclaration>
             ): void => {
                 for (const name of exportedNamesFromDeclaration(node)) {
-                    exports = [...exports, { name, node }];
+                    namedExports = [...namedExports, { name, node }];
                 }
             },
             "Program:exit": (): void => {
@@ -77,16 +73,16 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     return;
                 }
 
-                const stem = filenameStem(resolve(context.filename));
+                const stem = filenameStem(path.resolve(context.filename));
                 const expected = toCasing(stem, options.format ?? "PascalCase");
-                const matching = exports.filter(
+                const matching = namedExports.filter(
                     (entry) => entry.name === expected
                 );
-                if (isEmpty(matching) || exports.length <= 1) {
+                if (isEmpty(matching) || namedExports.length <= 1) {
                     return;
                 }
 
-                for (const entry of exports) {
+                for (const entry of namedExports) {
                     if (entry.name === expected) {
                         continue;
                     }

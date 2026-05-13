@@ -1,5 +1,7 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden";
@@ -13,15 +15,16 @@ const isReadonlyWrappedRecord = (
 ): boolean => {
     const parent = typeReference.parent;
 
-    if (parent?.type !== "TSTypeParameterInstantiation") {
+    if (parent.type !== AST_NODE_TYPES.TSTypeParameterInstantiation) {
         return false;
     }
 
     const maybeReadonlyTypeReference = parent.parent;
 
     return (
-        maybeReadonlyTypeReference?.type === "TSTypeReference" &&
-        maybeReadonlyTypeReference.typeName.type === "Identifier" &&
+        maybeReadonlyTypeReference.type === AST_NODE_TYPES.TSTypeReference &&
+        maybeReadonlyTypeReference.typeName.type ===
+            AST_NODE_TYPES.Identifier &&
         maybeReadonlyTypeReference.typeName.name === "Readonly"
     );
 };
@@ -35,15 +38,15 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 >({
     create: (context) => ({
         [selector]: (node: Readonly<es.Node>): void => {
-            if (node.type !== "Identifier") {
+            if (node.type !== AST_NODE_TYPES.Identifier) {
                 return;
             }
 
             const typeReference = node.parent;
 
             if (
-                typeReference?.type !== "TSTypeReference" ||
-                typeReference.typeName.type !== "Identifier" ||
+                typeReference.type !== AST_NODE_TYPES.TSTypeReference ||
+                typeReference.typeName.type !== AST_NODE_TYPES.Identifier ||
                 typeReference.typeName.name !== "Record" ||
                 isReadonlyWrappedRecord(typeReference)
             ) {

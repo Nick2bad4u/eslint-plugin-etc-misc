@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden" | "suggestRequireReadonlyRecordPropertyType";
@@ -13,8 +15,8 @@ type Options = readonly [];
 const isRecordTypeReference = (
     typeNode: Readonly<es.TypeNode>
 ): typeNode is Readonly<MutableRecordTypeReference> =>
-    typeNode.type === "TSTypeReference" &&
-    typeNode.typeName.type === "Identifier" &&
+    typeNode.type === AST_NODE_TYPES.TSTypeReference &&
+    typeNode.typeName.type === AST_NODE_TYPES.Identifier &&
     typeNode.typeName.name === "Record";
 
 const isReadonlyWrappedRecord = (
@@ -23,7 +25,8 @@ const isReadonlyWrappedRecord = (
     const maybeTypeParameterInstantiation = typeReference.parent;
 
     if (
-        maybeTypeParameterInstantiation?.type !== "TSTypeParameterInstantiation"
+        maybeTypeParameterInstantiation.type !==
+        AST_NODE_TYPES.TSTypeParameterInstantiation
     ) {
         return false;
     }
@@ -31,8 +34,9 @@ const isReadonlyWrappedRecord = (
     const maybeReadonlyTypeReference = maybeTypeParameterInstantiation.parent;
 
     return (
-        maybeReadonlyTypeReference?.type === "TSTypeReference" &&
-        maybeReadonlyTypeReference.typeName.type === "Identifier" &&
+        maybeReadonlyTypeReference.type === AST_NODE_TYPES.TSTypeReference &&
+        maybeReadonlyTypeReference.typeName.type ===
+            AST_NODE_TYPES.Identifier &&
         maybeReadonlyTypeReference.typeName.name === "Readonly"
     );
 };
@@ -41,8 +45,8 @@ const collectMutableRecordTypeNodes = (
     typeNode: Readonly<es.TypeNode>
 ): readonly MutableRecordTypeReference[] => {
     if (
-        typeNode.type === "TSIntersectionType" ||
-        typeNode.type === "TSUnionType"
+        typeNode.type === AST_NODE_TYPES.TSIntersectionType ||
+        typeNode.type === AST_NODE_TYPES.TSUnionType
     ) {
         return typeNode.types.flatMap((subTypeNode) =>
             collectMutableRecordTypeNodes(subTypeNode)
@@ -70,17 +74,14 @@ const isTopLevelPropertySignature = (
 ): boolean => {
     const parent = node.parent;
 
-    if (parent?.type === "TSInterfaceBody") {
+    if (parent.type === AST_NODE_TYPES.TSInterfaceBody) {
         return true;
     }
-
-    if (parent?.type !== "TSTypeLiteral") {
-        return false;
-    }
-
     const maybeTypeAliasDeclaration = parent.parent;
 
-    return maybeTypeAliasDeclaration?.type === "TSTypeAliasDeclaration";
+    return (
+        maybeTypeAliasDeclaration.type === AST_NODE_TYPES.TSTypeAliasDeclaration
+    );
 };
 
 /**

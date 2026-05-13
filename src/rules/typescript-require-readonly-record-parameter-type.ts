@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden" | "suggestRequireReadonlyRecordParameterType";
@@ -17,16 +19,16 @@ const getParametersFromFunctionLikeNode = (
     node: Readonly<es.Node>
 ): Readonly<readonly es.Parameter[]> | undefined => {
     if (
-        node.type === "ArrowFunctionExpression" ||
-        node.type === "FunctionDeclaration" ||
-        node.type === "FunctionExpression" ||
-        node.type === "TSCallSignatureDeclaration" ||
-        node.type === "TSConstructSignatureDeclaration" ||
-        node.type === "TSConstructorType" ||
-        node.type === "TSDeclareFunction" ||
-        node.type === "TSEmptyBodyFunctionExpression" ||
-        node.type === "TSFunctionType" ||
-        node.type === "TSMethodSignature"
+        node.type === AST_NODE_TYPES.ArrowFunctionExpression ||
+        node.type === AST_NODE_TYPES.FunctionDeclaration ||
+        node.type === AST_NODE_TYPES.FunctionExpression ||
+        node.type === AST_NODE_TYPES.TSCallSignatureDeclaration ||
+        node.type === AST_NODE_TYPES.TSConstructSignatureDeclaration ||
+        node.type === AST_NODE_TYPES.TSConstructorType ||
+        node.type === AST_NODE_TYPES.TSDeclareFunction ||
+        node.type === AST_NODE_TYPES.TSEmptyBodyFunctionExpression ||
+        node.type === AST_NODE_TYPES.TSFunctionType ||
+        node.type === AST_NODE_TYPES.TSMethodSignature
     ) {
         return node.params;
     }
@@ -37,11 +39,11 @@ const getParametersFromFunctionLikeNode = (
 const getTypeAnnotationFromPattern = (
     pattern: Readonly<es.AssignmentPattern | es.BindingName | es.RestElement>
 ): Readonly<es.TSTypeAnnotation> | undefined => {
-    if (pattern.type === "AssignmentPattern") {
+    if (pattern.type === AST_NODE_TYPES.AssignmentPattern) {
         return getTypeAnnotationFromPattern(pattern.left);
     }
 
-    if (pattern.type === "RestElement") {
+    if (pattern.type === AST_NODE_TYPES.RestElement) {
         if (pattern.typeAnnotation !== undefined) {
             return pattern.typeAnnotation;
         }
@@ -49,9 +51,9 @@ const getTypeAnnotationFromPattern = (
         const argument = pattern.argument;
 
         if (
-            argument.type !== "ArrayPattern" &&
-            argument.type !== "Identifier" &&
-            argument.type !== "ObjectPattern"
+            argument.type !== AST_NODE_TYPES.ArrayPattern &&
+            argument.type !== AST_NODE_TYPES.Identifier &&
+            argument.type !== AST_NODE_TYPES.ObjectPattern
         ) {
             return undefined;
         }
@@ -65,7 +67,7 @@ const getTypeAnnotationFromPattern = (
 const getTypeAnnotationFromParameter = (
     parameter: Readonly<es.Parameter>
 ): Readonly<es.TSTypeAnnotation> | undefined => {
-    if (parameter.type === "TSParameterProperty") {
+    if (parameter.type === AST_NODE_TYPES.TSParameterProperty) {
         return getTypeAnnotationFromPattern(parameter.parameter);
     }
 
@@ -75,8 +77,8 @@ const getTypeAnnotationFromParameter = (
 const isRecordTypeReference = (
     typeNode: Readonly<es.TypeNode>
 ): typeNode is Readonly<MutableRecordTypeReference> =>
-    typeNode.type === "TSTypeReference" &&
-    typeNode.typeName.type === "Identifier" &&
+    typeNode.type === AST_NODE_TYPES.TSTypeReference &&
+    typeNode.typeName.type === AST_NODE_TYPES.Identifier &&
     typeNode.typeName.name === "Record";
 
 const isReadonlyWrappedRecord = (
@@ -85,7 +87,8 @@ const isReadonlyWrappedRecord = (
     const maybeTypeParameterInstantiation = typeReference.parent;
 
     if (
-        maybeTypeParameterInstantiation?.type !== "TSTypeParameterInstantiation"
+        maybeTypeParameterInstantiation.type !==
+        AST_NODE_TYPES.TSTypeParameterInstantiation
     ) {
         return false;
     }
@@ -93,8 +96,9 @@ const isReadonlyWrappedRecord = (
     const maybeReadonlyTypeReference = maybeTypeParameterInstantiation.parent;
 
     return (
-        maybeReadonlyTypeReference?.type === "TSTypeReference" &&
-        maybeReadonlyTypeReference.typeName.type === "Identifier" &&
+        maybeReadonlyTypeReference.type === AST_NODE_TYPES.TSTypeReference &&
+        maybeReadonlyTypeReference.typeName.type ===
+            AST_NODE_TYPES.Identifier &&
         maybeReadonlyTypeReference.typeName.name === "Readonly"
     );
 };
@@ -103,8 +107,8 @@ const collectMutableRecordTypeNodes = (
     typeNode: Readonly<es.TypeNode>
 ): readonly MutableRecordTypeReference[] => {
     if (
-        typeNode.type === "TSIntersectionType" ||
-        typeNode.type === "TSUnionType"
+        typeNode.type === AST_NODE_TYPES.TSIntersectionType ||
+        typeNode.type === AST_NODE_TYPES.TSUnionType
     ) {
         return typeNode.types.flatMap((subTypeNode) =>
             collectMutableRecordTypeNodes(subTypeNode)

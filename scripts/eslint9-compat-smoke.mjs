@@ -55,6 +55,8 @@ const isUnknownRecord = (value) =>
  * @param {readonly string[]} argv
  *
  * @returns {number | undefined}
+ *
+ * @throws {Error} When the expected major argument value is missing/invalid.
  */
 const parseExpectedEslintMajor = (argv) => {
     const matchingArgument = argv.find((argument) =>
@@ -88,6 +90,11 @@ const parseExpectedEslintMajor = (argv) => {
 
 /**
  * @param {number | undefined} expectedMajor
+ *
+ * @returns {void}
+ *
+ * @throws {Error} When runtime ESLint version cannot be parsed or mismatches
+ *   the expected major.
  */
 const assertEslintMajor = (expectedMajor) => {
     const runtimeVersion = ESLint.version;
@@ -128,6 +135,10 @@ const assertEslintMajor = (expectedMajor) => {
 
 /**
  * @param {string} fixturePath
+ *
+ * @returns {void}
+ *
+ * @throws {Error} When the expected fixture path does not exist.
  */
 const assertFixtureExists = (fixturePath) => {
     if (!existsSync(fixturePath)) {
@@ -140,6 +151,8 @@ const assertFixtureExists = (fixturePath) => {
  * @param {boolean} typed
  *
  * @returns {import("eslint").Linter.Config[]}
+ *
+ * @throws {Error} When the plugin recommended config is unavailable.
  */
 const createCompatibilityConfig = (ruleId, typed) => {
     const recommendedConfigValue = plugin.configs?.recommended;

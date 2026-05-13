@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden" | "suggestRequireReadonlySetTypeAlias";
@@ -12,21 +14,26 @@ const isSetTypeReference = (
     node: Readonly<es.TSTypeReference>
 ): node is Readonly<
     es.TSTypeReference & { readonly typeName: es.Identifier }
-> => node.typeName.type === "Identifier" && node.typeName.name === "Set";
+> =>
+    node.typeName.type === AST_NODE_TYPES.Identifier &&
+    node.typeName.name === "Set";
 
 const collectMutableSetTypeNodes = (
     typeNode: Readonly<es.TypeNode>
 ): readonly MutableSetTypeNode[] => {
     if (
-        typeNode.type === "TSIntersectionType" ||
-        typeNode.type === "TSUnionType"
+        typeNode.type === AST_NODE_TYPES.TSIntersectionType ||
+        typeNode.type === AST_NODE_TYPES.TSUnionType
     ) {
         return typeNode.types.flatMap((subTypeNode) =>
             collectMutableSetTypeNodes(subTypeNode)
         );
     }
 
-    if (typeNode.type !== "TSTypeReference" || !isSetTypeReference(typeNode)) {
+    if (
+        typeNode.type !== AST_NODE_TYPES.TSTypeReference ||
+        !isSetTypeReference(typeNode)
+    ) {
         return [];
     }
 

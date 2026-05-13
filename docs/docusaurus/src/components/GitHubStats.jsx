@@ -36,9 +36,15 @@ const liveBadges = [
 ];
 
 /**
+ * @typedef {object} GitHubStatsProps
+ *
+ * @property {string} [className] - Optional class appended to the badge list.
+ */
+
+/**
  * Renders live repository and package badges powered by flat.badgen.net.
  *
- * @param {{ className?: string }} [props] - Optional list class override.
+ * @param {GitHubStatsProps} [props] - Optional list class override.
  *
  * @returns {import("react").JSX.Element} Badge strip with links to
  *   package/repository metadata.

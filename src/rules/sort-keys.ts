@@ -2,6 +2,7 @@
 
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayFirst, arrayJoin, arrayLast, isDefined } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -11,12 +12,12 @@ type MessageIds = "incorrectSorting";
 type Options = readonly [];
 
 const keyName = (property: Readonly<es.Property>): string | undefined => {
-    if (property.key.type === "Identifier") {
+    if (property.key.type === AST_NODE_TYPES.Identifier) {
         return property.key.name;
     }
 
     if (
-        property.key.type === "Literal" &&
+        property.key.type === AST_NODE_TYPES.Literal &&
         typeof property.key.value === "string"
     ) {
         return property.key.value;
@@ -64,7 +65,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             let properties: readonly es.Property[] = [];
             for (const property of node.properties) {
                 if (
-                    property.type === "Property" &&
+                    property.type === AST_NODE_TYPES.Property &&
                     property.kind === "init" &&
                     !property.computed
                 ) {

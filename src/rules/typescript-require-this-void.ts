@@ -1,5 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayFirst } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -18,7 +19,7 @@ const createThisVoidSuggestionFix = (
     const firstParameter = arrayFirst(functionExpression.params);
 
     if (
-        firstParameter?.type === "Identifier" &&
+        firstParameter?.type === AST_NODE_TYPES.Identifier &&
         firstParameter.name === "this"
     ) {
         const existingTypeAnnotation = firstParameter.typeAnnotation;
@@ -55,7 +56,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 
         return {
             [selector]: (node: Readonly<es.Node>): void => {
-                if (node.type !== "FunctionExpression") {
+                if (node.type !== AST_NODE_TYPES.FunctionExpression) {
                     return;
                 }
 

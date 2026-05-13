@@ -9,7 +9,7 @@ type MessageIds = "inconsistent";
 type Options = readonly [];
 
 const splitLines = (sourceText: string): readonly string[] =>
-    stringSplit(sourceText.replaceAll(/\r\n?/gu, "\n"), "\n");
+    stringSplit(sourceText.replaceAll(/\r\n?/gv, "\n"), "\n");
 
 const collapseEmptyLines = (sourceText: string): string => {
     const lines = splitLines(sourceText);

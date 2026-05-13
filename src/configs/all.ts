@@ -1,13 +1,12 @@
 /* eslint-disable canonical/no-reassign-imports -- Rule entry map intentionally references imported plugin rules object. */
-
-import { objectEntries, objectFromEntries } from "ts-extras";
+import { objectEntries } from "ts-extras";
 
 import { rules as pluginRules } from "../rules.js";
 
-type AllConfig = {
+interface AllConfig {
     readonly name: "etc-misc/all";
     readonly rules: Readonly<Record<string, RuleSeverity>>;
-};
+}
 
 type RuleSeverity = "error" | "warn";
 
@@ -21,14 +20,17 @@ const getAllPresetSeverity = (
     return ruleModule.meta.type === "problem" ? "error" : "warn";
 };
 
-const allRuleEntries = objectEntries(pluginRules).map(
-    ([ruleName, ruleModule]) =>
-        [`etc-misc/${ruleName}`, getAllPresetSeverity(ruleModule)] as const
-);
+let allRulesAccumulator: Record<string, RuleSeverity> = {};
 
-const allRules = objectFromEntries(allRuleEntries) as Readonly<
-    Record<string, RuleSeverity>
->;
+for (const [ruleName, ruleModule] of objectEntries(pluginRules)) {
+    allRulesAccumulator = {
+        ...allRulesAccumulator,
+        [`etc-misc/${ruleName}`]: getAllPresetSeverity(ruleModule),
+    };
+}
+
+const allRules: Readonly<Record<string, RuleSeverity>> =
+    Object.freeze(allRulesAccumulator);
 
 /**
  * Flat config preset enabling every available plugin rule.

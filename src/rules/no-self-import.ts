@@ -1,6 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
-import { dirname, resolve } from "node:path";
+import path from "node:path";
 import { arrayIncludes } from "ts-extras";
 
 import { getImportSourceFromNode } from "../_internal/import-patterns.js";
@@ -16,17 +16,17 @@ type Options = readonly [];
 
 const importFileSuffixes = [
     "",
-    ".ts",
-    ".tsx",
-    ".js",
-    ".mjs",
     ".cjs",
     ".d.ts",
-    "/index.ts",
-    "/index.tsx",
+    ".js",
+    ".mjs",
+    ".ts",
+    ".tsx",
+    "/index.cjs",
     "/index.js",
     "/index.mjs",
-    "/index.cjs",
+    "/index.ts",
+    "/index.tsx",
 ] as const;
 
 const toResolvedCandidates = (
@@ -34,7 +34,7 @@ const toResolvedCandidates = (
     importSource: string
 ): readonly string[] =>
     importFileSuffixes.map((suffix) =>
-        resolve(baseDirectory, `${importSource}${suffix}`)
+        path.resolve(baseDirectory, `${importSource}${suffix}`)
     );
 
 /**
@@ -50,8 +50,8 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             return {};
         }
 
-        const normalizedCurrentFilePath = resolve(currentFilePath);
-        const currentFileDirectory = dirname(normalizedCurrentFilePath);
+        const normalizedCurrentFilePath = path.resolve(currentFilePath);
+        const currentFileDirectory = path.dirname(normalizedCurrentFilePath);
 
         return {
             "ImportDeclaration, ExportNamedDeclaration[source], ExportAllDeclaration, ImportExpression":

@@ -1,5 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { minimatch } from "minimatch";
 
 /**
@@ -23,18 +24,18 @@ const matchesAnyPattern = (
 
 const getImportSourceText = (node: Readonly<es.Node>): string | undefined => {
     if (
-        node.type === "ExportAllDeclaration" ||
-        node.type === "ImportDeclaration"
+        node.type === AST_NODE_TYPES.ExportAllDeclaration ||
+        node.type === AST_NODE_TYPES.ImportDeclaration
     ) {
         return node.source.value;
     }
 
-    if (node.type === "ExportNamedDeclaration") {
+    if (node.type === AST_NODE_TYPES.ExportNamedDeclaration) {
         return node.source?.value;
     }
 
-    if (node.type === "ImportExpression") {
-        return node.source.type === "Literal" &&
+    if (node.type === AST_NODE_TYPES.ImportExpression) {
+        return node.source.type === AST_NODE_TYPES.Literal &&
             typeof node.source.value === "string"
             ? node.source.value
             : undefined;

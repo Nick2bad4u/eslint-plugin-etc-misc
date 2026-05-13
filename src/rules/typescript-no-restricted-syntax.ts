@@ -1,8 +1,14 @@
+import { assertDefined } from "ts-extras";
+
 import {
     createReplacementRuleInfo,
     withDeprecatedRuleLifecycle,
 } from "../_internal/rule-deprecation.js";
-import noRestrictedSyntaxRule from "./no-restricted-syntax.js";
+import deprecatedRule from "./no-restricted-syntax.js";
+
+const noRestrictedSyntaxRule: typeof deprecatedRule = deprecatedRule;
+const baseDocs = noRestrictedSyntaxRule.meta.docs;
+assertDefined(baseDocs);
 
 /**
  * TypeScript-prefixed alias for selector-based restricted syntax checks.
@@ -13,19 +19,19 @@ const typescriptNoRestrictedSyntaxRule: typeof noRestrictedSyntaxRule = {
         deprecated: true,
         ...noRestrictedSyntaxRule.meta,
         docs: {
+            ...baseDocs,
             deprecated: true,
             frozen: true,
             recommended: false,
-            ...noRestrictedSyntaxRule.meta.docs,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-restricted-syntax",
-        } as NonNullable<typeof noRestrictedSyntaxRule.meta.docs>,
+        },
     },
 };
 
 /**
  * Wrapper rule with explicit lifecycle metadata and replacement mapping.
  */
-const deprecatedRule: typeof typescriptNoRestrictedSyntaxRule =
+const rule: typeof typescriptNoRestrictedSyntaxRule =
     withDeprecatedRuleLifecycle(typescriptNoRestrictedSyntaxRule, {
         message:
             "Deprecated in favor of @typescript-eslint/no-restricted-syntax.",
@@ -44,4 +50,4 @@ const deprecatedRule: typeof typescriptNoRestrictedSyntaxRule =
         ruleId: "typescript/no-restricted-syntax",
     });
 
-export default deprecatedRule;
+export default rule;

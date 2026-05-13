@@ -1,5 +1,7 @@
 import type { TSESLint } from "@typescript-eslint/utils";
 
+import { AST_TOKEN_TYPES } from "@typescript-eslint/utils";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden" | "suggestConvertToBlock";
@@ -11,7 +13,7 @@ type Options = readonly [
 ];
 
 const directiveCommentPattern =
-    /^(?:eslint(?:-|$)|global\s|exported\s|ts-(?:check|expect-error|ignore|nocheck))/u;
+    /^(?:eslint(?:-|$)|global\s|exported\s|ts-(?:check|expect-error|ignore|nocheck))/v;
 
 const isDirectiveComment = (commentText: string): boolean =>
     directiveCommentPattern.test(commentText.trimStart());
@@ -41,7 +43,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         return {
             Program: () => {
                 for (const comment of context.sourceCode.getAllComments()) {
-                    if (comment.type !== "Line") {
+                    if (comment.type !== AST_TOKEN_TYPES.Line) {
                         continue;
                     }
 

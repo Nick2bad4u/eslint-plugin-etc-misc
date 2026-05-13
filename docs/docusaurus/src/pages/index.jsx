@@ -69,6 +69,11 @@ const homeCards = [
     },
 ];
 
+/**
+ * Renders the Docusaurus landing page.
+ *
+ * @returns {import("react").JSX.Element} Home page layout.
+ */
 export default function Home() {
     const logoSrc = useBaseUrl("/img/logo.png");
 

@@ -1,8 +1,8 @@
 import { stringSplit } from "ts-extras";
 
-const camelCaseBoundaryPattern = /(?<=[\da-z])(?=[A-Z])/gu;
-const nonAlphanumericPattern = /[^0-9A-Za-z]+/gu;
-const whitespacePattern = /\s+/gu;
+const camelCaseBoundaryPattern = /(?<=[\da-z])(?=[A-Z])/gv;
+const nonAlphanumericPattern = /[^0-9A-Za-z]+/gv;
+const whitespacePattern = /\s+/gv;
 
 /**
  * Split identifier-like text into non-empty blocks while preserving original

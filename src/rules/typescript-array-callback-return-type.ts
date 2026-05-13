@@ -5,7 +5,11 @@ import {
     getConstrainedTypeAtLocation,
     isTypeArrayTypeOrUnionOfArrayTypes,
 } from "@typescript-eslint/type-utils";
-import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
+import {
+    AST_NODE_TYPES,
+    type TSESTree as es,
+    ESLintUtils,
+} from "@typescript-eslint/utils";
 import { arrayFirst, setHas } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -70,7 +74,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     | Readonly<es.FunctionExpression>
             ) => {
                 const parentNode = callback.parent;
-                if (parentNode?.type !== "CallExpression") {
+                if (parentNode.type !== AST_NODE_TYPES.CallExpression) {
                     return;
                 }
 
@@ -80,9 +84,9 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 
                 const { callee } = parentNode;
                 if (
-                    callee.type !== "MemberExpression" ||
-                    callee.object.type === "Super" ||
-                    callee.property.type !== "Identifier" ||
+                    callee.type !== AST_NODE_TYPES.MemberExpression ||
+                    callee.object.type === AST_NODE_TYPES.Super ||
+                    callee.property.type !== AST_NODE_TYPES.Identifier ||
                     !setHas(arrayCallbackMethodNames, callee.property.name)
                 ) {
                     return;

@@ -1,5 +1,8 @@
-import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
-
+import {
+    AST_NODE_TYPES,
+    type TSESTree as es,
+    TSESLint,
+} from "@typescript-eslint/utils";
 import { arrayFirst } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -17,7 +20,7 @@ type Variable = TSESLint.Scope.Variable;
 const getAssignmentTargetIdentifier = (
     node: Readonly<es.AssignmentExpression>
 ): Readonly<es.Identifier> | undefined => {
-    if (node.left.type === "Identifier") {
+    if (node.left.type === AST_NODE_TYPES.Identifier) {
         return node.left;
     }
 
@@ -45,8 +48,10 @@ const getScopeVariable = (
 const isParameterVariable = (
     variable: Readonly<Variable> | undefined
 ): boolean =>
-    variable?.defs.some((definition) => definition.type === "Parameter") ??
-    false;
+    variable?.defs.some(
+        (definition) =>
+            definition.type === TSESLint.Scope.DefinitionType.Parameter
+    ) ?? false;
 
 const isInFirstFunctionExpressionStatement = (
     sourceCode: Readonly<SourceCode>,
@@ -66,21 +71,21 @@ const isInFirstFunctionExpressionStatement = (
         }
 
         if (
-            ancestor.type === "ArrowFunctionExpression" ||
-            ancestor.type === "FunctionDeclaration" ||
-            ancestor.type === "FunctionExpression"
+            ancestor.type === AST_NODE_TYPES.ArrowFunctionExpression ||
+            ancestor.type === AST_NODE_TYPES.FunctionDeclaration ||
+            ancestor.type === AST_NODE_TYPES.FunctionExpression
         ) {
             enclosingFunction = ancestor;
             break;
         }
     }
 
-    if (enclosingFunction?.body.type !== "BlockStatement") {
+    if (enclosingFunction?.body.type !== AST_NODE_TYPES.BlockStatement) {
         return false;
     }
 
     const [firstStatement] = enclosingFunction.body.body;
-    if (firstStatement?.type !== "ExpressionStatement") {
+    if (firstStatement?.type !== AST_NODE_TYPES.ExpressionStatement) {
         return false;
     }
 
@@ -131,7 +136,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 reportIfParameterReassignment(identifier);
             },
             UpdateExpression: (node: Readonly<es.UpdateExpression>): void => {
-                if (node.argument.type !== "Identifier") {
+                if (node.argument.type !== AST_NODE_TYPES.Identifier) {
                     return;
                 }
 

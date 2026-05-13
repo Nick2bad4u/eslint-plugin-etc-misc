@@ -1,5 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { setHas } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -16,18 +17,13 @@ const getExportedNames = (
     node: Readonly<es.ExportNamedDeclaration>
 ): readonly string[] => {
     if (node.specifiers.length > 0) {
-        return node.specifiers
-            .filter(
-                (specifier): specifier is es.ExportSpecifier =>
-                    specifier.type === "ExportSpecifier"
-            )
-            .flatMap((specifier) => {
-                if (specifier.exported.type === "Identifier") {
-                    return [specifier.exported.name];
-                }
+        return node.specifiers.flatMap((specifier) => {
+            if (specifier.exported.type === AST_NODE_TYPES.Identifier) {
+                return [specifier.exported.name];
+            }
 
-                return [];
-            });
+            return [];
+        });
     }
 
     const declaration = node.declaration;
@@ -36,17 +32,17 @@ const getExportedNames = (
     }
 
     if (
-        declaration.type === "FunctionDeclaration" ||
-        declaration.type === "ClassDeclaration"
+        declaration.type === AST_NODE_TYPES.FunctionDeclaration ||
+        declaration.type === AST_NODE_TYPES.ClassDeclaration
     ) {
         return declaration.id === null ? [] : [declaration.id.name];
     }
 
-    if (declaration.type === "VariableDeclaration") {
+    if (declaration.type === AST_NODE_TYPES.VariableDeclaration) {
         let names: readonly string[] = [];
 
         for (const declarator of declaration.declarations) {
-            if (declarator.id.type === "Identifier") {
+            if (declarator.id.type === AST_NODE_TYPES.Identifier) {
                 names = [...names, declarator.id.name];
             }
         }

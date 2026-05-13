@@ -27,11 +27,11 @@ const hasExpectedBoundaryNewlines = (
 };
 
 const normalizeTemplate = (sourceText: string): string => {
-    const lines = stringSplit(sourceText.replaceAll(/\r\n?/gu, "\n"), "\n");
+    const lines = stringSplit(sourceText.replaceAll(/\r\n?/gv, "\n"), "\n");
     const contentLines = lines.slice(1, -1);
     const indents = contentLines
         .filter((line) => line.trim().length > 0)
-        .map((line) => /^\s*/u.exec(line)?.[0].length ?? 0);
+        .map((line) => /^\s*/v.exec(line)?.[0].length ?? 0);
     const minIndent = isEmpty(indents) ? 0 : Math.min(...indents);
 
     const normalizedContent = arrayJoin(

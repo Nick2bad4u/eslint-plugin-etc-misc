@@ -19,6 +19,8 @@ const typedocCliPath = resolve(
  *   path.
  *
  * @returns {string} TypeDoc options file name to pass to `typedoc --options`.
+ *
+ * @throws {Error} When `--config`/`--options` is provided without a value.
  */
 function getConfigFileName(cliArgs) {
     for (let index = 0; index < cliArgs.length; index += 1) {
@@ -107,6 +109,8 @@ function runTypedoc(cwd, configFile) {
  * Pick an unused drive letter suitable for a temporary `subst` mapping.
  *
  * @returns {string} Drive letter (without colon).
+ *
+ * @throws {Error} When no free temporary drive letter can be found.
  */
 function getTemporaryDriveLetter() {
     const candidateLetters = [

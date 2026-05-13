@@ -1,5 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayLast } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -25,9 +26,10 @@ const isValidCaseBody = (node: Readonly<es.SwitchCase>): boolean => {
 
     const startsOnFollowingLine =
         firstStatement.loc.start.line > node.loc.start.line;
-    const startsWithBlock = firstStatement.type === "BlockStatement";
+    const startsWithBlock =
+        firstStatement.type === AST_NODE_TYPES.BlockStatement;
     const endsWithBreak =
-        lastStatement.type === "BreakStatement" || startsWithBlock;
+        lastStatement.type === AST_NODE_TYPES.BreakStatement || startsWithBlock;
 
     return (startsOnFollowingLine || startsWithBlock) && endsWithBreak;
 };

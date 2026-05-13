@@ -1,5 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayJoin } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -25,7 +26,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 >({
     create: (context) => ({
         [selector]: (node: Readonly<es.Node>): void => {
-            if (node.type !== "Literal") {
+            if (node.type !== AST_NODE_TYPES.Literal) {
                 return;
             }
 

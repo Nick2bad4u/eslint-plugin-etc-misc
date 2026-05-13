@@ -50,5 +50,5 @@ export const filenameStem = (filePath: string): string => {
     const pathSegments = stringSplit(normalizedPath, "/");
     const lastPathSegment = arrayAt(pathSegments, -1) ?? filePath;
 
-    return lastPathSegment.replace(/\.[^./\\]+$/u, "");
+    return lastPathSegment.replace(/\.[^.\/]+$/v, "");
 };

@@ -1,5 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_TOKEN_TYPES } from "@typescript-eslint/utils";
 import { arrayFirst } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -9,14 +10,18 @@ type MessageIds = "invalidSpacing";
 type Options = readonly [];
 
 const isEslintDirectiveComment = (comment: Readonly<es.Comment>): boolean =>
-    comment.type === "Block" && comment.value.trimStart().startsWith("eslint-");
+    comment.type === AST_TOKEN_TYPES.Block &&
+    comment.value.trimStart().startsWith("eslint-");
 
 const expectedBlankLines = (comment: Readonly<es.Comment>): 0 | 1 => {
-    if (comment.type === "Line" || isEslintDirectiveComment(comment)) {
+    if (
+        comment.type === AST_TOKEN_TYPES.Line ||
+        isEslintDirectiveComment(comment)
+    ) {
         return 0;
     }
 
-    return /\r\n|\n/u.test(comment.value) ? 1 : 0;
+    return /\r\n|\n/v.test(comment.value) ? 1 : 0;
 };
 
 const buildFix =

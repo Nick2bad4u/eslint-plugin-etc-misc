@@ -125,6 +125,8 @@ const defaultMinimumMessageCount = 1;
  * @param {string} label - Error label for diagnostics.
  *
  * @returns {readonly string[]} Normalized readonly string array.
+ *
+ * @throws {TypeError} When value is not an array of strings.
  */
 const ensureStringArray = (value, label) => {
     if (!Array.isArray(value)) {
@@ -198,6 +200,8 @@ const benchmarkScenarios = Object.freeze([
  * @param {number} fallbackValue - Value used when key is not provided.
  *
  * @returns {number} Parsed positive integer.
+ *
+ * @throws {TypeError} When a provided value is not a non-negative integer.
  */
 const parseIntegerArgument = (key, fallbackValue) => {
     const matchingArgument = process.argv.find((argument) =>
@@ -224,6 +228,8 @@ const parseIntegerArgument = (key, fallbackValue) => {
  * @param {string} key - CLI key without the leading dashes.
  *
  * @returns {string | undefined} Parsed string when provided.
+ *
+ * @throws {TypeError} When the flag is provided with an empty value.
  */
 const parseStringArgument = (key) => {
     const matchingArgument = process.argv.find((argument) =>
@@ -246,10 +252,10 @@ const parseStringArgument = (key) => {
 /**
  * Build an ESLint instance for benchmark scenarios.
  *
- * @param {{ fix: boolean; rules: BenchmarkRules }} options - ESLint benchmark
- *   options.
+ * @param {{ fix: boolean; rules: BenchmarkRules }} options - Fix mode and rule
+ *   set for one benchmark scenario.
  *
- * @returns {ESLint} Configured ESLint instance.
+ * @returns {ESLint} Ready-to-run ESLint instance with stats enabled.
  */
 const createBenchmarkEslint = ({ fix, rules }) =>
     new ESLint({
@@ -296,7 +302,7 @@ const getLintPasses = (lintResult) => {
  *
  * @param {unknown} timingPayload - Arbitrary timing payload.
  *
- * @returns {number} Timing total in milliseconds.
+ * @returns {number} Numeric total extracted from the payload, or `0`.
  */
 const getTimingTotalMilliseconds = (timingPayload) => {
     if (!isObjectRecord(timingPayload)) {
@@ -313,7 +319,7 @@ const getTimingTotalMilliseconds = (timingPayload) => {
  * @param {unknown} pass - ESLint pass payload.
  * @param {"fix" | "parse"} phaseName - Pass phase field name.
  *
- * @returns {number} Phase timing in milliseconds.
+ * @returns {number} Milliseconds reported for the selected pass phase.
  */
 const getPassPhaseTimingMilliseconds = (pass, phaseName) => {
     if (!isObjectRecord(pass)) {
@@ -359,6 +365,8 @@ const resolvePath = (filePath) =>
  * @param {string} context - Error context.
  *
  * @returns {string} String property value.
+ *
+ * @throws {TypeError} When the property is missing or not a string.
  */
 const readRequiredString = (record, key, context) => {
     const value = record[key];
@@ -377,6 +385,8 @@ const readRequiredString = (record, key, context) => {
  * @param {string} context - Error context.
  *
  * @returns {number} Numeric property value.
+ *
+ * @throws {TypeError} When the property is missing or not a finite number.
  */
 const readRequiredNumber = (record, key, context) => {
     const value = record[key];
@@ -405,6 +415,9 @@ const readRequiredNumber = (record, key, context) => {
  *     scenario: string;
  * }}
  *   Comparable scenario summary.
+ *
+ * @throws {TypeError} When scenario payload fields do not match expected
+ *   runtime shape.
  */
 const parseComparableScenario = (scenario, index, comparePath) => {
     const scenarioContext = `${comparePath}: scenarios[${index}]`;
@@ -530,10 +543,11 @@ const sum = (values) => {
 /**
  * Safely divide two numbers and return `undefined` when denominator is zero.
  *
- * @param {number} numerator - Numerator.
- * @param {number} denominator - Denominator.
+ * @param {number} numerator - Value to scale.
+ * @param {number} denominator - Divisor used to compute the ratio.
  *
- * @returns {number | undefined} Quotient when denominator is non-zero.
+ * @returns {number | undefined} Ratio result, or `undefined` when divisor is
+ *   zero.
  */
 const divide = (numerator, denominator) =>
     denominator === 0 ? undefined : numerator / denominator;
@@ -541,12 +555,11 @@ const divide = (numerator, denominator) =>
 /**
  * Sort values without mutating native prototype methods like `.sort()`.
  *
- * @template T
+ * @param {readonly unknown[]} values - Values to sort.
+ * @param {(left: unknown, right: unknown) => number} compare - Comparator
+ *   callback.
  *
- * @param {readonly T[]} values - Values to sort.
- * @param {(left: T, right: T) => number} compare - Comparator callback.
- *
- * @returns {T[]} New sorted array.
+ * @returns {unknown[]} New sorted array copy.
  */
 const sortValues = (values, compare) => {
     const sortedValues = [...values];
@@ -701,7 +714,9 @@ const median = (values) => {
         return 0;
     }
 
-    const sortedValues = sortValues(values, (left, right) => left - right);
+    const sortedValues = /** @type {number[]} */ (
+        sortValues(values, (left, right) => Number(left) - Number(right))
+    );
     const middleIndex = Math.floor(sortedValues.length / 2);
 
     if (sortedValues.length % 2 === 0) {
@@ -755,7 +770,7 @@ const aggregateTimingBreakdown = (lintResults) => {
  * Collect top rules by timing from lint results.
  *
  * @param {LintResults} lintResults - ESLint lint results.
- * @param {number} [topCount=8] - Maximum rule entries to return. Default is `8`
+ * @param {number} [topCount] - Maximum rule entries to return. Default is `8`
  *
  * @returns {RuleTiming[]} Sorted top rule timings.
  */
@@ -777,10 +792,25 @@ const collectTopRuleTimings = (lintResults, topCount = 8) => {
         }
     }
 
-    return sortValues(
-        [...ruleTotals.entries()],
-        (left, right) => right[1] - left[1]
-    )
+    const sortedRuleTotals = /** @type {(readonly [string, number])[]} */ (
+        sortValues(
+            [...ruleTotals.entries()],
+            (left, right) => {
+                const leftTotal =
+                    Array.isArray(left) && typeof left[1] === "number"
+                        ? left[1]
+                        : 0;
+                const rightTotal =
+                    Array.isArray(right) && typeof right[1] === "number"
+                        ? right[1]
+                        : 0;
+
+                return rightTotal - leftTotal;
+            }
+        )
+    );
+
+    return sortedRuleTotals
         .slice(0, topCount)
         .map(([ruleName, totalMilliseconds]) => ({
             ruleName,

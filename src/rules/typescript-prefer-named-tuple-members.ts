@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden" | "suggestPreferNamedTupleMembers";
@@ -9,13 +11,13 @@ type Options = readonly [];
 const isUnnamedTupleElement = (
     tupleElement: Readonly<es.TypeNode>
 ): boolean => {
-    if (tupleElement.type === "TSNamedTupleMember") {
+    if (tupleElement.type === AST_NODE_TYPES.TSNamedTupleMember) {
         return false;
     }
 
     if (
-        tupleElement.type === "TSRestType" &&
-        tupleElement.typeAnnotation.type === "TSNamedTupleMember"
+        tupleElement.type === AST_NODE_TYPES.TSRestType &&
+        tupleElement.typeAnnotation.type === AST_NODE_TYPES.TSNamedTupleMember
     ) {
         return false;
     }
@@ -54,12 +56,15 @@ const getTupleMemberReplacementText = (
     memberName: string,
     sourceCode: Readonly<TSESLint.SourceCode>
 ): string => {
-    if (tupleElement.type === "TSOptionalType") {
+    if (tupleElement.type === AST_NODE_TYPES.TSOptionalType) {
         return `${memberName}?: ${sourceCode.getText(tupleElement.typeAnnotation)}`;
     }
 
-    if (tupleElement.type === "TSRestType") {
-        if (tupleElement.typeAnnotation.type === "TSNamedTupleMember") {
+    if (tupleElement.type === AST_NODE_TYPES.TSRestType) {
+        if (
+            tupleElement.typeAnnotation.type ===
+            AST_NODE_TYPES.TSNamedTupleMember
+        ) {
             return sourceCode.getText(tupleElement);
         }
 
@@ -91,11 +96,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 
                 const usedNames = new Set<string>(
                     node.elementTypes.flatMap((tupleElement) => {
-                        if (tupleElement.type !== "TSNamedTupleMember") {
-                            return [];
-                        }
-
-                        if (tupleElement.label.type !== "Identifier") {
+                        if (
+                            tupleElement.type !==
+                            AST_NODE_TYPES.TSNamedTupleMember
+                        ) {
                             return [];
                         }
 

@@ -1,5 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES, AST_TOKEN_TYPES } from "@typescript-eslint/utils";
 import { arrayLast, setHas } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -37,8 +38,9 @@ const hasJSDocComment = (
     const comments = sourceCode.getCommentsBefore(node);
 
     const comment = arrayLast(comments);
-
-    return comment?.type === "Block" && comment.value.startsWith("*");
+    return (
+        comment?.type === AST_TOKEN_TYPES.Block && comment.value.startsWith("*")
+    );
 };
 
 const reportMissingJSDoc = (
@@ -86,7 +88,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 if (
                     !setHas(kinds, "method") ||
                     node.kind === "constructor" ||
-                    node.key.type !== "Identifier"
+                    node.key.type !== AST_NODE_TYPES.Identifier
                 ) {
                     return;
                 }
@@ -101,8 +103,8 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 }
 
                 if (
-                    node.type === "TSInterfaceDeclaration" ||
-                    node.type === "TSTypeAliasDeclaration"
+                    node.type === AST_NODE_TYPES.TSInterfaceDeclaration ||
+                    node.type === AST_NODE_TYPES.TSTypeAliasDeclaration
                 ) {
                     reportMissingJSDoc(context, node);
                 }
@@ -112,9 +114,9 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             ): void => {
                 if (
                     !setHas(kinds, "arrow-function") ||
-                    node.id.type !== "Identifier" ||
-                    node.init?.type !== "ArrowFunctionExpression" ||
-                    node.parent.type !== "VariableDeclaration" ||
+                    node.id.type !== AST_NODE_TYPES.Identifier ||
+                    node.init?.type !==
+                        AST_NODE_TYPES.ArrowFunctionExpression ||
                     node.parent.kind !== "const"
                 ) {
                     return;

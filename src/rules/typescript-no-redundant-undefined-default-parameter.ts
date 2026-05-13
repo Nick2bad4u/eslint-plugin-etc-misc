@@ -1,5 +1,6 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayJoin, isDefined, isEmpty } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -15,16 +16,16 @@ const getParametersFromFunctionLikeNode = (
     node: Readonly<es.Node>
 ): Readonly<readonly es.Parameter[]> | undefined => {
     if (
-        node.type === "ArrowFunctionExpression" ||
-        node.type === "FunctionDeclaration" ||
-        node.type === "FunctionExpression" ||
-        node.type === "TSCallSignatureDeclaration" ||
-        node.type === "TSConstructSignatureDeclaration" ||
-        node.type === "TSConstructorType" ||
-        node.type === "TSDeclareFunction" ||
-        node.type === "TSEmptyBodyFunctionExpression" ||
-        node.type === "TSFunctionType" ||
-        node.type === "TSMethodSignature"
+        node.type === AST_NODE_TYPES.ArrowFunctionExpression ||
+        node.type === AST_NODE_TYPES.FunctionDeclaration ||
+        node.type === AST_NODE_TYPES.FunctionExpression ||
+        node.type === AST_NODE_TYPES.TSCallSignatureDeclaration ||
+        node.type === AST_NODE_TYPES.TSConstructSignatureDeclaration ||
+        node.type === AST_NODE_TYPES.TSConstructorType ||
+        node.type === AST_NODE_TYPES.TSDeclareFunction ||
+        node.type === AST_NODE_TYPES.TSEmptyBodyFunctionExpression ||
+        node.type === AST_NODE_TYPES.TSFunctionType ||
+        node.type === AST_NODE_TYPES.TSMethodSignature
     ) {
         return node.params;
     }
@@ -35,11 +36,11 @@ const getParametersFromFunctionLikeNode = (
 const getAssignmentPatternFromPattern = (
     pattern: Readonly<es.AssignmentPattern | es.BindingName | es.RestElement>
 ): Readonly<es.AssignmentPattern> | undefined => {
-    if (pattern.type === "AssignmentPattern") {
+    if (pattern.type === AST_NODE_TYPES.AssignmentPattern) {
         return pattern;
     }
 
-    if (pattern.type === "RestElement") {
+    if (pattern.type === AST_NODE_TYPES.RestElement) {
         return undefined;
     }
 
@@ -49,7 +50,7 @@ const getAssignmentPatternFromPattern = (
 const getAssignmentPatternFromParameter = (
     parameter: Readonly<es.Parameter>
 ): Readonly<es.AssignmentPattern> | undefined => {
-    if (parameter.type === "TSParameterProperty") {
+    if (parameter.type === AST_NODE_TYPES.TSParameterProperty) {
         return getAssignmentPatternFromPattern(parameter.parameter);
     }
 
@@ -58,26 +59,17 @@ const getAssignmentPatternFromParameter = (
 
 const getTypeAnnotationFromAssignmentPattern = (
     assignmentPattern: Readonly<es.AssignmentPattern>
-): Readonly<es.TSTypeAnnotation> | undefined => {
-    if (
-        assignmentPattern.left.type !== "ArrayPattern" &&
-        assignmentPattern.left.type !== "Identifier" &&
-        assignmentPattern.left.type !== "ObjectPattern"
-    ) {
-        return undefined;
-    }
-
-    return assignmentPattern.left.typeAnnotation;
-};
+): Readonly<es.TSTypeAnnotation> | undefined =>
+    assignmentPattern.left.typeAnnotation;
 
 const unwrapExpression = (
     expression: Readonly<es.Expression>
 ): Readonly<es.Expression> => {
     if (
-        expression.type === "TSAsExpression" ||
-        expression.type === "TSSatisfiesExpression" ||
-        expression.type === "TSNonNullExpression" ||
-        expression.type === "TSTypeAssertion"
+        expression.type === AST_NODE_TYPES.TSAsExpression ||
+        expression.type === AST_NODE_TYPES.TSSatisfiesExpression ||
+        expression.type === AST_NODE_TYPES.TSNonNullExpression ||
+        expression.type === AST_NODE_TYPES.TSTypeAssertion
     ) {
         return unwrapExpression(expression.expression);
     }
@@ -90,35 +82,35 @@ const isDefinitelyDefinedExpression = (
 ): boolean => {
     const unwrappedExpression = unwrapExpression(expression);
 
-    if (unwrappedExpression.type === "ArrayExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.ArrayExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "ArrowFunctionExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.ArrowFunctionExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "ClassExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.ClassExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "FunctionExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.FunctionExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "Literal") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.Literal) {
         return true;
     }
 
-    if (unwrappedExpression.type === "NewExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.NewExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "ObjectExpression") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.ObjectExpression) {
         return true;
     }
 
-    if (unwrappedExpression.type === "TemplateLiteral") {
+    if (unwrappedExpression.type === AST_NODE_TYPES.TemplateLiteral) {
         return true;
     }
 
@@ -132,7 +124,7 @@ const buildFixedTypeText = (
     let nonUndefinedTypeTexts: readonly string[] = [];
 
     for (const typeNode of unionType.types) {
-        if (typeNode.type === "TSUndefinedKeyword") {
+        if (typeNode.type === AST_NODE_TYPES.TSUndefinedKeyword) {
             continue;
         }
 
@@ -151,6 +143,17 @@ const buildFixedTypeText = (
 
     return arrayJoin(nonUndefinedTypeTexts, " | ");
 };
+
+const createReplaceTypeFix =
+    (
+        targetNode: Readonly<es.Node>,
+        replacementText: string
+    ): ((fixer: Readonly<TSESLint.RuleFixer>) => TSESLint.RuleFix) =>
+    (fixer: Readonly<TSESLint.RuleFixer>): TSESLint.RuleFix => {
+        const [start, end] = targetNode.range;
+
+        return fixer.replaceTextRange([start, end], replacementText);
+    };
 
 /**
  * Disallow redundant `undefined` unions on default parameters with
@@ -194,7 +197,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         continue;
                     }
 
-                    if (typeAnnotation.typeAnnotation.type !== "TSUnionType") {
+                    if (
+                        typeAnnotation.typeAnnotation.type !==
+                        AST_NODE_TYPES.TSUnionType
+                    ) {
                         continue;
                     }
 
@@ -207,13 +213,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         continue;
                     }
 
-                    const fix = (
-                        fixer: Readonly<TSESLint.RuleFixer>
-                    ): TSESLint.RuleFix =>
-                        fixer.replaceText(
-                            typeAnnotation.typeAnnotation,
-                            fixedTypeText
-                        );
+                    const fix = createReplaceTypeFix(
+                        typeAnnotation.typeAnnotation,
+                        fixedTypeText
+                    );
 
                     context.report({
                         fix,

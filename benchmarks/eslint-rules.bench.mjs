@@ -27,6 +27,14 @@ import {
  * }>} LintScenarioOptions
  */
 
+/**
+ * @typedef {object} BenchmarkSignalOptions
+ *
+ * @property {number} [maximumReportedProblems] - Maximum allowed lint problems.
+ * @property {number} [minimumReportedProblems] - Minimum required lint
+ *   problems.
+ */
+
 const standardBenchmarkOptions = Object.freeze({
     iterations: 3,
     warmupIterations: 1,
@@ -89,7 +97,7 @@ const getPassRules = (pass) => {
  *
  * @param {unknown} ruleTiming - Timing payload.
  *
- * @returns {number} Rule timing in milliseconds.
+ * @returns {number} Numeric `stats.times.passes[].rules[*].total` value.
  */
 const getRuleTimingMilliseconds = (ruleTiming) => {
     if (!isObjectRecord(ruleTiming)) {
@@ -105,7 +113,7 @@ const getRuleTimingMilliseconds = (ruleTiming) => {
  *
  * @param {LintResults} lintResults - ESLint lint results.
  *
- * @returns Total error + warning count.
+ * @returns {number} Sum of reported errors and warnings.
  */
 const countReportedProblems = (lintResults) =>
     lintResults.reduce(
@@ -119,7 +127,7 @@ const countReportedProblems = (lintResults) =>
  *
  * @param {LintResults} lintResults - ESLint lint results.
  *
- * @returns Total rule timing in milliseconds.
+ * @returns {number} Aggregate rule execution time in milliseconds.
  */
 const sumRuleTimingMilliseconds = (lintResults) => {
     let totalRuleTime = 0;
@@ -143,11 +151,11 @@ const sumRuleTimingMilliseconds = (lintResults) => {
  *
  * @param {string} scenarioName - Human-friendly scenario label.
  * @param {LintResults} lintResults - ESLint lint results.
- * @param {{
- *     maximumReportedProblems?: number;
- *     minimumReportedProblems?: number;
- * }} [options]
- *   - Signal options.
+ * @param {BenchmarkSignalOptions} [options] - Signal bounds for reported
+ *   problem counts.
+ *
+ * @throws {Error} When lint results are empty, out of expected bounds, or have
+ *   no rule timing.
  */
 const assertMeaningfulBenchmarkSignal = (
     scenarioName,
@@ -186,9 +194,10 @@ const assertMeaningfulBenchmarkSignal = (
 /**
  * Run ESLint with a temporary benchmark-specific config.
  *
- * @param {LintScenarioOptions} options - Scenario options.
+ * @param {LintScenarioOptions} options - File globs, fix mode, and rule set
+ *   used for one benchmark run.
  *
- * @returns {Promise<LintResult[]>} ESLint lint results.
+ * @returns {Promise<LintResult[]>} Lint output for the scenario corpus.
  */
 const lintScenario = async ({ filePatterns, fix, rules }) => {
     const eslint = new ESLint({

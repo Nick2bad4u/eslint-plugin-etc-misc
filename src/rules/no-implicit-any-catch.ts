@@ -3,6 +3,7 @@ import {
     isPromiseLike,
 } from "@typescript-eslint/type-utils";
 import {
+    AST_NODE_TYPES,
     type TSESTree as es,
     ESLintUtils,
     type TSESLint,
@@ -37,7 +38,10 @@ const isPromiseRejectionCall = (
     program: TypedProgram
 ): boolean => {
     const { callee } = callExpression;
-    if (callee.type !== "MemberExpression" || callee.object.type === "Super") {
+    if (
+        callee.type !== AST_NODE_TYPES.MemberExpression ||
+        callee.object.type === AST_NODE_TYPES.Super
+    ) {
         return false;
     }
 
@@ -105,14 +109,14 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             callback: Readonly<es.CallExpressionArgument>
         ): void => {
             if (
-                callback.type !== "ArrowFunctionExpression" &&
-                callback.type !== "FunctionExpression"
+                callback.type !== AST_NODE_TYPES.ArrowFunctionExpression &&
+                callback.type !== AST_NODE_TYPES.FunctionExpression
             ) {
                 return;
             }
 
             const [parameter] = callback.params;
-            if (parameter?.type !== "Identifier") {
+            if (parameter?.type !== AST_NODE_TYPES.Identifier) {
                 return;
             }
 
@@ -153,11 +157,11 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 
             const { typeAnnotation } = parameter;
             const annotationType = typeAnnotation.typeAnnotation.type;
-            if (annotationType === "TSUnknownKeyword") {
+            if (annotationType === AST_NODE_TYPES.TSUnknownKeyword) {
                 return;
             }
 
-            if (annotationType === "TSAnyKeyword") {
+            if (annotationType === AST_NODE_TYPES.TSAnyKeyword) {
                 if (allowExplicitAny) {
                     return;
                 }

@@ -2,7 +2,11 @@ import {
     getConstrainedTypeAtLocation,
     isTypeNeverType,
 } from "@typescript-eslint/type-utils";
-import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
+import {
+    AST_NODE_TYPES,
+    type TSESTree as es,
+    ESLintUtils,
+} from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -11,9 +15,9 @@ type MessageIds = "forbidden";
 type Options = readonly [];
 
 const isTypeAliasNeverIdentifier = (node: Readonly<es.Identifier>): boolean =>
-    node.parent.type === "TSTypeAliasDeclaration" &&
+    node.parent.type === AST_NODE_TYPES.TSTypeAliasDeclaration &&
     node.parent.id === node &&
-    node.parent.typeAnnotation.type === "TSNeverKeyword";
+    node.parent.typeAnnotation.type === AST_NODE_TYPES.TSNeverKeyword;
 
 /**
  * Disallow inferred `never` types on identifiers.

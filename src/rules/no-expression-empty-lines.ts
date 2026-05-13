@@ -9,7 +9,7 @@ type MessageIds = "forbidden";
 type Options = readonly [];
 
 const splitLines = (sourceText: string): readonly string[] =>
-    stringSplit(sourceText.replaceAll(/\r\n?/gu, "\n"), "\n");
+    stringSplit(sourceText.replaceAll(/\r\n?/gv, "\n"), "\n");
 
 const hasBlankLine = (text: string): boolean =>
     splitLines(text).some((line) => line.trim().length === 0);

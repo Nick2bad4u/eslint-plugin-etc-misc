@@ -1,5 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { isDefined } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -20,13 +21,14 @@ const styleFromImport = (node: Readonly<es.ImportDeclaration>): ImportStyle => {
     }
 
     const hasDefault = node.specifiers.some(
-        (specifier) => specifier.type === "ImportDefaultSpecifier"
+        (specifier) => specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier
     );
     const hasNamed = node.specifiers.some(
-        (specifier) => specifier.type === "ImportSpecifier"
+        (specifier) => specifier.type === AST_NODE_TYPES.ImportSpecifier
     );
     const hasNamespace = node.specifiers.some(
-        (specifier) => specifier.type === "ImportNamespaceSpecifier"
+        (specifier) =>
+            specifier.type === AST_NODE_TYPES.ImportNamespaceSpecifier
     );
 
     if (hasNamespace) {

@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/no-use-before-define, perfectionist/sort-modules -- helper declarations are grouped by concern; forward references are functionally harmless and keep inference code readable. */
+/* eslint-disable @typescript-eslint/no-use-before-define, no-use-before-define, perfectionist/sort-modules -- helper declarations are grouped by concern; forward references are functionally harmless and keep inference code readable. */
 
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { isDefined, setHas } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -130,6 +131,7 @@ const nativeTypeDefinitions: readonly NativeTypeDefinition[] = [
 const nativeTypeNameSet = new Set<NativeTypeName>(
     nativeTypeDefinitions.map((definition) => definition.name)
 );
+const nativeTypeNameLookup: ReadonlySet<string> = nativeTypeNameSet;
 
 function buildNativeTypeInfoByName(
     definitions: readonly NativeTypeDefinition[]
@@ -149,8 +151,8 @@ function collectPropertyKinds(
 ): ReadonlyMap<string, MemberKind> {
     const propertyKinds = new Map<string, MemberKind>();
     const descriptorSources = [
-        definition.prototypeRef,
         definition.constructorRef,
+        definition.prototypeRef,
     ] as const;
 
     for (const descriptorSource of descriptorSources) {
@@ -190,11 +192,14 @@ function collectPropertyKinds(
 function unwrapExpression(
     node: Readonly<es.Expression>
 ): Readonly<es.Expression> {
-    if (node.type === "TSAsExpression" || node.type === "TSTypeAssertion") {
+    if (
+        node.type === AST_NODE_TYPES.TSAsExpression ||
+        node.type === AST_NODE_TYPES.TSTypeAssertion
+    ) {
         return unwrapExpression(node.expression);
     }
 
-    if (node.type === "ChainExpression") {
+    if (node.type === AST_NODE_TYPES.ChainExpression) {
         return unwrapExpression(node.expression);
     }
 
@@ -206,35 +211,38 @@ const inferNativeType = (
 ): NativeTypeName | null => {
     const expression = unwrapExpression(rawExpression);
 
-    if (expression.type === "ArrayExpression") {
+    if (expression.type === AST_NODE_TYPES.ArrayExpression) {
         return "Array";
     }
 
-    if (expression.type === "ObjectExpression") {
+    if (expression.type === AST_NODE_TYPES.ObjectExpression) {
         return "Object";
     }
 
-    if (expression.type === "TemplateLiteral") {
+    if (expression.type === AST_NODE_TYPES.TemplateLiteral) {
         return "String";
     }
 
-    if (expression.type === "Literal") {
+    if (expression.type === AST_NODE_TYPES.Literal) {
         return inferNativeTypeFromLiteral(expression);
     }
 
-    if (expression.type === "Identifier" && isNativeTypeName(expression.name)) {
+    if (
+        expression.type === AST_NODE_TYPES.Identifier &&
+        isNativeTypeName(expression.name)
+    ) {
         return expression.name;
     }
 
-    if (expression.type === "BinaryExpression") {
+    if (expression.type === AST_NODE_TYPES.BinaryExpression) {
         return inferNativeTypeFromBinaryExpression(expression);
     }
 
-    if (expression.type === "MemberExpression") {
+    if (expression.type === AST_NODE_TYPES.MemberExpression) {
         return inferNativeTypeFromMemberExpression(expression);
     }
 
-    if (expression.type === "NewExpression") {
+    if (expression.type === AST_NODE_TYPES.NewExpression) {
         return inferNativeTypeFromNewExpression(expression);
     }
 
@@ -293,9 +301,9 @@ function inferNativeTypeFromMemberExpression(
 ): NativeTypeName | null {
     if (
         expression.computed ||
-        expression.property.type !== "Identifier" ||
+        expression.property.type !== AST_NODE_TYPES.Identifier ||
         expression.property.name !== "prototype" ||
-        expression.object.type !== "Identifier" ||
+        expression.object.type !== AST_NODE_TYPES.Identifier ||
         !isNativeTypeName(expression.object.name)
     ) {
         return null;
@@ -308,7 +316,7 @@ function inferNativeTypeFromNewExpression(
     expression: Readonly<es.NewExpression>
 ): NativeTypeName | null {
     if (
-        expression.callee.type !== "Identifier" ||
+        expression.callee.type !== AST_NODE_TYPES.Identifier ||
         !isNativeTypeName(expression.callee.name)
     ) {
         return null;
@@ -332,7 +340,7 @@ function getMemberKind(descriptor: Readonly<PropertyDescriptor>): MemberKind {
 const getStaticMemberPropertyName = (
     node: Readonly<es.MemberExpression>
 ): null | string => {
-    if (node.computed || node.property.type !== "Identifier") {
+    if (node.computed || node.property.type !== AST_NODE_TYPES.Identifier) {
         return null;
     }
 
@@ -342,14 +350,16 @@ const getStaticMemberPropertyName = (
 const isCallUsage = (node: Readonly<es.MemberExpression>): boolean => {
     const parent = node.parent;
 
-    return parent.type === "CallExpression" && parent.callee === node;
+    return (
+        parent.type === AST_NODE_TYPES.CallExpression && parent.callee === node
+    );
 };
 
 const nativeTypeInfoByName: ReadonlyMap<NativeTypeName, NativeTypeInfo> =
     buildNativeTypeInfoByName(nativeTypeDefinitions);
 
 const isNativeTypeName = (value: string): value is NativeTypeName =>
-    setHas(nativeTypeNameSet, value as NativeTypeName);
+    setHas(nativeTypeNameLookup, value);
 
 /**
  * Disallow using non-native members on built-in JavaScript types.
@@ -428,4 +438,4 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 
 export default rule;
 
-/* eslint-enable @typescript-eslint/no-use-before-define, perfectionist/sort-modules -- Re-enable after this file-scoped exception block. */
+/* eslint-enable @typescript-eslint/no-use-before-define, no-use-before-define, perfectionist/sort-modules -- Re-enable after this file-scoped exception block. */

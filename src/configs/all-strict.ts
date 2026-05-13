@@ -1,27 +1,29 @@
 /* eslint-disable canonical/no-reassign-imports -- Rule entry map intentionally references imported plugin rules metadata. */
 
-import { objectEntries, objectFromEntries } from "ts-extras";
+import { objectEntries } from "ts-extras";
 
 import { rules as pluginRules } from "../rules.js";
 
-type AllStrictConfig = {
+interface AllStrictConfig {
     readonly name: "etc-misc/all-strict";
     readonly rules: Readonly<Record<string, RuleSeverity>>;
-};
+}
 
 type RuleSeverity = "error" | "warn";
 
-const allStrictRuleEntries = objectEntries(pluginRules).map(
-    ([ruleName, ruleModule]) =>
-        [
-            `etc-misc/${ruleName}`,
-            ruleModule.meta.deprecated === false ? "error" : "warn",
-        ] as const
-);
+let allStrictRulesAccumulator: Record<string, RuleSeverity> = {};
 
-const allStrictRules = objectFromEntries(allStrictRuleEntries) as Readonly<
-    Record<string, RuleSeverity>
->;
+for (const [ruleName, ruleModule] of objectEntries(pluginRules)) {
+    allStrictRulesAccumulator = {
+        ...allStrictRulesAccumulator,
+        [`etc-misc/${ruleName}`]:
+            ruleModule.meta.deprecated === false ? "error" : "warn",
+    };
+}
+
+const allStrictRules: Readonly<Record<string, RuleSeverity>> = Object.freeze(
+    allStrictRulesAccumulator
+);
 
 /**
  * Flat config preset enabling every plugin rule at `error`, except deprecated

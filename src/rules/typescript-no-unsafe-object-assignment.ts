@@ -1,21 +1,28 @@
-import coreNoUnsafeObjectAssignRule from "./typescript-no-unsafe-object-assign.js";
+import { assertDefined } from "ts-extras";
+
+import rule from "./typescript-no-unsafe-object-assign.js";
+
+const coreNoUnsafeObjectAssignRule: typeof rule = rule;
+const baseDocs = coreNoUnsafeObjectAssignRule.meta.docs;
+assertDefined(baseDocs);
 
 /**
  * TypeScript-prefixed alias for Object.assign readonly-target safety checks.
  */
-const rule: typeof coreNoUnsafeObjectAssignRule = {
-    ...coreNoUnsafeObjectAssignRule,
-    meta: {
-        deprecated: false,
-        ...coreNoUnsafeObjectAssignRule.meta,
-        docs: {
+const typescriptNoUnsafeObjectAssignmentRule: typeof coreNoUnsafeObjectAssignRule =
+    {
+        ...coreNoUnsafeObjectAssignRule,
+        meta: {
             deprecated: false,
-            frozen: false,
-            recommended: false,
-            ...coreNoUnsafeObjectAssignRule.meta.docs,
-            url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-unsafe-object-assignment",
-        } as NonNullable<typeof coreNoUnsafeObjectAssignRule.meta.docs>,
-    },
-};
+            ...coreNoUnsafeObjectAssignRule.meta,
+            docs: {
+                ...baseDocs,
+                deprecated: false,
+                frozen: false,
+                recommended: false,
+                url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-unsafe-object-assignment",
+            },
+        },
+    };
 
-export default rule;
+export default typescriptNoUnsafeObjectAssignmentRule;

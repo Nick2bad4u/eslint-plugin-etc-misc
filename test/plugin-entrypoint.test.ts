@@ -118,60 +118,35 @@ describe("plugin.mjs entrypoint", () => {
         expect.hasAssertions();
         expect(plugin.meta).toStrictEqual(pluginMeta);
         expect(plugin.processors).toStrictEqual({});
-
         expect(Object.keys(plugin.rules)).toStrictEqual(Object.keys(rules));
-        expect(plugin.configs.allStrict.rules).toStrictEqual(
-            configs.allStrict.rules
-        );
-        expect(plugin.configs.allStrict.name).toBe(configs.allStrict.name);
-        expect(plugin.configs.all.rules).toStrictEqual(configs.all.rules);
-        expect(plugin.configs.all.name).toBe(configs.all.name);
-        expect(plugin.configs.minimal.rules).toStrictEqual(
-            configs.minimal.rules
-        );
-        expect(plugin.configs.minimal.name).toBe(configs.minimal.name);
-        expect(plugin.configs.recommended.rules).toStrictEqual(
-            configs.recommended.rules
-        );
-        expect(plugin.configs.recommended.name).toBe(configs.recommended.name);
-        expect(plugin.configs.strict.rules).toStrictEqual(configs.strict.rules);
-        expect(plugin.configs.strict.name).toBe(configs.strict.name);
-        expect(plugin.configs.strictTypeChecked.rules).toStrictEqual(
-            configs.strictTypeChecked.rules
-        );
-        expect(plugin.configs.strictTypeChecked.name).toBe(
-            configs.strictTypeChecked.name
-        );
+
+        const configVariants = [
+            "all",
+            "allStrict",
+            "minimal",
+            "recommended",
+            "strict",
+            "strictTypeChecked",
+        ] as const;
+
+        for (const configVariant of configVariants) {
+            expect(plugin.configs[configVariant].rules).toStrictEqual(
+                configs[configVariant].rules
+            );
+            expect(plugin.configs[configVariant].name).toBe(
+                configs[configVariant].name
+            );
+            expect(
+                plugin.configs[configVariant].plugins["etc-misc"].meta
+            ).toStrictEqual(plugin.meta);
+            expect(
+                plugin.configs[configVariant].plugins["etc-misc"].rules
+            ).toBe(plugin.rules);
+        }
+
         expect(plugin.configs.strictTypeChecked.languageOptions).toStrictEqual(
             configs.strictTypeChecked.languageOptions
         );
-
-        const allStrictPluginReference =
-            plugin.configs.allStrict.plugins["etc-misc"];
-        const allPluginReference = plugin.configs.all.plugins["etc-misc"];
-        const minimalPluginReference =
-            plugin.configs.minimal.plugins["etc-misc"];
-        const recommendedPluginReference =
-            plugin.configs.recommended.plugins["etc-misc"];
-        const strictPluginReference = plugin.configs.strict.plugins["etc-misc"];
-        const strictTypeCheckedPluginReference =
-            plugin.configs.strictTypeChecked.plugins["etc-misc"];
-
-        expect(allStrictPluginReference.meta).toStrictEqual(plugin.meta);
-        expect(allPluginReference.meta).toStrictEqual(plugin.meta);
-        expect(minimalPluginReference.meta).toStrictEqual(plugin.meta);
-        expect(recommendedPluginReference.meta).toStrictEqual(plugin.meta);
-        expect(strictPluginReference.meta).toStrictEqual(plugin.meta);
-        expect(strictTypeCheckedPluginReference.meta).toStrictEqual(
-            plugin.meta
-        );
-
-        expect(allStrictPluginReference.rules).toBe(plugin.rules);
-        expect(allPluginReference.rules).toBe(plugin.rules);
-        expect(minimalPluginReference.rules).toBe(plugin.rules);
-        expect(recommendedPluginReference.rules).toBe(plugin.rules);
-        expect(strictPluginReference.rules).toBe(plugin.rules);
-        expect(strictTypeCheckedPluginReference.rules).toBe(plugin.rules);
         expect(
             plugin.configs.strictTypeChecked.languageOptions?.parserOptions
                 ?.projectService

@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 import {
     createReplacementRuleInfo,
@@ -17,7 +19,7 @@ type Variable = TSESLint.Scope.Variable;
 const shouldIgnoreVariable = (variable: Readonly<Variable>): boolean =>
     variable.defs.some(
         (definition) =>
-            definition.node.type === "TSEnumDeclaration" ||
+            definition.node.type === AST_NODE_TYPES.TSEnumDeclaration ||
             definition.type.includes("Enum")
     );
 

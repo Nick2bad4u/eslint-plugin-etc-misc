@@ -5,7 +5,11 @@ import {
     getConstrainedTypeAtLocation,
     isTypeArrayTypeOrUnionOfArrayTypes,
 } from "@typescript-eslint/type-utils";
-import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
+import {
+    AST_NODE_TYPES,
+    type TSESTree as es,
+    ESLintUtils,
+} from "@typescript-eslint/utils";
 import { setHas } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -85,7 +89,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             "CallExpression[callee.type='MemberExpression'][callee.property.type='Identifier'][callee.property.name='forEach']":
                 (callExpression: Readonly<es.CallExpression>) => {
                     const { callee } = callExpression;
-                    if (callee.type !== "MemberExpression") {
+                    if (callee.type !== AST_NODE_TYPES.MemberExpression) {
                         return;
                     }
 

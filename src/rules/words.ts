@@ -1,4 +1,4 @@
-import writeGoodCommentsPlugin from "eslint-plugin-write-good-comments-2";
+import plugin from "eslint-plugin-write-good-comments-2";
 
 import {
     adaptExternalRule,
@@ -14,7 +14,7 @@ import {
  */
 const rule: ReturnType<typeof adaptExternalRule> = adaptExternalRule(
     getExternalRuleFromPlugin(
-        writeGoodCommentsPlugin,
+        plugin,
         "write-good-comments",
         "eslint-plugin-write-good-comments-2"
     ),

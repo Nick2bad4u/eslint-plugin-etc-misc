@@ -1,6 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
-import { basename, extname } from "node:path";
+import path from "node:path";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -9,8 +9,8 @@ type MessageIds = "mismatch";
 type Options = readonly [];
 
 const getFileStem = (filePath: string): string => {
-    const extension = extname(filePath);
-    return basename(filePath, extension);
+    const extension = path.extname(filePath);
+    return path.basename(filePath, extension);
 };
 
 /**

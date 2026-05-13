@@ -1,5 +1,6 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayAt, objectEntries, objectHasOwn } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -54,7 +55,7 @@ const containsThisExpression = (root: Readonly<es.Node>): boolean => {
             continue;
         }
 
-        if (node.type === "ThisExpression") {
+        if (node.type === AST_NODE_TYPES.ThisExpression) {
             return true;
         }
 
@@ -68,7 +69,8 @@ const hasThisParameter = (node: Readonly<es.MethodDefinition>): boolean => {
     const [firstParameter] = node.value.params;
 
     return (
-        firstParameter?.type === "Identifier" && firstParameter.name === "this"
+        firstParameter?.type === AST_NODE_TYPES.Identifier &&
+        firstParameter.name === "this"
     );
 };
 

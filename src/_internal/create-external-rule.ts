@@ -1,10 +1,16 @@
 import type { TSESLint } from "@typescript-eslint/utils";
 import type { UnknownArray, UnknownRecord } from "type-fest";
 
-import { objectHasOwn, safeCastTo } from "ts-extras";
+import { keyIn, objectEntries, objectHasOwn, safeCastTo } from "ts-extras";
+
+import type { RuleDocsMetadata } from "./rule-creator.js";
 
 type RuleContext = TSESLint.RuleContext<string, Readonly<UnknownArray>>;
-type RuleModule = TSESLint.RuleModule<string, Readonly<UnknownArray>>;
+type RuleModule = TSESLint.RuleModule<
+    string,
+    Readonly<UnknownArray>,
+    RuleDocsMetadata
+>;
 
 const isObjectRecord = (value: unknown): value is UnknownRecord =>
     typeof value === "object" && value !== null;
@@ -14,6 +20,74 @@ const hasCreateFunction = (
 ): value is Readonly<UnknownRecord> &
     Readonly<{ readonly create: RuleModule["create"] }> =>
     isObjectRecord(value) && typeof value["create"] === "function";
+
+const isRuleMetaDocs = (value: unknown): value is TSESLint.RuleMetaDataDocs =>
+    isObjectRecord(value) && typeof value["description"] === "string";
+
+const getNormalizedMetaType = (value: unknown): RuleModule["meta"]["type"] => {
+    if (value === "layout" || value === "problem" || value === "suggestion") {
+        return value;
+    }
+
+    return "problem";
+};
+
+const getNormalizedMetaMessages = (value: unknown): Record<string, string> => {
+    if (!isObjectRecord(value)) {
+        return {};
+    }
+
+    let normalizedMessages: Record<string, string> = {};
+
+    for (const [key, message] of objectEntries(value)) {
+        if (typeof message !== "string") {
+            continue;
+        }
+
+        normalizedMessages = {
+            ...normalizedMessages,
+            [key]: message,
+        };
+    }
+
+    return normalizedMessages;
+};
+
+type RuleSchema = RuleModule["meta"]["schema"];
+type RuleSchemaObject = Exclude<RuleSchema, Readonly<UnknownArray>>;
+
+const isJsonSchemaLike = (value: unknown): value is RuleSchemaObject => {
+    if (!isObjectRecord(value)) {
+        return false;
+    }
+
+    return (
+        keyIn(value, "allOf") ||
+        keyIn(value, "anyOf") ||
+        keyIn(value, "oneOf") ||
+        keyIn(value, "properties") ||
+        keyIn(value, "type")
+    );
+};
+
+const isJsonSchemaArray = (
+    value: unknown
+): value is readonly RuleSchemaObject[] =>
+    Array.isArray(value) && value.every((entry) => isJsonSchemaLike(entry));
+
+const getNormalizedMetaSchema = (
+    value: unknown
+): RuleModule["meta"]["schema"] => {
+    if (isJsonSchemaArray(value)) {
+        return value;
+    }
+
+    if (isJsonSchemaLike(value)) {
+        return value;
+    }
+
+    return [];
+};
 
 const createLegacyContextCompat = (context: RuleContext): RuleContext =>
     new Proxy(context, {
@@ -74,17 +148,22 @@ export const adaptExternalRule = (
     }
 
     const externalRuleRecord = externalRule;
-    const externalMeta = isObjectRecord(externalRuleRecord["meta"])
+    const externalMetaRecord = isObjectRecord(externalRuleRecord["meta"])
         ? externalRuleRecord["meta"]
         : {};
-    const externalDocs = isObjectRecord(externalMeta["docs"])
-        ? externalMeta["docs"]
-        : {};
+    const externalDocs = isRuleMetaDocs(externalMetaRecord["docs"])
+        ? externalMetaRecord["docs"]
+        : {
+              description:
+                  "External rule re-exported by eslint-plugin-etc-misc.",
+          };
     const create: RuleModule["create"] = (context) =>
         externalRule.create(createLegacyContextCompat(context));
+    const externalRuleModule =
+        safeCastTo<Partial<RuleModule>>(externalRuleRecord);
 
     return {
-        ...(externalRuleRecord as unknown as RuleModule),
+        ...externalRuleModule,
         create,
         defaultOptions: Array.isArray(externalRuleRecord["defaultOptions"])
             ? safeCastTo<Readonly<UnknownArray>>(
@@ -92,13 +171,14 @@ export const adaptExternalRule = (
               )
             : [],
         meta: {
-            ...(externalMeta as unknown as RuleModule["meta"]),
+            ...externalMetaRecord,
             docs: {
-                ...(externalDocs as unknown as NonNullable<
-                    RuleModule["meta"]
-                >["docs"]),
+                ...externalDocs,
                 url: docsUrl,
             },
-        } as RuleModule["meta"],
+            messages: getNormalizedMetaMessages(externalMetaRecord["messages"]),
+            schema: getNormalizedMetaSchema(externalMetaRecord["schema"]),
+            type: getNormalizedMetaType(externalMetaRecord["type"]),
+        },
     };
 };

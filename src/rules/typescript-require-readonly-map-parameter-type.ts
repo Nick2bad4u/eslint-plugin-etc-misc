@@ -1,5 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden" | "suggestRequireReadonlyMapParameterType";
@@ -15,16 +17,16 @@ const getParametersFromFunctionLikeNode = (
     node: Readonly<es.Node>
 ): Readonly<readonly es.Parameter[]> | undefined => {
     if (
-        node.type === "ArrowFunctionExpression" ||
-        node.type === "FunctionDeclaration" ||
-        node.type === "FunctionExpression" ||
-        node.type === "TSCallSignatureDeclaration" ||
-        node.type === "TSConstructSignatureDeclaration" ||
-        node.type === "TSConstructorType" ||
-        node.type === "TSDeclareFunction" ||
-        node.type === "TSEmptyBodyFunctionExpression" ||
-        node.type === "TSFunctionType" ||
-        node.type === "TSMethodSignature"
+        node.type === AST_NODE_TYPES.ArrowFunctionExpression ||
+        node.type === AST_NODE_TYPES.FunctionDeclaration ||
+        node.type === AST_NODE_TYPES.FunctionExpression ||
+        node.type === AST_NODE_TYPES.TSCallSignatureDeclaration ||
+        node.type === AST_NODE_TYPES.TSConstructSignatureDeclaration ||
+        node.type === AST_NODE_TYPES.TSConstructorType ||
+        node.type === AST_NODE_TYPES.TSDeclareFunction ||
+        node.type === AST_NODE_TYPES.TSEmptyBodyFunctionExpression ||
+        node.type === AST_NODE_TYPES.TSFunctionType ||
+        node.type === AST_NODE_TYPES.TSMethodSignature
     ) {
         return node.params;
     }
@@ -35,11 +37,11 @@ const getParametersFromFunctionLikeNode = (
 const getTypeAnnotationFromPattern = (
     pattern: Readonly<es.AssignmentPattern | es.BindingName | es.RestElement>
 ): Readonly<es.TSTypeAnnotation> | undefined => {
-    if (pattern.type === "AssignmentPattern") {
+    if (pattern.type === AST_NODE_TYPES.AssignmentPattern) {
         return getTypeAnnotationFromPattern(pattern.left);
     }
 
-    if (pattern.type === "RestElement") {
+    if (pattern.type === AST_NODE_TYPES.RestElement) {
         if (pattern.typeAnnotation !== undefined) {
             return pattern.typeAnnotation;
         }
@@ -47,9 +49,9 @@ const getTypeAnnotationFromPattern = (
         const argument = pattern.argument;
 
         if (
-            argument.type !== "ArrayPattern" &&
-            argument.type !== "Identifier" &&
-            argument.type !== "ObjectPattern"
+            argument.type !== AST_NODE_TYPES.ArrayPattern &&
+            argument.type !== AST_NODE_TYPES.Identifier &&
+            argument.type !== AST_NODE_TYPES.ObjectPattern
         ) {
             return undefined;
         }
@@ -63,7 +65,7 @@ const getTypeAnnotationFromPattern = (
 const getTypeAnnotationFromParameter = (
     parameter: Readonly<es.Parameter>
 ): Readonly<es.TSTypeAnnotation> | undefined => {
-    if (parameter.type === "TSParameterProperty") {
+    if (parameter.type === AST_NODE_TYPES.TSParameterProperty) {
         return getTypeAnnotationFromPattern(parameter.parameter);
     }
 
@@ -74,21 +76,26 @@ const isMapTypeReference = (
     node: Readonly<es.TSTypeReference>
 ): node is Readonly<
     es.TSTypeReference & { readonly typeName: es.Identifier }
-> => node.typeName.type === "Identifier" && node.typeName.name === "Map";
+> =>
+    node.typeName.type === AST_NODE_TYPES.Identifier &&
+    node.typeName.name === "Map";
 
 const collectMutableMapTypeNodes = (
     typeNode: Readonly<es.TypeNode>
 ): readonly MutableMapTypeNode[] => {
     if (
-        typeNode.type === "TSIntersectionType" ||
-        typeNode.type === "TSUnionType"
+        typeNode.type === AST_NODE_TYPES.TSIntersectionType ||
+        typeNode.type === AST_NODE_TYPES.TSUnionType
     ) {
         return typeNode.types.flatMap((subTypeNode) =>
             collectMutableMapTypeNodes(subTypeNode)
         );
     }
 
-    if (typeNode.type !== "TSTypeReference" || !isMapTypeReference(typeNode)) {
+    if (
+        typeNode.type !== AST_NODE_TYPES.TSTypeReference ||
+        !isMapTypeReference(typeNode)
+    ) {
         return [];
     }
 

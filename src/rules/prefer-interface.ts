@@ -1,7 +1,7 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
 import { getConstrainedTypeAtLocation } from "@typescript-eslint/type-utils";
-import { ESLintUtils } from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
 import { arrayFirst, arrayJoin, isDefined } from "ts-extras";
 import * as tsutils from "tsutils";
 
@@ -25,13 +25,14 @@ const defaultOptions: Options = [{}];
 const isExportedTypeAlias = (
     typeAliasDeclaration: Readonly<es.TSTypeAliasDeclaration>
 ): boolean =>
-    typeAliasDeclaration.parent?.type === "ExportNamedDeclaration" &&
+    typeAliasDeclaration.parent.type ===
+        AST_NODE_TYPES.ExportNamedDeclaration &&
     typeAliasDeclaration.parent.declaration === typeAliasDeclaration;
 
 const getTypeAliasDeclarationParent = (
     node: Readonly<es.Node> | undefined
 ): Readonly<es.TSTypeAliasDeclaration> | undefined =>
-    node?.type === "TSTypeAliasDeclaration" ? node : undefined;
+    node?.type === AST_NODE_TYPES.TSTypeAliasDeclaration ? node : undefined;
 
 const formatTypeParameters = (
     sourceCode: Readonly<TSESLint.SourceCode>,
@@ -120,12 +121,12 @@ const canSafelyConvertIntersection = (
     let references: readonly es.TSTypeReference[] = [];
 
     for (const intersectionMember of intersectionTypeNode.types) {
-        if (intersectionMember.type === "TSTypeLiteral") {
+        if (intersectionMember.type === AST_NODE_TYPES.TSTypeLiteral) {
             literals = [...literals, intersectionMember];
             continue;
         }
 
-        if (intersectionMember.type === "TSTypeReference") {
+        if (intersectionMember.type === AST_NODE_TYPES.TSTypeReference) {
             references = [...references, intersectionMember];
             continue;
         }
