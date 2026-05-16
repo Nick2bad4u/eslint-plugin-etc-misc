@@ -1,5 +1,7 @@
 /* eslint-disable canonical/no-reassign-imports -- Flat-config preset object intentionally references imported preset modules. */
 
+import type { UnknownRecord } from "type-fest";
+
 import { pluginMeta } from "./_internal/plugin-meta.js";
 import { allStrict as allStrictConfig } from "./configs/all-strict.js";
 import { all as allConfig } from "./configs/all.js";
@@ -48,7 +50,7 @@ const withPluginReference = <
 /**
  * Available flat-config presets exported by the plugin.
  */
-export interface PluginConfigs {
+export interface PluginConfigs extends Readonly<UnknownRecord> {
     readonly all: PresetWithPlugin<
         typeof allConfig.name,
         typeof allConfig.rules

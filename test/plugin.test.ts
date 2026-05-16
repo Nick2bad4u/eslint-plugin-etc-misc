@@ -2,6 +2,11 @@ import { describe, expect, it } from "vitest";
 
 import plugin from "../src/plugin";
 
+interface ConfigurablePlugin {
+    readonly configs?: Readonly<Record<string, unknown>>;
+    readonly flat?: Readonly<Record<string, unknown>>;
+}
+
 const deprecatedRuleIds = [
     "array-type",
     "consistent-filename",
@@ -286,6 +291,16 @@ const assertPluginExposesRulesAndConfigs = (): void => {
 };
 
 describe("plugin export", () => {
+    it("is assignable to generic flat-config plugin shapes", () => {
+        expect.hasAssertions();
+
+        const configurablePlugin: ConfigurablePlugin = plugin;
+
+        expect(configurablePlugin.configs?.["recommended"]).toBe(
+            plugin.configs.recommended
+        );
+    });
+
     it("exposes rules and configs", () => {
         expect.hasAssertions();
 

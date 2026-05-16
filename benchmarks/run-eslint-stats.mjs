@@ -793,21 +793,18 @@ const collectTopRuleTimings = (lintResults, topCount = 8) => {
     }
 
     const sortedRuleTotals = /** @type {(readonly [string, number])[]} */ (
-        sortValues(
-            [...ruleTotals.entries()],
-            (left, right) => {
-                const leftTotal =
-                    Array.isArray(left) && typeof left[1] === "number"
-                        ? left[1]
-                        : 0;
-                const rightTotal =
-                    Array.isArray(right) && typeof right[1] === "number"
-                        ? right[1]
-                        : 0;
+        sortValues([...ruleTotals.entries()], (left, right) => {
+            const leftTotal =
+                Array.isArray(left) && typeof left[1] === "number"
+                    ? left[1]
+                    : 0;
+            const rightTotal =
+                Array.isArray(right) && typeof right[1] === "number"
+                    ? right[1]
+                    : 0;
 
-                return rightTotal - leftTotal;
-            }
-        )
+            return rightTotal - leftTotal;
+        })
     );
 
     return sortedRuleTotals

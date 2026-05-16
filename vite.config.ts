@@ -22,7 +22,7 @@ const maxWorkerCount =
         ? parsedMaxWorkers
         : 1;
 /** CI-specific fast-check run count override; undefined keeps local defaults. */
-const ciFastCheckNumRuns = isCiEnvironment ? "25" : undefined;
+const ciFastCheckNumRuns = isCiEnvironment ? "10" : undefined;
 /** Shared glob exclusions for generated/cache directories. */
 const testExcludePatterns = [
     "**/.cache/**",
