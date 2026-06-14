@@ -185,7 +185,8 @@
         "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.build.json --noEmit && tsc -p tsconfig.eslint.json --noEmit && tsc -p tsconfig.js.json --noEmit && npm run --workspace docs/docusaurus typecheck",
         "typecheck:all": "npm run typecheck",
         "types:update": "typesync",
-        "update-deps": "npx ncu -i --install never && npm update --workspaces --force && npm install --force && npm run sync:rules:write"
+        "update-deps": "npx ncu -i --install never && npm update --workspaces --force && npm install --force && npm run sync:rules:write",
+        "update-actions": "npx actions-up --yes --style sha"
     },
     "dependencies": {
         "@eslint-community/eslint-plugin-eslint-comments": "^4.7.1",
