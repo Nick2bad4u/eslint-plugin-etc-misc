@@ -130,7 +130,7 @@ jobs:
                   set -euo pipefail
                   sudo apt-get update
                   sudo apt-get install --no-install-recommends --yes yamllint
-                  go install github.com/gitleaks/gitleaks/v8@latest
+                  go install github.com/zricethezav/gitleaks/v8@latest
                   echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
             - name: "Configure Git for release automation"
