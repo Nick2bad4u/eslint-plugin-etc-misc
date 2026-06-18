@@ -5,7 +5,8 @@ import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
  * Dynamic sidebar generation for plugin rule documentation sections.
  */
 import { readdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 type RuleCatalogMapEntry = Readonly<{
     catalogId: string;
@@ -21,7 +22,7 @@ interface SidebarDocItem {
 }
 
 /** Directory containing this sidebar module. */
-const sidebarDirectoryPath = import.meta.dirname;
+const sidebarDirectoryPath = dirname(fileURLToPath(import.meta.url));
 /** Directory containing generated rule docs consumed by the sidebar. */
 const rulesDocsDirectoryPath = join(sidebarDirectoryPath, "..", "rules");
 const ruleCatalogMapFilePath = join(

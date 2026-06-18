@@ -8,6 +8,8 @@ import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
+import prettier from "prettier";
+
 /**
  * @typedef {object} ReadmeReference
  *
@@ -477,8 +479,13 @@ const syncReadmeRulesTable = async ({ writeChanges }) => {
     );
 
     const nextReadmeText = `${readmePrefix}${lineEnding}${lineEnding}${generatedRulesSection}${readmeSuffix}`;
+    const prettierOptions = (await prettier.resolveConfig(readmePath)) ?? {};
+    const formattedNextReadmeText = await prettier.format(nextReadmeText, {
+        ...prettierOptions,
+        filepath: readmePath,
+    });
 
-    if (readmeText === nextReadmeText) {
+    if (readmeText === formattedNextReadmeText) {
         return {
             changed: false,
         };
@@ -490,7 +497,7 @@ const syncReadmeRulesTable = async ({ writeChanges }) => {
         };
     }
 
-    await writeFile(readmePath, nextReadmeText, "utf8");
+    await writeFile(readmePath, formattedNextReadmeText, "utf8");
 
     return {
         changed: true,
