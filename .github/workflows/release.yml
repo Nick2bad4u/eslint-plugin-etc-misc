@@ -130,6 +130,7 @@ jobs:
                   set -euo pipefail
                   sudo apt-get update
                   sudo apt-get install --no-install-recommends --yes yamllint
+                  go install github.com/rhysd/actionlint/cmd/actionlint@latest
                   go install github.com/zricethezav/gitleaks/v8@latest
                   echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
