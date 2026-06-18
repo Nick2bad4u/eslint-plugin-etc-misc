@@ -150,7 +150,7 @@ describe("plugin.mjs entrypoint", () => {
         expect(
             plugin.configs.strictTypeChecked.languageOptions?.parserOptions
                 ?.projectService
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("keeps the entrypoint module structure stable", () => {
@@ -188,12 +188,12 @@ describe("plugin.mjs entrypoint", () => {
             fc.property(
                 fc.constantFrom(...allConfigRuleEntries),
                 ([qualifiedRuleName, severity]) => {
-                    expect(
-                        severity === "error" || severity === "warn"
-                    ).toBeTruthy();
-                    expect(
-                        qualifiedRuleName.startsWith("etc-misc/")
-                    ).toBeTruthy();
+                    expect(severity === "error" || severity === "warn").toBe(
+                        true
+                    );
+                    expect(qualifiedRuleName.startsWith("etc-misc/")).toBe(
+                        true
+                    );
 
                     const shortRuleName = qualifiedRuleName.slice(
                         "etc-misc/".length

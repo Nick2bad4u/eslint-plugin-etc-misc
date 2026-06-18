@@ -83,39 +83,39 @@ describe("require-syntax fixture parser shape", () => {
                 (statement) =>
                     statement.type === AST_NODE_TYPES.ImportDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             program.body.some(
                 (statement) =>
                     statement.type === AST_NODE_TYPES.ExportNamedDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             program.body.some(
                 (statement) =>
                     statement.type === AST_NODE_TYPES.ExportAllDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             program.body.some(
                 (statement) =>
                     statement.type === AST_NODE_TYPES.ClassDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             nodes.some((node) => node.type === AST_NODE_TYPES.ImportExpression)
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             program.body.some(
                 (statement) =>
                     statement.type === AST_NODE_TYPES.ExportDefaultDeclaration
             )
-        ).toBeFalsy();
+        ).toBe(false);
     });
 
     it("parses generated selector-heavy module snippets from fast-check", () => {

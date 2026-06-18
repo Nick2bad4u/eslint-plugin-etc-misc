@@ -56,7 +56,7 @@ describe("no-single-line-comment fixture structure", () => {
                     comment.type === AST_TOKEN_TYPES.Line &&
                     comment.value.trimStart().startsWith("global ")
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             comments.some(
@@ -64,7 +64,7 @@ describe("no-single-line-comment fixture structure", () => {
                     comment.type === AST_TOKEN_TYPES.Line &&
                     comment.value.trimStart().startsWith("ts-ignore")
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             comments.some(
@@ -72,11 +72,11 @@ describe("no-single-line-comment fixture structure", () => {
                     comment.type === AST_TOKEN_TYPES.Line &&
                     comment.value.trimStart() === "rationale"
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             comments.some((comment) => comment.type === AST_TOKEN_TYPES.Block)
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("parses generated single-line comments from fast-check", () => {

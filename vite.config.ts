@@ -1,5 +1,5 @@
 // eslint-disable-next-line @eslint-community/eslint-comments/disable-enable-pair -- project-wide disable pattern for build configs
-/* eslint-disable n/no-process-env, comment-length/limit-single-line-comments   -- Disable specific rules for build configs */
+/* eslint-disable comment-length/limit-single-line-comments   -- Disable specific rules for build configs */
 
 import { codecovVitePlugin } from "@codecov/vite-plugin";
 import pc from "picocolors";
@@ -62,7 +62,7 @@ const vitestConfig: ReturnType<typeof defineConfig> = defineConfig({
     },
     cacheDir: "./.cache/vitest",
     plugins: [
-        // Put the Codecov vite plugin after all other plugins
+        // Put the Codecov Vite plugin after all other plugins
         codecovVitePlugin({
             bundleName: "eslint-plugin-etc-misc",
             enableBundleAnalysis: process.env["CODECOV_TOKEN"] !== undefined,

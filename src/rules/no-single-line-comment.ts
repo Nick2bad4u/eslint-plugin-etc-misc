@@ -63,23 +63,19 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                           );
 
                     context.report({
-                        ...(suggestionFix === undefined
-                            ? {}
-                            : {
-                                  fix: suggestionFix,
-                              }),
+                        ...(suggestionFix !== undefined && {
+                            fix: suggestionFix,
+                        }),
                         loc: comment.loc,
                         messageId: "forbidden",
-                        ...(suggestionFix === undefined
-                            ? {}
-                            : {
-                                  suggest: [
-                                      {
-                                          fix: suggestionFix,
-                                          messageId: "suggestConvertToBlock",
-                                      },
-                                  ],
-                              }),
+                        ...(suggestionFix !== undefined && {
+                            suggest: [
+                                {
+                                    fix: suggestionFix,
+                                    messageId: "suggestConvertToBlock",
+                                },
+                            ],
+                        }),
                     });
                 }
             },

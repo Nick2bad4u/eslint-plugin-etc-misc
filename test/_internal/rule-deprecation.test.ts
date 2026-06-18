@@ -100,7 +100,7 @@ describe("deprecated rule metadata helpers", () => {
             message: "Use typescript/prefer-readonly-array instead.",
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-multi-type-tuples",
         });
-        expect(Object.hasOwn(deprecationInfo, "replacedBy")).toBeFalsy();
+        expect(Object.hasOwn(deprecationInfo, "replacedBy")).toBe(false);
     });
 });
 
@@ -128,7 +128,7 @@ describe("deprecated rule lifecycle decoration", () => {
             ruleId: "prefer-interface",
         });
 
-        expect(decoratedRule.meta?.docs?.frozen).toBeTruthy();
+        expect(decoratedRule.meta?.docs?.frozen).toBe(true);
         expect(decoratedRule.meta?.deprecated).toMatchObject({
             availableUntil: "2.0.0",
             deprecatedSince: "1.0.0",

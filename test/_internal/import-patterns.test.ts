@@ -171,7 +171,7 @@ describe("import source reporting decisions", () => {
                 },
                 ["@legacy/**"]
             )
-        ).toBeTruthy();
+        ).toBe(true);
         expect(
             shouldReportImportSource(
                 "@internal/public/thing",
@@ -181,10 +181,10 @@ describe("import source reporting decisions", () => {
                 },
                 ["@legacy/**"]
             )
-        ).toBeFalsy();
+        ).toBe(false);
         expect(
             shouldReportImportSource("@legacy/path", undefined, ["@legacy/**"])
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("respects disallow and allow precedence for arbitrary module names", () => {
@@ -198,7 +198,7 @@ describe("import source reporting decisions", () => {
                         { disallow: [sourceText] },
                         []
                     )
-                ).toBeTruthy();
+                ).toBe(true);
                 expect(
                     shouldReportImportSource(
                         sourceText,
@@ -208,12 +208,12 @@ describe("import source reporting decisions", () => {
                         },
                         []
                     )
-                ).toBeFalsy();
+                ).toBe(false);
                 expect(
                     shouldReportImportSource(sourceText, undefined, [
                         sourceText,
                     ])
-                ).toBeTruthy();
+                ).toBe(true);
             })
         );
     });

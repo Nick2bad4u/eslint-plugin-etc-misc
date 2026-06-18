@@ -83,7 +83,7 @@ describe("no-param-reassign fixture structure", () => {
                     node.type === AST_NODE_TYPES.AssignmentExpression &&
                     node.left.type === AST_NODE_TYPES.Identifier
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             nodes.some(
@@ -91,7 +91,7 @@ describe("no-param-reassign fixture structure", () => {
                     node.type === AST_NODE_TYPES.AssignmentExpression &&
                     node.left.type === AST_NODE_TYPES.MemberExpression
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             nodes.some(
@@ -99,7 +99,7 @@ describe("no-param-reassign fixture structure", () => {
                     node.type === AST_NODE_TYPES.UpdateExpression &&
                     node.argument.type === AST_NODE_TYPES.Identifier
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             nodes.some(
@@ -107,7 +107,7 @@ describe("no-param-reassign fixture structure", () => {
                     node.type === AST_NODE_TYPES.UpdateExpression &&
                     node.argument.type === AST_NODE_TYPES.MemberExpression
             )
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("parses generated parameter-reassignment snippets from fast-check", () => {

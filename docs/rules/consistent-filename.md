@@ -4,7 +4,7 @@ Enforce filename casing consistency.
 
 ## Targeted pattern scope
 
-This rule validates the current file’s stem (filename without extension) against
+This rule validates the current file's stem (filename without extension) against
 one configured casing format.
 
 ## What this rule reports

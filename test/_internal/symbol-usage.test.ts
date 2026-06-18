@@ -18,28 +18,28 @@ describe("symbol-usage helpers", () => {
             isImportOrExportSpecifier({
                 type: AST_NODE_TYPES.ImportSpecifier,
             } as es.Node)
-        ).toBeTruthy();
+        ).toBe(true);
         expect(
             isImportOrExportSpecifier({
                 type: AST_NODE_TYPES.ImportDefaultSpecifier,
             } as es.Node)
-        ).toBeTruthy();
+        ).toBe(true);
         expect(
             isImportOrExportSpecifier({
                 type: AST_NODE_TYPES.ImportNamespaceSpecifier,
             } as es.Node)
-        ).toBeTruthy();
+        ).toBe(true);
         expect(
             isImportOrExportSpecifier({
                 type: AST_NODE_TYPES.ExportSpecifier,
             } as es.Node)
-        ).toBeTruthy();
+        ).toBe(true);
         expect(
             isImportOrExportSpecifier({
                 type: AST_NODE_TYPES.Identifier,
             } as es.Node)
-        ).toBeFalsy();
-        expect(isImportOrExportSpecifier(undefined)).toBeFalsy();
+        ).toBe(false);
+        expect(isImportOrExportSpecifier(undefined)).toBe(false);
     });
 
     it("detects declaration identifiers across supported declaration node types", () => {
@@ -94,15 +94,15 @@ describe("symbol-usage helpers", () => {
 
         const withoutParentIdentifier = {} as es.Identifier;
 
-        expect(isDeclarationIdentifier(tsInterfaceIdentifier)).toBeTruthy();
-        expect(isDeclarationIdentifier(tsTypeAliasIdentifier)).toBeTruthy();
-        expect(isDeclarationIdentifier(classIdentifier)).toBeTruthy();
-        expect(isDeclarationIdentifier(functionIdentifier)).toBeTruthy();
-        expect(isDeclarationIdentifier(declareFunctionIdentifier)).toBeTruthy();
-        expect(isDeclarationIdentifier(tsEnumIdentifier)).toBeTruthy();
-        expect(isDeclarationIdentifier(variableIdentifier)).toBeTruthy();
-        expect(isDeclarationIdentifier(nonDeclarationIdentifier)).toBeFalsy();
-        expect(isDeclarationIdentifier(withoutParentIdentifier)).toBeFalsy();
+        expect(isDeclarationIdentifier(tsInterfaceIdentifier)).toBe(true);
+        expect(isDeclarationIdentifier(tsTypeAliasIdentifier)).toBe(true);
+        expect(isDeclarationIdentifier(classIdentifier)).toBe(true);
+        expect(isDeclarationIdentifier(functionIdentifier)).toBe(true);
+        expect(isDeclarationIdentifier(declareFunctionIdentifier)).toBe(true);
+        expect(isDeclarationIdentifier(tsEnumIdentifier)).toBe(true);
+        expect(isDeclarationIdentifier(variableIdentifier)).toBe(true);
+        expect(isDeclarationIdentifier(nonDeclarationIdentifier)).toBe(false);
+        expect(isDeclarationIdentifier(withoutParentIdentifier)).toBe(false);
     });
 
     it("extracts and normalizes JSDoc tag comments", () => {
@@ -116,7 +116,7 @@ describe("symbol-usage helpers", () => {
                         name: "internal",
                         text: [{ text: " part " }, { text: " value " }],
                     },
-                    { name: "internal", text: "   " },
+                    { name: "internal", text: " ".repeat(3) },
                     { name: "deprecated", text: "ignore" },
                     { name: "internal" },
                 ],
@@ -145,10 +145,10 @@ describe("symbol-usage helpers", () => {
 
     it("matches text against any provided regex pattern", () => {
         expect.hasAssertions();
-        expect(matchesAnyPattern("MySymbol", [/^My/v, /Other$/v])).toBeTruthy();
-        expect(
-            matchesAnyPattern("MySymbol", [/^Other/v, /Else$/v])
-        ).toBeFalsy();
+        expect(matchesAnyPattern("MySymbol", [/^My/v, /Other$/v])).toBe(true);
+        expect(matchesAnyPattern("MySymbol", [/^Other/v, /Else$/v])).toBe(
+            false
+        );
     });
 
     it("returns symbol from parserServices location lookup when available", () => {

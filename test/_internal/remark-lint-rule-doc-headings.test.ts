@@ -98,7 +98,7 @@ describe("remark-lint-rule-doc-headings catalog marker", () => {
                 messages,
                 "remark-lint:rule-doc-headings:missing-rule-catalog-id"
             )
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("reports when duplicate rule catalog markers are present", () => {
@@ -115,13 +115,13 @@ describe("remark-lint-rule-doc-headings catalog marker", () => {
                 messages,
                 "remark-lint:rule-doc-headings:duplicate-rule-catalog-id"
             )
-        ).toBeTruthy();
+        ).toBe(true);
         expect(
             hasRuleId(
                 messages,
                 "remark-lint:rule-doc-headings:missing-rule-catalog-id"
             )
-        ).toBeFalsy();
+        ).toBe(false);
     });
 
     it("accepts exactly one rule catalog marker", () => {
@@ -134,12 +134,12 @@ describe("remark-lint-rule-doc-headings catalog marker", () => {
                 messages,
                 "remark-lint:rule-doc-headings:missing-rule-catalog-id"
             )
-        ).toBeFalsy();
+        ).toBe(false);
         expect(
             hasRuleId(
                 messages,
                 "remark-lint:rule-doc-headings:duplicate-rule-catalog-id"
             )
-        ).toBeFalsy();
+        ).toBe(false);
     });
 });

@@ -92,8 +92,8 @@ describe("no-t fixture structure", () => {
 
         const names = collectTypeParameterNames(parseFixtureProgram());
 
-        expect(names.some((name) => name.length === 1)).toBeTruthy();
-        expect(names.some((name) => name.length > 1)).toBeTruthy();
+        expect(names.some((name) => name.length === 1)).toBe(true);
+        expect(names.some((name) => name.length > 1)).toBe(true);
     });
 
     it("parses generated generic declarations from fast-check", () => {

@@ -88,13 +88,7 @@ type Options = [
 ```ts
 [
  {
-  kinds: [
-   "arrow-function",
-   "class",
-   "function",
-   "method",
-   "type",
-  ],
+  kinds: ["arrow-function", "class", "function", "method", "type"],
  },
 ];
 ```

@@ -9,7 +9,7 @@ Use this preset when you want every rule exported by `eslint-plugin-etc-misc`.
 ## Config key
 
 ```ts
-etcMisc.configs.all
+etcMisc.configs.all;
 ```
 
 ## Flat Config example

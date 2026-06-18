@@ -16,9 +16,7 @@ Enable one preset in your Flat Config:
 ```ts
 import etcMisc from "eslint-plugin-etc-misc";
 
-export default [
-    etcMisc.configs.recommended,
-];
+export default [etcMisc.configs.recommended];
 ```
 
 Use `minimal` or `recommended` first, then move through stricter presets as
@@ -33,24 +31,24 @@ import tsParser from "@typescript-eslint/parser";
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        files: ["**/*.{ts,tsx,mts,cts}"],
-        languageOptions: {
-            parser: tsParser,
-            parserOptions: {
-                ecmaVersion: "latest",
-                // Enable only when using a type-aware preset.
-                // projectService: true,
-                sourceType: "module",
-            },
-        },
-        plugins: {
-            "etc-misc": etcMisc,
-        },
-        rules: {
-            ...etcMisc.configs.recommended.rules,
-        },
-    },
+ {
+  files: ["**/*.{ts,tsx,mts,cts}"],
+  languageOptions: {
+   parser: tsParser,
+   parserOptions: {
+    ecmaVersion: "latest",
+    // Enable only when using a type-aware preset.
+    // projectService: true,
+    sourceType: "module",
+   },
+  },
+  plugins: {
+   "etc-misc": etcMisc,
+  },
+  rules: {
+   ...etcMisc.configs.recommended.rules,
+  },
+ },
 ];
 ```
 

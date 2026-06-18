@@ -4,7 +4,7 @@ import * as fc from "fast-check";
 const configuredNumRunsRaw = process.env["FAST_CHECK_NUM_RUNS"];
 const configuredNumRuns =
     configuredNumRunsRaw === undefined
-        ? Number.NaN
+        ? NaN
         : Number.parseInt(configuredNumRunsRaw, 10);
 
 if (Number.isFinite(configuredNumRuns) && configuredNumRuns > 0) {

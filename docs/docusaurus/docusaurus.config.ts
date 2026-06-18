@@ -1,9 +1,9 @@
-import { themes as prismThemes } from "prism-react-renderer";
-
-import type { Config } from "@docusaurus/types";
 import type { Options as DocsPluginOptions } from "@docusaurus/plugin-content-docs";
 import type * as Preset from "@docusaurus/preset-classic";
+import type { Config } from "@docusaurus/types";
+
 import { fileURLToPath } from "node:url";
+import { themes as prismThemes } from "prism-react-renderer";
 
 /** Canonical site origin used for sitemap/canonical URL generation. */
 const siteUrl =
@@ -44,16 +44,14 @@ const removeHeadAttrFlagKey = [
 
 /** Docusaurus future flags, including optional experimental fast path. */
 const futureConfig = {
-    ...(enableExperimentalFaster
-        ? {
-              experimental_faster: {
-                  mdxCrossCompilerCache: true,
-                  rspackBundler: true,
-                  rspackPersistentCache: true,
-                  ssgWorkerThreads: true,
-              },
-          }
-        : {}),
+    ...(enableExperimentalFaster && {
+        experimental_faster: {
+            mdxCrossCompilerCache: true,
+            rspackBundler: true,
+            rspackPersistentCache: true,
+            ssgWorkerThreads: true,
+        },
+    }),
     v4: {
         [removeHeadAttrFlagKey]: true,
         // NOTE: Enabling cascade layers currently breaks our production CSS output
@@ -68,11 +66,11 @@ const futureConfig = {
 const config = {
     baseUrl,
     baseUrlIssueBanner: true,
+    clientModules: [modernEnhancementsClientModule],
     deploymentBranch: "gh-pages",
     favicon: "img/favicon.ico",
     // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
     future: futureConfig,
-    clientModules: [modernEnhancementsClientModule],
     i18n: {
         defaultLocale: "en",
         locales: ["en"],
@@ -189,9 +187,9 @@ const config = {
                 docs: {
                     breadcrumbs: true,
                     editUrl: `https://github.com/${organizationName}/${projectName}/blob/main/docs/docusaurus/`,
-                    path: "site-docs",
                     includeCurrentVersion: true,
                     onInlineTags: "ignore",
+                    path: "site-docs",
                     routeBasePath: "docs",
                     showLastUpdateAuthor: true,
                     showLastUpdateTime: true,
@@ -233,7 +231,7 @@ const config = {
                 svgr: {
                     svgrConfig: {
                         dimensions: false, // Remove width/height so CSS controls size
-                        expandProps: "start", // Spread props at the start: <svg {...props}>
+                        expandProps: "start", // Spread props at the start: <SVG {...props}>
                         icon: true, // Treat SVGs as icons (scales via viewBox)
                         memo: true, // Wrap component with React.memo
                         native: false, // Produce web React components (not React Native)
@@ -269,12 +267,6 @@ const config = {
             disableSwitch: false,
             respectPrefersColorScheme: true,
         },
-        metadata: [
-            {
-                content: "eslint-plugin-etc-misc",
-                name: "keywords",
-            },
-        ],
         footer: {
             copyright: footerCopyright,
             links: [
@@ -310,12 +302,12 @@ const config = {
                             label: "🔍 ESLint Inspector",
                         },
                         {
-                            to: "/docs/rules/overview",
                             label: "📏 Rule Docs",
+                            to: "/docs/rules/overview",
                         },
                         {
-                            to: "/docs/rules/presets/all",
                             label: "🟣 All Preset",
+                            to: "/docs/rules/presets/all",
                         },
                     ],
                     title: "🚀 Project",
@@ -344,14 +336,20 @@ const config = {
             ],
             logo: {
                 alt: "eslint-plugin-etc-misc logo",
+                height: "auto",
                 href: `https://github.com/${organizationName}/${projectName}`,
                 src: "img/logo_128x128.png",
                 width: "auto",
-                height: "auto",
             },
             style: "dark",
         },
         image: "img/logo.png",
+        metadata: [
+            {
+                content: "eslint-plugin-etc-misc",
+                name: "keywords",
+            },
+        ],
         navbar: {
             items: [
                 {

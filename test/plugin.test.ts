@@ -197,7 +197,7 @@ const assertPluginExposesRulesAndConfigs = (): void => {
     expect(
         plugin.configs.strictTypeChecked.languageOptions?.parserOptions
             ?.projectService
-    ).toBeTruthy();
+    ).toBe(true);
 
     const exportedRuleIds = getSortedRuleNames(plugin.rules);
     const allConfigRuleIds = toSortedStrings(
@@ -241,7 +241,7 @@ const assertPluginExposesRulesAndConfigs = (): void => {
             throw new Error(`Expected rule ${deprecatedRuleId} to exist.`);
         }
 
-        expect(rule.meta?.docs?.frozen).toBeTruthy();
+        expect(rule.meta?.docs?.frozen).toBe(true);
 
         const deprecatedMetadata = rule.meta?.deprecated;
         const hasDeprecationMetadata =
@@ -250,17 +250,17 @@ const assertPluginExposesRulesAndConfigs = (): void => {
             ? deprecatedMetadata.availableUntil
             : undefined;
 
-        expect(hasDeprecationMetadata).toBeTruthy();
+        expect(hasDeprecationMetadata).toBe(true);
         expect(availableUntil).toBe("2.0.0");
     }
 
     for (const minimalRuleId of minimalRuleIdSet) {
-        expect(recommendedRuleIdSet.has(minimalRuleId)).toBeTruthy();
+        expect(recommendedRuleIdSet.has(minimalRuleId)).toBe(true);
     }
 
     for (const preferReadonlyRuleId of preferReadonlyRuleIdSet) {
-        expect(minimalRuleIdSet.has(preferReadonlyRuleId)).toBeFalsy();
-        expect(recommendedRuleIdSet.has(preferReadonlyRuleId)).toBeTruthy();
+        expect(minimalRuleIdSet.has(preferReadonlyRuleId)).toBe(false);
+        expect(recommendedRuleIdSet.has(preferReadonlyRuleId)).toBe(true);
     }
 
     for (const [ruleId, rule] of Object.entries(plugin.rules)) {
@@ -323,12 +323,12 @@ describe("plugin export", () => {
         for (const preferReadonlyRuleId of preferReadonlyRuleIds) {
             const qualifiedRuleName = `etc-misc/${preferReadonlyRuleId}`;
 
-            expect(
-                qualifiedRuleName in plugin.configs.minimal.rules
-            ).toBeFalsy();
-            expect(
-                qualifiedRuleName in plugin.configs.recommended.rules
-            ).toBeTruthy();
+            expect(qualifiedRuleName in plugin.configs.minimal.rules).toBe(
+                false
+            );
+            expect(qualifiedRuleName in plugin.configs.recommended.rules).toBe(
+                true
+            );
         }
 
         const recommendedRuleLevelKeys = Object.keys(
@@ -386,7 +386,7 @@ describe("plugin export", () => {
         expect(
             plugin.configs.strictTypeChecked.languageOptions?.parserOptions
                 ?.projectService
-        ).toBeTruthy();
+        ).toBe(true);
 
         const allRuleNames = getSortedRuleNames(plugin.configs.all.rules);
         const allStrictRuleNames = getSortedRuleNames(

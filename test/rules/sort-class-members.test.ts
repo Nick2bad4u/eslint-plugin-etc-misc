@@ -89,7 +89,7 @@ describe("sort-class-members fixture structure", () => {
                         member.key.type === AST_NODE_TYPES.Literal
                 )
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             classBodies.some((classBody) =>
@@ -99,7 +99,7 @@ describe("sort-class-members fixture structure", () => {
                         member.computed
                 )
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             classBodies.some((classBody) =>
@@ -109,7 +109,7 @@ describe("sort-class-members fixture structure", () => {
                         member.key.type === AST_NODE_TYPES.PrivateIdentifier
                 )
             )
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("parses generated sorted class member snippets from fast-check", () => {

@@ -53,11 +53,11 @@ describe("sort-top-comments fixture structure", () => {
 
         expect(
             comments.some((comment) => comment.type === AST_TOKEN_TYPES.Block)
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             comments.some((comment) => comment.type === AST_TOKEN_TYPES.Line)
-        ).toBeTruthy();
+        ).toBe(true);
 
         const firstNodeStartLine = firstNode?.loc.start.line ?? 0;
 
@@ -65,13 +65,13 @@ describe("sort-top-comments fixture structure", () => {
             comments.some(
                 (comment) => comment.loc.end.line === firstNodeStartLine
             )
-        ).toBeFalsy();
+        ).toBe(false);
 
         expect(
             comments.some(
                 (comment) => comment.loc.end.line > firstNodeStartLine
             )
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("parses generated top-comment snippets from fast-check", () => {

@@ -85,11 +85,11 @@ Using both rules together gives better protection:
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-use-extend-native": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-use-extend-native": "error",
+  },
+ },
 ];
 ```

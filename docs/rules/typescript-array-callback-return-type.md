@@ -18,7 +18,7 @@ type: `Array`, tuple, union-of-arrays, or `ReadonlyArray`.
 
 ### Type checking
 
-This rule uses parser services and TypeScript’s type checker to avoid false
+This rule uses parser services and TypeScript's type checker to avoid false
 positives on user-defined methods that happen to share method names like `map`.
 
 ## What this rule reports
@@ -35,11 +35,7 @@ clarity and catches accidental return-shape drift earlier.
 ## ❌ Incorrect
 
 ```ts
-[
- 1,
- 2,
- 3,
-].map((value) => value + 1);
+[1, 2, 3].map((value) => value + 1);
 ```
 
 ```ts
@@ -49,11 +45,7 @@ users.find((user) => user.id === targetId);
 ## ✅ Correct
 
 ```ts
-[
- 1,
- 2,
- 3,
-].map((value): number => value + 1);
+[1, 2, 3].map((value): number => value + 1);
 ```
 
 ```ts
@@ -85,18 +77,14 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-const scores = [
- 2,
- 4,
- 6,
-] as const;
+const scores = [2, 4, 6] as const;
 
 const doubled = scores.map((score): number => score * 2);
 ```
 
 ```ts
 const custom = {
-    map: <T>(value: T): T => value,
+ map: <T>(value: T): T => value,
 };
 
 custom.map((value: number) => value + 1);

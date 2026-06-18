@@ -61,11 +61,7 @@ Use this option to control which type names are checked.
 ## Additional examples
 
 ```ts
-const set = new Set([
- 1,
- 2,
- 3,
-]);
+const set = new Set([1, 2, 3]);
 set.forEach((value) => console.log(value));
 // ❌ reported with default options
 

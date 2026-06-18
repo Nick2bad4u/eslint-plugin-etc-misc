@@ -79,19 +79,19 @@ describe("no-restricted-syntax fixture structure", () => {
 
         expect(
             nodes.some((node) => node.type === AST_NODE_TYPES.IfStatement)
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             nodes.some((node) => node.type === AST_NODE_TYPES.WhileStatement)
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             nodes.some((node) => node.type === AST_NODE_TYPES.SwitchStatement)
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             nodes.some((node) => node.type === AST_NODE_TYPES.ForStatement)
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("parses generated statement snippets from fast-check", () => {

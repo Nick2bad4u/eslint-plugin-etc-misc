@@ -1,4 +1,5 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
+import type { ArrayElement } from "type-fest";
 import type * as ts from "typescript";
 
 import { ESLintUtils } from "@typescript-eslint/utils";
@@ -21,7 +22,7 @@ type VariableInfo = NonNullable<ReturnType<VariableUsageMap["get"]>>;
 
 type VariableUsageMap = ReturnType<typeof tsutils.collectVariableUsage>;
 
-type VariableUse = VariableInfo["uses"][number];
+type VariableUse = ArrayElement<VariableInfo["uses"]>;
 
 const getVariableUses = (
     usageMap: Readonly<VariableUsageMap>,

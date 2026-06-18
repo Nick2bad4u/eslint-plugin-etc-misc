@@ -9,18 +9,18 @@ This rule analyzes TypeScript `TSEnumMember` nodes and validates naming for:
 - enum member identifiers (for example `ACTIVE_USER`), and
 - string literal member values when provided.
 
-It enforces SCREAMING\_SNAKE\_CASE in both places.
+It enforces SCREAMING_SNAKE_CASE in both places.
 
 ## What this rule reports
 
 This rule reports enum members when **neither** of these matches
-SCREAMING\_SNAKE\_CASE:
+SCREAMING_SNAKE_CASE:
 
 - the member identifier name, or
 - the string literal initializer value.
 
 In other words, the current implementation accepts a member if either side is
-already SCREAMING\_SNAKE\_CASE.
+already SCREAMING_SNAKE_CASE.
 
 ## Why this rule exists
 

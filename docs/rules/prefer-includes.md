@@ -19,22 +19,13 @@ comparisons.
 ## ❌ Incorrect
 
 ```ts
-const hasValue =
- [
-  1,
-  2,
-  3,
- ].indexOf(2) !== -1;
+const hasValue = [1, 2, 3].indexOf(2) !== -1;
 ```
 
 ## ✅ Correct
 
 ```ts
-const hasValue = [
- 1,
- 2,
- 3,
-].includes(2);
+const hasValue = [1, 2, 3].includes(2);
 ```
 
 ## Behavior and migration notes

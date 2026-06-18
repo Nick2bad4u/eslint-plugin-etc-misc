@@ -80,25 +80,25 @@ describe("no-internal fixture parser shape", () => {
 
         expect(
             nodes.some((node) => node.type === AST_NODE_TYPES.ImportSpecifier)
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             nodes.some((node) => node.type === AST_NODE_TYPES.ExportSpecifier)
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             program.body.some(
                 (statement) =>
                     statement.type === AST_NODE_TYPES.TSInterfaceDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             program.body.some(
                 (statement) =>
                     statement.type === AST_NODE_TYPES.TSDeclareFunction
             )
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("parses generated internal API snippets from fast-check", () => {

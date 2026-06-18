@@ -1,5 +1,5 @@
 import type { TSESLint } from "@typescript-eslint/utils";
-import type { UnknownArray } from "type-fest";
+import type { ArrayElement, UnknownArray } from "type-fest";
 
 import { isDefined } from "ts-extras";
 
@@ -7,7 +7,7 @@ type DeprecatedInfo = Exclude<
     TSESLint.RuleMetaData<string>["deprecated"],
     boolean | undefined
 >;
-type ReplacedByInfo = NonNullable<DeprecatedInfo["replacedBy"]>[number];
+type ReplacedByInfo = ArrayElement<NonNullable<DeprecatedInfo["replacedBy"]>>;
 
 type RuleDeprecationOptions = Readonly<{
     readonly message: string;
@@ -35,8 +35,8 @@ export const createReplacementRuleInfo = (
         }>;
     }>
 ): ReplacedByInfo => ({
-    ...(isDefined(replacement.plugin) ? { plugin: replacement.plugin } : {}),
-    ...(isDefined(replacement.rule) ? { rule: replacement.rule } : {}),
+    ...(isDefined(replacement.plugin) && { plugin: replacement.plugin }),
+    ...(isDefined(replacement.rule) && { rule: replacement.rule }),
 });
 
 /**
@@ -50,7 +50,7 @@ export const createDeprecatedRuleInfo = ({
     availableUntil: "2.0.0",
     deprecatedSince: "1.0.0",
     message,
-    ...(replacedBy.length === 0 ? {} : { replacedBy: [...replacedBy] }),
+    ...(replacedBy.length > 0 && { replacedBy: [...replacedBy] }),
     url: `${docsBaseUrl}/${ruleId.replaceAll("/", "-")}`,
 });
 
@@ -65,14 +65,12 @@ export const withDeprecatedRuleLifecycle = <TRule extends RuleModule>(
     meta: {
         ...rule.meta,
         deprecated: createDeprecatedRuleInfo(options),
-        ...(rule.meta.docs === undefined
-            ? {}
-            : {
-                  docs: {
-                      ...rule.meta.docs,
-                      deprecated: true,
-                      frozen: true,
-                  },
-              }),
+        ...(rule.meta.docs !== undefined && {
+            docs: {
+                ...rule.meta.docs,
+                deprecated: true,
+                frozen: true,
+            },
+        }),
     },
 });

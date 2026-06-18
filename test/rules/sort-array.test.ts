@@ -112,13 +112,13 @@ describe("sort-array fixture structure", () => {
                     (element) => element?.type === AST_NODE_TYPES.SpreadElement
                 )
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             arrays.some((arrayExpression) =>
                 arrayExpression.elements.includes(null)
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             arrays.some((arrayExpression) => {
@@ -132,7 +132,7 @@ describe("sort-array fixture structure", () => {
 
                 return nonNullElementCount >= 2;
             })
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("parses generated literal arrays from fast-check", () => {

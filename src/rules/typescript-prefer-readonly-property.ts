@@ -41,17 +41,15 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             context.report({
                 messageId: "forbidden",
                 node,
-                ...(isDefined(fix)
-                    ? {
-                          fix,
-                          suggest: [
-                              {
-                                  fix,
-                                  messageId: "suggestAddReadonly",
-                              },
-                          ],
-                      }
-                    : {}),
+                ...(isDefined(fix) && {
+                    fix,
+                    suggest: [
+                        {
+                            fix,
+                            messageId: "suggestAddReadonly",
+                        },
+                    ],
+                }),
             });
         },
     }),

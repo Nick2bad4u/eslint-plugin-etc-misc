@@ -55,7 +55,7 @@ describe("identifier block utilities", () => {
             fc.property(fc.string(), (value) => {
                 const blocks = splitIdentifierBlocks(value);
 
-                expect(blocks.every((block) => block.length > 0)).toBeTruthy();
+                expect(blocks.every((block) => block.length > 0)).toBe(true);
             }),
             {
                 numRuns: 50,

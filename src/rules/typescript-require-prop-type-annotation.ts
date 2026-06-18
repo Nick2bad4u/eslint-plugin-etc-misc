@@ -38,17 +38,15 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             context.report({
                 messageId: "forbidden",
                 node,
-                ...(isDefined(fix)
-                    ? {
-                          fix,
-                          suggest: [
-                              {
-                                  fix,
-                                  messageId: "suggestAnnotateUnknown",
-                              },
-                          ],
-                      }
-                    : {}),
+                ...(isDefined(fix) && {
+                    fix,
+                    suggest: [
+                        {
+                            fix,
+                            messageId: "suggestAnnotateUnknown",
+                        },
+                    ],
+                }),
             });
         },
     }),

@@ -1,19 +1,11 @@
+import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
+
 /**
  * @packageDocumentation
  * Dynamic sidebar generation for plugin rule documentation sections.
  */
-import { readFileSync, readdirSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-
-import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
-
-/** Minimal document item shape used by generated rule categories. */
-type SidebarDocItem = {
-    readonly id: string;
-    readonly label?: string;
-    readonly type: "doc";
-};
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 
 type RuleCatalogMapEntry = Readonly<{
     catalogId: string;
@@ -21,8 +13,15 @@ type RuleCatalogMapEntry = Readonly<{
     ruleName: string;
 }>;
 
+/** Minimal document item shape used by generated rule categories. */
+interface SidebarDocItem {
+    readonly id: string;
+    readonly label?: string;
+    readonly type: "doc";
+}
+
 /** Directory containing this sidebar module. */
-const sidebarDirectoryPath = dirname(fileURLToPath(import.meta.url));
+const sidebarDirectoryPath = import.meta.dirname;
 /** Directory containing generated rule docs consumed by the sidebar. */
 const rulesDocsDirectoryPath = join(sidebarDirectoryPath, "..", "rules");
 const ruleCatalogMapFilePath = join(
@@ -39,7 +38,7 @@ const sourceRulesDirectoryPath = join(
 );
 
 /** Docs that are part of the rules docs plugin but are not individual rule docs. */
-const nonRuleDocIds = new Set(["overview", "getting-started"]);
+const nonRuleDocIds = new Set(["getting-started", "overview"]);
 
 const ruleCatalogMap = JSON.parse(
     readFileSync(ruleCatalogMapFilePath, "utf8")
@@ -62,7 +61,7 @@ const toRuleId = (fileName: string): string => fileName.slice(0, -3);
 
 /** Convert a markdown path (e.g. `foo/bar.md`) to a Docusaurus doc id. */
 const toDocIdFromRelativePath = (relativePath: string): string =>
-    relativePath.replace(/\\/gu, "/").replace(/\.md$/u, "");
+    relativePath.replaceAll("\\", "/").replace(/\.md$/u, "");
 
 /** Collect markdown doc ids recursively from a docs directory. */
 const collectMarkdownDocIdsRecursively = (
@@ -112,11 +111,9 @@ const allRulesMarkdownDocIds = readdirSync(rulesDocsDirectoryPath, {
     .sort((left, right) => left.localeCompare(right));
 
 /** Sorted markdown doc ids discovered from `docs/rules/**`. */
-const allRulesPluginDocIds = collectMarkdownDocIdsRecursively(
-    rulesDocsDirectoryPath
-)
-    .slice()
-    .sort((left, right) => left.localeCompare(right));
+const allRulesPluginDocIds = [
+    ...collectMarkdownDocIdsRecursively(rulesDocsDirectoryPath),
+].sort((left, right) => left.localeCompare(right));
 const allRulesPluginDocIdSet = new Set(allRulesPluginDocIds);
 
 const hasRulesPluginDocId = (docId: string): boolean =>
@@ -224,15 +221,15 @@ if (guideItems.length > 0) {
         customProps: {
             badge: "guides",
         },
-        type: "category",
+        items: guideItems,
         label: "🧭 Adoption & Rollout",
         link: {
-            type: "generated-index",
-            title: "Adoption & Rollout",
             description:
                 "Shared migration, rollout, and fix-safety guidance for rule adoption.",
+            title: "Adoption & Rollout",
+            type: "generated-index",
         },
-        items: guideItems,
+        type: "category",
     });
 }
 
@@ -293,15 +290,15 @@ if (presetItems.length > 0) {
         customProps: {
             badge: "presets",
         },
-        type: "category",
+        items: presetItems,
         label: "🎛 Presets",
         link: {
-            type: "generated-index",
-            title: "Presets",
             description:
                 "Predefined flat-config preset bundles for different adoption levels.",
+            title: "Presets",
+            type: "generated-index",
         },
-        items: presetItems,
+        type: "category",
     });
 }
 
@@ -337,15 +334,6 @@ const sidebars = {
             customProps: {
                 badge: "rules",
             },
-            type: "category",
-            label: "📏 Rules",
-            link: {
-                type: "generated-index",
-                title: "Rule Reference",
-                slug: "/",
-                description:
-                    "Rule documentation for every eslint-plugin-etc-misc rule.",
-            },
             items: [
                 {
                     className: "sb-cat-rules-core",
@@ -353,15 +341,15 @@ const sidebars = {
                     customProps: {
                         badge: "core",
                     },
-                    type: "category",
+                    items: createRuleItems(coreRuleDocIds),
                     label: "🧱 Core Rules",
                     link: {
-                        type: "generated-index",
-                        title: "Core Rules",
                         description:
                             "General-purpose etc-misc rules for safer and clearer TypeScript code.",
+                        title: "Core Rules",
+                        type: "generated-index",
                     },
-                    items: createRuleItems(coreRuleDocIds),
+                    type: "category",
                 },
                 {
                     className: "sb-cat-rules-typescript",
@@ -369,17 +357,26 @@ const sidebars = {
                     customProps: {
                         badge: "typescript",
                     },
-                    type: "category",
+                    items: createRuleItems(typeScriptRuleDocIds),
                     label: "🧠 TypeScript Rules",
                     link: {
-                        type: "generated-index",
-                        title: "TypeScript Rules",
                         description:
                             "Rules focused on stronger TypeScript-only constraints and type-level consistency.",
+                        title: "TypeScript Rules",
+                        type: "generated-index",
                     },
-                    items: createRuleItems(typeScriptRuleDocIds),
+                    type: "category",
                 },
             ],
+            label: "📏 Rules",
+            link: {
+                description:
+                    "Rule documentation for every eslint-plugin-etc-misc rule.",
+                slug: "/",
+                title: "Rule Reference",
+                type: "generated-index",
+            },
+            type: "category",
         },
     ],
 } as const satisfies SidebarsConfig;

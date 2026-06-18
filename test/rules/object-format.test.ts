@@ -93,14 +93,14 @@ describe("object-format fixture structure", () => {
                 (expression) =>
                     expression.loc.start.line === expression.loc.end.line
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             objectExpressions.some(
                 (expression) =>
                     expression.loc.start.line !== expression.loc.end.line
             )
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("parses generated object literals from fast-check", () => {

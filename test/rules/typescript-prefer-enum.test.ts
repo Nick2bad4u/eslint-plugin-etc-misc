@@ -79,7 +79,7 @@ describe("typescript-prefer-enum fixture structure", () => {
 
         expect(
             nodes.some((node) => node.type === AST_NODE_TYPES.TSEnumDeclaration)
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             nodes.some(
@@ -90,7 +90,7 @@ describe("typescript-prefer-enum fixture structure", () => {
                         node.operator === "!=" ||
                         node.operator === "!==")
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             nodes.some(
@@ -99,7 +99,7 @@ describe("typescript-prefer-enum fixture structure", () => {
                     node.argument?.type === AST_NODE_TYPES.Literal &&
                     typeof node.argument.value === "string"
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             nodes.some(
@@ -107,7 +107,7 @@ describe("typescript-prefer-enum fixture structure", () => {
                     node.type === AST_NODE_TYPES.TSTypeAliasDeclaration &&
                     node.typeAnnotation.type === AST_NODE_TYPES.TSUnionType
             )
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("parses generated string-literal unions from fast-check", () => {

@@ -15,14 +15,15 @@ which means the following code is syntactically valid and runs without errors:
 
 ```ts
 function publicMethods(obj) {
-    if (obj instanceof CustomClass) {
-        return {
-            get: methodGetter(obj), // ← called before its declaration ❌
-        };
-    }
-    function methodGetter(obj) { // ← declared after the return
-        // …
-    }
+ if (obj instanceof CustomClass) {
+  return {
+   get: methodGetter(obj), // ← called before its declaration ❌
+  };
+ }
+ function methodGetter(obj) {
+  // ← declared after the return
+  // …
+ }
 }
 ```
 
@@ -57,21 +58,25 @@ the `return` statement in the same statement list (`BlockStatement` or
 
 ```ts
 function outer() {
-    return 42;
-    function helper() {} // ← 'helper' should be moved before the return
+ return 42;
+ function helper() {} // ← 'helper' should be moved before the return
 }
 ```
 
 ```ts
 function publicMethods(obj) {
-    if (obj) {
-        return {
-            set: methodSetter(obj),
-            get: methodGetter(obj),
-        };
-        function methodSetter(obj) { /* … */ } // ← should be before return
-        function methodGetter(obj) { /* … */ } // ← should be before return
-    }
+ if (obj) {
+  return {
+   set: methodSetter(obj),
+   get: methodGetter(obj),
+  };
+  function methodSetter(obj) {
+   /* … */
+  } // ← should be before return
+  function methodGetter(obj) {
+   /* … */
+  } // ← should be before return
+ }
 }
 ```
 
@@ -79,21 +84,25 @@ function publicMethods(obj) {
 
 ```ts
 function outer() {
-    function helper() {} // ← declared before the return
-    return helper();
+ function helper() {} // ← declared before the return
+ return helper();
 }
 ```
 
 ```ts
 function publicMethods(obj) {
-    function methodSetter(obj) { /* … */ } // ← before the return
-    function methodGetter(obj) { /* … */ } // ← before the return
-    if (obj) {
-        return {
-            set: methodSetter(obj),
-            get: methodGetter(obj),
-        };
-    }
+ function methodSetter(obj) {
+  /* … */
+ } // ← before the return
+ function methodGetter(obj) {
+  /* … */
+ } // ← before the return
+ if (obj) {
+  return {
+   set: methodSetter(obj),
+   get: methodGetter(obj),
+  };
+ }
 }
 ```
 
@@ -101,8 +110,8 @@ function publicMethods(obj) {
 // Arrow functions and function expressions after return are NOT flagged —
 // use no-unreachable for those.
 function outer() {
-    return 1;
-    const arrow = () => {}; // not a FunctionDeclaration — not flagged here
+ return 1;
+ const arrow = () => {}; // not a FunctionDeclaration — not flagged here
 }
 ```
 
@@ -139,11 +148,11 @@ This rule has no options.
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-function-declare-after-return": "warn",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-function-declare-after-return": "warn",
+  },
+ },
 ];
 ```

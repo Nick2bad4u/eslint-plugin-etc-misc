@@ -54,11 +54,11 @@ const maybeUnsafe = RegExp(source); // Dynamic value: intentionally not analyzed
 
 ```ts
 type Options = [
-    {
-        ignoreErrors?: boolean;
-        permittableComplexities?: Array<"polynomial" | "exponential">;
-        timeout?: number | null;
-    }?,
+ {
+  ignoreErrors?: boolean;
+  permittableComplexities?: Array<"polynomial" | "exponential">;
+  timeout?: number | null;
+ }?,
 ];
 ```
 
@@ -112,11 +112,11 @@ For example, to allow polynomial but still report exponential:
 import etcMisc from "eslint-plugin-etc-misc";
 
 export default [
-    {
-        plugins: { "etc-misc": etcMisc },
-        rules: {
-            "etc-misc/no-vulnerable": "error",
-        },
-    },
+ {
+  plugins: { "etc-misc": etcMisc },
+  rules: {
+   "etc-misc/no-vulnerable": "error",
+  },
+ },
 ];
 ```

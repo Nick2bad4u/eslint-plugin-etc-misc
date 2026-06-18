@@ -26,20 +26,12 @@ mutating shared state, which causes subtle bugs.
 ## ❌ Incorrect
 
 ```ts
-const names = [
- "c",
- "a",
- "b",
-];
+const names = ["c", "a", "b"];
 const sorted = names.sort();
 ```
 
 ```ts
-const names = [
- "c",
- "a",
- "b",
-];
+const names = ["c", "a", "b"];
 print(names.reverse());
 ```
 
@@ -51,29 +43,17 @@ return sorted;
 ## ✅ Correct
 
 ```ts
-const names = [
- "c",
- "a",
- "b",
-];
+const names = ["c", "a", "b"];
 names.sort();
 ```
 
 ```ts
-const names = [
- "c",
- "a",
- "b",
-];
+const names = ["c", "a", "b"];
 const sorted = names.slice().sort();
 ```
 
 ```ts
-const names = [
- "c",
- "a",
- "b",
-];
+const names = ["c", "a", "b"];
 const sorted = names.map((name) => name).reverse();
 ```
 

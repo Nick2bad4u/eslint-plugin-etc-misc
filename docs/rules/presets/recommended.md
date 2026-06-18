@@ -46,7 +46,7 @@ export default [etcMisc.configs.recommended];
 
 ## Adoption guidance
 
-If you don’t want readonly preference rules yet, start with minimal. Otherwise, start here for a balanced baseline of correctness and maintainability rules. This preset is designed to be a long-term baseline, so it includes some rules that may be initially noisy but are worth fixing early for long-term benefits.
+If you don't want readonly preference rules yet, start with minimal. Otherwise, start here for a balanced baseline of correctness and maintainability rules. This preset is designed to be a long-term baseline, so it includes some rules that may be initially noisy but are worth fixing early for long-term benefits.
 
 This preset now enables a wider "safe baseline" mix:
 

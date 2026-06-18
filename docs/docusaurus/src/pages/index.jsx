@@ -1,9 +1,9 @@
 import Link from "@docusaurus/Link";
 import useBaseUrl from "@docusaurus/useBaseUrl";
-import Layout from "@theme/Layout";
 import Heading from "@theme/Heading";
-import GitHubStats from "../components/GitHubStats";
+import Layout from "@theme/Layout";
 
+import GitHubStats from "../components/GitHubStats";
 import styles from "./index.module.css";
 
 const heroBadges = [
@@ -47,24 +47,24 @@ const heroStats = [
 
 const homeCards = [
     {
-        icon: "\uf135",
-        title: "Get Started",
         description:
             "Install the plugin, enable a preset, and start enforcing consistent TypeScript-first conventions.",
+        icon: "\u{F135}",
+        title: "Get Started",
         to: "/docs/rules/getting-started",
     },
     {
-        icon: "\uf14e",
-        title: "Presets",
         description:
             "Choose between the focused recommended preset and the complete all-rules preset.",
+        icon: "\u{F14E}",
+        title: "Presets",
         to: "/docs/rules/presets/all",
     },
     {
-        icon: "\uf02d",
-        title: "Rule Reference",
         description:
             "Browse every rule with concrete incorrect/correct examples and migration guidance.",
+        icon: "\u{F02D}",
+        title: "Rule Reference",
         to: "/docs/rules",
     },
 ];
@@ -79,8 +79,8 @@ export default function Home() {
 
     return (
         <Layout
-            title="eslint-plugin-etc-misc docs"
             description="Documentation for eslint-plugin-etc-misc"
+            title="eslint-plugin-etc-misc docs"
         >
             <header className={styles.heroBanner}>
                 <div className={`container ${styles.heroContent}`}>
@@ -102,8 +102,8 @@ export default function Home() {
                             <div className={styles.heroBadgeRow}>
                                 {heroBadges.map((badge) => (
                                     <article
-                                        key={badge.label}
                                         className={styles.heroBadge}
+                                        key={badge.label}
                                     >
                                         <p className={styles.heroBadgeLabel}>
                                             <span
@@ -159,8 +159,8 @@ export default function Home() {
                     <div className={styles.heroStats}>
                         {heroStats.map((stat) => (
                             <article
-                                key={stat.headline}
                                 className={styles.heroStatCard}
+                                key={stat.headline}
                             >
                                 <p className={styles.heroStatHeading}>
                                     {stat.headline}
@@ -178,7 +178,7 @@ export default function Home() {
                 <section className="container">
                     <div className={styles.cardGrid}>
                         {homeCards.map((card) => (
-                            <article key={card.title} className={styles.card}>
+                            <article className={styles.card} key={card.title}>
                                 <div className={styles.cardHeader}>
                                     <p className={styles.cardIcon}>
                                         {card.icon}

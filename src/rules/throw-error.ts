@@ -96,16 +96,14 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 data: { usage },
                 messageId: "forbidden",
                 node,
-                ...(suggestionFix === undefined
-                    ? {}
-                    : {
-                          suggest: [
-                              {
-                                  fix: suggestionFix,
-                                  messageId: "suggestWrapInError",
-                              },
-                          ],
-                      }),
+                ...(suggestionFix !== undefined && {
+                    suggest: [
+                        {
+                            fix: suggestionFix,
+                            messageId: "suggestWrapInError",
+                        },
+                    ],
+                }),
             });
         };
 

@@ -47,7 +47,7 @@ describe("export-matching-filename-only fixture structure", () => {
                     statement.declaration?.type ===
                         AST_NODE_TYPES.ClassDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             program.body.some(
@@ -58,7 +58,7 @@ describe("export-matching-filename-only fixture structure", () => {
                             specifier.type === AST_NODE_TYPES.ExportSpecifier
                     )
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             program.body.some(
@@ -67,14 +67,14 @@ describe("export-matching-filename-only fixture structure", () => {
                     statement.declaration?.type ===
                         AST_NODE_TYPES.FunctionDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             program.body.some(
                 (statement) =>
                     statement.type === AST_NODE_TYPES.ExportDefaultDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("parses generated export snippets from fast-check", () => {

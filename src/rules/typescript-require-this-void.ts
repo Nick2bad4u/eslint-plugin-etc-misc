@@ -68,17 +68,15 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 context.report({
                     messageId: "forbidden",
                     node,
-                    ...(suggestionFix === undefined
-                        ? {}
-                        : {
-                              fix: suggestionFix,
-                              suggest: [
-                                  {
-                                      fix: suggestionFix,
-                                      messageId: "suggestAddThisVoid",
-                                  },
-                              ],
-                          }),
+                    ...(suggestionFix !== undefined && {
+                        fix: suggestionFix,
+                        suggest: [
+                            {
+                                fix: suggestionFix,
+                                messageId: "suggestAddThisVoid",
+                            },
+                        ],
+                    }),
                 });
             },
         };

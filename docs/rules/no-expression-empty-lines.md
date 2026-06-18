@@ -4,7 +4,7 @@ Disallow blank lines inside expression statements.
 
 ## Targeted pattern scope
 
-This rule inspects `ExpressionStatement` nodes and checks the expression’s raw
+This rule inspects `ExpressionStatement` nodes and checks the expression's raw
 source text for blank lines.
 
 It only applies to expression statements and does not inspect declarations,
@@ -23,9 +23,7 @@ formatting noise.
 ## ❌ Incorrect
 
 ```ts
-someCall(
-
-    1);
+someCall(1);
 ```
 
 ## ✅ Correct

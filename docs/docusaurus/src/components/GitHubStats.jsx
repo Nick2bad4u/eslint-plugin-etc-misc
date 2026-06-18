@@ -57,19 +57,19 @@ export default function GitHubStats({ className = "" } = {}) {
     return (
         <ul className={badgeListClassName}>
             {liveBadges.map((badge) => (
-                <li key={badge.src} className={styles.liveBadgeListItem}>
+                <li className={styles.liveBadgeListItem} key={badge.src}>
                     <Link
                         className={styles.liveBadgeAnchor}
                         href={badge.href}
-                        target="_blank"
                         rel="noopener noreferrer"
+                        target="_blank"
                     >
                         <img
                             alt={badge.alt}
                             className={styles.liveBadgeImage}
-                            src={badge.src}
-                            loading="lazy"
                             decoding="async"
+                            loading="lazy"
+                            src={badge.src}
                         />
                     </Link>
                 </li>

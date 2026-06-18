@@ -106,7 +106,7 @@ describe("sort-keys fixture structure", () => {
                         property.key.type === AST_NODE_TYPES.Identifier
                 )
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             objects.some((objectExpression) =>
@@ -116,7 +116,7 @@ describe("sort-keys fixture structure", () => {
                         property.computed
                 )
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             objects.some((objectExpression) =>
@@ -124,7 +124,7 @@ describe("sort-keys fixture structure", () => {
                     (property) => property.type === AST_NODE_TYPES.SpreadElement
                 )
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             objects.some((objectExpression) =>
@@ -135,7 +135,7 @@ describe("sort-keys fixture structure", () => {
                         typeof property.key.value === "number"
                 )
             )
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("parses generated object literals from fast-check", () => {

@@ -101,8 +101,8 @@ const isNeverReassigned = (
         return false;
     }
 
-    return !declaredVariable.references.some(
-        (reference) => reference.isWrite() && reference.init !== true
+    return declaredVariable.references.every(
+        (reference) => !reference.isWrite() || reference.init === true
     );
 };
 

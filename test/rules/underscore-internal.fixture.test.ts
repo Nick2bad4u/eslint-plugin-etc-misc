@@ -53,7 +53,7 @@ describe("underscore-internal fixture structure", () => {
                     statement.declaration?.type ===
                     AST_NODE_TYPES.VariableDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             exportNamedDeclarations.some(
@@ -61,7 +61,7 @@ describe("underscore-internal fixture structure", () => {
                     statement.declaration?.type ===
                     AST_NODE_TYPES.FunctionDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             exportNamedDeclarations.some(
@@ -69,7 +69,7 @@ describe("underscore-internal fixture structure", () => {
                     statement.declaration?.type ===
                     AST_NODE_TYPES.ClassDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             exportNamedDeclarations.some(
@@ -77,7 +77,7 @@ describe("underscore-internal fixture structure", () => {
                     statement.declaration?.type ===
                     AST_NODE_TYPES.TSEnumDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             exportNamedDeclarations.some(
@@ -87,14 +87,14 @@ describe("underscore-internal fixture structure", () => {
                     statement.declaration?.type ===
                         AST_NODE_TYPES.TSTypeAliasDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             program.body.some(
                 (statement) =>
                     statement.type === AST_NODE_TYPES.ExportDefaultDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("parses generated internal export snippets from fast-check", () => {

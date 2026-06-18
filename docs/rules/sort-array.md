@@ -25,21 +25,13 @@ faster during code review.
 ## ❌ Incorrect
 
 ```ts
-const statuses = [
- "pending",
- "active",
- "archived",
-];
+const statuses = ["pending", "active", "archived"];
 ```
 
 ## ✅ Correct
 
 ```ts
-const statuses = [
- "active",
- "archived",
- "pending",
-];
+const statuses = ["active", "archived", "pending"];
 ```
 
 ## Behavior and migration notes

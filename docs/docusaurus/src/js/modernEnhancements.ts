@@ -7,9 +7,9 @@
 type CleanupFunction = () => void;
 
 /** Mutable holder used to swap active cleanup handlers between route refreshes. */
-type CleanupRef = {
+interface CleanupRef {
     current: CleanupFunction | null;
-};
+}
 
 declare global {
     interface Window {
@@ -19,58 +19,6 @@ declare global {
 
 /** Delay before re-initializing effects after client-side route transitions. */
 const ROUTE_REFRESH_DELAY_MS = 100;
-
-/**
- * Check whether a node is an {@link HTMLElement}.
- *
- * @param element - DOM element candidate.
- *
- * @returns `true` when element is an `HTMLElement` instance.
- */
-function isHTMLElement(element: Element | null): element is HTMLElement {
-    return element instanceof HTMLElement;
-}
-
-/**
- * Create and maintain a top-page scroll progress indicator.
- *
- * @returns Cleanup callback that removes listeners and indicator markup.
- */
-function createScrollIndicator(): CleanupFunction {
-    const indicator = document.createElement("div");
-    indicator.className = "scroll-indicator";
-    indicator.style.cssText = [
-        "position: fixed",
-        "inset-block-start: 0",
-        "inset-inline-start: 0",
-        "z-index: 9999",
-        "height: 3px",
-        "width: 0%",
-        "background: linear-gradient(90deg, var(--ifm-color-primary), var(--ifm-color-primary-light))",
-        "pointer-events: none",
-        "transition: width 80ms linear",
-    ].join(";");
-
-    document.body.append(indicator);
-
-    const update = (): void => {
-        const scrollTop =
-            window.pageYOffset || document.documentElement.scrollTop;
-        const docHeight =
-            document.documentElement.scrollHeight - window.innerHeight;
-        const safeHeight = docHeight > 0 ? docHeight : 1;
-        const scrollPercent = (scrollTop / safeHeight) * 100;
-        indicator.style.width = `${Math.max(0, Math.min(100, scrollPercent))}%`;
-    };
-
-    window.addEventListener("scroll", update, { passive: true });
-    update();
-
-    return (): void => {
-        window.removeEventListener("scroll", update);
-        indicator.remove();
-    };
-}
 
 /**
  * Apply a subtle animation to the theme toggle control.
@@ -117,12 +65,53 @@ function applyThemeToggleAnimation(): CleanupFunction {
 }
 
 /**
+ * Create and maintain a top-page scroll progress indicator.
+ *
+ * @returns Cleanup callback that removes listeners and indicator markup.
+ */
+function createScrollIndicator(): CleanupFunction {
+    const indicator = document.createElement("div");
+    indicator.className = "scroll-indicator";
+    indicator.style.cssText = [
+        "position: fixed",
+        "inset-block-start: 0",
+        "inset-inline-start: 0",
+        "z-index: 9999",
+        "height: 3px",
+        "width: 0%",
+        "background: linear-gradient(90deg, var(--ifm-color-primary), var(--ifm-color-primary-light))",
+        "pointer-events: none",
+        "transition: width 80ms linear",
+    ].join(";");
+
+    document.body.append(indicator);
+
+    const update = (): void => {
+        const scrollTop =
+            window.pageYOffset || document.documentElement.scrollTop;
+        const docHeight =
+            document.documentElement.scrollHeight - window.innerHeight;
+        const safeHeight = docHeight > 0 ? docHeight : 1;
+        const scrollPercent = (scrollTop / safeHeight) * 100;
+        indicator.style.width = `${Math.max(0, Math.min(100, scrollPercent))}%`;
+    };
+
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+
+    return (): void => {
+        window.removeEventListener("scroll", update);
+        indicator.remove();
+    };
+}
+
+/**
  * Initialize modern interaction features and return cleanup hooks.
  *
  * @returns Cleanup callback for all registered enhancement handlers.
  */
 function initializeAdvancedFeatures(): CleanupFunction {
-    const prefersReducedMotion = window.matchMedia(
+    const prefersReducedMotion = globalThis.matchMedia(
         "(prefers-reduced-motion: reduce)"
     ).matches;
     const cleanupFunctions: CleanupFunction[] = [];
@@ -134,9 +123,9 @@ function initializeAdvancedFeatures(): CleanupFunction {
     }
 
     return (): void => {
-        cleanupFunctions.forEach((cleanup) => {
+        for (const cleanup of cleanupFunctions) {
             cleanup();
-        });
+        }
     };
 }
 
@@ -208,6 +197,17 @@ function initializeEnhancements(): CleanupFunction {
         window.removeEventListener("beforeunload", handleBeforeUnload);
         handleBeforeUnload();
     };
+}
+
+/**
+ * Check whether a node is an {@link HTMLElement}.
+ *
+ * @param element - DOM element candidate.
+ *
+ * @returns `true` when element is an `HTMLElement` instance.
+ */
+function isHTMLElement(element: Element | null): element is HTMLElement {
+    return element instanceof HTMLElement;
 }
 
 if (typeof window !== "undefined" && typeof document !== "undefined") {

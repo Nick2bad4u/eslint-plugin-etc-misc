@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-use-before-define, no-use-before-define, perfectionist/sort-modules -- helper declarations are grouped by concern; forward references are functionally harmless and keep inference code readable. */
+/* eslint-disable @typescript-eslint/no-use-before-define, perfectionist/sort-modules -- helper declarations are grouped by concern; forward references are functionally harmless and keep inference code readable. */
 
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
@@ -438,4 +438,4 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 
 export default rule;
 
-/* eslint-enable @typescript-eslint/no-use-before-define, no-use-before-define, perfectionist/sort-modules -- Re-enable after this file-scoped exception block. */
+/* eslint-enable @typescript-eslint/no-use-before-define, perfectionist/sort-modules -- Re-enable after this file-scoped exception block. */

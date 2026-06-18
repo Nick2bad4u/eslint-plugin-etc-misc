@@ -44,7 +44,7 @@ describe("no-self-import fixture structure", () => {
                 (statement) =>
                     statement.type === AST_NODE_TYPES.ImportDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             program.body.some(
@@ -52,14 +52,14 @@ describe("no-self-import fixture structure", () => {
                     statement.type === AST_NODE_TYPES.ExportNamedDeclaration &&
                     statement.source !== null
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             program.body.some(
                 (statement) =>
                     statement.type === AST_NODE_TYPES.ExportAllDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             program.body.some(
@@ -70,7 +70,7 @@ describe("no-self-import fixture structure", () => {
                     statement.expression.argument.type ===
                         AST_NODE_TYPES.ImportExpression
             )
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("parses generated relative import snippets from fast-check", () => {

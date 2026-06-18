@@ -13,7 +13,7 @@ const splitWords = (value: string): readonly string[] =>
 const toPascal = (value: string): string =>
     arrayJoin(
         splitWords(value).map(
-            (word) => `${word[0]?.toUpperCase() ?? ""}${word.slice(1)}`
+            (word) => `${word.at(0)?.toUpperCase() ?? ""}${word.slice(1)}`
         ),
         ""
     );
@@ -25,7 +25,7 @@ export const toCasing = (value: string, format: Casing): string => {
     switch (format) {
         case "camelCase": {
             const pascal = toPascal(value);
-            return `${pascal[0]?.toLowerCase() ?? ""}${pascal.slice(1)}`;
+            return `${pascal.at(0)?.toLowerCase() ?? ""}${pascal.slice(1)}`;
         }
 
         case "kebab-case": {

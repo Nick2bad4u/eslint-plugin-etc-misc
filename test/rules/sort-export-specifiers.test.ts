@@ -109,7 +109,7 @@ describe("sort-export-specifiers fixture structure", () => {
                         specifier.local.name !== specifier.exported.name
                 )
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         expect(
             declarations.some((declaration) =>
@@ -120,7 +120,7 @@ describe("sort-export-specifiers fixture structure", () => {
                         typeof specifier.exported.value === "string"
                 )
             )
-        ).toBeTruthy();
+        ).toBe(true);
 
         const fixtureProgram = parseFixtureProgram();
 
@@ -129,7 +129,7 @@ describe("sort-export-specifiers fixture structure", () => {
                 (statement) =>
                     statement.type === AST_NODE_TYPES.ExportAllDeclaration
             )
-        ).toBeTruthy();
+        ).toBe(true);
     });
 
     it("parses generated export lists from fast-check", () => {
