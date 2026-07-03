@@ -46,7 +46,7 @@ const getConfiguredTypeNames = (
     return typeNames;
 };
 
-const matchesConfiguredCollectionType = (
+const isConfiguredCollectionType = (
     typeChecker: Readonly<ts.TypeChecker>,
     type: Readonly<ts.Type>,
     configuredTypeNames: ReadonlySet<string>
@@ -98,7 +98,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         callee.object
                     );
                     if (
-                        !matchesConfiguredCollectionType(
+                        !isConfiguredCollectionType(
                             typeChecker,
                             objectType,
                             configuredTypeNames

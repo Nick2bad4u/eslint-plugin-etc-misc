@@ -40,8 +40,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     create: (context) => ({
         ClassBody: (node: Readonly<es.ClassBody>): void => {
             let members: readonly (
-                | es.MethodDefinition
-                | es.PropertyDefinition
+                es.MethodDefinition | es.PropertyDefinition
             )[] = [];
             for (const member of node.body) {
                 if (

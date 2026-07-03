@@ -82,15 +82,17 @@ const getImportExpressionsFromProgram = (
     const importExpressions: TSESTree.ImportExpression[] = [];
 
     for (const statement of program.body) {
-        if (statement.type === AST_NODE_TYPES.ExpressionStatement) {
-            const expression =
-                statement.expression.type === AST_NODE_TYPES.UnaryExpression
-                    ? statement.expression.argument
-                    : statement.expression;
+        if (statement.type !== AST_NODE_TYPES.ExpressionStatement) {
+            continue;
+        }
 
-            if (expression.type === AST_NODE_TYPES.ImportExpression) {
-                importExpressions.push(expression);
-            }
+        const expression =
+            statement.expression.type === AST_NODE_TYPES.UnaryExpression
+                ? statement.expression.argument
+                : statement.expression;
+
+        if (expression.type === AST_NODE_TYPES.ImportExpression) {
+            importExpressions.push(expression);
         }
     }
 

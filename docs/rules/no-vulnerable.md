@@ -2,21 +2,7 @@
 
 Disallow regular expressions that are potentially vulnerable to ReDoS (Regular Expression Denial of Service).
 
-## Why this rule is included here
-
-This rule was integrated into `eslint-plugin-etc-misc` to avoid requiring a separate single-rule plugin dependency.
-
-Original plugin source: [`eslint-plugin-redos-detector`](https://github.com/tjenkinson/eslint-plugin-redos-detector).
-
-## Rule details
-
-This rule analyzes regular expression literals and statically-resolvable `RegExp(...)` constructor calls using [`recheck`](https://www.npmjs.com/package/recheck).
-
-Catastrophic backtracking can make an application spend excessive CPU time on crafted inputs. In server contexts, that can become an availability issue.
-
-This rule reports patterns that `recheck` identifies as vulnerable with polynomial or exponential complexity.
-
-## What this rule checks
+## Targeted pattern scope
 
 This rule checks:
 
@@ -24,6 +10,16 @@ This rule checks:
 - `RegExp("...")` and `new RegExp("...", "flags")` when both arguments are statically-known strings.
 
 This rule intentionally skips dynamic patterns/flags it cannot resolve safely at lint time.
+
+## What this rule reports
+
+This rule analyzes regular expression literals and statically-resolvable `RegExp(...)` constructor calls using [`recheck`](https://www.npmjs.com/package/recheck).
+
+This rule reports patterns that `recheck` identifies as vulnerable with polynomial or exponential complexity.
+
+## Why this rule exists
+
+Catastrophic backtracking can make an application spend excessive CPU time on crafted inputs. In server contexts, that can become an availability issue.
 
 ## ❌ Incorrect
 
@@ -50,7 +46,7 @@ const source = getPatternFromConfig();
 const maybeUnsafe = RegExp(source); // Dynamic value: intentionally not analyzed.
 ```
 
-## Options
+## Behavior and migration notes
 
 ```ts
 type Options = [
@@ -94,17 +90,7 @@ For example, to allow polynomial but still report exponential:
 }
 ```
 
-## When not to use it
-
-- If your codebase never handles untrusted input with regexes.
-- If lint-time regex analysis cost is unacceptable for your workflow.
-- If you prefer running ReDoS scanning as a separate CI security step rather than as an ESLint rule.
-
-## Further reading
-
-- [OWASP: Regular expression Denial of Service (ReDoS)](https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS)
-- [`recheck` package](https://www.npmjs.com/package/recheck)
-- [MDN: Regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions)
+Original plugin source: [`eslint-plugin-redos-detector`](https://github.com/tjenkinson/eslint-plugin-redos-detector).
 
 ## ESLint flat config example
 
@@ -120,3 +106,15 @@ export default [
  },
 ];
 ```
+
+## When not to use it
+
+- If your codebase never handles untrusted input with regexes.
+- If lint-time regex analysis cost is unacceptable for your workflow.
+- If you prefer running ReDoS scanning as a separate CI security step rather than as an ESLint rule.
+
+## Further reading
+
+- [OWASP: Regular expression Denial of Service (ReDoS)](https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS)
+- [`recheck` package](https://www.npmjs.com/package/recheck)
+- [MDN: Regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions)

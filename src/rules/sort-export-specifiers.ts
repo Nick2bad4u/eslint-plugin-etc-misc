@@ -57,10 +57,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             const sorted = [...exportSpecifiers].sort((a, b) =>
                 toName(a).localeCompare(toName(b))
             );
-            const unchanged = exportSpecifiers.every(
+            const isUnchanged = exportSpecifiers.every(
                 (specifier, index) => specifier === sorted[index]
             );
-            if (unchanged) {
+            if (isUnchanged) {
                 return;
             }
 

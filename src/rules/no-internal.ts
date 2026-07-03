@@ -12,9 +12,9 @@ import { ruleCreator } from "../_internal/rule-creator.js";
 import {
     getIdentifierSymbol,
     getJsDocTagComments,
+    hasAnyPatternMatch,
     isDeclarationIdentifier,
     isImportOrExportSpecifier,
-    matchesAnyPattern,
 } from "../_internal/symbol-usage.js";
 
 type MessageIds = "forbidden" | "forbiddenWithComment" | "invalidIgnorePattern";
@@ -58,14 +58,14 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 }
 
                 const symbolName = symbol.getName();
-                if (matchesAnyPattern(symbolName, ignorePatterns.name)) {
+                if (hasAnyPatternMatch(symbolName, ignorePatterns.name)) {
                     return;
                 }
 
                 const fullyQualifiedName =
                     typeChecker.getFullyQualifiedName(symbol);
                 if (
-                    matchesAnyPattern(fullyQualifiedName, ignorePatterns.path)
+                    hasAnyPatternMatch(fullyQualifiedName, ignorePatterns.path)
                 ) {
                     return;
                 }

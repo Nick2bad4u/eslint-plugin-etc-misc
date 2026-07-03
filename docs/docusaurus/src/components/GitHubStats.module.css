@@ -31,16 +31,31 @@
         filter: brightness(1.06);
         transform: translateY(-1px);
     }
+
+    @media screen and (prefers-reduced-motion: reduce) {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        transition: none;
+
+        &:hover,
+        &:focus {
+            filter: brightness(1.06);
+            transform: translateY(-1px);
+        }
+    }
 }
 
 .liveBadgeImage {
     display: block;
     block-size: 20px;
     inline-size: auto;
-}
 
-@media (width <= 640px) {
-    .liveBadgeImage {
+    @media (width <= 640px) {
         block-size: 18px;
     }
 }

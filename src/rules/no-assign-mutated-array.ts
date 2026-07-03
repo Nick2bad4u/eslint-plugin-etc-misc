@@ -72,7 +72,7 @@ const isNewArray = (node: Readonly<es.Expression>): boolean => {
     return false;
 };
 
-const mutatesReferencedArray = (
+const hasReferencedArrayMutation = (
     callExpression: Readonly<es.CallExpression>
 ): boolean => {
     if (callExpression.callee.type !== AST_NODE_TYPES.MemberExpression) {
@@ -93,7 +93,7 @@ const mutatesReferencedArray = (
     }
 
     if (object.type === AST_NODE_TYPES.CallExpression) {
-        return mutatesReferencedArray(object);
+        return hasReferencedArrayMutation(object);
     }
 
     return true;
@@ -137,7 +137,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                             return;
                         }
 
-                        if (!mutatesReferencedArray(callExpression)) {
+                        if (!hasReferencedArrayMutation(callExpression)) {
                             return;
                         }
 

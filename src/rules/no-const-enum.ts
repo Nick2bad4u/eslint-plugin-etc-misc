@@ -53,18 +53,20 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     constToken === undefined
                         ? undefined
                         : (fixer) => {
-                              let removeEnd = constToken.range[1];
+                              let tokenRemovalEnd = constToken.range[1];
                               while (
-                                  removeEnd < sourceCode.text.length &&
-                                  (sourceCode.text.at(removeEnd) === " " ||
-                                      sourceCode.text.at(removeEnd) === "\t")
+                                  tokenRemovalEnd < sourceCode.text.length &&
+                                  (sourceCode.text.at(tokenRemovalEnd) ===
+                                      " " ||
+                                      sourceCode.text.at(tokenRemovalEnd) ===
+                                          "\t")
                               ) {
-                                  removeEnd += 1;
+                                  tokenRemovalEnd += 1;
                               }
 
                               return fixer.removeRange([
                                   arrayFirst(constToken.range),
-                                  removeEnd,
+                                  tokenRemovalEnd,
                               ]);
                           };
 

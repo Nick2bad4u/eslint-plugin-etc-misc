@@ -6,9 +6,9 @@ import { describe, expect, it } from "vitest";
 import {
     getIdentifierSymbol,
     getJsDocTagComments,
+    hasAnyPatternMatch,
     isDeclarationIdentifier,
     isImportOrExportSpecifier,
-    matchesAnyPattern,
 } from "../../src/_internal/symbol-usage";
 
 describe("symbol-usage helpers", () => {
@@ -145,8 +145,8 @@ describe("symbol-usage helpers", () => {
 
     it("matches text against any provided regex pattern", () => {
         expect.hasAssertions();
-        expect(matchesAnyPattern("MySymbol", [/^My/v, /Other$/v])).toBe(true);
-        expect(matchesAnyPattern("MySymbol", [/^Other/v, /Else$/v])).toBe(
+        expect(hasAnyPatternMatch("MySymbol", [/^My/v, /Other$/v])).toBe(true);
+        expect(hasAnyPatternMatch("MySymbol", [/^Other/v, /Else$/v])).toBe(
             false
         );
     });

@@ -15,14 +15,10 @@ const isUnnamedTupleElement = (
         return false;
     }
 
-    if (
-        tupleElement.type === AST_NODE_TYPES.TSRestType &&
-        tupleElement.typeAnnotation.type === AST_NODE_TYPES.TSNamedTupleMember
-    ) {
-        return false;
-    }
-
-    return true;
+    return (
+        tupleElement.type !== AST_NODE_TYPES.TSRestType ||
+        tupleElement.typeAnnotation.type !== AST_NODE_TYPES.TSNamedTupleMember
+    );
 };
 
 const generateUniqueTupleMemberName = (

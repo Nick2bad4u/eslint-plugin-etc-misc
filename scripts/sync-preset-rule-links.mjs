@@ -5,11 +5,7 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 /**
- * @typedef {"minimal"
- *     | "recommended"
- *     | "strict"
- *     | "strictTypeChecked"
- *     | "allStrict"} PresetName
+ * @typedef {"minimal" | "recommended" | "strict" | "strictTypeChecked" | "allStrict"} PresetName
  */
 
 /**

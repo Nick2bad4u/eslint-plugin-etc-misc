@@ -60,15 +60,9 @@ describe("casing utilities", () => {
         fc.assert(
             fc.property(fc.string(), fc.string(), (base, extension) => {
                 const normalizedBase =
-                    base
-                        .replaceAll("/", "x")
-                        .replaceAll("\\", "x")
-                        .replaceAll(".", "x") || "base";
+                    base.replaceAll(/[.\/\\]/gv, "x") || "base";
                 const normalizedExtension =
-                    extension
-                        .replaceAll("/", "x")
-                        .replaceAll("\\", "x")
-                        .replaceAll(".", "x") || "ext";
+                    extension.replaceAll(/[.\/\\]/gv, "x") || "ext";
                 const filePath = `/workspace/project/${normalizedBase}.${normalizedExtension}`;
 
                 expect(filenameStem(filePath)).toBe(normalizedBase);

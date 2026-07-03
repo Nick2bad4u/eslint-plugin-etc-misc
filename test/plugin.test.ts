@@ -350,8 +350,7 @@ describe("plugin export", () => {
             Object.entries(plugin.rules)
                 .filter(([, ruleModule]) => {
                     const docs = ruleModule.meta.docs as
-                        | RuleDocsMetadata
-                        | undefined;
+                        RuleDocsMetadata | undefined;
 
                     return (
                         ruleModule.meta.deprecated === false &&

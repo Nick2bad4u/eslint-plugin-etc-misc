@@ -28,8 +28,8 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             }
 
             const shouldBeSingleLine = node.properties.length <= maxProperties;
-            const singleLine = isSingleLine(node);
-            if (singleLine === shouldBeSingleLine) {
+            const isCurrentlySingleLine = isSingleLine(node);
+            if (isCurrentlySingleLine === shouldBeSingleLine) {
                 return;
             }
 

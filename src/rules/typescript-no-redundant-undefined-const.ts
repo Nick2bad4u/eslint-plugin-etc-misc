@@ -88,11 +88,7 @@ const isDefinitelyDefinedExpression = (
         return true;
     }
 
-    if (unwrappedExpression.type === AST_NODE_TYPES.TemplateLiteral) {
-        return true;
-    }
-
-    return false;
+    return unwrappedExpression.type === AST_NODE_TYPES.TemplateLiteral;
 };
 
 /**

@@ -10,9 +10,7 @@ type MessageIds = "forbidden" | "suggestRemoveRedundantUndefined";
 type Options = readonly [];
 
 type ReturnableFunctionNode =
-    | es.ArrowFunctionExpression
-    | es.FunctionDeclaration
-    | es.FunctionExpression;
+    es.ArrowFunctionExpression | es.FunctionDeclaration | es.FunctionExpression;
 
 const buildFixedTypeText = (
     sourceCode: Readonly<TSESLint.SourceCode>,
@@ -112,11 +110,7 @@ const isDefinitelyDefinedExpression = (
         );
     }
 
-    if (unwrappedExpression.type === AST_NODE_TYPES.TemplateLiteral) {
-        return true;
-    }
-
-    return false;
+    return unwrappedExpression.type === AST_NODE_TYPES.TemplateLiteral;
 };
 
 const hasDefinitelyDefinedReturnValue = (

@@ -40,11 +40,11 @@ export const compareRuleNamesForCatalog = (
     leftRuleName: string,
     rightRuleName: string
 ): number => {
-    const leftIsTypeScriptRule = leftRuleName.startsWith("typescript/");
-    const rightIsTypeScriptRule = rightRuleName.startsWith("typescript/");
+    const isLeftIsTypeScriptRule = leftRuleName.startsWith("typescript/");
+    const isRightIsTypeScriptRule = rightRuleName.startsWith("typescript/");
 
-    if (leftIsTypeScriptRule !== rightIsTypeScriptRule) {
-        return leftIsTypeScriptRule ? 1 : -1;
+    if (isLeftIsTypeScriptRule !== isRightIsTypeScriptRule) {
+        return isLeftIsTypeScriptRule ? 1 : -1;
     }
 
     return leftRuleName.localeCompare(rightRuleName);

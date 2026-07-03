@@ -114,34 +114,34 @@ const analyzeTypeParameterUses = (
     signature: Readonly<ts.SignatureDeclaration>,
     typeParameters: readonly Readonly<ts.TypeParameterDeclaration>[]
 ): TypeParameterUsageAnalysis => {
-    let appearsInMultipleParameters = false;
-    let usedInParameters = false;
-    let usedInReturnOrExtends = tsutils.isFunctionWithBody(signature);
+    let isAppearsInMultipleParameters = false;
+    let isUsedInParameters = false;
+    let isUsedInReturnOrExtends = tsutils.isFunctionWithBody(signature);
 
     for (const use of uses) {
         if (isUseWithinParameterRange(use.location.pos, signature)) {
-            if (usedInParameters) {
-                appearsInMultipleParameters = true;
+            if (isUsedInParameters) {
+                isAppearsInMultipleParameters = true;
                 break;
             }
 
-            usedInParameters = true;
+            isUsedInParameters = true;
             continue;
         }
 
-        if (usedInReturnOrExtends) {
+        if (isUsedInReturnOrExtends) {
             continue;
         }
 
-        usedInReturnOrExtends =
+        isUsedInReturnOrExtends =
             use.location.pos > signature.parameters.end ||
             isTypeUseInsideConstraint(use.location, typeParameters);
     }
 
     return {
-        appearsInMultipleParameters,
-        usedInParameters,
-        usedInReturnOrExtends,
+        appearsInMultipleParameters: isAppearsInMultipleParameters,
+        usedInParameters: isUsedInParameters,
+        usedInReturnOrExtends: isUsedInReturnOrExtends,
     };
 };
 

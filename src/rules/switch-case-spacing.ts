@@ -24,14 +24,15 @@ const isValidCaseBody = (node: Readonly<es.SwitchCase>): boolean => {
         return true;
     }
 
-    const startsOnFollowingLine =
+    const isStartsOnFollowingLine =
         firstStatement.loc.start.line > node.loc.start.line;
-    const startsWithBlock =
+    const isStartsWithBlock =
         firstStatement.type === AST_NODE_TYPES.BlockStatement;
-    const endsWithBreak =
-        lastStatement.type === AST_NODE_TYPES.BreakStatement || startsWithBlock;
+    const isEndsWithBreak =
+        lastStatement.type === AST_NODE_TYPES.BreakStatement ||
+        isStartsWithBlock;
 
-    return (startsOnFollowingLine || startsWithBlock) && endsWithBreak;
+    return (isStartsOnFollowingLine || isStartsWithBlock) && isEndsWithBreak;
 };
 
 /**

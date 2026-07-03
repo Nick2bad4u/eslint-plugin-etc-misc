@@ -127,7 +127,7 @@ export const getJsDocTagComments = (
 /**
  * Return true when text matches any compiled regex pattern.
  */
-export const matchesAnyPattern = (
+export const hasAnyPatternMatch = (
     text: string,
     patterns: readonly Readonly<RegExp>[]
 ): boolean => patterns.some((pattern) => pattern.test(text));

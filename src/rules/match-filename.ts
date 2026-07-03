@@ -69,9 +69,9 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         node.name,
                         options.format ?? "kebab-case"
                     )}${options.suffix ?? ""}`;
-                    const matches = stem === expected;
+                    const isMatches = stem === expected;
 
-                    if ((options.match ?? true) ? matches : !matches) {
+                    if ((options.match ?? true) ? isMatches : !isMatches) {
                         return;
                     }
 

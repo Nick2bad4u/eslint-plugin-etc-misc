@@ -83,10 +83,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     getSortableValue(b) ?? ""
                 )
             );
-            const unchanged = elements.every(
+            const isUnchanged = elements.every(
                 (element, index) => element === sorted[index]
             );
-            if (unchanged) {
+            if (isUnchanged) {
                 return;
             }
 

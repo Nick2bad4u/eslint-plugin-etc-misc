@@ -11,7 +11,7 @@ type ImportPathOptions = Readonly<{
     readonly disallow?: readonly string[];
 }>;
 
-const matchesAnyPattern = (
+const hasAnyPatternMatch = (
     value: string,
     patterns: readonly string[]
 ): boolean =>
@@ -68,11 +68,11 @@ export const shouldReportImportSource = (
     defaultDisallowPatterns: readonly string[]
 ): boolean => {
     const mergedOptions = toMergedOptions(options, defaultDisallowPatterns);
-    if (!matchesAnyPattern(sourceText, mergedOptions.disallow)) {
+    if (!hasAnyPatternMatch(sourceText, mergedOptions.disallow)) {
         return false;
     }
 
-    return !matchesAnyPattern(sourceText, mergedOptions.allow);
+    return !hasAnyPatternMatch(sourceText, mergedOptions.allow);
 };
 
 /**

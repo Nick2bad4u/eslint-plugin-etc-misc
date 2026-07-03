@@ -30,7 +30,7 @@ const isAllowedThrowableVariant = (
     isTypeUnknownType(type) ||
     isErrorLike(program, type);
 
-const couldBeAllowedThrowableType = (
+const canBeAllowedThrowableType = (
     type: Readonly<ts.Type>,
     program: Readonly<ts.Program>
 ): boolean =>
@@ -40,7 +40,7 @@ const couldBeAllowedThrowableType = (
             isAllowedThrowableVariant(typeVariant, program)
         );
 
-const couldBePromiseConstructorType = (
+const canBePromiseConstructorType = (
     type: Readonly<ts.Type>,
     program: Readonly<ts.Program>
 ): boolean =>
@@ -83,7 +83,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         ): void => {
             const type = getConstrainedTypeAtLocation(parserServices, node);
 
-            if (couldBeAllowedThrowableType(type, program)) {
+            if (canBeAllowedThrowableType(type, program)) {
                 return;
             }
 
@@ -134,7 +134,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         callee.object
                     );
                     if (
-                        !couldBePromiseConstructorType(objectType, program) &&
+                        !canBePromiseConstructorType(objectType, program) &&
                         !isPromiseIdentifier(callee.object)
                     ) {
                         return;

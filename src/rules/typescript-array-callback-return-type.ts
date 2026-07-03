@@ -52,8 +52,7 @@ const isArrayLikeType = (
 const isFirstCallbackArgument = (
     callExpression: Readonly<es.CallExpression>,
     callback:
-        | Readonly<es.ArrowFunctionExpression>
-        | Readonly<es.FunctionExpression>
+        Readonly<es.ArrowFunctionExpression> | Readonly<es.FunctionExpression>
 ): boolean => arrayFirst(callExpression.arguments) === callback;
 
 /**

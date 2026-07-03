@@ -45,7 +45,7 @@ const collectNodeChildren = (
     return children;
 };
 
-const containsThisExpression = (root: Readonly<es.Node>): boolean => {
+const hasThisExpression = (root: Readonly<es.Node>): boolean => {
     let stack: readonly es.Node[] = [root];
 
     while (stack.length > 0) {
@@ -74,15 +74,17 @@ const hasThisParameter = (node: Readonly<es.MethodDefinition>): boolean => {
     );
 };
 
-const usesThisExpression = (node: Readonly<es.MethodDefinition>): boolean =>
-    node.value.body === null ? false : containsThisExpression(node.value.body);
+const hasThisExpressionUsage = (
+    node: Readonly<es.MethodDefinition>
+): boolean =>
+    node.value.body === null ? false : hasThisExpression(node.value.body);
 
 const shouldSkipMethod = (node: Readonly<es.MethodDefinition>): boolean =>
     node.kind !== "method" ||
     node.static ||
     node.value.body === null ||
     hasThisParameter(node) ||
-    usesThisExpression(node);
+    hasThisExpressionUsage(node);
 
 /**
  * Require non-static class methods to reference `this`.

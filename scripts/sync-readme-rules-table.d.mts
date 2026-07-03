@@ -25,9 +25,7 @@ export interface ReadmeRuleModule {
               readonly docs?:
                   | {
                         readonly typefestConfigs?:
-                            | readonly string[]
-                            | string
-                            | undefined;
+                            readonly string[] | string | undefined;
                         readonly url?: string | undefined;
                     }
                   | undefined;
@@ -50,8 +48,7 @@ export interface ReadmePlugin {
                   string,
                   {
                       readonly rules?:
-                          | Readonly<Record<string, unknown>>
-                          | undefined;
+                          Readonly<Record<string, unknown>> | undefined;
                   }
               >
           >

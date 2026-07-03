@@ -180,7 +180,9 @@ function collectPropertyKinds(
         }
     }
 
-    for (const dataPropertyName of definition.dataProperties ?? []) {
+    const dataPropertyNames = definition.dataProperties ?? [];
+
+    for (const dataPropertyName of dataPropertyNames) {
         if (!propertyKinds.has(dataPropertyName)) {
             propertyKinds.set(dataPropertyName, "data");
         }
