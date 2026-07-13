@@ -2,7 +2,11 @@ import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
-type MessageIds = "forbiddenGT" | "forbiddenGTE" | "suggestLT" | "suggestLTE";
+type MessageIds =
+    | "forbiddenGT"
+    | "forbiddenGTE"
+    | "suggestLT"
+    | "suggestLTE";
 
 const createFixes = (
     fixer: Readonly<TSESLint.RuleFixer>,

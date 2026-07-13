@@ -51,6 +51,8 @@ const config = [
             ],
             "no-plusplus": "off",
             "sonarjs/deprecation": "off",
+            // Legacy rule-domain names intentionally describe collections and operations.
+            "unicorn/consistent-boolean-name": "off",
             "unicorn/consistent-compound-words": "off",
             "unicorn/import-style": "off",
             "unicorn/no-break-in-nested-loop": "off",
@@ -59,6 +61,8 @@ const config = [
             "unicorn/no-unsafe-property-key": "off",
             "unicorn/no-useless-recursion": "off",
             "unicorn/no-useless-template-literals": "off",
+            // Error.isError is unavailable on the package's supported Node 20 runtime.
+            "unicorn/prefer-error-is-error": "off",
             "unicorn/prefer-includes-over-repeated-comparisons": "off",
             "unicorn/prefer-iterator-concat": "off",
             "unicorn/prefer-minimal-ternary": "off",

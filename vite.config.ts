@@ -249,7 +249,10 @@ const vitestConfig: ReturnType<typeof defineConfig> = defineConfig({
         outputFile: {
             json: "./coverage/test-results.json",
         },
-        pool: "threads", // Use worker threads for better performance
+        // eslint-plugin-unicorn's transitive web-worker runtime treats any Node
+        // worker thread as its own bootstrap worker. Process isolation avoids that
+        // incompatible workerData assumption while preserving parallel execution.
+        pool: "forks",
         printConsoleTrace: false, // Disable stack trace printing for cleaner output
         // Improve test output
         reporters: [

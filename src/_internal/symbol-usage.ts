@@ -66,7 +66,10 @@ export const isDeclarationIdentifier = (
 };
 
 const normalizeTagComment = (
-    text: readonly JsDocTagTextPart[] | string | undefined
+    text:
+        | readonly JsDocTagTextPart[]
+        | string
+        | undefined
 ): string | undefined => {
     if (!isDefined(text)) {
         return undefined;
