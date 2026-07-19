@@ -60,6 +60,9 @@ Use this pattern when you only extend rules and want full control over parser se
 2. Move to `recommended` for the full baseline.
 3. Promote to `strict` when you want the same rules to hard-fail.
 4. Move to `strictTypeChecked` once your lint config is fully type-aware.
-5. Adopt `allStrict` or `all` when you want full rule coverage.
+5. Adopt `allStrict` or `all` when you want full preset-eligible rule coverage.
+
+Deprecated same-plugin compatibility aliases remain available for explicit
+legacy configurations but are intentionally excluded from every preset.
 
 See the **Presets** section in this sidebar for details and examples.

@@ -10,9 +10,7 @@ type MessageIds = "forbidden" | "suggestRemoveRedundantUndefined";
 type Options = readonly [];
 
 type ReturnableFunctionNode =
-    | es.ArrowFunctionExpression
-    | es.FunctionDeclaration
-    | es.FunctionExpression;
+    es.ArrowFunctionExpression | es.FunctionDeclaration | es.FunctionExpression;
 
 const buildFixedTypeText = (
     sourceCode: Readonly<TSESLint.SourceCode>,

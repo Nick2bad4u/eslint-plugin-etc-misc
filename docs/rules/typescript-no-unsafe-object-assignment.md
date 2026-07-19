@@ -1,6 +1,6 @@
 # typescript/no-unsafe-object-assignment
 
-Disallow assignments to targets with readonly properties.
+Deprecated compatibility alias for `typescript/no-unsafe-object-assign`.
 
 ## Targeted pattern scope
 
@@ -9,18 +9,18 @@ Disallow assignments to targets with readonly properties.
 This rule is a TypeScript-prefixed alias of
 `typescript/no-unsafe-object-assign`.
 
-It reports `Object.assign(...)` calls where the target type has readonly
-properties.
+It delegates to the canonical rule and reports only when an `Object.assign`
+source may write a readonly target key.
 
 ## What this rule reports
 
-This rule reports `Object.assign` calls that attempt to mutate readonly-typed
-targets.
+This rule reports the same calls as
+[`typescript/no-unsafe-object-assign`](./typescript-no-unsafe-object-assign.md).
 
 ## Why this rule exists
 
-Mutating readonly-shaped targets through `Object.assign` bypasses the intent of
-readonly contracts and can hide unsafe state changes.
+The alias remains exported so existing explicit configurations keep working
+while consumers migrate to the canonical rule ID.
 
 ## ❌ Incorrect
 
@@ -33,17 +33,25 @@ Object.assign(target, { x: 2 });
 ## ✅ Correct
 
 ```ts
-type Target = { x: number };
-const target: Target = { x: 1 };
-Object.assign(target, { x: 2 });
+type Target = { readonly id: string; count: number };
+declare const target: Target;
+Object.assign(target, { count: 2 });
 ```
+
+## Deprecated
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v1.2.0`
+- **Available until:** `v2.0.0`
+- **Use instead:** [`typescript/no-unsafe-object-assign`](./typescript-no-unsafe-object-assign.md)
 
 ## Behavior and migration notes
 
-This rule reports only and does not provide an autofix.
+This rule reports only and does not provide an autofix. It remains available
+for manual compatibility configurations but is excluded from every executable
+preset so a preset never enables both IDs.
 
-Use immutable update patterns or non-readonly target types when mutation is
-intentional.
+Replace the alias ID with `etc-misc/typescript/no-unsafe-object-assign`.
 
 ### Options
 
@@ -52,8 +60,9 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-const readonlyTarget: Readonly<{ value: number }> = { value: 1 };
-Object.assign(readonlyTarget, { value: 2 });
+type Target = { readonly id: string; count: number };
+declare const target: Target;
+Object.assign(target, { id: "changed" });
 // ❌ reported
 ```
 
@@ -66,7 +75,7 @@ export default [
  {
   plugins: { "etc-misc": etcMisc },
   rules: {
-   "etc-misc/typescript/no-unsafe-object-assignment": "error",
+   "etc-misc/typescript/no-unsafe-object-assign": "error",
   },
  },
 ];
@@ -74,17 +83,18 @@ export default [
 
 ## When not to use it
 
-Disable this rule if your project intentionally permits mutating readonly-typed
-targets via `Object.assign`.
+Do not enable this alias in new configurations. Configure the canonical rule
+instead.
 
 ## Package documentation
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R102
+> **Rule catalog ID:** R105
 
 ## Further reading
 
+- [`typescript/no-unsafe-object-assign`](./typescript-no-unsafe-object-assign.md)
 - [TypeScript-ESLint: Typed Linting](https://typescript-eslint.io/getting-started/typed-linting)
 
 ## Adoption resources

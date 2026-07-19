@@ -78,7 +78,7 @@ patterns (for example, lazy loading inside specific runtime branches).
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R056
+> **Rule catalog ID:** R059
 
 ## Further reading
 

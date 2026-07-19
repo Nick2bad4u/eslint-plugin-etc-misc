@@ -1,44 +1,66 @@
 # typescript/no-unsafe-object-assign
 
-Disallow `Object.assign` into readonly-typed targets.
+Disallow `Object.assign` sources that may overwrite readonly target keys.
 
 ## Targeted pattern scope
 
 ⚠️ This rule requires type information to run. Configure type-aware linting (`parserOptions.project` or `projectService`) before enabling it.
 
-This rule targets calls matching `Object.assign(...)` and checks the first
-argument's resolved TypeScript type.
+This rule targets calls matching `Object.assign(...)`, resolves the target and
+source types, and compares each source's known property and index-signature
+keys with readonly target properties and index signatures.
 
 ## What this rule reports
 
-This rule uses TypeScript type information to detect `Object.assign` calls where the target type has readonly properties.
+This rule reports an `Object.assign` call only when at least one source may
+write a readonly key on the target. Merely having an unrelated readonly target
+property is not an error.
 
 ## Why this rule exists
 
-It prevents mutating targets whose type advertises readonly properties.
+It prevents `Object.assign` from bypassing readonly contracts without blocking
+safe writes to unrelated mutable properties.
 
 ## ❌ Incorrect
 
 ```ts
-type Target = { readonly x: number };
-const target: Target = { x: 1 };
-Object.assign(target, { x: 2 });
+type Target = {
+ readonly id: string;
+ count: number;
+};
+
+declare const target: Target;
+Object.assign(target, { id: "changed" });
 ```
 
 ## ✅ Correct
 
 ```ts
-type Target = { x: number };
-const target: Target = { x: 1 };
-Object.assign(target, { x: 2 });
+type Target = {
+ readonly id: string;
+ count: number;
+};
+
+declare const target: Target;
+
+Object.assign(target);
+Object.assign(target, {});
+Object.assign(target, { count: 2 });
 ```
 
 ## Behavior and migration notes
 
 This rule reports only and does not provide an autofix.
 
-Prefer immutable copy patterns or avoid readonly target types when mutation is
-required.
+- Multiple sources are checked and the call is reported at most once.
+- Union branches, intersections, optional properties, constrained generics,
+  and string, number, or symbol index signatures are analyzed without assuming
+  every target key is written.
+- An `any` source is treated conservatively because it may provide any key.
+- `unknown`, `never`, `null`, `undefined`, and empty sources have no statically
+  known write keys.
+
+Prefer an immutable copy when a source intentionally replaces a readonly key.
 
 ### Options
 
@@ -47,12 +69,17 @@ This rule has no options.
 ## Additional examples
 
 ```ts
-const mutable = { count: 0 };
-Object.assign(mutable, { count: 1 });
-// ✅ valid
+type Target = {
+ readonly id: string;
+ count: number;
+};
 
-const readonlyTarget: Readonly<{ count: number }> = { count: 0 };
-Object.assign(readonlyTarget, { count: 1 });
+declare const target: Target;
+
+Object.assign(target, { count: 1 });
+// ✅ valid: count is writable
+
+Object.assign(target, { id: "changed" });
 // ❌ reported
 ```
 
@@ -79,7 +106,7 @@ Disable this rule if readonly object mutation via `Object.assign` is intentional
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R101
+> **Rule catalog ID:** R104
 
 ## Further reading
 

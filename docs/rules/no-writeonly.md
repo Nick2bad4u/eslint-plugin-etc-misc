@@ -90,7 +90,7 @@ pattern is documented.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R052
+> **Rule catalog ID:** R055
 
 ## Further reading
 

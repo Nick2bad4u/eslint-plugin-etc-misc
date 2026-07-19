@@ -21,16 +21,11 @@ export interface ReadmeDeprecatedInfo {
 export interface ReadmeRuleModule {
     readonly meta?:
         | {
-              readonly deprecated?:
-                  | boolean
-                  | ReadmeDeprecatedInfo
-                  | undefined;
+              readonly deprecated?: boolean | ReadmeDeprecatedInfo | undefined;
               readonly docs?:
                   | {
                         readonly typefestConfigs?:
-                            | readonly string[]
-                            | string
-                            | undefined;
+                            readonly string[] | string | undefined;
                         readonly url?: string | undefined;
                     }
                   | undefined;

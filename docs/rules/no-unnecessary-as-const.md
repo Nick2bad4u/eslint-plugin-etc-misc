@@ -84,7 +84,7 @@ even when type annotations already constrain the value.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R045
+> **Rule catalog ID:** R046
 
 ## Further reading
 

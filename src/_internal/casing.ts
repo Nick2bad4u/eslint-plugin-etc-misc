@@ -5,10 +5,7 @@ import { splitIdentifierBlocks } from "./identifier-blocks.js";
 /**
  * Supported casing formats for identifier transformations.
  */
-export type Casing =
-    | "camelCase"
-    | "kebab-case"
-    | "PascalCase";
+export type Casing = "camelCase" | "kebab-case" | "PascalCase";
 
 const splitWords = (value: string): readonly string[] =>
     splitIdentifierBlocks(value).map((word) => word.toLowerCase());

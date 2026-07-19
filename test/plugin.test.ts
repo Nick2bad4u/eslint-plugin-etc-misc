@@ -7,6 +7,15 @@ interface ConfigurablePlugin {
     readonly flat?: Readonly<Record<string, unknown>>;
 }
 
+const configVariants = [
+    "all",
+    "allStrict",
+    "minimal",
+    "recommended",
+    "strict",
+    "strictTypeChecked",
+] as const;
+
 const deprecatedRuleIds = [
     "array-type",
     "consistent-filename",
@@ -34,6 +43,7 @@ const deprecatedRuleIds = [
     "typescript/no-empty-interfaces",
     "typescript/no-inferrable-types",
     "typescript/no-restricted-syntax",
+    "typescript/no-unsafe-object-assignment",
     "unused-internal-properties",
     "uppercase-iife",
     "words",
@@ -158,22 +168,78 @@ const getSortedRuleNames = (
     ruleMap: Readonly<Record<string, unknown>>
 ): readonly string[] => toSortedStrings(Object.keys(ruleMap));
 
+const assertObjectAssignAliasContract = (): void => {
+    const exportedRuleIds = getSortedRuleNames(plugin.rules);
+    const presetEligibleExportedRuleIds = exportedRuleIds.filter(
+        (ruleId) => ruleId !== "typescript/no-unsafe-object-assignment"
+    );
+    const allConfigRuleIds = toSortedStrings(
+        Object.keys(plugin.configs.all.rules).map((qualifiedRuleName) =>
+            qualifiedRuleName.slice("etc-misc/".length)
+        )
+    );
+
+    expect(presetEligibleExportedRuleIds).toStrictEqual(allConfigRuleIds);
+
+    const canonicalRule = plugin.rules["typescript/no-unsafe-object-assign"];
+    const compatibilityAliasRule =
+        plugin.rules["typescript/no-unsafe-object-assignment"];
+
+    expect(canonicalRule).toBeDefined();
+    expect(compatibilityAliasRule).toBeDefined();
+
+    if (canonicalRule === undefined || compatibilityAliasRule === undefined) {
+        throw new Error("Expected Object.assign rules to remain exported.");
+    }
+
+    expect(canonicalRule.meta.deprecated).toBe(false);
+    expect(compatibilityAliasRule.create).toBe(canonicalRule.create);
+
+    const aliasDeprecation = compatibilityAliasRule.meta.deprecated;
+
+    expect(aliasDeprecation).toBeTypeOf("object");
+
+    if (typeof aliasDeprecation !== "object" || aliasDeprecation === null) {
+        throw new TypeError("Expected structured alias deprecation metadata.");
+    }
+
+    expect(aliasDeprecation.deprecatedSince).toBe("1.2.0");
+    expect(aliasDeprecation.availableUntil).toBe("2.0.0");
+
+    const aliasReplacement = aliasDeprecation.replacedBy?.[0];
+
+    expect(aliasReplacement?.rule?.name).toBe(
+        "typescript/no-unsafe-object-assign"
+    );
+    expect(aliasReplacement).not.toHaveProperty("plugin");
+
+    for (const configVariant of configVariants) {
+        expect(
+            "etc-misc/typescript/no-unsafe-object-assignment" in
+                plugin.configs[configVariant].rules
+        ).toBe(false);
+    }
+
+    for (const configVariant of [
+        "all",
+        "allStrict",
+        "strictTypeChecked",
+    ] as const) {
+        expect(
+            plugin.configs[configVariant].rules[
+                "etc-misc/typescript/no-unsafe-object-assign"
+            ]
+        ).toBe("error");
+    }
+};
+
 const assertPluginExposesRulesAndConfigs = (): void => {
     expect(plugin.meta).toStrictEqual({
         name: "eslint-plugin-etc-misc",
         namespace: "etc-misc",
-        version: "1.0.0",
+        version: "1.2.0",
     });
     expect(plugin.processors).toStrictEqual({});
-
-    const configVariants = [
-        "all",
-        "allStrict",
-        "minimal",
-        "recommended",
-        "strict",
-        "strictTypeChecked",
-    ] as const;
 
     for (const configVariant of configVariants) {
         expect(plugin.configs[configVariant].rules).toBeDefined();
@@ -199,14 +265,7 @@ const assertPluginExposesRulesAndConfigs = (): void => {
             ?.projectService
     ).toBe(true);
 
-    const exportedRuleIds = getSortedRuleNames(plugin.rules);
-    const allConfigRuleIds = toSortedStrings(
-        Object.keys(plugin.configs.all.rules).map((qualifiedRuleName) =>
-            qualifiedRuleName.slice("etc-misc/".length)
-        )
-    );
-
-    expect(exportedRuleIds).toStrictEqual(allConfigRuleIds);
+    assertObjectAssignAliasContract();
 
     const recommendedRuleLevelKeys = Object.keys(
         recommendedRuleLevels

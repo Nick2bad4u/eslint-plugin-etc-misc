@@ -76,7 +76,7 @@ Disable this rule if your codebase allows non-latin identifier names.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R064
+> **Rule catalog ID:** R067
 
 ## Further reading
 

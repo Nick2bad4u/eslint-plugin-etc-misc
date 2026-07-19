@@ -5,7 +5,12 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 /**
- * @typedef {"minimal" | "recommended" | "strict" | "strictTypeChecked" | "allStrict"} PresetName
+ * @typedef {"all"
+ *     | "minimal"
+ *     | "recommended"
+ *     | "strict"
+ *     | "strictTypeChecked"
+ *     | "allStrict"} PresetName
  */
 
 /**
@@ -239,6 +244,7 @@ const presetOrder = [
     "strict",
     "strictTypeChecked",
     "allStrict",
+    "all",
 ];
 
 /** @type {readonly RuleCatalogEntry[]} */
@@ -253,6 +259,7 @@ const namespace = plugin.meta?.namespace ?? "etc-misc";
 
 /** @type {Record<PresetName, readonly string[]>} */
 const presetRuleLinksByPresetName = {
+    all: [],
     allStrict: [],
     minimal: [],
     recommended: [],
@@ -294,12 +301,33 @@ for (const presetName of presetOrder) {
     presetRuleLinksByPresetName[presetName] = ruleLinks;
 }
 
+const allConfiguredRuleNames = new Set(
+    Object.keys(plugin.configs?.["all"]?.rules ?? {}).flatMap(
+        (configuredRuleName) => {
+            const normalizedRuleName = normalizeConfiguredRuleName(
+                configuredRuleName,
+                namespace
+            );
+
+            return normalizedRuleName === null ? [] : [normalizedRuleName];
+        }
+    )
+);
+
 const allCoreRuleLinks = ruleCatalogMap
-    .filter((entry) => !entry.ruleName.startsWith("typescript/"))
+    .filter(
+        (entry) =>
+            allConfiguredRuleNames.has(entry.ruleName) &&
+            !entry.ruleName.startsWith("typescript/")
+    )
     .map((entry) => toPresetRuleLinkLine(entry));
 
 const allTypeScriptRuleLinks = ruleCatalogMap
-    .filter((entry) => entry.ruleName.startsWith("typescript/"))
+    .filter(
+        (entry) =>
+            allConfiguredRuleNames.has(entry.ruleName) &&
+            entry.ruleName.startsWith("typescript/")
+    )
     .map((entry) => toPresetRuleLinkLine(entry));
 
 const allStrictPresetContent = await readFile(allStrictPresetDocPath, "utf8");

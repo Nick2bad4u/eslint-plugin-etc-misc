@@ -13,10 +13,7 @@ import { arrayFirst } from "ts-extras";
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds =
-    | "explicitAny"
-    | "implicitAny"
-    | "narrowed"
-    | "suggestExplicitUnknown";
+    "explicitAny" | "implicitAny" | "narrowed" | "suggestExplicitUnknown";
 
 type Options = readonly [RuleOptions?];
 

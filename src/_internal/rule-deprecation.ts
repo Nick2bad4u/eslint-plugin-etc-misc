@@ -10,6 +10,7 @@ type DeprecatedInfo = Exclude<
 type ReplacedByInfo = ArrayElement<NonNullable<DeprecatedInfo["replacedBy"]>>;
 
 type RuleDeprecationOptions = Readonly<{
+    readonly deprecatedSince?: string;
     readonly message: string;
     readonly replacedBy?: readonly ReplacedByInfo[];
     readonly ruleId: string;
@@ -43,16 +44,42 @@ export const createReplacementRuleInfo = (
  * Create standardized deprecation metadata for this plugin.
  */
 export const createDeprecatedRuleInfo = ({
+    deprecatedSince = "1.0.0",
     message,
     replacedBy = [],
     ruleId,
 }: RuleDeprecationOptions): DeprecatedInfo => ({
     availableUntil: "2.0.0",
-    deprecatedSince: "1.0.0",
+    deprecatedSince,
     message,
     ...(replacedBy.length > 0 && { replacedBy: [...replacedBy] }),
     url: `${docsBaseUrl}/${ruleId.replaceAll("/", "-")}`,
 });
+
+/**
+ * Determine whether structured deprecation metadata describes a compatibility
+ * alias whose replacement belongs to this plugin.
+ */
+export const isDeprecatedSamePluginAlias = ({
+    deprecated,
+    ruleId,
+}: Readonly<{
+    readonly deprecated: TSESLint.RuleMetaData<string>["deprecated"];
+    readonly ruleId: string;
+}>): boolean => {
+    if (typeof deprecated !== "object") {
+        return false;
+    }
+
+    return (
+        deprecated.replacedBy?.some(
+            (replacement) =>
+                replacement.plugin === undefined &&
+                isDefined(replacement.rule?.name) &&
+                replacement.rule.name !== ruleId
+        ) ?? false
+    );
+};
 
 /**
  * Apply deprecated+frozen lifecycle metadata to a rule module.

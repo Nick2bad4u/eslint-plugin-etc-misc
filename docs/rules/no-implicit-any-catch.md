@@ -146,7 +146,7 @@ parameter typing and you do not want to enforce explicit `unknown` handling.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R026
+> **Rule catalog ID:** R027
 
 ## Further reading
 

@@ -149,6 +149,8 @@ export default [
   `if`-block), the fix may require manual review to confirm the intended
   placement.
 
+> **Rule catalog ID:** R026
+
 ## Further reading
 
 - [MDN: Function declarations — Hoisting](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function#hoisting)

@@ -78,7 +78,7 @@ Disable this rule if your team allows complex inferred return types without expl
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R087
+> **Rule catalog ID:** R090
 
 ## Further reading
 

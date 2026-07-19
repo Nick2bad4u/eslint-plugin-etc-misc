@@ -33,10 +33,7 @@ type AnyMessageError = Readonly<{
 }>;
 
 type AnyMessageErrorOptions = Readonly<{
-    suggestions?:
-        | null
-        | number
-        | readonly unknown[];
+    suggestions?: null | number | readonly unknown[];
 }>;
 
 /**

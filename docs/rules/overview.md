@@ -31,14 +31,18 @@ That is enough for TypeScript files (`**/*.{ts,tsx,mts,cts}`).
 
 ## Presets
 
-| Preset                                 | Purpose                                                                     |
-| -------------------------------------- | --------------------------------------------------------------------------- |
-| 🟢 `etcMisc.configs.minimal`           | `recommended` minus the `typescript/prefer-readonly*` rules.                |
-| 🟡 `etcMisc.configs.recommended`       | Balanced starter preset for most projects.                                  |
-| 🟠 `etcMisc.configs.strict`            | Same rule set as `recommended`, but every enabled rule is `error`.          |
-| 🔵 `etcMisc.configs.strictTypeChecked` | `strict` plus additional non-deprecated type-aware rules at `error`.        |
-| 🔴 `etcMisc.configs.allStrict`         | Every non-deprecated plugin rule at `error` (deprecated rules stay `warn`). |
-| 🟣 `etcMisc.configs.all`               | Enables every rule exported by the plugin with metadata-derived severities. |
+| Preset                                 | Purpose                                                                   |
+| -------------------------------------- | ------------------------------------------------------------------------- |
+| 🟢 `etcMisc.configs.minimal`           | `recommended` minus the `typescript/prefer-readonly*` rules.              |
+| 🟡 `etcMisc.configs.recommended`       | Balanced starter preset for most projects.                                |
+| 🟠 `etcMisc.configs.strict`            | Same rule set as `recommended`, but every enabled rule is `error`.        |
+| 🔵 `etcMisc.configs.strictTypeChecked` | `strict` plus additional non-deprecated type-aware rules at `error`.      |
+| 🔴 `etcMisc.configs.allStrict`         | Every preset-eligible rule at `error`; external deprecations stay `warn`. |
+| 🟣 `etcMisc.configs.all`               | Every preset-eligible rule with metadata-derived severities.              |
+
+Deprecated same-plugin compatibility aliases remain exported for manual
+configuration but are excluded from executable presets to avoid running the
+same implementation twice.
 
 ## Next steps
 

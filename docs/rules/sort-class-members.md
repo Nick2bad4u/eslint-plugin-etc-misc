@@ -102,7 +102,7 @@ public/private sections) rather than lexical.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R067
+> **Rule catalog ID:** R070
 
 ## Further reading
 

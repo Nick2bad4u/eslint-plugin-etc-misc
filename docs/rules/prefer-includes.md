@@ -71,7 +71,7 @@ cannot be polyfilled safely.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R057
+> **Rule catalog ID:** R060
 
 ## Further reading
 

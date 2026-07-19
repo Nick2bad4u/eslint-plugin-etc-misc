@@ -78,7 +78,7 @@ Disable this rule if function property assignment across statements is accepted 
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R083
+> **Rule catalog ID:** R086
 
 ## Further reading
 

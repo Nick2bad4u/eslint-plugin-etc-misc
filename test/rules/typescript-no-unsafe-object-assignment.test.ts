@@ -7,13 +7,13 @@ ruleTester.run(
     {
         invalid: [
             {
-                code: "type Target = { readonly x: number }; const target: Target = { x: 1 }; Object.assign(target, { x: 2 });",
+                code: "type Target = { readonly id: string; count: number }; declare const target: Target; Object.assign(target, { id: 'changed' });",
                 errors: [{ messageId: "forbidden" }],
             },
         ],
         valid: [
             {
-                code: "type Target = { x: number }; const target: Target = { x: 1 }; Object.assign(target, { x: 2 });",
+                code: "type Target = { readonly id: string; count: number }; declare const target: Target; Object.assign(target, { count: 2 });",
             },
         ],
     }

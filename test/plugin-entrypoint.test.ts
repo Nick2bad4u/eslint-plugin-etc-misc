@@ -142,7 +142,31 @@ describe("plugin.mjs entrypoint", () => {
             expect(
                 plugin.configs[configVariant].plugins["etc-misc"].rules
             ).toBe(plugin.rules);
+            expect(
+                "etc-misc/typescript/no-unsafe-object-assignment" in
+                    plugin.configs[configVariant].rules
+            ).toBe(false);
         }
+
+        expect(
+            plugin.rules["typescript/no-unsafe-object-assignment"]
+        ).toBeDefined();
+        expect(
+            plugin.rules["typescript/no-unsafe-object-assign"]?.meta.deprecated
+        ).toBe(false);
+        expect(
+            plugin.rules["typescript/no-unsafe-object-assignment"]?.meta
+                .deprecated
+        ).toMatchObject({
+            deprecatedSince: "1.2.0",
+            replacedBy: [
+                {
+                    rule: {
+                        name: "typescript/no-unsafe-object-assign",
+                    },
+                },
+            ],
+        });
 
         expect(plugin.configs.strictTypeChecked.languageOptions).toStrictEqual(
             configs.strictTypeChecked.languageOptions

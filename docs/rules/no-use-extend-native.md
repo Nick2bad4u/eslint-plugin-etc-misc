@@ -87,6 +87,8 @@ export default [
 - If your project intentionally and explicitly relies on controlled prototype extension.
 - If your runtime environment guarantees specific prototype patches and that dependency is accepted in your architecture.
 
+> **Rule catalog ID:** R051
+
 ## Further reading
 
 - [ESLint `no-extend-native`](https://eslint.org/docs/latest/rules/no-extend-native)

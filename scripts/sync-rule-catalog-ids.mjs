@@ -210,7 +210,7 @@ const catalogMapOutputPath = path.join(
 );
 await writeFile(
     catalogMapOutputPath,
-    `${JSON.stringify(ruleCatalogEntries, null, 2)}\n`,
+    `${JSON.stringify(ruleCatalogEntries, null, 4)}\n`,
     "utf8"
 );
 

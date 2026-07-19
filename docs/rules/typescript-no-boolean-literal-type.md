@@ -82,7 +82,7 @@ Disable this rule if optional literal booleans are part of your public type cont
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R085
+> **Rule catalog ID:** R088
 
 ## Further reading
 

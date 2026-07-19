@@ -100,7 +100,7 @@ Disable this rule if your project uses a different naming convention for interna
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R076
+> **Rule catalog ID:** R079
 
 ## Further reading
 

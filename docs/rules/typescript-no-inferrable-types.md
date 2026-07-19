@@ -90,7 +90,7 @@ Disable this rule if explicit primitive annotations are required for readability
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R089
+> **Rule catalog ID:** R092
 
 ## Further reading
 

@@ -78,7 +78,7 @@ stringification and that behavior is covered by runtime tests.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R051
+> **Rule catalog ID:** R053
 
 ## Further reading
 

@@ -93,7 +93,7 @@ types or if you already enforce broader readonly type policy at the same scope.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R128
+> **Rule catalog ID:** R131
 
 ## Further reading
 

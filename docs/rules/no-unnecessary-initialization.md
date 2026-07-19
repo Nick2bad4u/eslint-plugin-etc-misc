@@ -81,7 +81,7 @@ Disable this rule if your project prefers explicit `undefined` initializers for 
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R047
+> **Rule catalog ID:** R048
 
 ## Further reading
 

@@ -89,7 +89,7 @@ Disable this rule if your team intentionally keeps explicit `| undefined` on
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R092
+> **Rule catalog ID:** R095
 
 ## Further reading
 

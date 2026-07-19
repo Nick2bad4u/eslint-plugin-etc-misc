@@ -80,7 +80,7 @@ steps, chronological logs, or legal blocks with fixed sequence.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R071
+> **Rule catalog ID:** R074
 
 ## Further reading
 

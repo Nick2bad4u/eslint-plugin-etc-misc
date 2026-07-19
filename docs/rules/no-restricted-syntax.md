@@ -129,7 +129,7 @@ Disable this rule if your project does not rely on selector-based syntax restric
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R037
+> **Rule catalog ID:** R038
 
 ## Further reading
 

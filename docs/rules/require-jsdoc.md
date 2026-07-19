@@ -145,7 +145,7 @@ example ADRs or API schema files) and intentionally avoids inline JSDoc.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R062
+> **Rule catalog ID:** R065
 
 ## Further reading
 

@@ -6,10 +6,7 @@ import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds = "forbidden" | "suggestRequireReadonlyArrayPropertyType";
 
-type MutableArrayLikeTypeNode =
-    | es.Identifier
-    | es.TSArrayType
-    | es.TSTupleType;
+type MutableArrayLikeTypeNode = es.Identifier | es.TSArrayType | es.TSTupleType;
 
 type Options = readonly [];
 

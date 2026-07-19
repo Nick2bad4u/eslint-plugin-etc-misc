@@ -102,7 +102,7 @@ Disable this rule if you intentionally omit `default` cases.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R084
+> **Rule catalog ID:** R087
 
 ## Further reading
 

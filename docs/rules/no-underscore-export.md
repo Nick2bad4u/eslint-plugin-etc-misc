@@ -81,7 +81,7 @@ Disable this rule if underscore-prefixed exports are part of your public API con
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R044
+> **Rule catalog ID:** R045
 
 ## Further reading
 

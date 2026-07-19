@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
     createDeprecatedRuleInfo,
     createReplacementRuleInfo,
+    isDeprecatedSamePluginAlias,
     withDeprecatedRuleLifecycle,
 } from "../../src/_internal/rule-deprecation";
 
@@ -101,6 +102,82 @@ describe("deprecated rule metadata helpers", () => {
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-multi-type-tuples",
         });
         expect(Object.hasOwn(deprecationInfo, "replacedBy")).toBe(false);
+    });
+
+    it("allows a rule to record the exact release that deprecated it", () => {
+        expect.hasAssertions();
+
+        const deprecationInfo = createDeprecatedRuleInfo({
+            deprecatedSince: "1.2.0",
+            message: "Use typescript/no-unsafe-object-assign instead.",
+            ruleId: "typescript/no-unsafe-object-assignment",
+        });
+
+        expect(deprecationInfo.deprecatedSince).toBe("1.2.0");
+    });
+
+    it("identifies only different-rule replacements from the same plugin as aliases", () => {
+        expect.hasAssertions();
+
+        const samePluginAlias = createDeprecatedRuleInfo({
+            message: "Use the canonical rule.",
+            replacedBy: [
+                createReplacementRuleInfo({
+                    rule: { name: "typescript/no-unsafe-object-assign" },
+                }),
+            ],
+            ruleId: "typescript/no-unsafe-object-assignment",
+        });
+        const externalReplacement = createDeprecatedRuleInfo({
+            message: "Use the external rule.",
+            replacedBy: [
+                createReplacementRuleInfo({
+                    plugin: { name: "@typescript-eslint" },
+                    rule: { name: "no-unsafe-assignment" },
+                }),
+            ],
+            ruleId: "typescript/no-unsafe-object-assignment",
+        });
+        const sameRuleReplacement = createDeprecatedRuleInfo({
+            message: "Use this rule.",
+            replacedBy: [
+                createReplacementRuleInfo({
+                    rule: { name: "no-restricted-syntax" },
+                }),
+            ],
+            ruleId: "no-restricted-syntax",
+        });
+
+        expect(
+            isDeprecatedSamePluginAlias({
+                deprecated: samePluginAlias,
+                ruleId: "typescript/no-unsafe-object-assignment",
+            })
+        ).toBe(true);
+        expect(
+            isDeprecatedSamePluginAlias({
+                deprecated: externalReplacement,
+                ruleId: "typescript/no-unsafe-object-assignment",
+            })
+        ).toBe(false);
+        expect(
+            isDeprecatedSamePluginAlias({
+                deprecated: sameRuleReplacement,
+                ruleId: "no-restricted-syntax",
+            })
+        ).toBe(false);
+        expect(
+            isDeprecatedSamePluginAlias({
+                deprecated: false,
+                ruleId: "example",
+            })
+        ).toBe(false);
+        expect(
+            isDeprecatedSamePluginAlias({
+                deprecated: true,
+                ruleId: "example",
+            })
+        ).toBe(false);
     });
 });
 

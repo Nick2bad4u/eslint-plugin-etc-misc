@@ -7,10 +7,7 @@ import { isDefined, setHas } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
-type MemberKind =
-    | "accessor"
-    | "data"
-    | "method";
+type MemberKind = "accessor" | "data" | "method";
 
 type MessageIds = "forbidden";
 

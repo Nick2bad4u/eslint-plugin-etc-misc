@@ -69,7 +69,7 @@ for Error constructors.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R075
+> **Rule catalog ID:** R078
 
 ## Further reading
 

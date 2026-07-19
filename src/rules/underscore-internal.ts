@@ -13,10 +13,7 @@ const isNonUnderscoreIdentifier = (
 ): boolean => !identifier.name.startsWith("_");
 
 const isExportDeclaration = (
-    node:
-        | null
-        | Readonly<es.Node>
-        | undefined
+    node: null | Readonly<es.Node> | undefined
 ): node is es.ExportDefaultDeclaration | es.ExportNamedDeclaration =>
     node?.type === AST_NODE_TYPES.ExportDefaultDeclaration ||
     node?.type === AST_NODE_TYPES.ExportNamedDeclaration;
