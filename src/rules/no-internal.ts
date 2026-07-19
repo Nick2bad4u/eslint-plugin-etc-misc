@@ -17,7 +17,10 @@ import {
     isImportOrExportSpecifier,
 } from "../_internal/symbol-usage.js";
 
-type MessageIds = "forbidden" | "forbiddenWithComment" | "invalidIgnorePattern";
+type MessageIds =
+    | "forbidden"
+    | "forbiddenWithComment"
+    | "invalidIgnorePattern";
 
 type Options = readonly [
     {

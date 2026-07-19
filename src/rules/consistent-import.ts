@@ -5,7 +5,12 @@ import { isDefined } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
-type ImportStyle = "default" | "mixed" | "named" | "namespace" | "side-effect";
+type ImportStyle =
+    | "default"
+    | "mixed"
+    | "named"
+    | "namespace"
+    | "side-effect";
 
 type MessageIds = "inconsistent";
 

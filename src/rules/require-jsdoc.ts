@@ -9,7 +9,12 @@ import {
     withDeprecatedRuleLifecycle,
 } from "../_internal/rule-deprecation.js";
 
-type JSDocKind = "arrow-function" | "class" | "function" | "method" | "type";
+type JSDocKind =
+    | "arrow-function"
+    | "class"
+    | "function"
+    | "method"
+    | "type";
 
 type MessageIds = "missing";
 

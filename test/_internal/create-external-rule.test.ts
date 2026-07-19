@@ -124,7 +124,10 @@ const isSourceCode = (value: unknown): value is Readonly<TSESLint.SourceCode> =>
 
 const callLegacyStringMethod = (
     context: LegacyContextCompat,
-    methodName: "getCwd" | "getFilename" | "getPhysicalFilename"
+    methodName:
+        | "getCwd"
+        | "getFilename"
+        | "getPhysicalFilename"
 ): string => {
     const candidateMethod = Reflect.get(context, methodName);
 

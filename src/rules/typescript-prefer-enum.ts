@@ -14,7 +14,9 @@ import ts from "typescript";
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds =
-    "preferEnumComparison" | "preferEnumReturn" | "preferEnumUnion";
+    | "preferEnumComparison"
+    | "preferEnumReturn"
+    | "preferEnumUnion";
 
 type Options = readonly [];
 

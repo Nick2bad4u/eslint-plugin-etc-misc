@@ -34,7 +34,11 @@ const getParametersFromFunctionLikeNode = (
 };
 
 const getAssignmentPatternFromPattern = (
-    pattern: Readonly<es.AssignmentPattern | es.BindingName | es.RestElement>
+    pattern: Readonly<
+        | es.AssignmentPattern
+        | es.BindingName
+        | es.RestElement
+    >
 ): Readonly<es.AssignmentPattern> | undefined => {
     if (pattern.type === AST_NODE_TYPES.AssignmentPattern) {
         return pattern;
