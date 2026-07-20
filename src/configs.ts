@@ -2,7 +2,11 @@
 
 import type { UnknownRecord } from "type-fest";
 
-import { pluginMeta } from "./_internal/plugin-meta.js";
+import {
+    pluginMeta,
+    type PluginMeta,
+    type PluginNamespace,
+} from "./_internal/plugin-meta.js";
 import { allStrict as allStrictConfig } from "./configs/all-strict.js";
 import { all as allConfig } from "./configs/all.js";
 import { minimal as minimalConfig } from "./configs/minimal.js";
@@ -12,7 +16,7 @@ import { strict as strictConfig } from "./configs/strict.js";
 import { rules } from "./rules.js";
 
 interface PluginReference {
-    readonly meta: typeof pluginMeta;
+    readonly meta: PluginMeta;
     readonly rules: typeof rules;
 }
 
@@ -21,9 +25,7 @@ interface PresetWithPlugin<
     TRules extends Readonly<Record<string, RuleSeverity>>,
 > {
     readonly name: TName;
-    readonly plugins: Readonly<
-        Record<typeof pluginMeta.namespace, PluginReference>
-    >;
+    readonly plugins: Readonly<Record<PluginNamespace, PluginReference>>;
     readonly rules: TRules;
 }
 
