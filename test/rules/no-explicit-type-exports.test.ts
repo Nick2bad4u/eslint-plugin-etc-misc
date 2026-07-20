@@ -56,7 +56,7 @@ ruleTester.run("no-explicit-type-exports", rule, {
             filename: "file.ts",
         },
         {
-            code: "const value = 1;\nexport type { value };",
+            code: "type Value = number;\nexport type { Value };",
             filename: "file.ts",
         },
         {

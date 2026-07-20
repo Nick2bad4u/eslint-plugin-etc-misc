@@ -18,13 +18,13 @@ const cjsDeclarationPath = fileURLToPath(
     new URL("../dist/plugin.d.cts", import.meta.url)
 );
 const esmDefaultExportPattern =
-    /export default plugin;\r?\n\/\/# sourceMappingURL=plugin\.d\.ts\.map\r?\n?$/v;
+    /export default plugin;\r?\n(?:\/\/# sourceMappingURL=plugin\.d\.ts\.map\r?\n?)?$/u;
 
 const esmDeclaration = await readFile(esmDeclarationPath, "utf8");
 
 if (!esmDefaultExportPattern.test(esmDeclaration)) {
     throw new Error(
-        "Expected dist/plugin.d.ts to end with the plugin default export and source-map reference."
+        "Expected dist/plugin.d.ts to end with the plugin default export and optional source-map reference."
     );
 }
 
