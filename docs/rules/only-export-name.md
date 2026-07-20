@@ -110,7 +110,7 @@ Disable this rule if exported symbol names do not need to be constrained.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R057
+> **Rule catalog ID:** R074
 
 ## Further reading
 

@@ -121,7 +121,7 @@ current implementations are deterministically defined.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R099
+> **Rule catalog ID:** R123
 
 ## Further reading
 

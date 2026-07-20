@@ -91,7 +91,7 @@ constraints.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R130
+> **Rule catalog ID:** R154
 
 ## Further reading
 

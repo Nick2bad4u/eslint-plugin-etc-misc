@@ -98,7 +98,7 @@ or if broader immutability rules already enforce your preferred constraints.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R118
+> **Rule catalog ID:** R142
 
 ## Further reading
 

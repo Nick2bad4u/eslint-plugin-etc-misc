@@ -93,7 +93,7 @@ optional parameters or tuple members for stylistic consistency.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R098
+> **Rule catalog ID:** R122
 
 ## Further reading
 

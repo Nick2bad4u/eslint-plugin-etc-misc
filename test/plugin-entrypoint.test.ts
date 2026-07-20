@@ -4,6 +4,7 @@ import parser from "@typescript-eslint/parser";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as fc from "fast-check";
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { describe, expect, it } from "vitest";
 
 import pluginExport from "../plugin.mjs";
@@ -12,6 +13,9 @@ import { configs } from "../src/configs";
 import { rules } from "../src/rules";
 
 const plugin = pluginExport;
+const requireCommonJsModule: (specifier: string) => unknown = createRequire(
+    import.meta.url
+);
 
 const readPluginEntrypointSource = (): string =>
     readFileSync("plugin.mjs", "utf8");
@@ -114,6 +118,21 @@ const assertDefaultExportIdentifier = (
 };
 
 describe("plugin.mjs entrypoint", () => {
+    it("loads the advertised CommonJS entrypoint", () => {
+        expect.hasAssertions();
+
+        const commonJsPlugin = requireCommonJsModule("../dist/plugin.cjs");
+
+        expect(commonJsPlugin).toMatchObject({
+            meta: pluginMeta,
+        });
+        expect(commonJsPlugin).toHaveProperty("rules.prefer-includes");
+        expect(commonJsPlugin).toHaveProperty("rules.require-usememo");
+        expect(commonJsPlugin).toHaveProperty(
+            "configs.all.rules.etc-misc/compat"
+        );
+    });
+
     it("re-exports the built plugin with the same nested plugin references", () => {
         expect.hasAssertions();
         expect(plugin.meta).toStrictEqual(pluginMeta);

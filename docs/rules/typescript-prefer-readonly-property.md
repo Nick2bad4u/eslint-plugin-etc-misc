@@ -79,7 +79,7 @@ Disable this rule if mutable properties are part of your coding conventions.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R114
+> **Rule catalog ID:** R138
 
 ## Further reading
 

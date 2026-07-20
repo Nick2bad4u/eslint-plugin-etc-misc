@@ -97,7 +97,7 @@ Disable this rule if sibling imports are part of your module design.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R042
+> **Rule catalog ID:** R057
 
 ## Further reading
 

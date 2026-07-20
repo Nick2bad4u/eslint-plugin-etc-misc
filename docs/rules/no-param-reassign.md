@@ -98,7 +98,7 @@ Disable this rule if your codebase allows unrestricted parameter mutation.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R036
+> **Rule catalog ID:** R051
 
 ## Further reading
 

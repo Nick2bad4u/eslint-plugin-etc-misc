@@ -93,7 +93,7 @@ Disable this rule if your module resolver requires explicit source file extensio
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R009
+> **Rule catalog ID:** R010
 
 ## Further reading
 

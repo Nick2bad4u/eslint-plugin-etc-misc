@@ -113,7 +113,7 @@ instead of using docs, snippets, or tests.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R020
+> **Rule catalog ID:** R026
 
 ## Further reading
 

@@ -81,7 +81,7 @@ Disable this rule if your team does not enforce array-type alias naming conventi
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R085
+> **Rule catalog ID:** R109
 
 ## Further reading
 

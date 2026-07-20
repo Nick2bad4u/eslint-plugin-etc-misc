@@ -25,6 +25,22 @@ describe("external rule resolution", () => {
         expect(resolvedRule).toBe(externalRule);
     });
 
+    it("unwraps a default export produced by requiring an ES module", () => {
+        expect.hasAssertions();
+
+        const externalRule: Readonly<Record<string, unknown>> = {
+            create: (): Readonly<Record<string, never>> => ({}),
+        };
+
+        const resolvedRule = getExternalRuleFromPlugin(
+            { default: { rules: { "my-rule": externalRule } } },
+            "my-rule",
+            "example-plugin"
+        );
+
+        expect(resolvedRule).toBe(externalRule);
+    });
+
     it("throws when plugin does not expose a valid rules map", () => {
         expect.hasAssertions();
         expect(() =>
@@ -104,6 +120,27 @@ describe("external rule adaptation", () => {
             "https://example.com/rules/adapted"
         );
         expect(adaptedRule.meta?.docs?.description).toBe("Adapted rule");
+    });
+
+    it("keeps only string-valued external messages", () => {
+        expect.hasAssertions();
+
+        const adaptedRule = adaptExternalRule(
+            {
+                create: (): Readonly<Record<string, never>> => ({}),
+                meta: {
+                    messages: {
+                        invalid: 42,
+                        valid: "Valid external message.",
+                    },
+                },
+            },
+            "https://example.com/rules/adapted"
+        );
+
+        expect(adaptedRule.meta?.messages).toStrictEqual({
+            valid: "Valid external message.",
+        });
     });
 });
 

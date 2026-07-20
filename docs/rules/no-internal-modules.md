@@ -99,7 +99,7 @@ Disable this rule if your project intentionally imports deep internal module pat
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R030
+> **Rule catalog ID:** R043
 
 ## Further reading
 

@@ -52,7 +52,8 @@
     "files": [
         "dist",
         "docs",
-        "CHANGELOG.md"
+        "CHANGELOG.md",
+        "THIRD_PARTY_NOTICES.md"
     ],
     "workspaces": [
         "docs/docusaurus"
@@ -63,7 +64,7 @@
         "build:clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
         "build:eslint-inspector": "npx -y @eslint/config-inspector@latest build --outDir \"docs/docusaurus/static/eslint-inspector\" --base \"/eslint-plugin-etc-misc/eslint-inspector/\"",
         "build:eslint-inspector:local": "npx @eslint/config-inspector",
-        "build:types:cjs": "node -e \"require('node:fs').copyFileSync('dist/plugin.d.ts','dist/plugin.d.cts')\"",
+        "build:types:cjs": "node scripts/build-cjs-types.mjs",
         "changelog:generate": "git cliff --config node_modules/gitcliff-config-nick2bad4u/cliff.toml --github-repo Nick2bad4u/eslint-plugin-etc-misc --output CHANGELOG.md",
         "changelog:preview": "git cliff --config node_modules/gitcliff-config-nick2bad4u/cliff.toml --github-repo Nick2bad4u/eslint-plugin-etc-misc --unreleased",
         "changelog:release-notes": "git cliff --config node_modules/gitcliff-config-nick2bad4u/cliff.toml --github-repo Nick2bad4u/eslint-plugin-etc-misc --current",
@@ -203,10 +204,14 @@
         "@typescript-eslint/type-utils": "^8.63.0",
         "@typescript-eslint/utils": "^8.63.0",
         "debug": "^4.4.3",
+        "eslint-plugin-compat": "^6.2.1",
         "eslint-plugin-no-secrets": "^2.3.3",
+        "eslint-plugin-simple-import-sort": "^14.0.0",
         "eslint-plugin-unicorn": "^64.0.0",
+        "eslint-plugin-unused-imports": "^4.4.1",
         "eslint-plugin-write-good-comments-2": "^1.2.7",
         "eslint-visitor-keys": "^5.0.1",
+        "globals": "^17.7.0",
         "minimatch": "^10.2.5",
         "recheck": "^4.5.0",
         "semver": "^7.8.5",

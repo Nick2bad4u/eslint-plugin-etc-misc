@@ -87,7 +87,7 @@ project's type design.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R108
+> **Rule catalog ID:** R132
 
 ## Further reading
 

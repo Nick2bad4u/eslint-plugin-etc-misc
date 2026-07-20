@@ -86,7 +86,7 @@ Disable this rule if your project intentionally standardizes on TypeScript enums
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R023
+> **Rule catalog ID:** R035
 
 ## Further reading
 

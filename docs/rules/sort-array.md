@@ -79,7 +79,7 @@ or display order), or when you need locale-specific/custom sorting semantics.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R068
+> **Rule catalog ID:** R089
 
 ## Further reading
 

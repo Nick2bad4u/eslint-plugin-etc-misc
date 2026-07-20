@@ -149,7 +149,7 @@ export default [
   `if`-block), the fix may require manual review to confirm the intended
   placement.
 
-> **Rule catalog ID:** R026
+> **Rule catalog ID:** R039
 
 ## Further reading
 

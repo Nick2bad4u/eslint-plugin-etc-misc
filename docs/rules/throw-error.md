@@ -96,7 +96,7 @@ Disable this rule if your codebase intentionally uses non-`Error` throw/reject v
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R077
+> **Rule catalog ID:** R100
 
 ## Further reading
 

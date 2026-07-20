@@ -108,7 +108,7 @@ Disable this rule if methods that do not reference `this` are acceptable.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R084
+> **Rule catalog ID:** R107
 
 ## Further reading
 

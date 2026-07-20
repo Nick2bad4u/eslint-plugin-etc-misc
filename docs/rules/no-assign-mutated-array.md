@@ -105,7 +105,7 @@ Disable this rule if your codebase intentionally relies on mutating array method
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R016
+> **Rule catalog ID:** R022
 
 ## Further reading
 

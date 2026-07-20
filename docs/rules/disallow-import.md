@@ -98,7 +98,7 @@ Disable this rule if your project does not enforce import path restrictions.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R012
+> **Rule catalog ID:** R014
 
 ## Further reading
 

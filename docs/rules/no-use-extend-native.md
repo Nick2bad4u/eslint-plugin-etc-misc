@@ -1,71 +1,84 @@
 # no-use-extend-native
 
-Disallow usage of non-native members on built-in JavaScript objects.
+Disallow consuming non-native members on statically recognizable JavaScript
+built-ins.
 
 ## Targeted pattern scope
 
-This rule is intentionally conservative and focuses on obvious built-in object shapes such as:
-
-- String/number/boolean/regexp literals.
-- Array/object literals.
-- `new` expressions for built-ins.
-- `String.prototype.<member>` / `Array.prototype.<member>` style accesses.
-
-It does **not** attempt full-flow inference for arbitrary identifiers.
+This rule checks statically named member access on built-in constructors,
+namespaces, prototypes, and expression forms whose native type is unambiguous.
 
 ## What this rule reports
 
-This rule helps prevent implicit reliance on monkey-patched native prototypes (for example from legacy libraries that add methods like `String.prototype.green`).
+The rule recognizes built-in constructors, namespaces, prototypes, literal
+values, array/object/function expressions, callable built-in conversions, and
+statically inferable binary-expression results. It reports:
 
-This rule reports member usage on obvious built-in values when the accessed member is not part of the native API.
+- a statically named member absent from the built-in's native API;
+- calling a native data property or accessor as a function; and
+- using a prototype member as a static member, or a static member as an
+  instance member.
+
+Static computed strings are checked. Dynamic computed properties are ignored.
+Shadowed global names and explicitly declared object-literal properties are
+also ignored to prevent common false positives.
 
 ## Why this rule exists
 
-Relying on extended native objects can make code unpredictable across runtimes, bundling targets, and dependency versions.
+Code that consumes monkey-patched native members has hidden runtime coupling
+and fails when the patch is absent, reordered, or removed.
 
 ## ❌ Incorrect
 
 ```ts
-const value = "unicorn".green;
-```
-
-```ts
-const value = [].customFunction();
-```
-
-```ts
-const value = String.prototype.shortHash();
+"value".green;
+[].customMethod();
+new Float32Array().customMethod();
+new Map().size();
+String.toUpperCase();
+"value".fromCharCode();
 ```
 
 ## ✅ Correct
 
 ```ts
-const value = "unicorn".toUpperCase();
-```
+"value".toUpperCase();
+[].map(String);
+new Float32Array().values();
+new Map().size;
+String.fromCharCode(65);
 
-```ts
-const value = [].map((entry) => entry);
-```
+({ custom: true }).custom;
 
-```ts
-const value = String.prototype.toLowerCase.call("ABC");
+class Array {
+ custom(): void {}
+}
+new Array().custom();
 ```
 
 ## Behavior and migration notes
 
-This rule has no options.
+Coverage includes the standard error constructors, arrays and typed arrays,
+`ArrayBuffer`, `SharedArrayBuffer`, `DataView`, primitive wrappers,
+collections, promises, regular expressions, weak collections/references, and
+namespace objects such as `Atomics`, `Intl`, `JSON`, `Math`, and `Reflect` when
+they exist in the lint runtime.
 
-### Relationship to ESLint `no-extend-native`
+The rule reads property descriptors from the lint runtime. A runtime newer than
+the deployment target can therefore recognize APIs unavailable in that target;
+pair this rule with a compatibility rule when target-version enforcement is
+required.
 
-- ESLint core [`no-extend-native`](https://eslint.org/docs/latest/rules/no-extend-native) prevents adding properties to native prototypes.
-- This rule prevents consuming non-native members when they appear in code.
+### Options and fixes
 
-Using both rules together gives better protection:
+This rule has no options and no fixer. Replacing a non-native member requires
+project-specific knowledge.
 
-1. Prevent introducing prototype extension.
-2. Prevent relying on prototype extension from third-party code.
+### Relationship to core `no-extend-native`
 
-Original plugin source: [`eslint-plugin-no-use-extend-native`](https://github.com/dustinspecker/eslint-plugin-no-use-extend-native).
+Core [`no-extend-native`](https://eslint.org/docs/latest/rules/no-extend-native)
+prevents code from adding properties to native prototypes. This rule prevents
+code from relying on those added properties. The rules are complementary.
 
 ## ESLint flat config example
 
@@ -76,6 +89,7 @@ export default [
  {
   plugins: { "etc-misc": etcMisc },
   rules: {
+   "no-extend-native": "error",
    "etc-misc/no-use-extend-native": "error",
   },
  },
@@ -84,12 +98,28 @@ export default [
 
 ## When not to use it
 
-- If your project intentionally and explicitly relies on controlled prototype extension.
-- If your runtime environment guarantees specific prototype patches and that dependency is accepted in your architecture.
+Disable the rule when the runtime intentionally guarantees specific prototype
+patches, or when lint-runtime feature detection is not an acceptable API
+baseline.
 
-> **Rule catalog ID:** R051
+## Package documentation
+
+- [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
+
+> **Rule catalog ID:** R068
 
 ## Further reading
 
-- [ESLint `no-extend-native`](https://eslint.org/docs/latest/rules/no-extend-native)
-- [MDN: Inheritance and the prototype chain](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain)
+### Upstream inspiration
+
+Modernized from
+[`eslint-plugin-no-use-extend-native`](https://github.com/dustinspecker/eslint-plugin-no-use-extend-native).
+
+### Additional resources
+
+- [MDN: inheritance and the prototype chain](https://developer.mozilla.org/docs/Web/JavaScript/Inheritance_and_the_prototype_chain)
+
+## Adoption resources
+
+- Start at warning level in CI, then move to error after cleanup.
+- Review each finding against the configured JavaScript runtime baseline.

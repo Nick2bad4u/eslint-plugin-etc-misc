@@ -113,7 +113,7 @@ export default [
 - If lint-time regex analysis cost is unacceptable for your workflow.
 - If you prefer running ReDoS scanning as a separate CI security step rather than as an ESLint rule.
 
-> **Rule catalog ID:** R054
+> **Rule catalog ID:** R071
 
 ## Further reading
 
