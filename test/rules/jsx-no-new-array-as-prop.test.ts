@@ -39,6 +39,16 @@ ruleTester.run("jsx-no-new-array-as-prop", rule, {
             filename,
             options: [{ nativeAllowList: "all" }],
         },
+        {
+            code: "function View() { const values = []; return <Item first={values} second={values} />; }",
+            errors: [{ messageId: "unstableArrayProp" }],
+            filename,
+        },
+        {
+            code: "function View() { return <Item values={(0, [])} />; }",
+            errors: [{ messageId: "unstableArrayProp" }],
+            filename,
+        },
     ],
     valid: [
         {
@@ -65,6 +75,14 @@ ruleTester.run("jsx-no-new-array-as-prop", rule, {
         },
         {
             code: "const node = <Item values={[]} />;",
+            filename,
+        },
+        {
+            code: "function View() { const first = second; const second = first; return <Item values={first} />; }",
+            filename,
+        },
+        {
+            code: "function View() { return <Item values={/* intentionally empty */} />; }",
             filename,
         },
     ],

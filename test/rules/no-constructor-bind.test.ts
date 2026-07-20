@@ -47,6 +47,7 @@ ruleTester.run("no-constructor-bind", rule, {
         },
     ],
     valid: [
+        "declare class Handler { constructor(); }",
         "class Handler { click = () => {}; }",
         "class Handler { constructor() { this.click = this.click.bind(other); } click() {} }",
         "class Handler { constructor() { this.click = this.other.bind(this); } click() {} other() {} }",

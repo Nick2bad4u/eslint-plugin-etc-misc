@@ -121,6 +121,27 @@ describe("external rule adaptation", () => {
         );
         expect(adaptedRule.meta?.docs?.description).toBe("Adapted rule");
     });
+
+    it("keeps only string-valued external messages", () => {
+        expect.hasAssertions();
+
+        const adaptedRule = adaptExternalRule(
+            {
+                create: (): Readonly<Record<string, never>> => ({}),
+                meta: {
+                    messages: {
+                        invalid: 42,
+                        valid: "Valid external message.",
+                    },
+                },
+            },
+            "https://example.com/rules/adapted"
+        );
+
+        expect(adaptedRule.meta?.messages).toStrictEqual({
+            valid: "Valid external message.",
+        });
+    });
 });
 
 type ExternalRuleMessageId = "forbiddenIdentifier";
