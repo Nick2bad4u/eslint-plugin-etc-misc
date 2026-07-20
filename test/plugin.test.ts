@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
 
+// JSON module specifiers require an explicit file extension at runtime.
+// eslint-disable-next-line import-x/extensions -- Node.js cannot resolve this JSON module without its extension.
+import packageJson from "../package.json" with { type: "json" };
 import plugin from "../src/plugin";
 
 interface ConfigurablePlugin {
@@ -333,7 +336,7 @@ const assertPluginExposesRulesAndConfigs = (): void => {
     expect(plugin.meta).toStrictEqual({
         name: "eslint-plugin-etc-misc",
         namespace: "etc-misc",
-        version: "1.2.0",
+        version: packageJson.version,
     });
     expect(plugin.processors).toStrictEqual({});
 

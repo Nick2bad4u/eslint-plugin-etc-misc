@@ -59,12 +59,13 @@
         "docs/docusaurus"
     ],
     "scripts": {
-        "build": "npx tsc -b tsconfig.build.json --force && npm run build:types:cjs && npm run build:cjs",
+        "build": "npx tsc -b tsconfig.build.json --force && npm run build:types:cjs && npm run build:cjs && npm run build:verify",
         "build:cjs": "npx esbuild dist/plugin.js --bundle --format=cjs --platform=node --packages=external --sourcemap --outfile=dist/plugin.cjs --footer:js=\"module.exports = module.exports.default;\"",
         "build:clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
         "build:eslint-inspector": "npx -y @eslint/config-inspector@latest build --outDir \"docs/docusaurus/static/eslint-inspector\" --base \"/eslint-plugin-etc-misc/eslint-inspector/\"",
         "build:eslint-inspector:local": "npx @eslint/config-inspector",
         "build:types:cjs": "node scripts/build-cjs-types.mjs",
+        "build:verify": "node scripts/verify-built-plugin-meta.mjs",
         "changelog:generate": "git cliff --config node_modules/gitcliff-config-nick2bad4u/cliff.toml --github-repo Nick2bad4u/eslint-plugin-etc-misc --output CHANGELOG.md",
         "changelog:preview": "git cliff --config node_modules/gitcliff-config-nick2bad4u/cliff.toml --github-repo Nick2bad4u/eslint-plugin-etc-misc --unreleased",
         "changelog:release-notes": "git cliff --config node_modules/gitcliff-config-nick2bad4u/cliff.toml --github-repo Nick2bad4u/eslint-plugin-etc-misc --current",
