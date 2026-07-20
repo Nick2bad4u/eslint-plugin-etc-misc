@@ -85,7 +85,7 @@ Disable this rule if your tooling resolves `"@"` as a valid direct module import
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R017
+> **Rule catalog ID:** R023
 
 ## Further reading
 

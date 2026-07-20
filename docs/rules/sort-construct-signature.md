@@ -84,7 +84,7 @@ Disable this rule if interface member order is not important in your style guide
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R071
+> **Rule catalog ID:** R092
 
 ## Further reading
 

@@ -1,7 +1,13 @@
 import type { TSESLint } from "@typescript-eslint/utils";
 import type { UnknownArray, UnknownRecord } from "type-fest";
 
-import { keyIn, objectEntries, objectHasOwn, safeCastTo } from "ts-extras";
+import {
+    assertDefined,
+    keyIn,
+    objectEntries,
+    objectHasOwn,
+    safeCastTo,
+} from "ts-extras";
 
 import type { RuleDocsMetadata } from "./rule-creator.js";
 
@@ -120,13 +126,24 @@ export const getExternalRuleFromPlugin = (
     ruleName: string,
     pluginName: string
 ): unknown => {
-    if (!isObjectRecord(plugin) || !isObjectRecord(plugin["rules"])) {
-        throw new TypeError(
-            `Plugin "${pluginName}" does not expose a valid rules map.`
-        );
-    }
+    const directRules = isObjectRecord(plugin) ? plugin["rules"] : undefined;
+    const wrappedDefault = isObjectRecord(plugin)
+        ? plugin["default"]
+        : undefined;
+    const wrappedRules = isObjectRecord(wrappedDefault)
+        ? wrappedDefault["rules"]
+        : undefined;
+    const rules = isObjectRecord(directRules)
+        ? directRules
+        : isObjectRecord(wrappedRules)
+          ? wrappedRules
+          : undefined;
 
-    const rules = plugin["rules"];
+    assertDefined(
+        rules,
+        `Plugin "${pluginName}" does not expose a valid rules map.`
+    );
+
     if (!objectHasOwn(rules, ruleName)) {
         throw new Error(
             `Rule "${ruleName}" was not found in plugin "${pluginName}".`

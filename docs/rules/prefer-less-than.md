@@ -85,7 +85,7 @@ readability and does not want operand-swapping autofixes.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R062
+> **Rule catalog ID:** R079
 
 ## Further reading
 

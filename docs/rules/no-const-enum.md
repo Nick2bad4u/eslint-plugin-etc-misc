@@ -97,7 +97,7 @@ Disable this rule if your project explicitly depends on `const enum` inlining an
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R021
+> **Rule catalog ID:** R027
 
 ## Further reading
 

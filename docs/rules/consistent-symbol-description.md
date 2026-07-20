@@ -79,7 +79,7 @@ Disable this rule if your codebase intentionally allows other naming styles for 
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R010
+> **Rule catalog ID:** R011
 
 ## Further reading
 

@@ -90,7 +90,7 @@ Disable this rule if your codebase intentionally allows negated condition forms.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R034
+> **Rule catalog ID:** R048
 
 ## Further reading
 

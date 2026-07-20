@@ -76,7 +76,7 @@ Disable this rule if mixed-language tokens are expected and accepted in your pro
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R031
+> **Rule catalog ID:** R045
 
 ## Further reading
 

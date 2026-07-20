@@ -3,47 +3,53 @@ import { ruleTester } from "../_internal/ruleTester";
 
 ruleTester.run("no-use-extend-native", rule, {
     invalid: [
-        {
-            code: "const value = 'unicorn'.green;",
-            errors: [{ messageId: "forbidden" }],
-        },
-        {
-            code: "const value = [].customFunction();",
-            errors: [{ messageId: "forbidden" }],
-        },
-        {
-            code: "const value = String.prototype.shortHash();",
-            errors: [{ messageId: "forbidden" }],
-        },
-        {
-            code: "const value = 'abc'.length();",
-            errors: [{ messageId: "forbidden" }],
-        },
-    ],
+        "'unicorn'.green;",
+        "[].customFunction();",
+        "String.prototype.shortHash();",
+        "'abc'.length();",
+        "new Map().size();",
+        '[]["custom"]();',
+        "new Float32Array().custom();",
+        "new ArrayBuffer(8).custom;",
+        "new DataView(new ArrayBuffer(8)).custom();",
+        "(1 + 1).toLowerCase();",
+        "(function example() {}).custom();",
+        "(() => {}).custom;",
+        "String.toUpperCase();",
+        "'value'.fromCharCode();",
+        "({}).custom();",
+    ].map((code) => ({
+        code,
+        errors: [{ messageId: "forbidden" as const }],
+    })),
     valid: [
-        {
-            code: "const value = 'abc'.toUpperCase();",
-        },
-        {
-            code: "const maybeLabel = 'abc'?.toUpperCase?.();",
-        },
-        {
-            code: "const value = [].map((entry) => entry);",
-        },
-        {
-            code: "const value = ({ a: 1 }).toString();",
-        },
-        {
-            code: "const value = object.green;",
-        },
-        {
-            code: "const value = values[index];",
-        },
-        {
-            code: "const value = ''.concat(suffix)['toUpperCase'];",
-        },
-        {
-            code: "const value = String.prototype.toLowerCase.call('ABC');",
-        },
+        "new Proxy({ custom: 1 }, {}).custom;",
+        "Object('x').charAt(0);",
+        "new Object([1]).map(String);",
+        "(function () {}).prototype;",
+        "'abc'.toUpperCase();",
+        "'abc'.length;",
+        "const maybeLabel = 'abc'?.toUpperCase?.();",
+        "[].map((entry) => entry);",
+        "[][0];",
+        "'abc'[0];",
+        "new Uint8Array(2)[0];",
+        "({ custom: 1 }).custom;",
+        "({ custom() {} }).custom();",
+        "({ ...source }).custom;",
+        "String.fromCharCode(65);",
+        "Array.isArray([]);",
+        "Object.keys({});",
+        "new Map().size;",
+        "new DataView(new ArrayBuffer(8)).byteLength;",
+        "new Float64Array().values();",
+        "(1 + 1).valueOf();",
+        "('a' + 1).toUpperCase();",
+        "(/a/ + 1).toUpperCase();",
+        "(function example() {}).bind(null);",
+        "class Array { custom() {} } new Array().custom();",
+        "const String = { custom() {} }; String.custom();",
+        "customValue.custom();",
+        "value[dynamicProperty];",
     ],
 });

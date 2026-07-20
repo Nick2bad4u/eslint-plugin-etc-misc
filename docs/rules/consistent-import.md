@@ -116,7 +116,7 @@ same module (for example, staged migration from default to named exports).
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R007
+> **Rule catalog ID:** R008
 
 ## Further reading
 

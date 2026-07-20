@@ -87,7 +87,7 @@ Disable this rule if marker interfaces are intentionally used in your project.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R091
+> **Rule catalog ID:** R115
 
 ## Further reading
 

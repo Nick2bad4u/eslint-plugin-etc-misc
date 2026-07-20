@@ -94,7 +94,7 @@ never-reassigned `let` annotations for stylistic consistency.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R097
+> **Rule catalog ID:** R121
 
 ## Further reading
 

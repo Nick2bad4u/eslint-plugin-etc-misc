@@ -80,7 +80,7 @@ Disable this rule if blank lines inside expressions are allowed for readability.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R024
+> **Rule catalog ID:** R037
 
 ## Further reading
 

@@ -80,7 +80,7 @@ Disable this rule if your project permits `?.` and `??` in the same expression.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R019
+> **Rule catalog ID:** R025
 
 ## Further reading
 

@@ -101,7 +101,7 @@ mirror external schemas with different casing requirements.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R005
+> **Rule catalog ID:** R006
 
 ## Further reading
 

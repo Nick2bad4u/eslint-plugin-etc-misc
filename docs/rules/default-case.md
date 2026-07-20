@@ -83,7 +83,7 @@ checks and intentionally avoid `default` branches.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R011
+> **Rule catalog ID:** R013
 
 ## Further reading
 

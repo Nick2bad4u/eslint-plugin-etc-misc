@@ -86,7 +86,7 @@ Disable this rule if `@/` internal alias imports are part of your standard archi
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R018
+> **Rule catalog ID:** R024
 
 ## Further reading
 

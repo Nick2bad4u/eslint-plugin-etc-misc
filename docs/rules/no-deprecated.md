@@ -162,7 +162,7 @@ a planned migration window and you want to manage those usages manually.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R022
+> **Rule catalog ID:** R030
 
 ## Further reading
 

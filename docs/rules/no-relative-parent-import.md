@@ -106,7 +106,7 @@ Disable this rule if parent-relative imports are an accepted part of your module
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R037
+> **Rule catalog ID:** R052
 
 ## Further reading
 

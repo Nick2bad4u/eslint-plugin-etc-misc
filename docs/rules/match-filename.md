@@ -107,7 +107,7 @@ files, etc.).
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R014
+> **Rule catalog ID:** R020
 
 ## Further reading
 

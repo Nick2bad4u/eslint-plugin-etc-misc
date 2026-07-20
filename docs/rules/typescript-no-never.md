@@ -81,7 +81,7 @@ Disable this rule if inferred `never` identifiers are accepted in your codebase.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R094
+> **Rule catalog ID:** R118
 
 ## Further reading
 

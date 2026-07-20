@@ -22,6 +22,7 @@ const deprecatedRuleIds = [
     "consistent-source-extension",
     "no-commented-out-code",
     "no-deprecated",
+    "no-explicit-type-exports",
     "no-mixed-enums",
     "no-relative-parent-import",
     "no-restricted-syntax",
@@ -39,6 +40,7 @@ const deprecatedRuleIds = [
     "switch-case-spacing",
     "throw-new-error",
     "typescript/class-methods-use-this",
+    "typescript/compat",
     "typescript/exhaustive-switch",
     "typescript/no-empty-interfaces",
     "typescript/no-inferrable-types",
@@ -170,8 +172,12 @@ const getSortedRuleNames = (
 
 const assertObjectAssignAliasContract = (): void => {
     const exportedRuleIds = getSortedRuleNames(plugin.rules);
+    const samePluginAliasRuleIds = new Set([
+        "typescript/compat",
+        "typescript/no-unsafe-object-assignment",
+    ]);
     const presetEligibleExportedRuleIds = exportedRuleIds.filter(
-        (ruleId) => ruleId !== "typescript/no-unsafe-object-assignment"
+        (ruleId) => !samePluginAliasRuleIds.has(ruleId)
     );
     const allConfigRuleIds = toSortedStrings(
         Object.keys(plugin.configs.all.rules).map((qualifiedRuleName) =>
@@ -233,6 +239,96 @@ const assertObjectAssignAliasContract = (): void => {
     }
 };
 
+const assertCompatAliasContract = (): void => {
+    const canonicalRule = plugin.rules["compat"];
+    const compatibilityAliasRule = plugin.rules["typescript/compat"];
+
+    expect(canonicalRule).toBeDefined();
+    expect(compatibilityAliasRule).toBeDefined();
+
+    if (canonicalRule === undefined || compatibilityAliasRule === undefined) {
+        throw new Error("Expected compatibility rules to remain exported.");
+    }
+
+    expect(canonicalRule.meta.deprecated).toBe(false);
+    expect(compatibilityAliasRule.create).toBe(canonicalRule.create);
+
+    const aliasDeprecation = compatibilityAliasRule.meta.deprecated;
+
+    expect(aliasDeprecation).toBeTypeOf("object");
+
+    if (typeof aliasDeprecation !== "object" || aliasDeprecation === null) {
+        throw new TypeError("Expected structured alias deprecation metadata.");
+    }
+
+    expect(aliasDeprecation.deprecatedSince).toBe("1.3.0");
+    expect(aliasDeprecation.availableUntil).toBe("2.0.0");
+    expect(aliasDeprecation.replacedBy?.[0]?.rule?.name).toBe("compat");
+    expect(aliasDeprecation.replacedBy?.[0]).not.toHaveProperty("plugin");
+
+    for (const configVariant of configVariants) {
+        expect(
+            "etc-misc/typescript/compat" in plugin.configs[configVariant].rules
+        ).toBe(false);
+    }
+
+    for (const configVariant of ["all", "allStrict"] as const) {
+        expect(plugin.configs[configVariant].rules["etc-misc/compat"]).toBe(
+            "error"
+        );
+    }
+};
+
+const assertNoExplicitTypeExportsLifecycle = (): void => {
+    const compatibilityRule = plugin.rules["no-explicit-type-exports"];
+
+    expect(compatibilityRule).toBeDefined();
+
+    if (compatibilityRule === undefined) {
+        throw new Error(
+            "Expected no-explicit-type-exports to remain exported during its deprecation window."
+        );
+    }
+
+    expect(compatibilityRule.meta.docs?.requiresTypeChecking).toBe(true);
+
+    const deprecation = compatibilityRule.meta.deprecated;
+
+    expect(deprecation).toBeTypeOf("object");
+
+    if (typeof deprecation !== "object" || deprecation === null) {
+        throw new TypeError(
+            "Expected structured no-explicit-type-exports deprecation metadata."
+        );
+    }
+
+    const replacement = deprecation.replacedBy?.[0];
+
+    expect(deprecation.deprecatedSince).toBe("1.3.0");
+    expect(deprecation.availableUntil).toBe("2.0.0");
+    expect(replacement?.plugin?.name).toBe("@typescript-eslint");
+    expect(replacement?.plugin?.url).toBe("https://typescript-eslint.io/");
+    expect(replacement?.rule?.name).toBe("consistent-type-exports");
+    expect(replacement?.rule?.url).toBe(
+        "https://typescript-eslint.io/rules/consistent-type-exports"
+    );
+
+    for (const configVariant of ["all", "allStrict"] as const) {
+        expect(
+            plugin.configs[configVariant].rules[
+                "etc-misc/no-explicit-type-exports"
+            ]
+        ).toBe("warn");
+    }
+
+    for (const configVariant of ["recommended", "strictTypeChecked"] as const) {
+        expect(
+            "etc-misc/no-explicit-type-exports" in
+                plugin.configs[configVariant].rules
+        ).toBe(false);
+    }
+};
+
 const assertPluginExposesRulesAndConfigs = (): void => {
     expect(plugin.meta).toStrictEqual({
         name: "eslint-plugin-etc-misc",
@@ -266,6 +362,8 @@ const assertPluginExposesRulesAndConfigs = (): void => {
     ).toBe(true);
 
     assertObjectAssignAliasContract();
+    assertCompatAliasContract();
+    assertNoExplicitTypeExportsLifecycle();
 
     const recommendedRuleLevelKeys = Object.keys(
         recommendedRuleLevels

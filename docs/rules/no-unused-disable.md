@@ -76,7 +76,7 @@ placeholder disables are explicitly managed.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R050
+> **Rule catalog ID:** R065
 
 ## Further reading
 

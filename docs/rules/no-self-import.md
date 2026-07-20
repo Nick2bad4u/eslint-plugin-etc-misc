@@ -95,7 +95,7 @@ Disable this rule if your build tooling intentionally supports self-import patte
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R040
+> **Rule catalog ID:** R055
 
 ## Further reading
 

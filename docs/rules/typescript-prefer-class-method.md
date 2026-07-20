@@ -75,7 +75,7 @@ Disable this rule if class-property arrow functions are your preferred pattern.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R107
+> **Rule catalog ID:** R131
 
 ## Further reading
 

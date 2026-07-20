@@ -155,7 +155,7 @@ accepts the maintenance risk from those unstable dependencies.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R029
+> **Rule catalog ID:** R042
 
 ## Further reading
 

@@ -89,7 +89,7 @@ Disable this rule if your project intentionally uses `"."` barrel imports.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R028
+> **Rule catalog ID:** R041
 
 ## Further reading
 

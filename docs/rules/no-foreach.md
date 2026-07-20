@@ -95,7 +95,7 @@ Disable this rule if your project intentionally favors iterator callbacks and do
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R025
+> **Rule catalog ID:** R038
 
 ## Further reading
 

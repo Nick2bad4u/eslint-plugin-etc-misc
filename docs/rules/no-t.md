@@ -116,7 +116,7 @@ algorithm-heavy APIs).
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R044
+> **Rule catalog ID:** R059
 
 ## Further reading
 

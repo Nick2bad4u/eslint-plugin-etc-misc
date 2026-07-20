@@ -91,7 +91,7 @@ as desired.
 
 - [eslint-plugin-etc-misc README](https://github.com/Nick2bad4u/eslint-plugin-etc-misc#readme)
 
-> **Rule catalog ID:** R004
+> **Rule catalog ID:** R005
 
 ## Further reading
 

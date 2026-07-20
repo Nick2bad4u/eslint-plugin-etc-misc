@@ -25,6 +25,22 @@ describe("external rule resolution", () => {
         expect(resolvedRule).toBe(externalRule);
     });
 
+    it("unwraps a default export produced by requiring an ES module", () => {
+        expect.hasAssertions();
+
+        const externalRule: Readonly<Record<string, unknown>> = {
+            create: (): Readonly<Record<string, never>> => ({}),
+        };
+
+        const resolvedRule = getExternalRuleFromPlugin(
+            { default: { rules: { "my-rule": externalRule } } },
+            "my-rule",
+            "example-plugin"
+        );
+
+        expect(resolvedRule).toBe(externalRule);
+    });
+
     it("throws when plugin does not expose a valid rules map", () => {
         expect.hasAssertions();
         expect(() =>
