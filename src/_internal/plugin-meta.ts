@@ -3,13 +3,18 @@
 import packageJson from "../../package.json" with { type: "json" };
 
 /**
- * Static type representation of {@link pluginMeta}.
+ * Metadata exposed by the ESLint plugin module.
  */
 export type PluginMeta = Readonly<{
     name: "eslint-plugin-etc-misc";
-    namespace: "etc-misc";
+    namespace: PluginNamespace;
     version: string;
 }>;
+
+/**
+ * Namespace used to register the plugin in flat configurations.
+ */
+export type PluginNamespace = "etc-misc";
 
 /**
  * Immutable metadata describing this ESLint plugin package.
