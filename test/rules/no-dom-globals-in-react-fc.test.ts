@@ -33,6 +33,11 @@ ruleTester.run("no-dom-globals-in-react-fc", rule, {
             errors: [{ messageId: "forbidden" }],
             filename: "file.tsx",
         },
+        {
+            code: "const Header = () => <div>{globalThis['document'].title}</div>;",
+            errors: [{ messageId: "forbidden" }],
+            filename: "file.tsx",
+        },
     ],
     valid: [
         {
@@ -57,6 +62,18 @@ ruleTester.run("no-dom-globals-in-react-fc", rule, {
         },
         {
             code: "const Header = () => { const window = { innerWidth: 1 }; return <div>{window.innerWidth}</div>; };",
+            filename: "file.tsx",
+        },
+        {
+            code: "const Header = () => { Hooks[hookName](() => window.innerWidth); return <div />; };",
+            filename: "file.tsx",
+        },
+        {
+            code: "function Header() { const Nested = () => <span />; void Nested; return window.innerWidth; }",
+            filename: "file.tsx",
+        },
+        {
+            code: "const registry = { render: () => <div>{window.innerWidth}</div> }; void registry;",
             filename: "file.tsx",
         },
     ],

@@ -18,6 +18,11 @@ ruleTester.run("no-dom-globals-in-react-cc-render", rule, {
             errors: [{ messageId: "forbidden" }],
             filename: "file.tsx",
         },
+        {
+            code: "class Header { ['render']() { return <div>{window.innerWidth}</div>; } }",
+            errors: [{ messageId: "forbidden" }],
+            filename: "file.tsx",
+        },
     ],
     valid: [
         {
@@ -38,6 +43,10 @@ ruleTester.run("no-dom-globals-in-react-cc-render", rule, {
         },
         {
             code: "class Utility { render() { return 1; } method() { return window.innerWidth; } }",
+            filename: "file.tsx",
+        },
+        {
+            code: "const methodName = 'render'; class Utility { [methodName]() { return <div>{window.innerWidth}</div>; } }",
             filename: "file.tsx",
         },
     ],

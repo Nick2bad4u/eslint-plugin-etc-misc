@@ -310,6 +310,7 @@ const unwrapCallee = (
     if (
         expression.type === AST_NODE_TYPES.ChainExpression ||
         expression.type === AST_NODE_TYPES.TSAsExpression ||
+        expression.type === AST_NODE_TYPES.TSInstantiationExpression ||
         expression.type === AST_NODE_TYPES.TSNonNullExpression ||
         expression.type === AST_NODE_TYPES.TSSatisfiesExpression ||
         expression.type === AST_NODE_TYPES.TSTypeAssertion
@@ -338,9 +339,34 @@ const getCallName = (node: Readonly<es.CallExpression>): string | undefined => {
     return undefined;
 };
 
-const isImmediatelyInvoked = (node: Readonly<FunctionNode>): boolean =>
-    node.parent.type === AST_NODE_TYPES.CallExpression &&
-    unwrapCallee(node.parent.callee) === node;
+const isTransparentCalleeWrapper = (
+    parent: Readonly<es.Node> | undefined,
+    child: Readonly<es.Node>
+): boolean =>
+    parent !== undefined &&
+    (parent.type === AST_NODE_TYPES.ChainExpression ||
+        // eslint-disable-next-line typefest/prefer-ts-extras-set-has -- The generic helper rejects the heterogeneous TSESTree node-type union.
+        transparentTypeScriptNodeTypes.has(parent.type)) &&
+    Reflect.get(parent, "expression") === child;
+
+const isImmediatelyInvoked = (node: Readonly<FunctionNode>): boolean => {
+    let calleeNode: Readonly<es.Node> = node;
+    let parent: es.Node | undefined = calleeNode.parent;
+
+    while (
+        parent !== undefined &&
+        isTransparentCalleeWrapper(parent, calleeNode)
+    ) {
+        calleeNode = parent;
+        parent = calleeNode.parent;
+    }
+
+    if (parent?.type !== AST_NODE_TYPES.CallExpression) {
+        return false;
+    }
+
+    return unwrapCallee(parent.callee) === node;
+};
 
 const renderTimeHookNames: ReadonlySet<string> = new Set([
     "useMemo",
