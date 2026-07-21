@@ -1,3 +1,5 @@
+import type { ArrayElement } from "type-fest";
+
 import { AST_NODE_TYPES, type TSESTree as es } from "@typescript-eslint/utils";
 import { arrayFirst, isDefined, setHas } from "ts-extras";
 
@@ -37,42 +39,61 @@ const containsComponentFunction = (
     node: Readonly<ComponentFunction>
 ): boolean => setHas(functions, node);
 
+type ReactImportSpecifier = ArrayElement<es.ImportDeclaration["specifiers"]>;
+
+const isRuntimeReactImport = (
+    statement: Readonly<es.ProgramStatement>
+): statement is es.ImportDeclaration =>
+    statement.type === AST_NODE_TYPES.ImportDeclaration &&
+    (statement.source.value === "react" ||
+        statement.source.value === "preact/compat") &&
+    statement.importKind !== "type";
+
+const collectReactImportSpecifier = (
+    specifier: Readonly<ReactImportSpecifier>,
+    forwardRefNames: Set<string>,
+    memoNames: Set<string>,
+    namespaces: Set<string>
+): void => {
+    if (
+        specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier ||
+        specifier.type === AST_NODE_TYPES.ImportNamespaceSpecifier
+    ) {
+        namespaces.add(specifier.local.name);
+        return;
+    }
+
+    if (
+        specifier.importKind === "type" ||
+        specifier.imported.type !== AST_NODE_TYPES.Identifier
+    ) {
+        return;
+    }
+
+    if (specifier.imported.name === "memo") {
+        memoNames.add(specifier.local.name);
+    } else if (specifier.imported.name === "forwardRef") {
+        forwardRefNames.add(specifier.local.name);
+    }
+};
+
 const collectReactBindings = (program: Readonly<es.Program>): ReactBindings => {
     const forwardRefNames = new Set<string>();
     const memoNames = new Set<string>();
     const namespaces = new Set<string>();
 
     for (const statement of program.body) {
-        if (
-            statement.type !== AST_NODE_TYPES.ImportDeclaration ||
-            (statement.source.value !== "react" &&
-                statement.source.value !== "preact/compat") ||
-            statement.importKind === "type"
-        ) {
+        if (!isRuntimeReactImport(statement)) {
             continue;
         }
 
         for (const specifier of statement.specifiers) {
-            if (
-                specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier ||
-                specifier.type === AST_NODE_TYPES.ImportNamespaceSpecifier
-            ) {
-                namespaces.add(specifier.local.name);
-                continue;
-            }
-
-            if (
-                specifier.importKind === "type" ||
-                specifier.imported.type !== AST_NODE_TYPES.Identifier
-            ) {
-                continue;
-            }
-
-            if (specifier.imported.name === "memo") {
-                memoNames.add(specifier.local.name);
-            } else if (specifier.imported.name === "forwardRef") {
-                forwardRefNames.add(specifier.local.name);
-            }
+            collectReactImportSpecifier(
+                specifier,
+                forwardRefNames,
+                memoNames,
+                namespaces
+            );
         }
     }
 

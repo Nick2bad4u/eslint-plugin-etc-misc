@@ -89,6 +89,52 @@ const isReturnedFromCallback = (
     return false;
 };
 
+type AncestorTraversal =
+    | Readonly<{ readonly kind: "collect"; readonly name: string }>
+    | Readonly<{
+          readonly kind:
+              | "clear"
+              | "skip"
+              | "stop";
+      }>;
+
+const getAncestorTraversal = (
+    ancestors: readonly Readonly<es.Node>[],
+    index: number,
+    ancestor: Readonly<es.Node>
+): AncestorTraversal => {
+    if (
+        ancestor.type === AST_NODE_TYPES.JSXAttribute ||
+        ancestor.type === AST_NODE_TYPES.JSXSpreadAttribute
+    ) {
+        return { kind: "clear" };
+    }
+
+    if (isFunctionNode(ancestor)) {
+        return isTransparentArrayRenderCallback(ancestor) &&
+            isReturnedFromCallback(ancestors, index, ancestor)
+            ? { kind: "skip" }
+            : { kind: "stop" };
+    }
+
+    if (
+        ancestor.type === AST_NODE_TYPES.ClassDeclaration ||
+        ancestor.type === AST_NODE_TYPES.ClassExpression
+    ) {
+        return { kind: "stop" };
+    }
+
+    if (ancestor.type !== AST_NODE_TYPES.JSXElement) {
+        return { kind: "skip" };
+    }
+
+    const ancestorName = getSimpleJsxElementName(ancestor.openingElement);
+
+    return isDefined(ancestorName) && isIntrinsicJsxName(ancestorName)
+        ? { kind: "collect", name: ancestorName }
+        : { kind: "stop" };
+};
+
 const getIntrinsicAncestorNames = (
     context: Readonly<TSESLint.RuleContext<MessageIds, Options>>,
     node: Readonly<es.JSXElement>
@@ -103,42 +149,19 @@ const getIntrinsicAncestorNames = (
             continue;
         }
 
-        if (
-            ancestor.type === AST_NODE_TYPES.JSXAttribute ||
-            ancestor.type === AST_NODE_TYPES.JSXSpreadAttribute
-        ) {
+        const traversal = getAncestorTraversal(ancestors, index, ancestor);
+
+        if (traversal.kind === "clear") {
             return [];
         }
 
-        if (isFunctionNode(ancestor)) {
-            if (
-                isTransparentArrayRenderCallback(ancestor) &&
-                isReturnedFromCallback(ancestors, index, ancestor)
-            ) {
-                continue;
-            }
-
+        if (traversal.kind === "stop") {
             break;
         }
 
-        if (
-            ancestor.type === AST_NODE_TYPES.ClassDeclaration ||
-            ancestor.type === AST_NODE_TYPES.ClassExpression
-        ) {
-            break;
+        if (traversal.kind === "collect") {
+            intrinsicAncestorNames.push(traversal.name);
         }
-
-        if (ancestor.type !== AST_NODE_TYPES.JSXElement) {
-            continue;
-        }
-
-        const ancestorName = getSimpleJsxElementName(ancestor.openingElement);
-
-        if (!isDefined(ancestorName) || !isIntrinsicJsxName(ancestorName)) {
-            break;
-        }
-
-        intrinsicAncestorNames.push(ancestorName);
     }
 
     return intrinsicAncestorNames;

@@ -2,7 +2,11 @@ import {
     getConstrainedTypeAtLocation,
     isTypeFlagSet,
 } from "@typescript-eslint/type-utils";
-import { type TSESTree as es, ESLintUtils } from "@typescript-eslint/utils";
+import {
+    type TSESTree as es,
+    ESLintUtils,
+    type ParserServicesWithTypeInformation,
+} from "@typescript-eslint/utils";
 import { isDefined } from "ts-extras";
 import * as tsutils from "tsutils";
 import ts from "typescript";
@@ -116,6 +120,151 @@ const indexKeyTypesMayOverlap = (
     return false;
 };
 
+type ReadonlyTargetAnalysis = Readonly<{
+    checker: Readonly<ts.TypeChecker>;
+    propertyNames: readonly ts.__String[];
+    readonlyIndexInfos: readonly ts.IndexInfo[];
+    readonlyPropertyCache: Map<ts.__String, boolean>;
+    type: Readonly<ts.Type>;
+}>;
+
+const createReadonlyTargetAnalysis = (
+    checker: Readonly<ts.TypeChecker>,
+    type: Readonly<ts.Type>
+): ReadonlyTargetAnalysis => {
+    const indexInfos = getUnionIndexInfos(checker, type);
+
+    return {
+        checker,
+        propertyNames: [...getUnionPropertyNames(checker, type)],
+        readonlyIndexInfos: indexInfos.filter(
+            (indexInfo) => indexInfo.isReadonly
+        ),
+        readonlyPropertyCache: new Map(),
+        type,
+    };
+};
+
+const targetPartHasReadonlyProperty = (
+    analysis: Readonly<ReadonlyTargetAnalysis>,
+    targetPart: Readonly<ts.Type>,
+    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types -- TypeScript escaped property names are branded primitive strings.
+    propertyName: ts.__String
+): boolean => {
+    if (isDefined(tsutils.getPropertyOfType(targetPart, propertyName))) {
+        return tsutils.isPropertyReadonlyInType(
+            targetPart,
+            propertyName,
+            analysis.checker
+        );
+    }
+
+    return analysis.checker
+        .getIndexInfosOfType(targetPart)
+        .some(
+            (indexInfo) =>
+                indexInfo.isReadonly &&
+                indexInfoMayWriteProperty(
+                    analysis.checker,
+                    indexInfo,
+                    propertyName
+                )
+        );
+};
+
+const isReadonlyTargetProperty = (
+    analysis: Readonly<ReadonlyTargetAnalysis>,
+    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types -- TypeScript escaped property names are branded primitive strings.
+    propertyName: ts.__String
+): boolean => {
+    const cachedResult = analysis.readonlyPropertyCache.get(propertyName);
+    if (isDefined(cachedResult)) {
+        return cachedResult;
+    }
+
+    const isReadonly = tsutils
+        .unionTypeParts(analysis.type)
+        .some((targetPart) =>
+            targetPartHasReadonlyProperty(analysis, targetPart, propertyName)
+        );
+
+    analysis.readonlyPropertyCache.set(propertyName, isReadonly);
+
+    return isReadonly;
+};
+
+const targetHasReadonlyKey = (
+    analysis: Readonly<ReadonlyTargetAnalysis>
+): boolean =>
+    analysis.propertyNames.some((propertyName) =>
+        isReadonlyTargetProperty(analysis, propertyName)
+    ) || analysis.readonlyIndexInfos.length > 0;
+
+const sourceIndexMayWriteReadonlyTargetKey = (
+    analysis: Readonly<ReadonlyTargetAnalysis>,
+    sourceIndexInfo: Readonly<ts.IndexInfo>
+): boolean => {
+    for (const propertyName of analysis.propertyNames) {
+        if (
+            isReadonlyTargetProperty(analysis, propertyName) &&
+            indexInfoMayWriteProperty(
+                analysis.checker,
+                sourceIndexInfo,
+                propertyName
+            )
+        ) {
+            return true;
+        }
+    }
+
+    return analysis.readonlyIndexInfos.some((targetIndexInfo) =>
+        indexKeyTypesMayOverlap(
+            analysis.checker,
+            sourceIndexInfo.keyType,
+            targetIndexInfo.keyType
+        )
+    );
+};
+
+const sourcePartMayWriteReadonlyTargetKey = (
+    analysis: Readonly<ReadonlyTargetAnalysis>,
+    sourcePart: Readonly<ts.Type>
+): boolean => {
+    for (const sourceProperty of analysis.checker.getPropertiesOfType(
+        sourcePart
+    )) {
+        if (
+            isReadonlyTargetProperty(analysis, sourceProperty.getEscapedName())
+        ) {
+            return true;
+        }
+    }
+
+    return analysis.checker
+        .getIndexInfosOfType(sourcePart)
+        .some((sourceIndexInfo) =>
+            sourceIndexMayWriteReadonlyTargetKey(analysis, sourceIndexInfo)
+        );
+};
+
+const sourceMayWriteReadonlyTargetKey = (
+    analysis: Readonly<ReadonlyTargetAnalysis>,
+    parserServices: Readonly<ParserServicesWithTypeInformation>,
+    source: Readonly<es.CallExpressionArgument>
+): boolean => {
+    const sourceType = getConstrainedTypeAtLocation(parserServices, source);
+
+    if (isTypeFlagSet(sourceType, ts.TypeFlags.Any)) {
+        return targetHasReadonlyKey(analysis);
+    }
+
+    return tsutils
+        .unionTypeParts(sourceType)
+        .some((sourcePart) =>
+            sourcePartMayWriteReadonlyTargetKey(analysis, sourcePart)
+        );
+};
+
 /**
  * Disallow Object.assign sources that may overwrite readonly target keys.
  */
@@ -139,135 +288,19 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         parserServices,
                         target
                     );
-                    const targetPropertyNames = getUnionPropertyNames(
+                    const targetAnalysis = createReadonlyTargetAnalysis(
                         checker,
                         targetType
                     );
-                    const targetPropertyNameList = [...targetPropertyNames];
-                    const targetIndexInfos = getUnionIndexInfos(
-                        checker,
-                        targetType
-                    );
-                    const readonlyTargetPropertyCache = new Map<
-                        ts.__String,
-                        boolean
-                    >();
-
-                    const isReadonlyTargetProperty = (
-                        // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types -- TypeScript escaped property names are branded primitive strings.
-                        propertyName: ts.__String
-                    ): boolean => {
-                        const cachedResult =
-                            readonlyTargetPropertyCache.get(propertyName);
-                        if (isDefined(cachedResult)) {
-                            return cachedResult;
-                        }
-
-                        const isReadonly = tsutils
-                            .unionTypeParts(targetType)
-                            .some((targetPart) => {
-                                if (
-                                    isDefined(
-                                        tsutils.getPropertyOfType(
-                                            targetPart,
-                                            propertyName
-                                        )
-                                    )
-                                ) {
-                                    return tsutils.isPropertyReadonlyInType(
-                                        targetPart,
-                                        propertyName,
-                                        checker
-                                    );
-                                }
-
-                                return checker
-                                    .getIndexInfosOfType(targetPart)
-                                    .some(
-                                        (targetIndexInfo) =>
-                                            targetIndexInfo.isReadonly &&
-                                            indexInfoMayWriteProperty(
-                                                checker,
-                                                targetIndexInfo,
-                                                propertyName
-                                            )
-                                    );
-                            });
-
-                        readonlyTargetPropertyCache.set(
-                            propertyName,
-                            isReadonly
-                        );
-
-                        return isReadonly;
-                    };
-
-                    const readonlyTargetIndexInfos = targetIndexInfos.filter(
-                        (targetIndexInfo) => targetIndexInfo.isReadonly
-                    );
-                    const targetHasReadonlyKey = (): boolean =>
-                        targetPropertyNameList.some((targetPropertyName) =>
-                            isReadonlyTargetProperty(targetPropertyName)
-                        ) || readonlyTargetIndexInfos.length > 0;
-
-                    const sourceMayWriteReadonlyTargetKey = (
-                        source: Readonly<es.CallExpressionArgument>
-                    ): boolean => {
-                        const sourceType = getConstrainedTypeAtLocation(
-                            parserServices,
-                            source
-                        );
-
-                        if (isTypeFlagSet(sourceType, ts.TypeFlags.Any)) {
-                            return targetHasReadonlyKey();
-                        }
-
-                        return tsutils
-                            .unionTypeParts(sourceType)
-                            .some((sourcePart) => {
-                                if (
-                                    checker
-                                        .getPropertiesOfType(sourcePart)
-                                        .some((sourceProperty) =>
-                                            isReadonlyTargetProperty(
-                                                sourceProperty.getEscapedName()
-                                            )
-                                        )
-                                ) {
-                                    return true;
-                                }
-
-                                const sourceIndexInfos =
-                                    checker.getIndexInfosOfType(sourcePart);
-
-                                return sourceIndexInfos.some(
-                                    (sourceIndexInfo) =>
-                                        targetPropertyNameList.some(
-                                            (targetPropertyName) =>
-                                                isReadonlyTargetProperty(
-                                                    targetPropertyName
-                                                ) &&
-                                                indexInfoMayWriteProperty(
-                                                    checker,
-                                                    sourceIndexInfo,
-                                                    targetPropertyName
-                                                )
-                                        ) ||
-                                        readonlyTargetIndexInfos.some(
-                                            (targetIndexInfo) =>
-                                                indexKeyTypesMayOverlap(
-                                                    checker,
-                                                    sourceIndexInfo.keyType,
-                                                    targetIndexInfo.keyType
-                                                )
-                                        )
-                                );
-                            });
-                    };
 
                     if (
                         sources.every(
-                            (source) => !sourceMayWriteReadonlyTargetKey(source)
+                            (source) =>
+                                !sourceMayWriteReadonlyTargetKey(
+                                    targetAnalysis,
+                                    parserServices,
+                                    source
+                                )
                         )
                     ) {
                         return;

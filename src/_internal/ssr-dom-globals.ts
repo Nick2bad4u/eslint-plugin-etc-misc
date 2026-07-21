@@ -322,6 +322,119 @@ const getImmutablePredicateInitializer = (
         : undefined;
 };
 
+type GuardResolver = (expression: Readonly<es.Expression>) => GuardAvailability;
+
+const getIdentifierGuardAvailability = (
+    sourceCode: Readonly<SourceCode>,
+    identifier: Readonly<es.Identifier>,
+    cache: Readonly<AnalysisCache>,
+    resolveGuard: GuardResolver
+): GuardAvailability => {
+    const initializer = getImmutablePredicateInitializer(
+        sourceCode,
+        identifier,
+        cache
+    );
+
+    return isDefined(initializer) ? resolveGuard(initializer) : undefined;
+};
+
+const isEqualityOperator = (
+    operator: es.BinaryExpression["operator"]
+): boolean => operator === "==" || operator === "===";
+
+const isInequalityOperator = (
+    operator: es.BinaryExpression["operator"]
+): boolean => operator === "!=" || operator === "!==";
+
+const getTypeofComparisonAvailability = (
+    sourceCode: Readonly<SourceCode>,
+    expression: Readonly<es.BinaryExpression>,
+    globalName: string,
+    cache: Readonly<AnalysisCache>
+): GuardAvailability => {
+    const leftTypeofName = getTypeofGlobalName(
+        sourceCode,
+        expression.left,
+        cache
+    );
+    const rightTypeofName = getTypeofGlobalName(
+        sourceCode,
+        expression.right,
+        cache
+    );
+    const comparedValue = isDefined(leftTypeofName)
+        ? getStringLiteralValue(expression.right)
+        : getStringLiteralValue(expression.left);
+
+    if (
+        (leftTypeofName ?? rightTypeofName) !== globalName ||
+        !isDefined(comparedValue)
+    ) {
+        return undefined;
+    }
+
+    if (comparedValue === "undefined") {
+        if (isEqualityOperator(expression.operator)) {
+            return "false";
+        }
+
+        return isInequalityOperator(expression.operator) ? "true" : undefined;
+    }
+
+    return isEqualityOperator(expression.operator) &&
+        (comparedValue === "object" || comparedValue === "function")
+        ? "true"
+        : undefined;
+};
+
+const getBinaryGuardAvailability = (
+    sourceCode: Readonly<SourceCode>,
+    expression: Readonly<es.BinaryExpression>,
+    globalName: string,
+    cache: Readonly<AnalysisCache>
+): GuardAvailability => {
+    const inGlobalName = getInGlobalName(sourceCode, expression, cache);
+
+    return isDefined(inGlobalName)
+        ? inGlobalName === globalName
+            ? "true"
+            : undefined
+        : getTypeofComparisonAvailability(
+              sourceCode,
+              expression,
+              globalName,
+              cache
+          );
+};
+
+const getUncachedGuardAvailability = (
+    sourceCode: Readonly<SourceCode>,
+    expression: Readonly<es.Expression>,
+    globalName: string,
+    cache: Readonly<AnalysisCache>,
+    resolveGuard: GuardResolver
+): GuardAvailability => {
+    if (expression.type === AST_NODE_TYPES.Identifier) {
+        return getIdentifierGuardAvailability(
+            sourceCode,
+            expression,
+            cache,
+            resolveGuard
+        );
+    }
+
+    if (expression.type === AST_NODE_TYPES.UnaryExpression) {
+        return expression.operator === "!"
+            ? invertAvailability(resolveGuard(expression.argument))
+            : undefined;
+    }
+
+    return expression.type === AST_NODE_TYPES.BinaryExpression
+        ? getBinaryGuardAvailability(sourceCode, expression, globalName, cache)
+        : undefined;
+};
+
 const getAvailabilityGuard = (
     sourceCode: Readonly<SourceCode>,
     expression: Readonly<es.Expression>,
@@ -342,100 +455,21 @@ const getAvailabilityGuard = (
 
     visitedExpressions.add(unwrappedExpression);
 
-    const availability = (() => {
-        if (unwrappedExpression.type === AST_NODE_TYPES.Identifier) {
-            const initializer = getImmutablePredicateInitializer(
-                sourceCode,
-                unwrappedExpression,
-                cache
-            );
-
-            return isDefined(initializer)
-                ? getAvailabilityGuard(
-                      sourceCode,
-                      initializer,
-                      globalName,
-                      cache,
-                      visitedExpressions
-                  )
-                : undefined;
-        }
-
-        if (unwrappedExpression.type === AST_NODE_TYPES.UnaryExpression) {
-            return unwrappedExpression.operator === "!"
-                ? invertAvailability(
-                      getAvailabilityGuard(
-                          sourceCode,
-                          unwrappedExpression.argument,
-                          globalName,
-                          cache,
-                          visitedExpressions
-                      )
-                  )
-                : undefined;
-        }
-
-        if (unwrappedExpression.type !== AST_NODE_TYPES.BinaryExpression) {
-            return undefined;
-        }
-
-        const inGlobalName = getInGlobalName(
+    const resolveGuard: GuardResolver = (candidate) =>
+        getAvailabilityGuard(
             sourceCode,
-            unwrappedExpression,
-            cache
+            candidate,
+            globalName,
+            cache,
+            visitedExpressions
         );
-
-        if (isDefined(inGlobalName)) {
-            return inGlobalName === globalName ? "true" : undefined;
-        }
-
-        const leftTypeofName = getTypeofGlobalName(
-            sourceCode,
-            unwrappedExpression.left,
-            cache
-        );
-        const rightTypeofName = getTypeofGlobalName(
-            sourceCode,
-            unwrappedExpression.right,
-            cache
-        );
-        const leftLiteral = getStringLiteralValue(unwrappedExpression.left);
-        const rightLiteral = getStringLiteralValue(unwrappedExpression.right);
-        const typeofName = leftTypeofName ?? rightTypeofName;
-        const comparedValue = isDefined(leftTypeofName)
-            ? rightLiteral
-            : leftLiteral;
-
-        if (typeofName !== globalName || !isDefined(comparedValue)) {
-            return undefined;
-        }
-
-        const isEquality =
-            unwrappedExpression.operator === "==" ||
-            unwrappedExpression.operator === "===";
-        const isInequality =
-            unwrappedExpression.operator === "!=" ||
-            unwrappedExpression.operator === "!==";
-
-        if (comparedValue === "undefined") {
-            if (isEquality) {
-                return "false";
-            }
-
-            if (isInequality) {
-                return "true";
-            }
-        }
-
-        if (
-            isEquality &&
-            (comparedValue === "object" || comparedValue === "function")
-        ) {
-            return "true";
-        }
-
-        return undefined;
-    })();
+    const availability = getUncachedGuardAvailability(
+        sourceCode,
+        unwrappedExpression,
+        globalName,
+        cache,
+        resolveGuard
+    );
 
     const availabilityByName =
         cachedByName ?? new Map<string, GuardAvailability>();

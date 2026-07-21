@@ -368,24 +368,30 @@ const toInstanceAccess = (name: NativeTypeName): NativeAccess => ({
     side: "instance",
 });
 
+const booleanResultBinaryOperators: ReadonlySet<
+    Exclude<es.BinaryExpression["operator"], "in">
+> = new Set([
+    "!=",
+    "!==",
+    "<",
+    "<=",
+    "==",
+    "===",
+    ">",
+    ">=",
+    "instanceof",
+]);
+
 /* eslint-disable @typescript-eslint/no-use-before-define -- Binary and general expression inference are intentionally mutually recursive. */
-/* eslint-disable complexity -- Exhaustive expression classification stays bounded by AST wrapper depth. */
 const inferBinaryType = (
     context: Readonly<TSESLint.RuleContext<MessageIds, Options>>,
     expression: Readonly<es.BinaryExpression>
 ): NativeAccess | null => {
-    if (
-        expression.operator === "==" ||
-        expression.operator === "!=" ||
-        expression.operator === "===" ||
-        expression.operator === "!==" ||
-        expression.operator === "<" ||
-        expression.operator === "<=" ||
-        expression.operator === ">" ||
-        expression.operator === ">=" ||
-        expression.operator === "in" ||
-        expression.operator === "instanceof"
-    ) {
+    if (expression.operator === "in") {
+        return toInstanceAccess("Boolean");
+    }
+
+    if (setHas(booleanResultBinaryOperators, expression.operator)) {
         return toInstanceAccess("Boolean");
     }
 
@@ -458,12 +464,72 @@ const inferObjectConstructorResult = (
     return inferNativeAccess(context, unwrappedArgument);
 };
 
-const inferNativeAccess = (
+const inferIdentifierAccess = (
     context: Readonly<TSESLint.RuleContext<MessageIds, Options>>,
-    rawExpression: Readonly<es.Expression>
-): NativeAccess | null => {
-    const expression = unwrapExpression(rawExpression);
+    identifier: Readonly<es.Identifier>
+): NativeAccess | null =>
+    isUnshadowedNativeIdentifier(context, identifier)
+        ? { name: identifier.name, side: "static" }
+        : null;
 
+const inferPrototypeAccess = (
+    context: Readonly<TSESLint.RuleContext<MessageIds, Options>>,
+    expression: Readonly<es.MemberExpression>
+): NativeAccess | null => {
+    const propertyName = getStaticPropertyName(expression);
+    if (
+        propertyName !== "prototype" ||
+        expression.object.type !== AST_NODE_TYPES.Identifier ||
+        !isUnshadowedNativeIdentifier(context, expression.object)
+    ) {
+        return null;
+    }
+
+    return toInstanceAccess(expression.object.name);
+};
+
+const inferConstructedAccess = (
+    context: Readonly<TSESLint.RuleContext<MessageIds, Options>>,
+    expression: Readonly<es.NewExpression>
+): NativeAccess | null => {
+    if (
+        expression.callee.type !== AST_NODE_TYPES.Identifier ||
+        !isUnshadowedNativeIdentifier(context, expression.callee) ||
+        expression.callee.name === "Proxy"
+    ) {
+        return null;
+    }
+
+    return expression.callee.name === "Object"
+        ? inferObjectConstructorResult(context, expression.arguments)
+        : toInstanceAccess(expression.callee.name);
+};
+
+const inferCalledAccess = (
+    context: Readonly<TSESLint.RuleContext<MessageIds, Options>>,
+    expression: Readonly<es.CallExpression>
+): NativeAccess | null => {
+    if (
+        expression.callee.type !== AST_NODE_TYPES.Identifier ||
+        !isUnshadowedNativeIdentifier(context, expression.callee)
+    ) {
+        return null;
+    }
+
+    if (expression.callee.name === "Object") {
+        return inferObjectConstructorResult(context, expression.arguments);
+    }
+
+    const resultName = callableNativeResults[expression.callee.name];
+    return isDefined(resultName) ? toInstanceAccess(resultName) : null;
+};
+
+const inferDirectAccess = (
+    expression: Readonly<es.Expression>
+):
+    | NativeAccess
+    | null
+    | undefined => {
     if (expression.type === AST_NODE_TYPES.ArrayExpression) {
         return toInstanceAccess("Array");
     }
@@ -488,11 +554,21 @@ const inferNativeAccess = (
         return nativeType === null ? null : toInstanceAccess(nativeType);
     }
 
-    if (
-        expression.type === AST_NODE_TYPES.Identifier &&
-        isUnshadowedNativeIdentifier(context, expression)
-    ) {
-        return { name: expression.name, side: "static" };
+    return undefined;
+};
+
+const inferNativeAccess = (
+    context: Readonly<TSESLint.RuleContext<MessageIds, Options>>,
+    rawExpression: Readonly<es.Expression>
+): NativeAccess | null => {
+    const expression = unwrapExpression(rawExpression);
+    const directAccess = inferDirectAccess(expression);
+    if (isDefined(directAccess)) {
+        return directAccess;
+    }
+
+    if (expression.type === AST_NODE_TYPES.Identifier) {
+        return inferIdentifierAccess(context, expression);
     }
 
     if (expression.type === AST_NODE_TYPES.BinaryExpression) {
@@ -500,50 +576,17 @@ const inferNativeAccess = (
     }
 
     if (expression.type === AST_NODE_TYPES.MemberExpression) {
-        const propertyName = getStaticPropertyName(expression);
-        if (
-            propertyName === "prototype" &&
-            expression.object.type === AST_NODE_TYPES.Identifier &&
-            isUnshadowedNativeIdentifier(context, expression.object)
-        ) {
-            return toInstanceAccess(expression.object.name);
-        }
-
-        return null;
+        return inferPrototypeAccess(context, expression);
     }
 
-    if (
-        expression.type === AST_NODE_TYPES.NewExpression &&
-        expression.callee.type === AST_NODE_TYPES.Identifier &&
-        isUnshadowedNativeIdentifier(context, expression.callee)
-    ) {
-        if (expression.callee.name === "Proxy") {
-            return null;
-        }
-
-        if (expression.callee.name === "Object") {
-            return inferObjectConstructorResult(context, expression.arguments);
-        }
-
-        return toInstanceAccess(expression.callee.name);
+    if (expression.type === AST_NODE_TYPES.NewExpression) {
+        return inferConstructedAccess(context, expression);
     }
 
-    if (
-        expression.type === AST_NODE_TYPES.CallExpression &&
-        expression.callee.type === AST_NODE_TYPES.Identifier &&
-        isUnshadowedNativeIdentifier(context, expression.callee)
-    ) {
-        if (expression.callee.name === "Object") {
-            return inferObjectConstructorResult(context, expression.arguments);
-        }
-
-        const resultName = callableNativeResults[expression.callee.name];
-        return isDefined(resultName) ? toInstanceAccess(resultName) : null;
-    }
-
-    return null;
+    return expression.type === AST_NODE_TYPES.CallExpression
+        ? inferCalledAccess(context, expression)
+        : null;
 };
-/* eslint-enable complexity -- End exhaustive expression classification. */
 /* eslint-enable @typescript-eslint/no-use-before-define -- End mutually recursive expression inference. */
 
 const isIndexProperty = (
