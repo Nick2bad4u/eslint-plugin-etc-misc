@@ -1,4 +1,4 @@
-import { objectFromEntries, objectKeys, safeCastTo } from "ts-extras";
+import { assert, objectFromEntries, objectKeys, safeCastTo } from "ts-extras";
 
 import { recommended } from "./recommended.js";
 
@@ -26,11 +26,10 @@ const hasStrictRuleCoverage = (
         (ruleName) => candidateRules[ruleName] === "error"
     );
 
-if (!hasStrictRuleCoverage(strictRulesCandidate)) {
-    throw new Error(
-        "Strict preset synthesis failed to include every recommended rule."
-    );
-}
+assert(
+    hasStrictRuleCoverage(strictRulesCandidate),
+    "Strict preset synthesis failed to include every recommended rule."
+);
 
 const strictRules: StrictRules = strictRulesCandidate;
 

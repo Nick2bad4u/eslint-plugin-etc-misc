@@ -1,4 +1,5 @@
 import nickTwoBadFourU from "eslint-config-nick2bad4u";
+import eslintPlugin from "eslint-plugin-eslint-plugin";
 
 import pluginExport from "./plugin.mjs";
 
@@ -39,6 +40,30 @@ const config = [
     },
     // Add repository-specific config entries below as needed.
     {
+        files: ["src/**/*.ts"],
+        name: "ESLint 10 rule metadata ordering",
+        plugins: {
+            "eslint-plugin": eslintPlugin,
+        },
+        rules: {
+            "eslint-plugin/meta-property-ordering": [
+                "error",
+                [
+                    "defaultOptions",
+                    "deprecated",
+                    "docs",
+                    "fixable",
+                    "hasSuggestions",
+                    "languages",
+                    "messages",
+                    "replacedBy",
+                    "schema",
+                    "type",
+                ],
+            ],
+        },
+    },
+    {
         name: "Shared config compatibility overrides",
         rules: {
             "copilot/require-repository-instructions-file": "off",
@@ -50,6 +75,8 @@ const config = [
                 },
             ],
             "no-plusplus": "off",
+            // GitHub does not load custom secret-scanning patterns from a repository YAML file.
+            "repo-compliance/require-secret-scanning-config": "off",
             "sonarjs/deprecation": "off",
             // Legacy rule-domain names intentionally describe collections and operations.
             "unicorn/consistent-boolean-name": "off",

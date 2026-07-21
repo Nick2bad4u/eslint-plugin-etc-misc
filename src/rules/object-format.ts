@@ -54,6 +54,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/object-format",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             inconsistent:
                 "Object literal should use {{expected}} formatting for this size.",

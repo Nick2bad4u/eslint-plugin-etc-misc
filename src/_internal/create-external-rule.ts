@@ -1,22 +1,16 @@
 import type { TSESLint } from "@typescript-eslint/utils";
 import type { UnknownArray, UnknownRecord } from "type-fest";
 
-import {
-    assertDefined,
-    keyIn,
-    objectEntries,
-    objectHasOwn,
-    safeCastTo,
-} from "ts-extras";
+import { keyIn, objectEntries, safeCastTo } from "ts-extras";
 
 import type { RuleDocsMetadata } from "./rule-creator.js";
 
 type RuleContext = TSESLint.RuleContext<string, Readonly<UnknownArray>>;
-type RuleModule = TSESLint.RuleModule<
-    string,
-    Readonly<UnknownArray>,
-    RuleDocsMetadata
->;
+type RuleModule = Readonly<{
+    readonly meta: Readonly<{ readonly languages: readonly ["js/js"] }> &
+        TSESLint.RuleMetaData<string, RuleDocsMetadata, Readonly<UnknownArray>>;
+}> &
+    TSESLint.RuleModule<string, Readonly<UnknownArray>, RuleDocsMetadata>;
 
 const isObjectRecord = (value: unknown): value is UnknownRecord =>
     typeof value === "object" && value !== null;
@@ -119,42 +113,7 @@ const createLegacyContextCompat = (context: RuleContext): RuleContext =>
     });
 
 /**
- * Resolve a rule module from an external ESLint plugin's `rules` map.
- */
-export const getExternalRuleFromPlugin = (
-    plugin: unknown,
-    ruleName: string,
-    pluginName: string
-): unknown => {
-    const directRules = isObjectRecord(plugin) ? plugin["rules"] : undefined;
-    const wrappedDefault = isObjectRecord(plugin)
-        ? plugin["default"]
-        : undefined;
-    const wrappedRules = isObjectRecord(wrappedDefault)
-        ? wrappedDefault["rules"]
-        : undefined;
-    const rules = isObjectRecord(directRules)
-        ? directRules
-        : isObjectRecord(wrappedRules)
-          ? wrappedRules
-          : undefined;
-
-    assertDefined(
-        rules,
-        `Plugin "${pluginName}" does not expose a valid rules map.`
-    );
-
-    if (!objectHasOwn(rules, ruleName)) {
-        throw new Error(
-            `Rule "${ruleName}" was not found in plugin "${pluginName}".`
-        );
-    }
-
-    return rules[ruleName];
-};
-
-/**
- * Adapt an external rule so it points docs to this repository.
+ * Adapt an ESLint rule so it points docs to this repository.
  */
 export const adaptExternalRule = (
     externalRule: unknown,
@@ -193,6 +152,7 @@ export const adaptExternalRule = (
                 ...externalDocs,
                 url: docsUrl,
             },
+            languages: ["js/js"],
             messages: getNormalizedMetaMessages(externalMetaRecord["messages"]),
             schema: getNormalizedMetaSchema(externalMetaRecord["schema"]),
             type: getNormalizedMetaType(externalMetaRecord["type"]),

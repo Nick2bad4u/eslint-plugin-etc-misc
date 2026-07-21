@@ -103,6 +103,7 @@ export const createImportPatternRule = ({
                 url: `https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/${name.replaceAll("/", "-")}`,
             },
             hasSuggestions: false,
+            languages: ["js/js"],
             messages: {
                 disallowedSource:
                     "Import source `{{ source }}` is disallowed by this rule.",

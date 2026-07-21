@@ -67,6 +67,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "code",
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             forbidden: "Expression statement contains unnecessary blank lines.",
         },

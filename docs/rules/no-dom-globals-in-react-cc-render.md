@@ -36,14 +36,18 @@ class Header extends React.Component {
  }
 
  render() {
-  return <div />;
+  const hasWindow = "window" in globalThis;
+  return <div>{hasWindow ? globalThis.window.innerWidth : 0}</div>;
  }
 }
 ```
 
 Immediately invoked functions inside render are checked. Deferred callbacks,
-event handlers, `typeof`-guarded accesses, shadowed locals, and render-like
-methods without JSX are not reported.
+event handlers, guarded accesses, shadowed locals, and render-like methods
+without JSX are not reported. Guards may use direct or `globalThis` `typeof`
+comparisons, `"name" in globalThis`, or a predicate stored in a single `const`
+binding. Mutable or shadowed predicates are intentionally not trusted. Shared
+scope, guard, JSX, and execution results are cached per linted file.
 
 ## Behavior and migration notes
 

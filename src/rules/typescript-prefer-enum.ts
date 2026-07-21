@@ -183,6 +183,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-prefer-enum",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             preferEnumComparison:
                 "Use enum members instead of string literals in enum comparisons.",

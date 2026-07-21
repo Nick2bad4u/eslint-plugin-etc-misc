@@ -1,6 +1,6 @@
-import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
+import type { TSESTree as es } from "@typescript-eslint/utils";
 
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, TSESLint } from "@typescript-eslint/utils";
 import globals from "globals";
 import {
     arrayFirst,
@@ -12,6 +12,23 @@ import {
 } from "ts-extras";
 
 import { ruleCreator } from "./rule-creator.js";
+
+type AnalysisCache = Readonly<{
+    readonly effectiveExecutionFunctions: readonly [
+        WeakMap<Readonly<es.Node>, null | Readonly<FunctionNode>>,
+        WeakMap<Readonly<es.Node>, null | Readonly<FunctionNode>>,
+    ];
+    readonly functionContainsJsx: WeakMap<Readonly<FunctionNode>, boolean>;
+    readonly guardAvailability: WeakMap<
+        Readonly<es.Expression>,
+        Map<string, GuardAvailability>
+    >;
+    readonly guardedUses: WeakMap<Readonly<es.Node>, Map<string, boolean>>;
+    readonly references: WeakMap<
+        Readonly<es.Identifier>,
+        null | TSESLint.Scope.Reference
+    >;
+}>;
 
 /** Execution phase whose eager browser-global accesses a rule reports. */
 type ExecutionContext =
@@ -62,6 +79,28 @@ const isFunctionNode = (
 const isBrowserOnlyGlobalName = (name: string): boolean =>
     setHas(browserOnlyGlobalNames, name);
 
+const containsExpression = (
+    expressions: ReadonlySet<Readonly<es.Expression>>,
+    expression: Readonly<es.Expression>
+): boolean => setHas(expressions, expression);
+
+const unwrapCallee = (
+    expression: Readonly<es.Expression>
+): Readonly<es.Expression> => {
+    if (
+        expression.type === AST_NODE_TYPES.ChainExpression ||
+        expression.type === AST_NODE_TYPES.TSAsExpression ||
+        expression.type === AST_NODE_TYPES.TSInstantiationExpression ||
+        expression.type === AST_NODE_TYPES.TSNonNullExpression ||
+        expression.type === AST_NODE_TYPES.TSSatisfiesExpression ||
+        expression.type === AST_NODE_TYPES.TSTypeAssertion
+    ) {
+        return unwrapCallee(expression.expression);
+    }
+
+    return expression;
+};
+
 const getStaticMemberName = (
     node: Readonly<es.MemberExpression>
 ): string | undefined => {
@@ -80,36 +119,63 @@ const getStaticMemberName = (
     return undefined;
 };
 
-const isReferenceIdentifier = (
+const getReference = (
     sourceCode: Readonly<SourceCode>,
-    identifier: Readonly<es.Identifier>
-): boolean => {
+    identifier: Readonly<es.Identifier>,
+    cache: Readonly<AnalysisCache>
+): null | Readonly<TSESLint.Scope.Reference> => {
+    const cachedReference = cache.references.get(identifier);
+
+    if (isDefined(cachedReference) || cache.references.has(identifier)) {
+        return cachedReference ?? null;
+    }
+
     let scope: null | TSESLint.Scope.Scope = sourceCode.getScope(identifier);
 
     while (scope !== null) {
         for (const reference of scope.references) {
             if (reference.identifier === identifier) {
-                return (
-                    reference.resolved === null ||
-                    reference.resolved.defs.length === 0
-                );
+                cache.references.set(identifier, reference);
+                return reference;
             }
         }
 
         for (const reference of scope.through) {
             if (reference.identifier === identifier) {
-                return (
-                    reference.resolved === null ||
-                    reference.resolved.defs.length === 0
-                );
+                cache.references.set(identifier, reference);
+                return reference;
             }
         }
 
         scope = scope.upper;
     }
 
-    return false;
+    cache.references.set(identifier, null);
+    return null;
 };
+
+const isReferenceIdentifier = (
+    sourceCode: Readonly<SourceCode>,
+    identifier: Readonly<es.Identifier>,
+    cache: Readonly<AnalysisCache>
+): boolean => {
+    const reference = getReference(sourceCode, identifier, cache);
+
+    return (
+        reference !== null &&
+        (reference.resolved === null || reference.resolved.defs.length === 0)
+    );
+};
+
+const isImportedIdentifier = (
+    sourceCode: Readonly<SourceCode>,
+    identifier: Readonly<es.Identifier>,
+    cache: Readonly<AnalysisCache>
+): boolean =>
+    getReference(sourceCode, identifier, cache)?.resolved?.defs.some(
+        (definition) =>
+            definition.type === TSESLint.Scope.DefinitionType.ImportBinding
+    ) === true;
 
 const isTypeOnlyPosition = (
     sourceCode: Readonly<SourceCode>,
@@ -122,10 +188,27 @@ const isTypeOnlyPosition = (
             !transparentTypeScriptNodeTypes.has(ancestor.type)
     );
 
-const isDirectTypeofOperand = (node: Readonly<es.Node>): boolean =>
-    node.parent?.type === AST_NODE_TYPES.UnaryExpression &&
-    node.parent.operator === "typeof" &&
-    node.parent.argument === node;
+const isDirectTypeofOperand = (node: Readonly<es.Node>): boolean => {
+    let operand: Readonly<es.Node> = node;
+    let parent: Readonly<es.Node> | undefined = operand.parent;
+
+    while (
+        isDefined(parent) &&
+        (parent.type === AST_NODE_TYPES.ChainExpression ||
+            // eslint-disable-next-line typefest/prefer-ts-extras-set-has -- The generic helper rejects the heterogeneous TSESTree node-type union.
+            transparentTypeScriptNodeTypes.has(parent.type)) &&
+        Reflect.get(parent, "expression") === operand
+    ) {
+        operand = parent;
+        parent = operand.parent;
+    }
+
+    return (
+        parent?.type === AST_NODE_TYPES.UnaryExpression &&
+        parent.operator === "typeof" &&
+        parent.argument === operand
+    );
+};
 
 type GuardAvailability =
     | "false"
@@ -146,20 +229,6 @@ const invertAvailability = (
     return undefined;
 };
 
-const getTypeofIdentifierName = (
-    node: Readonly<es.Expression | es.PrivateIdentifier>
-): string | undefined => {
-    if (
-        node.type === AST_NODE_TYPES.UnaryExpression &&
-        node.operator === "typeof" &&
-        node.argument.type === AST_NODE_TYPES.Identifier
-    ) {
-        return node.argument.name;
-    }
-
-    return undefined;
-};
-
 const getStringLiteralValue = (
     node: Readonly<es.Expression | es.PrivateIdentifier>
 ): string | undefined =>
@@ -167,66 +236,273 @@ const getStringLiteralValue = (
         ? node.value
         : undefined;
 
-const getAvailabilityGuard = (
+const getGlobalThisMemberName = (
+    sourceCode: Readonly<SourceCode>,
     expression: Readonly<es.Expression>,
-    globalName: string
-): GuardAvailability => {
-    if (expression.type === AST_NODE_TYPES.UnaryExpression) {
-        return expression.operator === "!"
-            ? invertAvailability(
-                  getAvailabilityGuard(expression.argument, globalName)
-              )
+    cache: Readonly<AnalysisCache>
+): string | undefined => {
+    const unwrappedExpression = unwrapCallee(expression);
+
+    if (unwrappedExpression.type !== AST_NODE_TYPES.MemberExpression) {
+        return undefined;
+    }
+
+    const object = unwrappedExpression.object;
+
+    return object.type === AST_NODE_TYPES.Identifier &&
+        object.name === "globalThis" &&
+        isReferenceIdentifier(sourceCode, object, cache)
+        ? getStaticMemberName(unwrappedExpression)
+        : undefined;
+};
+
+const getTypeofGlobalName = (
+    sourceCode: Readonly<SourceCode>,
+    node: Readonly<es.Expression | es.PrivateIdentifier>,
+    cache: Readonly<AnalysisCache>
+): string | undefined => {
+    if (
+        node.type !== AST_NODE_TYPES.UnaryExpression ||
+        node.operator !== "typeof"
+    ) {
+        return undefined;
+    }
+
+    if (node.argument.type === AST_NODE_TYPES.Identifier) {
+        return isReferenceIdentifier(sourceCode, node.argument, cache)
+            ? node.argument.name
             : undefined;
     }
 
-    if (expression.type !== AST_NODE_TYPES.BinaryExpression) {
+    return getGlobalThisMemberName(sourceCode, node.argument, cache);
+};
+
+const getInGlobalName = (
+    sourceCode: Readonly<SourceCode>,
+    expression: Readonly<es.BinaryExpression>,
+    cache: Readonly<AnalysisCache>
+): string | undefined => {
+    if (
+        expression.operator !== "in" ||
+        expression.left.type !== AST_NODE_TYPES.Literal ||
+        typeof expression.left.value !== "string"
+    ) {
         return undefined;
     }
 
-    const leftTypeofName = getTypeofIdentifierName(expression.left);
-    const rightTypeofName = getTypeofIdentifierName(expression.right);
-    const leftLiteral = getStringLiteralValue(expression.left);
-    const rightLiteral = getStringLiteralValue(expression.right);
-    const typeofName = leftTypeofName ?? rightTypeofName;
-    const comparedValue = isDefined(leftTypeofName)
-        ? rightLiteral
-        : leftLiteral;
+    const right = unwrapCallee(expression.right);
 
-    if (typeofName !== globalName || !isDefined(comparedValue)) {
+    return right.type === AST_NODE_TYPES.Identifier &&
+        right.name === "globalThis" &&
+        isReferenceIdentifier(sourceCode, right, cache)
+        ? expression.left.value
+        : undefined;
+};
+
+const getImmutablePredicateInitializer = (
+    sourceCode: Readonly<SourceCode>,
+    identifier: Readonly<es.Identifier>,
+    cache: Readonly<AnalysisCache>
+): Readonly<es.Expression> | undefined => {
+    const reference = getReference(sourceCode, identifier, cache);
+    const variable = reference?.resolved;
+
+    if (variable === null || variable?.defs.length !== 1) {
         return undefined;
     }
 
-    const isEquality =
-        expression.operator === "==" || expression.operator === "===";
-    const isInequality =
-        expression.operator === "!=" || expression.operator === "!==";
+    const [definition] = variable.defs;
 
-    if (comparedValue === "undefined") {
-        if (isEquality) {
-            return "false";
+    return definition?.type === TSESLint.Scope.DefinitionType.Variable &&
+        definition.node.id.type === AST_NODE_TYPES.Identifier &&
+        definition.node.id.name === identifier.name &&
+        definition.node.init !== null &&
+        definition.node.parent.kind === "const"
+        ? definition.node.init
+        : undefined;
+};
+
+const getAvailabilityGuard = (
+    sourceCode: Readonly<SourceCode>,
+    expression: Readonly<es.Expression>,
+    globalName: string,
+    cache: Readonly<AnalysisCache>,
+    visitedExpressions: Set<Readonly<es.Expression>> = new Set()
+): GuardAvailability => {
+    const unwrappedExpression = unwrapCallee(expression);
+    const cachedByName = cache.guardAvailability.get(unwrappedExpression);
+
+    if (cachedByName?.has(globalName) === true) {
+        return cachedByName.get(globalName);
+    }
+
+    if (containsExpression(visitedExpressions, unwrappedExpression)) {
+        return undefined;
+    }
+
+    visitedExpressions.add(unwrappedExpression);
+
+    const availability = (() => {
+        if (unwrappedExpression.type === AST_NODE_TYPES.Identifier) {
+            const initializer = getImmutablePredicateInitializer(
+                sourceCode,
+                unwrappedExpression,
+                cache
+            );
+
+            return isDefined(initializer)
+                ? getAvailabilityGuard(
+                      sourceCode,
+                      initializer,
+                      globalName,
+                      cache,
+                      visitedExpressions
+                  )
+                : undefined;
         }
 
-        if (isInequality) {
+        if (unwrappedExpression.type === AST_NODE_TYPES.UnaryExpression) {
+            return unwrappedExpression.operator === "!"
+                ? invertAvailability(
+                      getAvailabilityGuard(
+                          sourceCode,
+                          unwrappedExpression.argument,
+                          globalName,
+                          cache,
+                          visitedExpressions
+                      )
+                  )
+                : undefined;
+        }
+
+        if (unwrappedExpression.type !== AST_NODE_TYPES.BinaryExpression) {
+            return undefined;
+        }
+
+        const inGlobalName = getInGlobalName(
+            sourceCode,
+            unwrappedExpression,
+            cache
+        );
+
+        if (isDefined(inGlobalName)) {
+            return inGlobalName === globalName ? "true" : undefined;
+        }
+
+        const leftTypeofName = getTypeofGlobalName(
+            sourceCode,
+            unwrappedExpression.left,
+            cache
+        );
+        const rightTypeofName = getTypeofGlobalName(
+            sourceCode,
+            unwrappedExpression.right,
+            cache
+        );
+        const leftLiteral = getStringLiteralValue(unwrappedExpression.left);
+        const rightLiteral = getStringLiteralValue(unwrappedExpression.right);
+        const typeofName = leftTypeofName ?? rightTypeofName;
+        const comparedValue = isDefined(leftTypeofName)
+            ? rightLiteral
+            : leftLiteral;
+
+        if (typeofName !== globalName || !isDefined(comparedValue)) {
+            return undefined;
+        }
+
+        const isEquality =
+            unwrappedExpression.operator === "==" ||
+            unwrappedExpression.operator === "===";
+        const isInequality =
+            unwrappedExpression.operator === "!=" ||
+            unwrappedExpression.operator === "!==";
+
+        if (comparedValue === "undefined") {
+            if (isEquality) {
+                return "false";
+            }
+
+            if (isInequality) {
+                return "true";
+            }
+        }
+
+        if (
+            isEquality &&
+            (comparedValue === "object" || comparedValue === "function")
+        ) {
             return "true";
         }
+
+        return undefined;
+    })();
+
+    const availabilityByName =
+        cachedByName ?? new Map<string, GuardAvailability>();
+    availabilityByName.set(globalName, availability);
+    cache.guardAvailability.set(unwrappedExpression, availabilityByName);
+
+    return availability;
+};
+
+const isGuardedByAncestor = (
+    sourceCode: Readonly<SourceCode>,
+    ancestor: Readonly<es.Node>,
+    childOnPath: Readonly<es.Node>,
+    globalName: string,
+    cache: Readonly<AnalysisCache>
+): boolean => {
+    if (
+        ancestor.type === AST_NODE_TYPES.IfStatement ||
+        ancestor.type === AST_NODE_TYPES.ConditionalExpression
+    ) {
+        const availability = getAvailabilityGuard(
+            sourceCode,
+            ancestor.test,
+            globalName,
+            cache
+        );
+
+        return (
+            (availability === "true" && ancestor.consequent === childOnPath) ||
+            (availability === "false" && ancestor.alternate === childOnPath)
+        );
     }
 
     if (
-        (comparedValue === "object" || comparedValue === "function") &&
-        isEquality
+        ancestor.type !== AST_NODE_TYPES.LogicalExpression ||
+        ancestor.right !== childOnPath
     ) {
-        return "true";
+        return false;
     }
 
-    return undefined;
+    const availability = getAvailabilityGuard(
+        sourceCode,
+        ancestor.left,
+        globalName,
+        cache
+    );
+
+    return (
+        (availability === "true" && ancestor.operator === "&&") ||
+        (availability === "false" && ancestor.operator === "||")
+    );
 };
 
 const isGuardedAvailabilityUse = (
     sourceCode: Readonly<SourceCode>,
     node: Readonly<es.Node>,
-    globalName: string
+    globalName: string,
+    cache: Readonly<AnalysisCache>
 ): boolean => {
+    const cachedByName = cache.guardedUses.get(node);
+
+    if (cachedByName?.has(globalName) === true) {
+        return cachedByName.get(globalName) ?? false;
+    }
+
     const ancestors = sourceCode.getAncestors(node);
+    let guarded = false;
 
     for (let index = 0; index < ancestors.length; index += 1) {
         const ancestor = ancestors[index];
@@ -236,55 +512,25 @@ const isGuardedAvailabilityUse = (
             continue;
         }
 
-        if (ancestor.type === AST_NODE_TYPES.IfStatement) {
-            const availability = getAvailabilityGuard(
-                ancestor.test,
-                globalName
-            );
-
-            if (
-                (ancestor.consequent === childOnPath &&
-                    availability === "true") ||
-                (ancestor.alternate === childOnPath && availability === "false")
-            ) {
-                return true;
-            }
-        }
-
-        if (ancestor.type === AST_NODE_TYPES.ConditionalExpression) {
-            const availability = getAvailabilityGuard(
-                ancestor.test,
-                globalName
-            );
-
-            if (
-                (ancestor.consequent === childOnPath &&
-                    availability === "true") ||
-                (ancestor.alternate === childOnPath && availability === "false")
-            ) {
-                return true;
-            }
-        }
-
         if (
-            ancestor.type === AST_NODE_TYPES.LogicalExpression &&
-            ancestor.right === childOnPath
+            isGuardedByAncestor(
+                sourceCode,
+                ancestor,
+                childOnPath,
+                globalName,
+                cache
+            )
         ) {
-            const availability = getAvailabilityGuard(
-                ancestor.left,
-                globalName
-            );
-
-            if (
-                (ancestor.operator === "&&" && availability === "true") ||
-                (ancestor.operator === "||" && availability === "false")
-            ) {
-                return true;
-            }
+            guarded = true;
+            break;
         }
     }
 
-    return false;
+    const guardedByName = cachedByName ?? new Map<string, boolean>();
+    guardedByName.set(globalName, guarded);
+    cache.guardedUses.set(node, guardedByName);
+
+    return guarded;
 };
 
 const getEnclosingFunction = (
@@ -304,23 +550,6 @@ const getEnclosingFunction = (
     return undefined;
 };
 
-const unwrapCallee = (
-    expression: Readonly<es.Expression>
-): Readonly<es.Expression> => {
-    if (
-        expression.type === AST_NODE_TYPES.ChainExpression ||
-        expression.type === AST_NODE_TYPES.TSAsExpression ||
-        expression.type === AST_NODE_TYPES.TSInstantiationExpression ||
-        expression.type === AST_NODE_TYPES.TSNonNullExpression ||
-        expression.type === AST_NODE_TYPES.TSSatisfiesExpression ||
-        expression.type === AST_NODE_TYPES.TSTypeAssertion
-    ) {
-        return unwrapCallee(expression.expression);
-    }
-
-    return expression;
-};
-
 const getCallName = (node: Readonly<es.CallExpression>): string | undefined => {
     const callee = unwrapCallee(node.callee);
 
@@ -337,6 +566,62 @@ const getCallName = (node: Readonly<es.CallExpression>): string | undefined => {
     }
 
     return undefined;
+};
+
+const getCalleeRootIdentifier = (
+    expression: Readonly<es.Expression>
+): Readonly<es.Identifier> | undefined => {
+    const callee = unwrapCallee(expression);
+
+    if (callee.type === AST_NODE_TYPES.Identifier) {
+        return callee;
+    }
+
+    if (callee.type === AST_NODE_TYPES.CallExpression) {
+        return getCalleeRootIdentifier(callee.callee);
+    }
+
+    if (callee.type !== AST_NODE_TYPES.MemberExpression) {
+        return undefined;
+    }
+
+    return callee.object.type === AST_NODE_TYPES.Super
+        ? undefined
+        : getCalleeRootIdentifier(callee.object);
+};
+
+const recognizedComponentWrapperNames: ReadonlySet<string> = new Set([
+    "forwardRef",
+    "memo",
+    "observer",
+]);
+
+/**
+ * Recognize established wrappers by name and arbitrary third-party wrappers by
+ * import provenance. Requiring either signal prevents ordinary calls such as
+ * `items.map(Component)` from acquiring component ownership merely because the
+ * result is assigned to an uppercase binding or default-exported.
+ */
+const isComponentWrapperCall = (
+    sourceCode: Readonly<SourceCode>,
+    node: Readonly<es.CallExpression>,
+    cache: Readonly<AnalysisCache>
+): boolean => {
+    const callName = getCallName(node);
+
+    if (
+        isDefined(callName) &&
+        setHas(recognizedComponentWrapperNames, callName)
+    ) {
+        return true;
+    }
+
+    const rootIdentifier = getCalleeRootIdentifier(node.callee);
+
+    return (
+        isDefined(rootIdentifier) &&
+        isImportedIdentifier(sourceCode, rootIdentifier, cache)
+    );
 };
 
 const isTransparentCalleeWrapper = (
@@ -374,23 +659,87 @@ const renderTimeHookNames: ReadonlySet<string> = new Set([
     "useState",
 ]);
 
-const isRenderTimeHookCallback = (node: Readonly<FunctionNode>): boolean =>
+const isCallArgumentAtIndex = (
+    node: Readonly<FunctionNode>,
+    index: number
+): boolean =>
     node.type !== AST_NODE_TYPES.FunctionDeclaration &&
     node.parent.type === AST_NODE_TYPES.CallExpression &&
-    // eslint-disable-next-line unicorn/prefer-includes -- TSESTree's argument union rejects this narrower function-node type in includes().
-    node.parent.arguments.some((argument) => argument === node) &&
-    setHas(renderTimeHookNames, getCallName(node.parent) ?? "");
+    node.parent.arguments[index] === node;
+
+const isRenderTimeHookCallback = (node: Readonly<FunctionNode>): boolean => {
+    if (
+        node.type === AST_NODE_TYPES.FunctionDeclaration ||
+        node.parent.type !== AST_NODE_TYPES.CallExpression
+    ) {
+        return false;
+    }
+
+    const callName = getCallName(node.parent);
+
+    if (!setHas(renderTimeHookNames, callName ?? "")) {
+        return false;
+    }
+
+    // UseMemo factories and useState lazy initializers execute while rendering.
+    // A useReducer reducer is deferred until dispatch; only its third-argument
+    // initializer executes during initialization.
+    return callName === "useReducer"
+        ? isCallArgumentAtIndex(node, 2)
+        : isCallArgumentAtIndex(node, 0);
+};
+
+const synchronousIterationCallbackNames: ReadonlySet<string> = new Set([
+    "every",
+    "filter",
+    "find",
+    "findIndex",
+    "findLast",
+    "findLastIndex",
+    "flatMap",
+    "forEach",
+    "map",
+    "reduce",
+    "reduceRight",
+    "some",
+]);
+
+const isSynchronousIterationCallback = (
+    node: Readonly<FunctionNode>
+): boolean =>
+    node.type !== AST_NODE_TYPES.FunctionDeclaration &&
+    node.parent.type === AST_NODE_TYPES.CallExpression &&
+    isCallArgumentAtIndex(node, 0) &&
+    setHas(synchronousIterationCallbackNames, getCallName(node.parent) ?? "");
+
+const isRenderTimeNestedFunction = (node: Readonly<FunctionNode>): boolean =>
+    isImmediatelyInvoked(node) ||
+    isRenderTimeHookCallback(node) ||
+    isSynchronousIterationCallback(node);
 
 const getEffectiveExecutionFunction = (
     sourceCode: Readonly<SourceCode>,
     node: Readonly<es.Node>,
-    includeRenderTimeHooks: boolean
+    includeRenderTimeHooks: boolean,
+    cache: Readonly<AnalysisCache>
 ): Readonly<FunctionNode> | undefined => {
+    const executionFunctionCache =
+        cache.effectiveExecutionFunctions[includeRenderTimeHooks ? 1 : 0];
+    const cachedExecutionFunction = executionFunctionCache.get(node);
+
+    if (
+        cachedExecutionFunction !== undefined ||
+        executionFunctionCache.has(node)
+    ) {
+        return cachedExecutionFunction ?? undefined;
+    }
+
     let enclosingFunction = getEnclosingFunction(sourceCode, node);
 
     while (isDefined(enclosingFunction)) {
         if (
             !isImmediatelyInvoked(enclosingFunction) &&
+            !isSynchronousIterationCallback(enclosingFunction) &&
             (!includeRenderTimeHooks ||
                 !isRenderTimeHookCallback(enclosingFunction))
         ) {
@@ -400,6 +749,7 @@ const getEffectiveExecutionFunction = (
         enclosingFunction = getEnclosingFunction(sourceCode, enclosingFunction);
     }
 
+    executionFunctionCache.set(node, enclosingFunction ?? null);
     return enclosingFunction;
 };
 
@@ -464,8 +814,15 @@ const getChildNodes = (
 
 const functionContainsJsx = (
     sourceCode: Readonly<SourceCode>,
-    node: Readonly<FunctionNode>
+    node: Readonly<FunctionNode>,
+    cache: Readonly<AnalysisCache>
 ): boolean => {
+    const cachedResult = cache.functionContainsJsx.get(node);
+
+    if (isDefined(cachedResult)) {
+        return cachedResult;
+    }
+
     const stack: es.Node[] = [node.body];
 
     while (stack.length > 0) {
@@ -479,16 +836,22 @@ const functionContainsJsx = (
             current.type === AST_NODE_TYPES.JSXElement ||
             current.type === AST_NODE_TYPES.JSXFragment
         ) {
+            cache.functionContainsJsx.set(node, true);
             return true;
         }
 
         if (current !== node.body && isFunctionNode(current)) {
+            if (isRenderTimeNestedFunction(current)) {
+                stack.push(current.body);
+            }
+
             continue;
         }
 
         stack.push(...getChildNodes(sourceCode, current));
     }
 
+    cache.functionContainsJsx.set(node, false);
     return false;
 };
 
@@ -516,14 +879,15 @@ const isConstructorFunction = (node: Readonly<FunctionNode>): boolean =>
 
 const isReactClassRenderFunction = (
     sourceCode: Readonly<SourceCode>,
-    node: Readonly<FunctionNode>
+    node: Readonly<FunctionNode>,
+    cache: Readonly<AnalysisCache>
 ): boolean =>
     node.type === AST_NODE_TYPES.FunctionExpression &&
     node.parent.type === AST_NODE_TYPES.MethodDefinition &&
     node.parent.kind === "method" &&
     !node.parent.static &&
     getStaticMethodName(node.parent) === "render" &&
-    functionContainsJsx(sourceCode, node);
+    functionContainsJsx(sourceCode, node, cache);
 
 const isComponentName = (name: string): boolean => {
     const firstCharacter = name.at(0);
@@ -537,42 +901,65 @@ const isComponentName = (name: string): boolean => {
 
 const isReactFunctionComponent = (
     sourceCode: Readonly<SourceCode>,
-    node: Readonly<FunctionNode>
+    node: Readonly<FunctionNode>,
+    cache: Readonly<AnalysisCache>
 ): boolean => {
-    if (!functionContainsJsx(sourceCode, node)) {
+    if (!functionContainsJsx(sourceCode, node, cache)) {
         return false;
     }
 
-    if (node.type === AST_NODE_TYPES.FunctionDeclaration && node.id !== null) {
-        return isComponentName(node.id.name);
+    if (node.type === AST_NODE_TYPES.FunctionDeclaration) {
+        return node.id === null || isComponentName(node.id.name);
+    }
+
+    let valueNode: Readonly<es.Node> = node;
+    let parent: Readonly<es.Node> | undefined = valueNode.parent;
+
+    while (isDefined(parent) && isTransparentCalleeWrapper(parent, valueNode)) {
+        valueNode = parent;
+        parent = valueNode.parent;
+    }
+
+    while (
+        parent?.type === AST_NODE_TYPES.CallExpression &&
+        arrayFirst(parent.arguments) === valueNode &&
+        isComponentWrapperCall(sourceCode, parent, cache)
+    ) {
+        valueNode = parent;
+        parent = valueNode.parent;
+
+        while (
+            isDefined(parent) &&
+            isTransparentCalleeWrapper(parent, valueNode)
+        ) {
+            valueNode = parent;
+            parent = valueNode.parent;
+        }
     }
 
     if (
-        node.parent.type === AST_NODE_TYPES.VariableDeclarator &&
-        node.parent.id.type === AST_NODE_TYPES.Identifier
+        parent?.type === AST_NODE_TYPES.VariableDeclarator &&
+        parent.id.type === AST_NODE_TYPES.Identifier
     ) {
-        return isComponentName(node.parent.id.name);
+        return isComponentName(parent.id.name);
     }
 
-    if (node.parent.type === AST_NODE_TYPES.CallExpression) {
-        const callName = getCallName(node.parent);
-        return callName === "forwardRef" || callName === "memo";
-    }
-
-    return false;
+    return parent?.type === AST_NODE_TYPES.ExportDefaultDeclaration;
 };
 
 const isInExecutionContext = (
     sourceCode: Readonly<SourceCode>,
     node: Readonly<es.Node>,
-    executionContext: ExecutionContext
+    executionContext: ExecutionContext,
+    cache: Readonly<AnalysisCache>
 ): boolean => {
     const includeRenderTimeHooks =
         executionContext === "react-function-component";
     const executionFunction = getEffectiveExecutionFunction(
         sourceCode,
         node,
-        includeRenderTimeHooks
+        includeRenderTimeHooks,
+        cache
     );
     const instanceInitializer = getInstancePropertyInitializer(
         sourceCode,
@@ -597,13 +984,13 @@ const isInExecutionContext = (
         case "react-class-render": {
             return (
                 executionFunction !== undefined &&
-                isReactClassRenderFunction(sourceCode, executionFunction)
+                isReactClassRenderFunction(sourceCode, executionFunction, cache)
             );
         }
         case "react-function-component": {
             return (
                 executionFunction !== undefined &&
-                isReactFunctionComponent(sourceCode, executionFunction)
+                isReactFunctionComponent(sourceCode, executionFunction, cache)
             );
         }
         default: {
@@ -616,13 +1003,14 @@ const shouldReportGlobalUse = (
     sourceCode: Readonly<SourceCode>,
     node: Readonly<es.Node>,
     globalName: string,
-    executionContext: ExecutionContext
+    executionContext: ExecutionContext,
+    cache: Readonly<AnalysisCache>
 ): boolean =>
     isBrowserOnlyGlobalName(globalName) &&
     !isTypeOnlyPosition(sourceCode, node) &&
     !isDirectTypeofOperand(node) &&
-    !isGuardedAvailabilityUse(sourceCode, node, globalName) &&
-    isInExecutionContext(sourceCode, node, executionContext);
+    !isGuardedAvailabilityUse(sourceCode, node, globalName, cache) &&
+    isInExecutionContext(sourceCode, node, executionContext, cache);
 
 /** Create one SSR DOM-global rule with shared lexical and execution analysis. */
 export const createSsrDomGlobalsRule = ({
@@ -637,60 +1025,82 @@ export const createSsrDomGlobalsRule = ({
     readonly name: string;
 }>): ReturnType<typeof ruleCreator<Options, MessageIds>> =>
     ruleCreator<Options, MessageIds>({
-        create: (context) => ({
-            Identifier: (node: Readonly<es.Identifier>): void => {
-                if (
-                    !isReferenceIdentifier(context.sourceCode, node) ||
-                    !shouldReportGlobalUse(
-                        context.sourceCode,
+        create: (context) => {
+            const cache: AnalysisCache = {
+                effectiveExecutionFunctions: [new WeakMap(), new WeakMap()],
+                functionContainsJsx: new WeakMap(),
+                guardAvailability: new WeakMap(),
+                guardedUses: new WeakMap(),
+                references: new WeakMap(),
+            };
+
+            return {
+                Identifier: (node: Readonly<es.Identifier>): void => {
+                    if (
+                        !isReferenceIdentifier(
+                            context.sourceCode,
+                            node,
+                            cache
+                        ) ||
+                        !shouldReportGlobalUse(
+                            context.sourceCode,
+                            node,
+                            node.name,
+                            executionContext,
+                            cache
+                        )
+                    ) {
+                        return;
+                    }
+
+                    context.report({
+                        data: {
+                            name: node.name,
+                        },
+                        messageId: "forbidden",
                         node,
-                        node.name,
-                        executionContext
-                    )
-                ) {
-                    return;
-                }
+                    });
+                },
+                MemberExpression: (
+                    node: Readonly<es.MemberExpression>
+                ): void => {
+                    if (
+                        node.object.type !== AST_NODE_TYPES.Identifier ||
+                        node.object.name !== "globalThis" ||
+                        !isReferenceIdentifier(
+                            context.sourceCode,
+                            node.object,
+                            cache
+                        )
+                    ) {
+                        return;
+                    }
 
-                context.report({
-                    data: {
-                        name: node.name,
-                    },
-                    messageId: "forbidden",
-                    node,
-                });
-            },
-            MemberExpression: (node: Readonly<es.MemberExpression>): void => {
-                if (
-                    node.object.type !== AST_NODE_TYPES.Identifier ||
-                    node.object.name !== "globalThis" ||
-                    !isReferenceIdentifier(context.sourceCode, node.object)
-                ) {
-                    return;
-                }
+                    const globalName = getStaticMemberName(node);
 
-                const globalName = getStaticMemberName(node);
+                    if (
+                        !isDefined(globalName) ||
+                        !shouldReportGlobalUse(
+                            context.sourceCode,
+                            node,
+                            globalName,
+                            executionContext,
+                            cache
+                        )
+                    ) {
+                        return;
+                    }
 
-                if (
-                    !isDefined(globalName) ||
-                    !shouldReportGlobalUse(
-                        context.sourceCode,
+                    context.report({
+                        data: {
+                            name: `globalThis.${globalName}`,
+                        },
+                        messageId: "forbidden",
                         node,
-                        globalName,
-                        executionContext
-                    )
-                ) {
-                    return;
-                }
-
-                context.report({
-                    data: {
-                        name: `globalThis.${globalName}`,
-                    },
-                    messageId: "forbidden",
-                    node,
-                });
-            },
-        }),
+                    });
+                },
+            };
+        },
         defaultOptions: [],
         meta: {
             deprecated: false,
@@ -702,6 +1112,7 @@ export const createSsrDomGlobalsRule = ({
                 url: `https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/${name}`,
             },
             hasSuggestions: false,
+            languages: ["js/js"],
             messages: {
                 forbidden: message,
             },

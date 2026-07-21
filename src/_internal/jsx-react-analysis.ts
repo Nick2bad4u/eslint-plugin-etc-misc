@@ -150,11 +150,7 @@ export const getSameFunctionConstInitializer = (
         definition.node
     );
 
-    if (
-        !isDefined(useFunction) ||
-        !isDefined(declarationFunction) ||
-        useFunction !== declarationFunction
-    ) {
+    if (useFunction !== declarationFunction || !isDefined(useFunction)) {
         return undefined;
     }
 

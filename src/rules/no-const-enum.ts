@@ -99,6 +99,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "code",
         hasSuggestions: true,
+        languages: ["js/js"],
         messages: {
             forbidden: "`const enum` declarations are forbidden.",
             suggestRemoveConst:

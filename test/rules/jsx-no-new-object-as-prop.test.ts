@@ -41,6 +41,12 @@ ruleTester.run("jsx-no-new-object-as-prop", rule, {
             filename,
             options: [{ nativeAllowList: "all" }],
         },
+        {
+            code: "function View() { return <section style={{}} />; }",
+            errors: [{ messageId: "unstableObjectProp" }],
+            filename,
+            options: [{ nativeAllowList: [] }],
+        },
     ],
     valid: [
         {
@@ -66,7 +72,6 @@ ruleTester.run("jsx-no-new-object-as-prop", rule, {
         {
             code: "function View() { return <section style={{}} />; }",
             filename,
-            options: [{ nativeAllowList: ["style"] }],
         },
         {
             code: "const node = <Item config={{}} />;",

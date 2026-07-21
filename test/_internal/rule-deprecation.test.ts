@@ -96,7 +96,7 @@ describe("deprecated rule metadata helpers", () => {
         });
 
         expect(deprecationInfo).toMatchObject({
-            availableUntil: "2.0.0",
+            availableUntil: "3.0.0",
             deprecatedSince: "1.0.0",
             message: "Use typescript/prefer-readonly-array instead.",
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-multi-type-tuples",
@@ -114,6 +114,22 @@ describe("deprecated rule metadata helpers", () => {
         });
 
         expect(deprecationInfo.deprecatedSince).toBe("1.2.0");
+    });
+
+    it("allows aliases to declare a later removal release explicitly", () => {
+        expect.hasAssertions();
+
+        const deprecationInfo = createDeprecatedRuleInfo({
+            availableUntil: "3.0.0",
+            deprecatedSince: "2.0.0",
+            message: "Use the canonical replacement.",
+            ruleId: "legacy-rule",
+        });
+
+        expect(deprecationInfo).toMatchObject({
+            availableUntil: "3.0.0",
+            deprecatedSince: "2.0.0",
+        });
     });
 
     it("identifies only different-rule replacements from the same plugin as aliases", () => {
@@ -201,13 +217,14 @@ describe("deprecated rule lifecycle decoration", () => {
         };
 
         const decoratedRule = withDeprecatedRuleLifecycle(ruleWithDocs, {
+            availableUntil: "3.0.0",
             message: "Use etc-misc/no-t instead.",
             ruleId: "prefer-interface",
         });
 
         expect(decoratedRule.meta?.docs?.frozen).toBe(true);
         expect(decoratedRule.meta?.deprecated).toMatchObject({
-            availableUntil: "2.0.0",
+            availableUntil: "3.0.0",
             deprecatedSince: "1.0.0",
             message: "Use etc-misc/no-t instead.",
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/prefer-interface",

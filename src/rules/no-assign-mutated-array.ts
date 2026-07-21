@@ -160,6 +160,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                 url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-assign-mutated-array",
             },
             hasSuggestions: false,
+            languages: ["js/js"],
             messages: {
                 forbidden: "Assignment of mutated arrays is forbidden.",
             },

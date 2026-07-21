@@ -92,6 +92,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "code",
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             forbidden:
                 "Optional properties should not redundantly include `undefined` in their type union.",

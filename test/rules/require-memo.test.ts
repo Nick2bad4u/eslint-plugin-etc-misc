@@ -1,7 +1,24 @@
+import { describe, expect, it } from "vitest";
+
 import rule from "../../src/rules/require-memo";
 import { ruleTester } from "../_internal/ruleTester";
 
 const filename = "component.tsx";
+
+describe("require-memo lifecycle", () => {
+    it("remains available as a frozen rule through 3.0.0", () => {
+        expect.hasAssertions();
+
+        expect(rule.meta.deprecated).toMatchObject({
+            availableUntil: "3.0.0",
+            deprecatedSince: "2.0.0",
+        });
+        expect(rule.meta.docs).toMatchObject({
+            deprecated: true,
+            frozen: true,
+        });
+    });
+});
 
 ruleTester.run("require-memo", rule, {
     invalid: [

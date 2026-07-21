@@ -61,6 +61,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/consistent-filename",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             inconsistent: "Filename should use '{{expected}}' casing.",
         },

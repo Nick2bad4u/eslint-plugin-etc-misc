@@ -285,6 +285,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                 url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-commented-out-code",
             },
             hasSuggestions: false,
+            languages: ["js/js"],
             messages: {
                 forbidden: "Commented-out code is forbidden.",
             },

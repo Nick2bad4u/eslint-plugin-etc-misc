@@ -34,6 +34,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/prefer-only-export",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             forbidden: "Export default should be only export.",
         },

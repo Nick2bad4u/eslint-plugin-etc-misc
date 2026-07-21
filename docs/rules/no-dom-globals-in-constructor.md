@@ -35,14 +35,20 @@ class Viewport {
 ```ts
 class Viewport {
  constructor() {
-  this.readWidth = () => window.innerWidth;
+  const hasWindow = typeof globalThis.window !== "undefined";
+  if (hasWindow) {
+   this.width = globalThis.window.innerWidth;
+  }
  }
 }
 ```
 
 Constructor parameter defaults and immediately invoked functions are checked.
-Deferred callbacks, static fields, `typeof`-guarded accesses, shadowed locals,
-and type-only references are not reported.
+Deferred callbacks, static fields, guarded accesses, shadowed locals, and
+type-only references are not reported. Guards may use direct or `globalThis`
+`typeof` comparisons, `"name" in globalThis`, or a predicate stored in a single
+`const` binding. Mutable or shadowed predicates are intentionally not trusted.
+Shared scope, guard, JSX, and execution results are cached per linted file.
 
 ## Behavior and migration notes
 

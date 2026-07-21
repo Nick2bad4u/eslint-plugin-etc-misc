@@ -39,6 +39,12 @@ ruleTester.run("jsx-no-new-function-as-prop", rule, {
             filename,
             options: [{ nativeAllowList: "all" }],
         },
+        {
+            code: "function View() { return <button onClick={() => undefined} />; }",
+            errors: [{ messageId: "unstableFunctionProp" }],
+            filename,
+            options: [{ nativeAllowList: [] }],
+        },
     ],
     valid: [
         {
@@ -52,7 +58,6 @@ ruleTester.run("jsx-no-new-function-as-prop", rule, {
         {
             code: "function View() { return <button onClick={() => undefined} />; }",
             filename,
-            options: [{ nativeAllowList: ["onClick"] }],
         },
         {
             code: "const node = <Item onClick={() => undefined} />;",

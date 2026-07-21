@@ -70,6 +70,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "code",
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             forbidden: "Prefer readonly array or tuple types.",
         },

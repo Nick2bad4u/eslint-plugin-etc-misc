@@ -1,6 +1,9 @@
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
-import type { JsxPropRuleOptions } from "../_internal/jsx-prop-stability.js";
+import type {
+    JsxPropRuleOption,
+    JsxPropRuleOptions,
+} from "../_internal/jsx-prop-stability.js";
 
 import {
     createJsxPropStabilityVisitor,
@@ -12,14 +15,15 @@ type MessageIds = "unstableObjectProp";
 
 type Options = JsxPropRuleOptions;
 
-const defaultOptions: Options = [{}];
+const defaultOption: JsxPropRuleOption = { nativeAllowList: "all" };
+const defaultOptions: Options = [defaultOption];
 
 /** Disallow render-local object allocations used as JSX props. */
 const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     Options,
     MessageIds
 >({
-    create: (context, [options = {}]) =>
+    create: (context, [options = defaultOption]) =>
         createJsxPropStabilityVisitor({
             context,
             matcher: (expression, sourceCode) =>
@@ -35,7 +39,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         }),
     defaultOptions,
     meta: {
-        defaultOptions: [{}],
+        defaultOptions: [{ nativeAllowList: "all" }],
         deprecated: false,
         docs: {
             deprecated: false,
@@ -46,6 +50,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/jsx-no-new-object-as-prop",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             unstableObjectProp:
                 "Avoid creating this object during render when passing it as a prop; lift it or memoize it only when stable identity is required.",

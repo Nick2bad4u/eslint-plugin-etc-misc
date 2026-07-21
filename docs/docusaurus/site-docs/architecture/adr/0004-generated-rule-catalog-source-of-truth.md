@@ -17,8 +17,11 @@ which increased the chance of inconsistency.
 
 ## Decision
 
-- Treat generated catalog metadata as the canonical source for rule-doc links
-  and stable rule catalog IDs.
+- Treat the persistent rule-catalog assignment ledger as the canonical source
+  for generated rule-doc links and stable rule catalog IDs.
+- Keep every assignment in that ledger, mark removed rules as
+  retired, never reuse their IDs, and allocate new rules after the highest
+  assigned ID.
 - Use sync scripts to update derived docs artifacts (for example README tables
   and preset docs) instead of editing them manually.
 - Preserve explicit rule catalog IDs (`R###`) in docs so references stay stable
@@ -36,6 +39,7 @@ which increased the chance of inconsistency.
 
 - Contributors must run sync scripts as part of docs change workflows.
 - Generated outputs can create larger diffs if not scoped carefully.
+- Rule removal leaves intentional gaps in the active catalog.
 
 ## Alternatives considered
 

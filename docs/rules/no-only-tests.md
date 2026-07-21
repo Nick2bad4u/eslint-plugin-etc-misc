@@ -4,14 +4,15 @@ Disallow focused test invocations such as `test.only(...)`.
 
 ## Targeted pattern scope
 
-This rule inspects call expressions with static test API paths and configured
-standalone focused-test function names.
+This rule inspects complete call/member chains, resolves supported test-runner
+imports and aliases, and distinguishes their bindings from shadowing locals.
 
 ## What this rule reports
 
 The rule reports calls whose static member path starts with a configured test
-block and ends in a configured focus method. It also reports direct calls to
-configured focused-function aliases.
+block and contains a configured focus method. This includes middle-chain forms
+such as `test.only.each(...)`. It also reports direct focused functions such as
+`fit(...)` and `fdescribe(...)`.
 
 Unlike the original plugin, this implementation checks actual calls. A binding
 or object property merely named `fit` is not reported.
@@ -26,6 +27,7 @@ reach continuous integration or a release branch.
 ```ts
 describe.only("focused suite", () => {});
 test.concurrent.only("focused test", () => {});
+test.only.each([1])("focused parameterized test", () => {});
 fit("focused test", () => {});
 ```
 
@@ -37,8 +39,15 @@ test.skip("skipped test", () => {});
 const fit = testFactory;
 ```
 
-Computed focus properties and object options such as `{ only: true }` are not
-reported.
+Static computed focus properties are reported without an automatic fix. Object
+options such as `{ only: true }` are not member-chain focus APIs and remain out
+of scope.
+
+The rule understands named, renamed, namespace, and applicable default imports
+from `@jest/globals`, `vitest`, `node:test`, `bun:test`, `@playwright/test`,
+`mocha`, `ava`, `qunit`, and `tape`. A local or parameter binding that shadows a
+known global/import is ignored. Renaming an ordinary import to `fit` does not
+turn it into a focused-test API.
 
 ## Behavior and migration notes
 
@@ -53,15 +62,15 @@ type Options = [
 ];
 ```
 
-- `block` defaults to `describe`, `it`, `context`, `test`, `tape`, `fixture`,
-  `serial`, `Feature`, `Scenario`, `Given`, `And`, `When`, and `Then`. A trailing
-  `*` enables prefix matching, so `test*` matches `testResource.only(...)`.
+- `block` defaults to `describe`, `it`, `context`, `test`, `bench`, `suite`,
+  `QUnit`, `tape`, `fixture`, `serial`, `Feature`, `Scenario`, `Given`, `And`,
+  `When`, and `Then`. A trailing `*` enables prefix matching, so `test*` matches
+  `testResource.only(...)`.
 - `focus` defaults to `only`.
-- `functions` defaults to an empty array. Add aliases such as `fit` and
-  `fdescribe` when needed.
+- `functions` defaults to `fit` and `fdescribe`.
 - `fix` defaults to `false`. When enabled, the fixer removes a plain,
-  non-optional `.focus` segment. Optional chains and other ambiguous forms are
-  reported without a fix.
+  non-optional `.focus` segment even when it occurs in the middle of a chain.
+  Optional or computed chains are reported without a fix.
 
 Example configuration:
 

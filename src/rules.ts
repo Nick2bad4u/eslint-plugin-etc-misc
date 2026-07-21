@@ -3,14 +3,11 @@ import type { UnknownArray } from "type-fest";
 
 import { assertDefined, objectEntries, objectKeys, setHas } from "ts-extras";
 
-import type { RuleCatalogEntry } from "./_internal/rule-catalog.js";
 import type { RuleDocsMetadata } from "./_internal/rule-creator.js";
 
 import { buildRuleCatalog } from "./_internal/rule-catalog.js";
-import * as arrayTypeModule from "./rules/array-type.js";
 import * as matchFilenameRuleModule from "./rules/class-match-filename.js";
 import * as commentSpacingModule from "./rules/comment-spacing.js";
-import * as compatModule from "./rules/compat.js";
 import * as consistentEmptyLinesModule from "./rules/consistent-empty-lines.js";
 import * as consistentEnumMembersModule from "./rules/consistent-enum-members.js";
 import * as consistentFilenameModule from "./rules/consistent-filename.js";
@@ -42,7 +39,6 @@ import * as noDomGlobalsInModuleScopeModule from "./rules/no-dom-globals-in-modu
 import * as noDomGlobalsInReactCcRenderModule from "./rules/no-dom-globals-in-react-cc-render.js";
 import * as noDomGlobalsInReactFcModule from "./rules/no-dom-globals-in-react-fc.js";
 import * as noEnumModule from "./rules/no-enum.js";
-import * as noExplicitTypeExportsModule from "./rules/no-explicit-type-exports.js";
 import * as noExpressionEmptyLinesModule from "./rules/no-expression-empty-lines.js";
 import * as noForeachModule from "./rules/no-foreach.js";
 import * as noFunctionDeclareAfterReturnModule from "./rules/no-function-declare-after-return.js";
@@ -53,14 +49,12 @@ import * as noInternalModule from "./rules/no-internal.js";
 import * as noInvalidJsxNestingModule from "./rules/no-invalid-jsx-nesting.js";
 import * as noLanguageMixingModule from "./rules/no-language-mixing.js";
 import * as noMisusedGenericsModule from "./rules/no-misused-generics.js";
-import * as noMixedEnumsModule from "./rules/no-mixed-enums.js";
 import * as noNegatedConditionsModule from "./rules/no-negated-conditions.js";
 import * as noNodejsModulesModule from "./rules/no-nodejs-modules.js";
 import * as noOnlyTestsModule from "./rules/no-only-tests.js";
 import * as noParamReassignModule from "./rules/no-param-reassign.js";
 import * as noRelativeParentImportModule from "./rules/no-relative-parent-import.js";
 import * as noRestrictedSyntaxModule from "./rules/no-restricted-syntax.js";
-import * as noSecretModule from "./rules/no-secret.js";
 import * as noSelfImportModule from "./rules/no-self-import.js";
 import * as noShadowModule from "./rules/no-shadow.js";
 import * as noSiblingImportModule from "./rules/no-sibling-import.js";
@@ -71,19 +65,15 @@ import * as noUnnecessaryAsConstModule from "./rules/no-unnecessary-as-const.js"
 import * as noUnnecessaryBreakModule from "./rules/no-unnecessary-break.js";
 import * as noUnnecessaryInitializationModule from "./rules/no-unnecessary-initialization.js";
 import * as noUnnecessaryTemplateLiteralModule from "./rules/no-unnecessary-template-literal.js";
-import * as noUnusedDisableModule from "./rules/no-unused-disable.js";
-import * as noUnusedImportsModule from "./rules/no-unused-imports.js";
-import * as noUnusedVarsModule from "./rules/no-unused-vars.js";
+import * as noUnstableReactChildrenModule from "./rules/no-unstable-react-children.js";
+import * as noUnstableReactValuesModule from "./rules/no-unstable-react-values.js";
 import * as noUseExtendNativeModule from "./rules/no-use-extend-native.js";
-import * as noUselessGenericsModule from "./rules/no-useless-generics.js";
-import * as noValueToStringModule from "./rules/no-value-tostring.js";
 import * as noVulnerableModule from "./rules/no-vulnerable.js";
 import * as noWriteonlyModule from "./rules/no-writeonly.js";
 import * as objectFormatModule from "./rules/object-format.js";
 import * as onlyExportNameModule from "./rules/only-export-name.js";
 import * as preferArrowFunctionPropertyModule from "./rules/prefer-arrow-function-property.js";
 import * as preferConstRequireModule from "./rules/prefer-const-require.js";
-import * as preferIncludesModule from "./rules/prefer-includes.js";
 import * as preferInterfaceModule from "./rules/prefer-interface.js";
 import * as preferLessThanModule from "./rules/prefer-less-than.js";
 import * as preferObjectHasOwnModule from "./rules/prefer-object-has-own.js";
@@ -100,17 +90,13 @@ import * as sortCallSignatureModule from "./rules/sort-call-signature.js";
 import * as sortClassMembersModule from "./rules/sort-class-members.js";
 import * as sortConstructSignatureModule from "./rules/sort-construct-signature.js";
 import * as sortExportSpecifiersModule from "./rules/sort-export-specifiers.js";
-import * as sortExportsModule from "./rules/sort-exports.js";
-import * as sortImportsModule from "./rules/sort-imports.js";
 import * as sortKeysModule from "./rules/sort-keys.js";
 import * as sortTopCommentsModule from "./rules/sort-top-comments.js";
 import * as switchCaseSpacingModule from "./rules/switch-case-spacing.js";
 import * as templateLiteralFormatModule from "./rules/template-literal-format.js";
 import * as throwErrorModule from "./rules/throw-error.js";
-import * as throwNewErrorModule from "./rules/throw-new-error.js";
 import * as typescriptArrayCallbackReturnTypeModule from "./rules/typescript-array-callback-return-type.js";
 import * as typescriptClassMethodsUseThisModule from "./rules/typescript-class-methods-use-this.js";
-import * as typescriptCompatModule from "./rules/typescript-compat.js";
 import * as typescriptConsistentArrayTypeNameModule from "./rules/typescript-consistent-array-type-name.js";
 import * as typescriptDefineFunctionInOneStatementModule from "./rules/typescript-define-function-in-one-statement.js";
 import * as typescriptExhaustiveSwitchModule from "./rules/typescript-exhaustive-switch.js";
@@ -161,20 +147,22 @@ import * as typescriptRequireReadonlySetReturnTypeModule from "./rules/typescrip
 import * as typescriptRequireReadonlySetTypeAliasModule from "./rules/typescript-require-readonly-set-type-alias.js";
 import * as typescriptRequireThisVoidModule from "./rules/typescript-require-this-void.js";
 import * as underscoreInternalModule from "./rules/underscore-internal.js";
-import * as unusedInternalPropertiesModule from "./rules/unused-internal-properties.js";
-import * as uppercaseIifeModule from "./rules/uppercase-iife.js";
-import * as wordsModule from "./rules/words.js";
 
-type RuleModule = TSESLint.RuleModule<
+type BaseRuleModule = TSESLint.RuleModule<
     string,
     Readonly<UnknownArray>,
     RuleDocsMetadata
 >;
 
+type RuleModule = BaseRuleModule &
+    Readonly<{
+        readonly meta: BaseRuleModule["meta"] &
+            Readonly<{ readonly languages: readonly ["js/js"] }>;
+    }>;
+
 const rulesWithRequiredTypeChecking = new Set<string>([
     "no-assign-mutated-array",
     "no-deprecated",
-    "no-explicit-type-exports",
     "no-foreach",
     "no-implicit-any-catch",
     "no-internal",
@@ -215,11 +203,9 @@ const recommendedRuleNames = new Set<string>([
 /**
  * Rule implementations keyed by rule name.
  */
-const baseRules: Readonly<Record<string, RuleModule>> = {
-    "array-type": arrayTypeModule.default,
+const baseRules: Readonly<Record<string, BaseRuleModule>> = {
     "class-match-filename": matchFilenameRuleModule.default,
     "comment-spacing": commentSpacingModule.default,
-    compat: compatModule.default,
     "consistent-empty-lines": consistentEmptyLinesModule.default,
     "consistent-enum-members": consistentEnumMembersModule.default,
     "consistent-filename": consistentFilenameModule.default,
@@ -252,7 +238,6 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
         noDomGlobalsInReactCcRenderModule.default,
     "no-dom-globals-in-react-fc": noDomGlobalsInReactFcModule.default,
     "no-enum": noEnumModule.default,
-    "no-explicit-type-exports": noExplicitTypeExportsModule.default,
     "no-expression-empty-lines": noExpressionEmptyLinesModule.default,
     "no-foreach": noForeachModule.default,
     "no-function-declare-after-return":
@@ -264,14 +249,12 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
     "no-invalid-jsx-nesting": noInvalidJsxNestingModule.default,
     "no-language-mixing": noLanguageMixingModule.default,
     "no-misused-generics": noMisusedGenericsModule.default,
-    "no-mixed-enums": noMixedEnumsModule.default,
     "no-negated-conditions": noNegatedConditionsModule.default,
     "no-nodejs-modules": noNodejsModulesModule.default,
     "no-only-tests": noOnlyTestsModule.default,
     "no-param-reassign": noParamReassignModule.default,
     "no-relative-parent-import": noRelativeParentImportModule.default,
     "no-restricted-syntax": noRestrictedSyntaxModule.default,
-    "no-secret": noSecretModule.default,
     "no-self-import": noSelfImportModule.default,
     "no-shadow": noShadowModule.default,
     "no-sibling-import": noSiblingImportModule.default,
@@ -283,19 +266,15 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
     "no-unnecessary-initialization": noUnnecessaryInitializationModule.default,
     "no-unnecessary-template-literal":
         noUnnecessaryTemplateLiteralModule.default,
-    "no-unused-disable": noUnusedDisableModule.default,
-    "no-unused-imports": noUnusedImportsModule.default,
-    "no-unused-vars": noUnusedVarsModule.default,
+    "no-unstable-react-children": noUnstableReactChildrenModule.default,
+    "no-unstable-react-values": noUnstableReactValuesModule.default,
     "no-use-extend-native": noUseExtendNativeModule.default,
-    "no-useless-generics": noUselessGenericsModule.default,
-    "no-value-tostring": noValueToStringModule.default,
     "no-vulnerable": noVulnerableModule.default,
     "no-writeonly": noWriteonlyModule.default,
     "object-format": objectFormatModule.default,
     "only-export-name": onlyExportNameModule.default,
     "prefer-arrow-function-property": preferArrowFunctionPropertyModule.default,
     "prefer-const-require": preferConstRequireModule.default,
-    "prefer-includes": preferIncludesModule.default,
     "prefer-interface": preferInterfaceModule.default,
     "prefer-less-than": preferLessThanModule.default,
     "prefer-object-has-own": preferObjectHasOwnModule.default,
@@ -314,19 +293,15 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
     "sort-class-members": sortClassMembersModule.default,
     "sort-construct-signature": sortConstructSignatureModule.default,
     "sort-export-specifiers": sortExportSpecifiersModule.default,
-    "sort-exports": sortExportsModule.default,
-    "sort-imports": sortImportsModule.default,
     "sort-keys": sortKeysModule.default,
     "sort-top-comments": sortTopCommentsModule.default,
     "switch-case-spacing": switchCaseSpacingModule.default,
     "template-literal-format": templateLiteralFormatModule.default,
     "throw-error": throwErrorModule.default,
-    "throw-new-error": throwNewErrorModule.default,
     "typescript/array-callback-return-type":
         typescriptArrayCallbackReturnTypeModule.default,
     "typescript/class-methods-use-this":
         typescriptClassMethodsUseThisModule.default,
-    "typescript/compat": typescriptCompatModule.default,
     "typescript/consistent-array-type-name":
         typescriptConsistentArrayTypeNameModule.default,
     "typescript/define-function-in-one-statement":
@@ -417,34 +392,13 @@ const baseRules: Readonly<Record<string, RuleModule>> = {
         typescriptRequireReadonlySetTypeAliasModule.default,
     "typescript/require-this-void": typescriptRequireThisVoidModule.default,
     "underscore-internal": underscoreInternalModule.default,
-    "unused-internal-properties": unusedInternalPropertiesModule.default,
-    "uppercase-iife": uppercaseIifeModule.default,
-    words: wordsModule.default,
 };
 
 const ruleCatalog = buildRuleCatalog(objectKeys(baseRules));
 
-/**
- * Globally ordered catalog entries for every rule.
- */
-export const ruleCatalogEntries: readonly RuleCatalogEntry[] =
-    ruleCatalog.ordered;
-
-/**
- * Catalog metadata keyed by rule name.
- */
-export const ruleCatalogByRuleName: Readonly<Record<string, RuleCatalogEntry>> =
-    ruleCatalog.byRuleName;
-
-/**
- * Catalog metadata keyed by documentation id (`/` replaced with `-`).
- */
-export const ruleCatalogByDocId: Readonly<Record<string, RuleCatalogEntry>> =
-    ruleCatalog.byDocId;
-
 const withCatalogDocsMetadata = (
     ruleName: string,
-    ruleModule: Readonly<RuleModule>
+    ruleModule: Readonly<BaseRuleModule>
 ): RuleModule => {
     const catalogEntry = ruleCatalog.byRuleName[ruleName];
 
@@ -482,6 +436,7 @@ const withCatalogDocsMetadata = (
             ...ruleModule.meta,
             deprecated: deprecatedMetadata,
             docs: docsWithCatalogMetadata,
+            languages: ["js/js"],
         },
     };
 };

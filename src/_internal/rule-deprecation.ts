@@ -10,6 +10,7 @@ type DeprecatedInfo = Exclude<
 type ReplacedByInfo = ArrayElement<NonNullable<DeprecatedInfo["replacedBy"]>>;
 
 type RuleDeprecationOptions = Readonly<{
+    readonly availableUntil?: string;
     readonly deprecatedSince?: string;
     readonly message: string;
     readonly replacedBy?: readonly ReplacedByInfo[];
@@ -44,12 +45,13 @@ export const createReplacementRuleInfo = (
  * Create standardized deprecation metadata for this plugin.
  */
 export const createDeprecatedRuleInfo = ({
+    availableUntil = "3.0.0",
     deprecatedSince = "1.0.0",
     message,
     replacedBy = [],
     ruleId,
 }: RuleDeprecationOptions): DeprecatedInfo => ({
-    availableUntil: "2.0.0",
+    availableUntil,
     deprecatedSince,
     message,
     ...(replacedBy.length > 0 && { replacedBy: [...replacedBy] }),

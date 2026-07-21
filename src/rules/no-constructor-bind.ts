@@ -193,6 +193,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-constructor-bind",
         },
         hasSuggestions: true,
+        languages: ["js/js"],
         messages: {
             convertToArrowField:
                 "Convert '{{methodName}}' to an instance arrow-function field and remove the constructor binding.",

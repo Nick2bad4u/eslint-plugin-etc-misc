@@ -35,6 +35,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-consistent-array-type-name",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             forbidden:
                 'Use a name ending with "Array" or "s" for array-like type aliases.',

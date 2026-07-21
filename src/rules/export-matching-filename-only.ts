@@ -110,6 +110,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/export-matching-filename-only",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             onlyExport:
                 "When exporting '{{expected}}', it must be the only export in this file.",

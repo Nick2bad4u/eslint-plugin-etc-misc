@@ -126,10 +126,10 @@ describe("plugin.mjs entrypoint", () => {
         expect(commonJsPlugin).toMatchObject({
             meta: pluginMeta,
         });
-        expect(commonJsPlugin).toHaveProperty("rules.prefer-includes");
+        expect(commonJsPlugin).toHaveProperty("rules.default-case");
         expect(commonJsPlugin).toHaveProperty("rules.require-usememo");
         expect(commonJsPlugin).toHaveProperty(
-            "configs.all.rules.etc-misc/compat"
+            "configs.all.rules.etc-misc/default-case"
         );
     });
 

@@ -143,6 +143,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/require-jsdoc",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             missing: "Missing JSDoc comment.",
         },

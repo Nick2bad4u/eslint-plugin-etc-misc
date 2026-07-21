@@ -1,4 +1,4 @@
-/**
+/*
  * @license Use of this source code is governed by an MIT-style license that can
  *   be found in the LICENSE file at
  *   https://github.com/cartant/eslint-plugin-etc
@@ -57,6 +57,7 @@ const rule: ReturnType<typeof ruleCreator<typeof defaultOptions, MessageIds>> =
                 url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-t",
             },
             hasSuggestions: false,
+            languages: ["js/js"],
             messages: {
                 forbidden:
                     'Single-character type parameters are forbidden. Choose a more descriptive name for "{{name}}"',

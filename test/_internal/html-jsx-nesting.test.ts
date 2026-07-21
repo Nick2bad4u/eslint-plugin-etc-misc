@@ -32,7 +32,8 @@ describe("parser-significant HTML JSX nesting relationships", () => {
     it("classifies invalid direct-parent relationships", () => {
         expect.hasAssertions();
 
-        expect(getHtmlNestingViolation("span", ["img"])).toStrictEqual({
+        expect(getHtmlNestingViolation("span", ["img"])).toBeUndefined();
+        expect(getHtmlNestingViolation("span", ["img"], true)).toStrictEqual({
             kind: "void-parent",
             relatedName: "img",
         });

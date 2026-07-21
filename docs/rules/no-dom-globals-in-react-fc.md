@@ -4,8 +4,9 @@ Disallow browser-only globals while rendering React function components.
 
 ## Targeted pattern scope
 
-This rule targets uppercase function components and components wrapped in
-`memo` or `forwardRef`, including render-time hook initializers.
+This rule targets uppercase function components, anonymous default exports, and
+component functions structurally owned by an uppercase or default-exported
+library wrapper, including render-time hook initializers.
 
 ## What this rule reports
 
@@ -17,10 +18,13 @@ function-component SSR.
 Function components can execute on the server. Reading browser-only state in
 their render path can crash SSR or produce hydration mismatches.
 
-The rule recognizes uppercase function declarations and variable names, plus
-components wrapped in `memo` or `forwardRef`, when their implementation contains
-JSX. Lazy initializers passed to `useState`, `useReducer`, and `useMemo` are part
-of rendering and are also checked.
+The rule recognizes uppercase function declarations and variable names,
+anonymous default exports, and functions passed as the first argument through
+one or more wrappers whose result is assigned to an uppercase component or
+exported as default. This structural ownership supports wrappers such as
+`memo`, `forwardRef`, and library-specific `observer` helpers without trusting a
+callee name by itself. Lazy initializers passed to `useState`, `useReducer`, and
+`useMemo` are part of rendering and are also checked.
 
 ## ❌ Incorrect
 
@@ -43,10 +47,19 @@ const Header = () => {
 
  return <button onClick={() => window.alert("Clicked")} />;
 };
+
+export default () => {
+ const hasDocument = "document" in globalThis;
+ return <h1>{hasDocument ? globalThis.document.title : ""}</h1>;
+};
 ```
 
-Effects, event callbacks, other deferred functions, `typeof`-guarded accesses,
-shadowed locals, and lowercase non-component helpers are not reported.
+Effects, event callbacks, other deferred functions, guarded accesses, shadowed
+locals, and lowercase non-component helpers are not reported. Guards may use
+direct or `globalThis` `typeof` comparisons, `"name" in globalThis`, or a
+predicate stored in a single `const` binding. Mutable or shadowed predicates are
+intentionally not trusted. Shared scope, guard, JSX, and execution results are
+cached per linted file.
 
 ## Behavior and migration notes
 

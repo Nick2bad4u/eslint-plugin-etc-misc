@@ -94,7 +94,11 @@
 .sb-doc-getting-started > .menu__link,
 .sb-doc-api-overview > .menu__link,
 .sb-cat-presets > .menu__list-item-collapsible .menu__link,
-.sb-cat-developer > .menu__list-item-collapsible .menu__link,
+.sb-cat-developer > .menu__list-item-collapsible .menu__link {
+    border-inline-start: 4px solid transparent;
+    padding-inline-start: calc(var(--ifm-menu-link-padding-horizontal) - 4px);
+}
+
 .sb-cat-developer-adr > .menu__list-item-collapsible .menu__link,
 .sb-cat-api-types > .menu__list-item-collapsible .menu__link,
 .sb-cat-api-runtime > .menu__list-item-collapsible .menu__link,
@@ -148,7 +152,12 @@
 .sb-cat-developer-adr > .menu__list-item-collapsible .menu__link,
 .sb-cat-presets > .menu__list-item-collapsible .menu__link,
 .sb-cat-api-types > .menu__list-item-collapsible .menu__link,
-.sb-cat-api-runtime > .menu__list-item-collapsible .menu__link,
+.sb-cat-api-runtime > .menu__list-item-collapsible .menu__link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
 .sb-cat-dev-charts > .menu__list-item-collapsible .menu__link,
 .sb-cat-rules-core > .menu__list-item-collapsible .menu__link,
 .sb-cat-rules-typescript > .menu__list-item-collapsible .menu__link,
@@ -162,7 +171,16 @@
 .sb-cat-developer-adr > .menu__list-item-collapsible .menu__link::before,
 .sb-cat-presets > .menu__list-item-collapsible .menu__link::before,
 .sb-cat-api-types > .menu__list-item-collapsible .menu__link::before,
-.sb-cat-api-runtime > .menu__list-item-collapsible .menu__link::before,
+.sb-cat-api-runtime > .menu__list-item-collapsible .menu__link::before {
+    margin-inline-start: auto;
+    padding: 0.07rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
 .sb-cat-dev-charts > .menu__list-item-collapsible .menu__link::before,
 .sb-cat-rules-core > .menu__list-item-collapsible .menu__link::before,
 .sb-cat-rules-typescript > .menu__list-item-collapsible .menu__link::before,

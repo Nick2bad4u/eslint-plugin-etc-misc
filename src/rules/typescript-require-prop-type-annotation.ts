@@ -62,6 +62,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "code",
         hasSuggestions: true,
+        languages: ["js/js"],
         messages: {
             forbidden: "Expecting a type annotation for this property.",
             suggestAnnotateUnknown:

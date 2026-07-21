@@ -263,6 +263,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-misused-generics",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             cannotInfer:
                 "Type parameter '{{name}}' cannot be inferred from any parameter.",

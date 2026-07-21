@@ -4,90 +4,88 @@ sidebar_position: 40
 
 # Releasing `eslint-plugin-etc-misc`
 
-This page mirrors the root [`RELEASING.md`](https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/RELEASING.md)
-guide so maintainers can follow release steps directly from the docs site.
+This page mirrors the root
+[`RELEASING.md`](https://github.com/Nick2bad4u/eslint-plugin-etc-misc/blob/main/RELEASING.md)
+guide.
 
 ## One-time setup
 
-1. Ensure you can publish this package name on npm (`eslint-plugin-etc-misc`).
-2. In GitHub repo settings, add secret: `NPM_TOKEN`.
-   - Use an npm automation token with publish access.
-3. Confirm Actions are enabled for the repository.
+1. Configure npm trusted publishing for
+   `Nick2bad4u/eslint-plugin-etc-misc` and
+   `.github/workflows/release.yml`.
+2. Confirm GitHub Actions can write repository contents and request an OIDC
+   identity token.
+3. Authenticate the GitHub CLI with workflow access.
 
-## Pre-release checks (local)
+The workflow publishes with npm provenance and does not need a long-lived
+`NPM_TOKEN` when trusted publishing is configured.
 
-```bash
-npm ci
+## Pre-release checks
+
+Release from a clean, current `main` after the exact source commit passes CI
+and security checks.
+
+```powershell
+npm ci --force
 npm run release:check
+npm run lint:package-check:strict
+npm run docs:typecheck
+npm run docs:build
 npm run changelog:preview
 ```
 
-## Changelog and release notes flow
-
-This repository uses `git-cliff` for changelog generation and release notes.
-
-- `npm run changelog:generate` writes `CHANGELOG.md` locally.
-- `npm run changelog:preview` prints unreleased notes to stdout.
-- `npm run changelog:release-notes` prints the latest tagged release notes for
-  CI usage.
-
-Important: CI does **not** commit or push changelog changes. Release notes are
-generated at workflow runtime and attached to the GitHub release body.
-
-## Release pipeline at a glance
-
-```mermaid
-flowchart TD
-   A[Local pre-release checks] --> B[Bump package.json version]
-   B --> C[Push matching v* tag]
-   C --> D[CI validates tag/version parity]
-   D --> E[CI runs lint + typecheck + tests + pack dry-run]
-   E --> F[CI generates release notes via git-cliff]
-   F --> G[CI publishes npm package with provenance]
-   G --> H[CI creates GitHub release]
-```
+Verify the packed tarball separately in a clean production consumer, including
+ESM, CommonJS, declarations, real ESLint execution, and
+`npm audit --omit=dev`.
 
 ## Create a release
 
-1. Bump `package.json` version.
-2. Commit and push to `main`.
-3. Create and push a matching `v*` tag:
+Do not bump the manifest, create a tag, or publish manually:
 
-   ```bash
-   git tag v0.1.0
-   git push origin v0.1.0
-   ```
+```powershell
+gh workflow run release.yml `
+  --ref main `
+  -f release_type=<patch|minor|major> `
+  -f ref=main `
+  -f skip_verify=false
+```
 
-The release workflow will:
+The optional `version=x.y.z` input overrides `release_type`.
 
-- validate tag matches `package.json` version
-- run lint/typecheck/tests + pack dry-run
-- generate release notes with `git-cliff` using full git history and tags
-- publish with provenance (`npm publish --provenance`)
-- create the GitHub release using generated notes from `temp/release-notes.md`
+The workflow verifies the package, applies and commits the version, creates and
+pushes the annotated tag, renders exact-tag release notes, publishes to npm with
+provenance, and creates the GitHub release with tarball and ZIP assets. Never
+set `skip_verify=true` for a normal release.
 
-`workflow_dispatch` can perform a full release (version bump, tag, publish)
-when configured with a valid target branch and npm token.
+## Post-release verification
 
-## Notes
+The release workflow pushes its version commit and tag with `GITHUB_TOKEN`, so
+GitHub intentionally suppresses new `push` workflow runs for those writes.
+After the release completes, explicitly dispatch the release-commit checks:
 
-- If tag and `package.json` version differ, release fails intentionally.
-- CI changelog generation is intentionally no-commit/no-push.
+```powershell
+gh workflow run ci.yml --ref main
+gh workflow run codeql.yml --ref main
+gh workflow run deploy-docusaurus.yml --ref main
+```
 
-## Pre-publish package surface checklist
+Wait for those CI, security, and documentation runs. Then confirm:
 
-This project is currently dogfooded from source, so publish-surface validation
-is intentionally lower priority during architecture work. Before the first real
-public publish, complete all of the following package-entrypoint checks:
+- Git tag, GitHub release, release commit, and npm version align;
+- npm provenance/signatures and registry integrity are present;
+- the published tarball has the expected files and public API;
+- fresh ESM, CommonJS, and NodeNext consumers work;
+- the production dependency tree has no audit advisories;
+- live documentation links resolve; and
+- local and remote `main` are clean and consistent.
 
-1. Build artifact import succeeds (`dist/plugin.js`).
-2. Package `exports` resolution works for `.` and `./package.json`.
-3. Types entrypoint resolves (`dist/plugin.d.ts`) from a consumer tsconfig.
-4. Default plugin export shape is validated from built output.
-5. `npm pack --dry-run` output is validated, then packed tarball import is
-   smoke-tested in an isolated temp project.
+## Changelog commands
 
-Treat this checklist as a release gate alongside lint/typecheck/tests.
+- `npm run changelog:preview` previews unreleased notes.
+- `npm run changelog:generate` writes `CHANGELOG.md`.
+- `npm run changelog:release-notes` renders the release at `HEAD`.
+
+The release body is generated at workflow runtime and is not committed.
 
 ## Related docs
 

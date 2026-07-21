@@ -164,8 +164,8 @@ const collectPropertyKinds = (
     let value = initialValue;
 
     while (
-        (typeof value === "object" && value !== null) ||
-        typeof value === "function"
+        typeof value === "function" ||
+        (value !== null && typeof value === "object")
     ) {
         for (const propertyKey of Reflect.ownKeys(value)) {
             if (
@@ -614,7 +614,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             const memberKind = propertyKinds.get(propertyName);
             if (
                 !isDefined(memberKind) ||
-                (isCallUsage(memberExpression) && memberKind !== "method")
+                (memberKind !== "method" && isCallUsage(memberExpression))
             ) {
                 context.report({
                     data: {
@@ -638,6 +638,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-use-extend-native",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             forbidden:
                 "Avoid using '{{nativeTypeName}}.{{propertyName}}' when it is not part of the native JavaScript API.",

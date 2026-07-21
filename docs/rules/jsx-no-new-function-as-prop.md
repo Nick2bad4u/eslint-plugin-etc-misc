@@ -64,9 +64,9 @@ interface Options {
 }
 ```
 
-Default: `{}`
+Default: `{ nativeAllowList: "all" }`
 
-`nativeAllowList` ignores case-insensitive attribute names on intrinsic JSX elements. A common configuration allows DOM event handlers while continuing to check custom components.
+`nativeAllowList` ignores case-insensitive attribute names on intrinsic JSX elements. The default `"all"` keeps ordinary DOM event handlers out of scope while continuing to check custom components. Set it to `[]` to check every intrinsic attribute, or provide selected names to ignore.
 
 ```tsx
 // config: { nativeAllowList: ["onClick", "onChange"] }

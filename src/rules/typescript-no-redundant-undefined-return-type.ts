@@ -227,6 +227,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "code",
         hasSuggestions: true,
+        languages: ["js/js"],
         messages: {
             forbidden:
                 "Return types should not redundantly include `undefined` when the function deterministically returns a definitely-defined value.",

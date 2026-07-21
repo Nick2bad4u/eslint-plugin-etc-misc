@@ -37,6 +37,7 @@ export const createSelectorRule = (
                 url: input.url,
             },
             hasSuggestions: false,
+            languages: ["js/js"],
             messages: {
                 [input.messageId]: input.message,
             },

@@ -128,6 +128,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-internal",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             forbidden: '"{{name}}" is internal.',
             forbiddenWithComment: '"{{name}}" is internal: {{comment}}',

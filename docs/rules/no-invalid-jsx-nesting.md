@@ -8,7 +8,7 @@ This rule checks intrinsic JSX element names such as `p`, `div`, `table`, `tr`, 
 
 - elements rendered under a direct parent whose HTML parsing mode will insert, move, or discard nodes, such as `tr` directly under `table`;
 - descendants that implicitly close or conflict with an ancestor, such as `div` inside `p`; and
-- children placed inside void elements such as `img`.
+- children placed inside void elements such as `img` when `checkVoidParents` is enabled.
 
 Fragments and direct `map` or `flatMap` render callbacks preserve the surrounding intrinsic-element ancestry. A custom component is a boundary because the rule cannot know which DOM elements that component renders. JSX passed through an attribute is analyzed independently from the receiving element's children.
 
@@ -82,7 +82,19 @@ The rule is opt-in and is included by both the `all` and `allStrict` presets. It
 
 ### Options
 
-This rule has no options.
+```ts
+interface Options {
+ checkVoidParents?: boolean;
+}
+```
+
+Default: `{ checkVoidParents: false }`
+
+Set `checkVoidParents` to `true` to report JSX children written inside void
+elements such as `img` or `input`. This check is disabled by default because
+JSX parsers and renderers already reject or normalize void-element shapes,
+and some non-HTML JSX runtimes intentionally assign different semantics to
+lowercase names.
 
 ## Additional examples
 

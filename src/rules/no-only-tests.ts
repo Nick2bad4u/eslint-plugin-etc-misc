@@ -1,11 +1,33 @@
-import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
-
-import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import {
+    AST_NODE_TYPES,
+    type TSESTree as es,
+    TSESLint,
+} from "@typescript-eslint/utils";
 import { arrayFirst, arrayJoin, isDefined, setHas } from "ts-extras";
 
+import { findVariable } from "../_internal/jsx-react-analysis.js";
 import { ruleCreator } from "../_internal/rule-creator.js";
 
+type CallPath = Readonly<{
+    readonly members: readonly MemberSegment[];
+    readonly root: Readonly<es.Identifier>;
+}>;
+type ImportBinding = Readonly<{
+    readonly kind:
+        | "default"
+        | "named"
+        | "namespace";
+    readonly name?: string;
+    readonly source: string;
+}>;
+
+type MemberSegment = Readonly<{
+    readonly member: Readonly<es.MemberExpression>;
+    readonly name: string;
+}>;
+
 type MessageIds = "focusedTest" | "forbiddenFunction";
+
 type Options = readonly [RuleOptions];
 
 type RuleOptions = Readonly<{
@@ -15,12 +37,15 @@ type RuleOptions = Readonly<{
     readonly functions?: readonly string[];
 }>;
 
-/* eslint-disable perfectionist/sort-arrays -- Preserve the upstream framework matching order for recognizable defaults. */
+/* eslint-disable perfectionist/sort-arrays -- Preserve the framework matching order for recognizable defaults. */
 const defaultBlocks = [
     "describe",
     "it",
     "context",
     "test",
+    "bench",
+    "suite",
+    "QUnit",
     "tape",
     "fixture",
     "serial",
@@ -33,14 +58,35 @@ const defaultBlocks = [
 ] as const;
 /* eslint-enable perfectionist/sort-arrays -- Re-enable after the intentional compatibility order. */
 
+const defaultFocusedFunctions = ["fdescribe", "fit"] as const;
+
 const defaultOptions = [
     {
         block: defaultBlocks,
         fix: false,
         focus: ["only"],
-        functions: [],
+        functions: defaultFocusedFunctions,
     },
 ] as const satisfies Options;
+
+const supportedFrameworkSources: ReadonlySet<string> = new Set([
+    "@jest/globals",
+    "@playwright/test",
+    "ava",
+    "bun:test",
+    "mocha",
+    "node:test",
+    "qunit",
+    "tape",
+    "vitest",
+]);
+
+const defaultImportRoots: ReadonlyMap<string, string> = new Map([
+    ["ava", "test"],
+    ["node:test", "test"],
+    ["qunit", "QUnit"],
+    ["tape", "tape"],
+]);
 
 const unwrapExpression = (
     expression: Readonly<es.Expression>
@@ -60,19 +106,28 @@ const unwrapExpression = (
 
 const getStaticMemberName = (
     memberExpression: Readonly<es.MemberExpression>
-): null | string =>
-    !memberExpression.computed &&
-    memberExpression.property.type === AST_NODE_TYPES.Identifier
-        ? memberExpression.property.name
-        : null;
+): string | undefined => {
+    if (
+        !memberExpression.computed &&
+        memberExpression.property.type === AST_NODE_TYPES.Identifier
+    ) {
+        return memberExpression.property.name;
+    }
+
+    return memberExpression.computed &&
+        memberExpression.property.type === AST_NODE_TYPES.Literal &&
+        typeof memberExpression.property.value === "string"
+        ? memberExpression.property.value
+        : undefined;
+};
 
 const getCallPath = (
     rawExpression: Readonly<es.Expression>
-): null | readonly string[] => {
+): CallPath | undefined => {
     const expression = unwrapExpression(rawExpression);
 
     if (expression.type === AST_NODE_TYPES.Identifier) {
-        return [expression.name];
+        return { members: [], root: expression };
     }
 
     if (expression.type === AST_NODE_TYPES.CallExpression) {
@@ -80,21 +135,143 @@ const getCallPath = (
     }
 
     if (expression.type !== AST_NODE_TYPES.MemberExpression) {
-        return null;
+        return undefined;
     }
 
     const propertyName = getStaticMemberName(expression);
     const objectPath = getCallPath(expression.object);
 
-    return propertyName === null || objectPath === null
-        ? null
-        : [...objectPath, propertyName];
+    return !isDefined(propertyName) || !isDefined(objectPath)
+        ? undefined
+        : {
+              members: [
+                  ...objectPath.members,
+                  { member: expression, name: propertyName },
+              ],
+              root: objectPath.root,
+          };
+};
+
+const getImportedName = (
+    specifier: Readonly<es.ImportSpecifier>
+): string | undefined =>
+    specifier.imported.type === AST_NODE_TYPES.Identifier
+        ? specifier.imported.name
+        : typeof specifier.imported.value === "string"
+          ? specifier.imported.value
+          : undefined;
+
+const getImportBinding = (
+    sourceCode: Readonly<TSESLint.SourceCode>,
+    identifier: Readonly<es.Identifier>
+): ImportBinding | undefined => {
+    const variable = findVariable(sourceCode, identifier);
+    const definition = arrayFirst(variable?.defs ?? []);
+
+    if (
+        variable?.defs.length !== 1 ||
+        definition?.type !== TSESLint.Scope.DefinitionType.ImportBinding ||
+        definition.parent.type !== AST_NODE_TYPES.ImportDeclaration ||
+        definition.parent.importKind === "type" ||
+        typeof definition.parent.source.value !== "string" ||
+        !setHas(supportedFrameworkSources, definition.parent.source.value) ||
+        definition.node.type === AST_NODE_TYPES.TSImportEqualsDeclaration
+    ) {
+        return undefined;
+    }
+
+    const source = definition.parent.source.value;
+
+    if (definition.node.type === AST_NODE_TYPES.ImportSpecifier) {
+        const name = getImportedName(definition.node);
+
+        return isDefined(name) ? { kind: "named", name, source } : undefined;
+    }
+
+    return {
+        kind:
+            definition.node.type === AST_NODE_TYPES.ImportDefaultSpecifier
+                ? "default"
+                : "namespace",
+        source,
+    };
+};
+
+const isUnshadowedGlobal = (
+    sourceCode: Readonly<TSESLint.SourceCode>,
+    identifier: Readonly<es.Identifier>
+): boolean => {
+    const variable = findVariable(sourceCode, identifier);
+
+    return !isDefined(variable) || variable.defs.length === 0;
+};
+
+const resolveCanonicalCallPath = (
+    sourceCode: Readonly<TSESLint.SourceCode>,
+    callPath: Readonly<CallPath>,
+    trustConfiguredBlocks: boolean
+): readonly string[] | undefined => {
+    const rawParts = [
+        callPath.root.name,
+        ...callPath.members.map(({ name }) => name),
+    ];
+
+    if (
+        trustConfiguredBlocks ||
+        isUnshadowedGlobal(sourceCode, callPath.root)
+    ) {
+        return rawParts;
+    }
+
+    const binding = getImportBinding(sourceCode, callPath.root);
+
+    if (!isDefined(binding)) {
+        return undefined;
+    }
+
+    if (binding.kind === "named") {
+        return [binding.name ?? callPath.root.name, ...rawParts.slice(1)];
+    }
+
+    if (binding.kind === "namespace") {
+        return rawParts.length > 1 ? rawParts.slice(1) : undefined;
+    }
+
+    const defaultRoot = defaultImportRoots.get(binding.source);
+
+    return isDefined(defaultRoot)
+        ? [defaultRoot, ...rawParts.slice(1)]
+        : undefined;
+};
+
+const resolveStandaloneFunctionName = (
+    sourceCode: Readonly<TSESLint.SourceCode>,
+    identifier: Readonly<es.Identifier>,
+    trustConfiguredFunctions: boolean
+): string | undefined => {
+    if (
+        trustConfiguredFunctions ||
+        isUnshadowedGlobal(sourceCode, identifier)
+    ) {
+        return identifier.name;
+    }
+
+    const binding = getImportBinding(sourceCode, identifier);
+
+    return binding?.kind === "named" ? binding.name : undefined;
 };
 
 const matchesBlock = (callPath: string, block: string): boolean =>
     block.endsWith("*")
         ? callPath.startsWith(block.slice(0, -1))
         : callPath.startsWith(`${block}.`);
+
+const matchesDefaultNames = (
+    names: readonly string[],
+    defaults: readonly string[]
+): boolean =>
+    names.length === defaults.length &&
+    names.every((name, index) => name === defaults[index]);
 
 const getSafeFocusFix = (
     sourceCode: Readonly<TSESLint.SourceCode>,
@@ -140,7 +317,18 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     create: (context, [options]) => {
         const blocks = options.block ?? defaultBlocks;
         const focusedNames = new Set(options.focus ?? ["only"]);
-        const forbiddenFunctions = new Set(options.functions);
+        const forbiddenFunctions = new Set(
+            options.functions ?? defaultFocusedFunctions
+        );
+        const reportedFocusMembers = new Set<Readonly<es.MemberExpression>>();
+        const trustConfiguredBlocks = !matchesDefaultNames(
+            blocks,
+            defaultBlocks
+        );
+        const trustConfiguredFunctions = !matchesDefaultNames(
+            options.functions ?? defaultFocusedFunctions,
+            defaultFocusedFunctions
+        );
 
         return {
             CallExpression: (
@@ -148,60 +336,82 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             ): void => {
                 const callee = unwrapExpression(callExpression.callee);
 
+                if (callee.type === AST_NODE_TYPES.Identifier) {
+                    const canonicalFunctionName = resolveStandaloneFunctionName(
+                        context.sourceCode,
+                        callee,
+                        trustConfiguredFunctions
+                    );
+
+                    if (
+                        isDefined(canonicalFunctionName) &&
+                        setHas(forbiddenFunctions, canonicalFunctionName)
+                    ) {
+                        context.report({
+                            data: { functionName: callee.name },
+                            messageId: "forbiddenFunction",
+                            node: callee,
+                        });
+                    }
+
+                    return;
+                }
+
+                const callPath = getCallPath(callee);
+
+                if (!isDefined(callPath)) {
+                    return;
+                }
+
+                const canonicalParts = resolveCanonicalCallPath(
+                    context.sourceCode,
+                    callPath,
+                    trustConfiguredBlocks
+                );
+
+                if (!isDefined(canonicalParts)) {
+                    return;
+                }
+
+                const canonicalCallPath = arrayJoin(canonicalParts, ".");
+
                 if (
-                    callee.type === AST_NODE_TYPES.Identifier &&
-                    setHas(forbiddenFunctions, callee.name)
+                    blocks.every(
+                        (block) => !matchesBlock(canonicalCallPath, block)
+                    )
                 ) {
-                    context.report({
-                        data: { functionName: callee.name },
-                        messageId: "forbiddenFunction",
-                        node: callee,
-                    });
-
                     return;
                 }
 
-                if (callee.type !== AST_NODE_TYPES.MemberExpression) {
-                    return;
-                }
+                for (const segment of callPath.members) {
+                    if (
+                        !setHas(focusedNames, segment.name) ||
+                        setHas(reportedFocusMembers, segment.member)
+                    ) {
+                        continue;
+                    }
 
-                const focusName = getStaticMemberName(callee);
-                if (focusName === null || !setHas(focusedNames, focusName)) {
-                    return;
-                }
+                    reportedFocusMembers.add(segment.member);
 
-                const callPathParts = getCallPath(callee);
-                if (callPathParts === null) {
-                    return;
-                }
+                    const safeFix =
+                        options.fix === true
+                            ? getSafeFocusFix(
+                                  context.sourceCode,
+                                  callExpression,
+                                  segment.member
+                              )
+                            : undefined;
+                    const reportDescriptor = {
+                        data: { callPath: canonicalCallPath },
+                        messageId: "focusedTest" as const,
+                        node: segment.member,
+                    };
 
-                const callPath = arrayJoin(callPathParts, ".");
-                if (blocks.every((block) => !matchesBlock(callPath, block))) {
-                    return;
-                }
-
-                const safeFix =
-                    options.fix === true
-                        ? getSafeFocusFix(
-                              context.sourceCode,
-                              callExpression,
-                              callee
-                          )
-                        : undefined;
-
-                if (isDefined(safeFix)) {
-                    context.report({
-                        data: { callPath },
-                        fix: safeFix,
-                        messageId: "focusedTest",
-                        node: callee,
-                    });
-                } else {
-                    context.report({
-                        data: { callPath },
-                        messageId: "focusedTest",
-                        node: callee,
-                    });
+                    context.report(
+                        isDefined(safeFix)
+                            ? { ...reportDescriptor, fix: safeFix }
+                            : reportDescriptor
+                    );
                 }
             },
         };
@@ -213,7 +423,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 block: defaultBlocks,
                 fix: false,
                 focus: ["only"],
-                functions: [],
+                functions: defaultFocusedFunctions,
             },
         ],
         deprecated: false,
@@ -226,6 +436,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "code",
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             focusedTest:
                 "Focused test invocation '{{callPath}}' is not permitted; remove the focus method before committing.",
@@ -257,7 +468,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     },
                     functions: {
                         description:
-                            "Standalone function names that always represent focused tests.",
+                            "Standalone function names that represent focused tests.",
                         items: { minLength: 1, type: "string" },
                         type: "array",
                         uniqueItems: true,

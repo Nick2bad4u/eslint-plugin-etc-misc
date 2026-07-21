@@ -87,6 +87,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "whitespace",
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             inconsistent:
                 "Consecutive empty lines should be collapsed to a single blank line.",

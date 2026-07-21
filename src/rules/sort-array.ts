@@ -109,6 +109,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "code",
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             incorrectSorting:
                 "Array literal elements should be sorted alphabetically.",

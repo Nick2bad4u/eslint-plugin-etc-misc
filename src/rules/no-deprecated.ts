@@ -132,6 +132,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-deprecated",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             forbidden: '"{{name}}" is deprecated.',
             forbiddenWithComment: '"{{name}}" is deprecated: {{comment}}',

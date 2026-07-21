@@ -90,6 +90,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "code",
         hasSuggestions: true,
+        languages: ["js/js"],
         messages: {
             forbidden: "Prefer readonly set type aliases.",
             suggestRequireReadonlySetTypeAlias:

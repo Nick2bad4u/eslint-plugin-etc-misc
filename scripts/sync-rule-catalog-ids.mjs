@@ -9,6 +9,12 @@ const repositoryRootPath = path.resolve(scriptsDirectoryPath, "..");
 
 const rulesDirectoryPath = path.join(repositoryRootPath, "src", "rules");
 const ruleDocsDirectoryPath = path.join(repositoryRootPath, "docs", "rules");
+const ruleCatalogAssignmentsPath = path.join(
+    repositoryRootPath,
+    "src",
+    "_internal",
+    "rule-catalog-assignments.json"
+);
 
 const ruleCatalogMarkerPrefix = "> **Rule catalog ID:**";
 const defaultFurtherReadingLink =
@@ -16,23 +22,6 @@ const defaultFurtherReadingLink =
 const furtherReadingHeadingPattern = /^##\s+Further\s+reading\s*$/imu;
 const existingCatalogMarkerPattern =
     /^> \*\*Rule catalog ID:\*\* R\d{3}\s*\n?/gmu;
-
-/**
- * @param {string} leftRuleName
- * @param {string} rightRuleName
- *
- * @returns {number}
- */
-const compareRuleNamesForCatalog = (leftRuleName, rightRuleName) => {
-    const leftIsTypeScriptRule = leftRuleName.startsWith("typescript/");
-    const rightIsTypeScriptRule = rightRuleName.startsWith("typescript/");
-
-    if (leftIsTypeScriptRule !== rightIsTypeScriptRule) {
-        return leftIsTypeScriptRule ? 1 : -1;
-    }
-
-    return leftRuleName.localeCompare(rightRuleName);
-};
 
 /**
  * @param {string} ruleFileName
@@ -55,14 +44,6 @@ const toRuleNameFromFileName = (ruleFileName) => {
  * @returns {string}
  */
 const toRuleDocId = (ruleName) => ruleName.replaceAll("/", "-");
-
-/**
- * @param {number} catalogIndex
- *
- * @returns {string}
- */
-const toRuleCatalogId = (catalogIndex) =>
-    `R${`${catalogIndex}`.padStart(3, "0")}`;
 
 /**
  * @param {string} sourceText
@@ -153,20 +134,89 @@ const ruleFileNames = (await readdir(rulesDirectoryPath))
         leftFileName.localeCompare(rightFileName)
     );
 
-const ruleCatalogEntries = ruleFileNames
-    .map(toRuleNameFromFileName)
-    .sort(compareRuleNamesForCatalog)
-    .map((ruleName, zeroBasedIndex) => {
-        const catalogIndex = zeroBasedIndex + 1;
+const ruleNames = new Set(ruleFileNames.map(toRuleNameFromFileName));
+const parsedCatalogAssignments = JSON.parse(
+    await readFile(ruleCatalogAssignmentsPath, "utf8")
+);
 
-        return {
-            catalogId: toRuleCatalogId(catalogIndex),
-            catalogIndex,
-            docId: toRuleDocId(ruleName),
-            isTypeScriptRule: ruleName.startsWith("typescript/"),
-            ruleName,
-        };
+if (
+    typeof parsedCatalogAssignments !== "object" ||
+    parsedCatalogAssignments === null ||
+    Array.isArray(parsedCatalogAssignments)
+) {
+    throw new TypeError("Rule catalog assignments must be a JSON object.");
+}
+
+const seenCatalogIndexes = new Set();
+const ruleCatalogEntries = [];
+
+for (const [ruleName, assignment] of Object.entries(parsedCatalogAssignments)) {
+    if (
+        typeof assignment !== "object" ||
+        assignment === null ||
+        Array.isArray(assignment)
+    ) {
+        throw new TypeError(
+            `Rule catalog assignment for ${ruleName} must be an object.`
+        );
+    }
+
+    const { catalogIndex, status } = assignment;
+
+    if (!Number.isSafeInteger(catalogIndex) || catalogIndex < 1) {
+        throw new TypeError(
+            `Rule catalog index for ${ruleName} must be a positive safe integer.`
+        );
+    }
+
+    if (seenCatalogIndexes.has(catalogIndex)) {
+        throw new Error(`Duplicate rule catalog index R${catalogIndex}.`);
+    }
+
+    seenCatalogIndexes.add(catalogIndex);
+
+    if (status !== "active" && status !== "retired") {
+        throw new TypeError(
+            `Rule catalog status for ${ruleName} must be active or retired.`
+        );
+    }
+
+    if (status === "retired") {
+        if (ruleNames.has(ruleName)) {
+            throw new Error(
+                `Retired rule catalog entry ${ruleName} still has a source module.`
+            );
+        }
+
+        continue;
+    }
+
+    if (!ruleNames.has(ruleName)) {
+        throw new Error(
+            `Active rule catalog entry ${ruleName} has no source module.`
+        );
+    }
+
+    ruleCatalogEntries.push({
+        catalogId: `R${`${catalogIndex}`.padStart(3, "0")}`,
+        catalogIndex,
+        docId: toRuleDocId(ruleName),
+        isTypeScriptRule: ruleName.startsWith("typescript/"),
+        ruleName,
     });
+}
+
+for (const ruleName of ruleNames) {
+    if (!Object.hasOwn(parsedCatalogAssignments, ruleName)) {
+        throw new Error(
+            `Rule ${ruleName} has no persistent catalog assignment. Allocate the next unused R### id explicitly.`
+        );
+    }
+}
+
+ruleCatalogEntries.sort(
+    (leftEntry, rightEntry) => leftEntry.catalogIndex - rightEntry.catalogIndex
+);
 
 const missingDocFilePaths = [];
 

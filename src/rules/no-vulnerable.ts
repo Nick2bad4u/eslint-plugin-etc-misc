@@ -460,6 +460,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-vulnerable",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             checkerError:
                 "ReDoS analysis failed ({{kind}}): {{message}}. Consider setting ignoreErrors to true for this pattern.",

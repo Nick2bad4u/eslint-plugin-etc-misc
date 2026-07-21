@@ -39,6 +39,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-exhaustive-switch",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             forbidden: "Add a default case to make this switch exhaustive.",
         },

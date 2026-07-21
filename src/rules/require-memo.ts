@@ -9,6 +9,7 @@ import {
     unwrapExpression,
 } from "../_internal/jsx-react-analysis.js";
 import { ruleCreator } from "../_internal/rule-creator.js";
+import { createDeprecatedRuleInfo } from "../_internal/rule-deprecation.js";
 
 type ComponentFunction =
     | es.ArrowFunctionExpression
@@ -306,16 +307,23 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     defaultOptions,
     meta: {
         defaultOptions: [{ ignoredComponents: {} }],
-        deprecated: false,
+        deprecated: createDeprecatedRuleInfo({
+            availableUntil: "3.0.0",
+            deprecatedSince: "2.0.0",
+            message:
+                "Deprecated because blanket React.memo requirements are not a sound performance policy and conflict with compiler-managed memoization.",
+            ruleId: "require-memo",
+        }),
         docs: {
-            deprecated: false,
+            deprecated: true,
             description:
                 "require exported function components to use explicit React memoization.",
-            frozen: false,
+            frozen: true,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/require-memo",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             memoRequired:
                 "Exported component '{{componentName}}' is not wrapped in React.memo(); add memoization only when profiling shows stable props make it beneficial.",

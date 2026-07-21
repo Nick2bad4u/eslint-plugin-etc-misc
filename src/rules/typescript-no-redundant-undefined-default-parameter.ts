@@ -245,6 +245,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "code",
         hasSuggestions: true,
+        languages: ["js/js"],
         messages: {
             forbidden:
                 "Default parameters with definitely-defined initializers should not redundantly include `undefined` in their type union.",

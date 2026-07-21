@@ -1,111 +1,42 @@
-import { AST_NODE_TYPES, type TSESTree as es } from "@typescript-eslint/utils";
-import { isDefined, setHas } from "ts-extras";
-
 import {
-    getEnclosingFunction,
-    isComponentOpeningElement,
-} from "../_internal/jsx-react-analysis.js";
-import { collectUnstableValues } from "../_internal/react-memo-stability.js";
-import { ruleCreator } from "../_internal/rule-creator.js";
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation.js";
+import canonicalRule from "./no-unstable-react-children.js";
 
-type MessageIds = "unstableChild";
-
-type Options = readonly [RuleOption?];
-
-type RuleOption = Readonly<{
-    readonly strict?: boolean;
-}>;
-
-const defaultOptions: Options = [{ strict: false }];
-
-/**
- * Report unstable child values passed to custom components without inserting
- * hooks or guessing dependency arrays.
- */
-const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
-    Options,
-    MessageIds
->({
-    create: (context, [configuredOption]) => {
-        const strict = configuredOption?.strict ?? false;
-        const reportedNodes = new Set<Readonly<es.Expression>>();
-
-        return {
-            JSXElement: (node: Readonly<es.JSXElement>): void => {
-                if (
-                    !isComponentOpeningElement(node.openingElement) ||
-                    !isDefined(getEnclosingFunction(context.sourceCode, node))
-                ) {
-                    return;
-                }
-
-                for (const child of node.children) {
-                    const unstableValues =
-                        child.type === AST_NODE_TYPES.JSXElement ||
-                        child.type === AST_NODE_TYPES.JSXFragment
-                            ? [{ kind: "jsx" as const, node: child }]
-                            : child.type ===
-                                    AST_NODE_TYPES.JSXExpressionContainer &&
-                                child.expression.type !==
-                                    AST_NODE_TYPES.JSXEmptyExpression
-                              ? collectUnstableValues(
-                                    context.sourceCode,
-                                    child.expression,
-                                    strict
-                                )
-                              : [];
-
-                    for (const unstableValue of unstableValues) {
-                        if (setHas(reportedNodes, unstableValue.node)) {
-                            continue;
-                        }
-
-                        reportedNodes.add(unstableValue.node);
-                        context.report({
-                            data: { valueKind: unstableValue.kind },
-                            messageId: "unstableChild",
-                            node: unstableValue.node,
-                        });
-                    }
-                }
-            },
-        };
-    },
-    defaultOptions,
+const compatibilityAlias: typeof canonicalRule = {
+    ...canonicalRule,
+    // eslint-disable-next-line @typescript-eslint/unbound-method -- Rule create callbacks have no receiver state; preserving identity makes this a true alias.
+    create: canonicalRule.create,
     meta: {
-        defaultOptions: [{ strict: false }],
-        deprecated: false,
+        ...canonicalRule.meta,
         docs: {
-            deprecated: false,
-            description:
-                "require explicit review of unstable complex children passed to custom components.",
-            frozen: false,
+            ...canonicalRule.meta.docs,
+            description: "deprecated alias for no-unstable-react-children.",
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/require-usememo-children",
         },
-        hasSuggestions: false,
-        messages: {
-            unstableChild:
-                "This {{valueKind}} child has a new identity on every render; use ordinary composition unless profiling proves stable child identity is required.",
-        },
-        schema: [
-            {
-                additionalProperties: false,
-                description:
-                    "Configuration for classifying unknown child expressions.",
-                properties: {
-                    strict: {
-                        description:
-                            "Report calls, member expressions, and tagged templates whose identity cannot be proven stable.",
-                        type: "boolean",
-                    },
-                },
-                type: "object",
-            },
-        ],
-        type: "suggestion",
     },
-    name: "require-usememo-children",
-});
+};
+
+/** Preserve the historical rule ID as a compatibility alias through v3. */
+const rule: typeof compatibilityAlias = withDeprecatedRuleLifecycle(
+    compatibilityAlias,
+    {
+        availableUntil: "3.0.0",
+        deprecatedSince: "2.0.0",
+        message:
+            "Deprecated compatibility alias. Use no-unstable-react-children instead.",
+        replacedBy: [
+            createReplacementRuleInfo({
+                rule: {
+                    name: "no-unstable-react-children",
+                    url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-unstable-react-children",
+                },
+            }),
+        ],
+        ruleId: "require-usememo-children",
+    }
+);
 
 export default rule;

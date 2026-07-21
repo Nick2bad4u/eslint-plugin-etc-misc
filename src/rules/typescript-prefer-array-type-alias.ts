@@ -35,6 +35,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-prefer-array-type-alias",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             forbidden:
                 'Prefer a named alias ending in "Array" or "s" for array/tuple type aliases.',

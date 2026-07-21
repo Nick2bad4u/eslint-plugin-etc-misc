@@ -34,6 +34,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/prefer-const-require",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             forbidden: "Assign require() results to a const variable.",
         },

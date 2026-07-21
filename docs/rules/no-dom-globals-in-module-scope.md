@@ -36,11 +36,22 @@ const readTitle = () => document.title;
 if (typeof window !== "undefined") {
  window.addEventListener("load", initialize);
 }
+
+const hasDocument = "document" in globalThis;
+if (hasDocument) {
+ globalThis.document.title = "Ready";
+}
 ```
 
 Immediately invoked functions inherit module execution and are checked. Deferred
 function bodies, instance field initializers, type-only references, shadowed
-locals, and statically recognizable `typeof` guards are not reported.
+locals, and statically recognizable availability guards are not reported.
+
+Availability analysis recognizes direct and `globalThis` `typeof` comparisons,
+static property checks such as `"document" in globalThis`, and those predicates
+stored in a single `const` binding. Mutable predicates and shadowed
+`globalThis` bindings are not trusted. Scope, guard, JSX, and execution results
+are cached per linted file so repeated references do not repeat whole-tree work.
 
 Both direct references and static `globalThis` properties are checked. The
 browser-global set comes from the current `globals` package with Node globals

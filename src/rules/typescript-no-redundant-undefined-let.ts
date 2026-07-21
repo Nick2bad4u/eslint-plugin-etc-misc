@@ -192,6 +192,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "code",
         hasSuggestions: true,
+        languages: ["js/js"],
         messages: {
             forbidden:
                 "Never-reassigned `let` declarations with definitely-defined initializers should not redundantly include `undefined` in their type union.",

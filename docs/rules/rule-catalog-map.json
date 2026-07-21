@@ -1,12 +1,5 @@
 [
     {
-        "catalogId": "R001",
-        "catalogIndex": 1,
-        "docId": "array-type",
-        "isTypeScriptRule": false,
-        "ruleName": "array-type"
-    },
-    {
         "catalogId": "R002",
         "catalogIndex": 2,
         "docId": "class-match-filename",
@@ -19,13 +12,6 @@
         "docId": "comment-spacing",
         "isTypeScriptRule": false,
         "ruleName": "comment-spacing"
-    },
-    {
-        "catalogId": "R004",
-        "catalogIndex": 4,
-        "docId": "compat",
-        "isTypeScriptRule": false,
-        "ruleName": "compat"
     },
     {
         "catalogId": "R005",
@@ -245,13 +231,6 @@
         "ruleName": "no-enum"
     },
     {
-        "catalogId": "R036",
-        "catalogIndex": 36,
-        "docId": "no-explicit-type-exports",
-        "isTypeScriptRule": false,
-        "ruleName": "no-explicit-type-exports"
-    },
-    {
         "catalogId": "R037",
         "catalogIndex": 37,
         "docId": "no-expression-empty-lines",
@@ -322,13 +301,6 @@
         "ruleName": "no-misused-generics"
     },
     {
-        "catalogId": "R047",
-        "catalogIndex": 47,
-        "docId": "no-mixed-enums",
-        "isTypeScriptRule": false,
-        "ruleName": "no-mixed-enums"
-    },
-    {
         "catalogId": "R048",
         "catalogIndex": 48,
         "docId": "no-negated-conditions",
@@ -369,13 +341,6 @@
         "docId": "no-restricted-syntax",
         "isTypeScriptRule": false,
         "ruleName": "no-restricted-syntax"
-    },
-    {
-        "catalogId": "R054",
-        "catalogIndex": 54,
-        "docId": "no-secret",
-        "isTypeScriptRule": false,
-        "ruleName": "no-secret"
     },
     {
         "catalogId": "R055",
@@ -448,46 +413,11 @@
         "ruleName": "no-unnecessary-template-literal"
     },
     {
-        "catalogId": "R065",
-        "catalogIndex": 65,
-        "docId": "no-unused-disable",
-        "isTypeScriptRule": false,
-        "ruleName": "no-unused-disable"
-    },
-    {
-        "catalogId": "R066",
-        "catalogIndex": 66,
-        "docId": "no-unused-imports",
-        "isTypeScriptRule": false,
-        "ruleName": "no-unused-imports"
-    },
-    {
-        "catalogId": "R067",
-        "catalogIndex": 67,
-        "docId": "no-unused-vars",
-        "isTypeScriptRule": false,
-        "ruleName": "no-unused-vars"
-    },
-    {
         "catalogId": "R068",
         "catalogIndex": 68,
         "docId": "no-use-extend-native",
         "isTypeScriptRule": false,
         "ruleName": "no-use-extend-native"
-    },
-    {
-        "catalogId": "R069",
-        "catalogIndex": 69,
-        "docId": "no-useless-generics",
-        "isTypeScriptRule": false,
-        "ruleName": "no-useless-generics"
-    },
-    {
-        "catalogId": "R070",
-        "catalogIndex": 70,
-        "docId": "no-value-tostring",
-        "isTypeScriptRule": false,
-        "ruleName": "no-value-tostring"
     },
     {
         "catalogId": "R071",
@@ -530,13 +460,6 @@
         "docId": "prefer-const-require",
         "isTypeScriptRule": false,
         "ruleName": "prefer-const-require"
-    },
-    {
-        "catalogId": "R077",
-        "catalogIndex": 77,
-        "docId": "prefer-includes",
-        "isTypeScriptRule": false,
-        "ruleName": "prefer-includes"
     },
     {
         "catalogId": "R078",
@@ -651,20 +574,6 @@
         "ruleName": "sort-export-specifiers"
     },
     {
-        "catalogId": "R094",
-        "catalogIndex": 94,
-        "docId": "sort-exports",
-        "isTypeScriptRule": false,
-        "ruleName": "sort-exports"
-    },
-    {
-        "catalogId": "R095",
-        "catalogIndex": 95,
-        "docId": "sort-imports",
-        "isTypeScriptRule": false,
-        "ruleName": "sort-imports"
-    },
-    {
         "catalogId": "R096",
         "catalogIndex": 96,
         "docId": "sort-keys",
@@ -700,39 +609,11 @@
         "ruleName": "throw-error"
     },
     {
-        "catalogId": "R101",
-        "catalogIndex": 101,
-        "docId": "throw-new-error",
-        "isTypeScriptRule": false,
-        "ruleName": "throw-new-error"
-    },
-    {
         "catalogId": "R102",
         "catalogIndex": 102,
         "docId": "underscore-internal",
         "isTypeScriptRule": false,
         "ruleName": "underscore-internal"
-    },
-    {
-        "catalogId": "R103",
-        "catalogIndex": 103,
-        "docId": "unused-internal-properties",
-        "isTypeScriptRule": false,
-        "ruleName": "unused-internal-properties"
-    },
-    {
-        "catalogId": "R104",
-        "catalogIndex": 104,
-        "docId": "uppercase-iife",
-        "isTypeScriptRule": false,
-        "ruleName": "uppercase-iife"
-    },
-    {
-        "catalogId": "R105",
-        "catalogIndex": 105,
-        "docId": "words",
-        "isTypeScriptRule": false,
-        "ruleName": "words"
     },
     {
         "catalogId": "R106",
@@ -747,13 +628,6 @@
         "docId": "typescript-class-methods-use-this",
         "isTypeScriptRule": true,
         "ruleName": "typescript/class-methods-use-this"
-    },
-    {
-        "catalogId": "R108",
-        "catalogIndex": 108,
-        "docId": "typescript-compat",
-        "isTypeScriptRule": true,
-        "ruleName": "typescript/compat"
     },
     {
         "catalogId": "R109",
@@ -1097,5 +971,19 @@
         "docId": "typescript-require-this-void",
         "isTypeScriptRule": true,
         "ruleName": "typescript/require-this-void"
+    },
+    {
+        "catalogId": "R158",
+        "catalogIndex": 158,
+        "docId": "no-unstable-react-values",
+        "isTypeScriptRule": false,
+        "ruleName": "no-unstable-react-values"
+    },
+    {
+        "catalogId": "R159",
+        "catalogIndex": 159,
+        "docId": "no-unstable-react-children",
+        "isTypeScriptRule": false,
+        "ruleName": "no-unstable-react-children"
     }
 ]

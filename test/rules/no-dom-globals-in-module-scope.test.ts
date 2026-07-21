@@ -28,6 +28,10 @@ ruleTester.run("no-dom-globals-in-module-scope", rule, {
             errors: [{ messageId: "forbidden" }],
         },
         {
+            code: "const widths = items.map(() => window.innerWidth); void widths;",
+            errors: [{ messageId: "forbidden" }],
+        },
+        {
             code: "((() => window.innerWidth) as () => number)();",
             errors: [{ messageId: "forbidden" }],
         },
@@ -72,6 +76,18 @@ ruleTester.run("no-dom-globals-in-module-scope", rule, {
             errors: [{ messageId: "forbidden" }],
             filename: "module.test.ts",
         },
+        {
+            code: "let hasWindow = typeof window !== 'undefined'; if (hasWindow) { void window.innerWidth; }",
+            errors: [{ messageId: "forbidden" }],
+        },
+        {
+            code: "const globalThis = { document: true }; if ('document' in globalThis) { void document.title; }",
+            errors: [{ messageId: "forbidden" }],
+        },
+        {
+            code: "const hasWindow = typeof window !== 'undefined'; { const hasWindow = true; if (hasWindow) { void window.innerWidth; } }",
+            errors: [{ messageId: "forbidden" }],
+        },
     ],
     valid: [
         "const window = { innerWidth: 1 }; { const width = window.innerWidth; void width; }",
@@ -84,6 +100,10 @@ ruleTester.run("no-dom-globals-in-module-scope", rule, {
         "!(typeof window === 'undefined') && window.addEventListener('load', () => {});",
         "if (!(typeof window !== 'undefined')) { /* unavailable */ } else { window.addEventListener('load', () => {}); }",
         "typeof window;",
+        "if (typeof globalThis.document !== 'undefined') { void globalThis.document.title; }",
+        "'document' in globalThis && void globalThis.document.title;",
+        "const hasWindow = typeof window !== 'undefined'; if (hasWindow) { void window.innerWidth; void window.location; }",
+        "const hasDocument = 'document' in globalThis; hasDocument && void globalThis.document.title;",
         "const key = 'document'; const title = globalThis[key]; void title;",
         "const window = { innerWidth: 100 }; const width = window.innerWidth; void width;",
         "type BrowserNode = HTMLElement; void (0 as unknown as BrowserNode);",

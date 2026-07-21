@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 // JSON module specifiers require an explicit file extension at runtime.
 // eslint-disable-next-line import-x/extensions -- Node.js cannot resolve this JSON module without its extension.
 import packageJson from "../package.json" with { type: "json" };
+// eslint-disable-next-line import-x/extensions -- Node.js requires the JSON extension at runtime.
+import ruleCatalogAssignments from "../src/_internal/rule-catalog-assignments.json" with { type: "json" };
 import plugin from "../src/plugin";
 
 interface ConfigurablePlugin {
@@ -20,38 +22,89 @@ const configVariants = [
 ] as const;
 
 const deprecatedRuleIds = [
-    "array-type",
     "consistent-filename",
     "consistent-source-extension",
     "no-commented-out-code",
     "no-deprecated",
-    "no-explicit-type-exports",
-    "no-mixed-enums",
     "no-relative-parent-import",
     "no-restricted-syntax",
-    "no-secret",
     "no-self-import",
     "no-shadow",
-    "no-unused-disable",
-    "no-useless-generics",
-    "no-value-tostring",
-    "prefer-includes",
     "prefer-interface",
     "prefer-object-has-own",
     "require-jsdoc",
+    "require-memo",
+    "require-usememo",
+    "require-usememo-children",
     "sort-class-members",
     "switch-case-spacing",
-    "throw-new-error",
     "typescript/class-methods-use-this",
-    "typescript/compat",
     "typescript/exhaustive-switch",
     "typescript/no-empty-interfaces",
     "typescript/no-inferrable-types",
     "typescript/no-restricted-syntax",
     "typescript/no-unsafe-object-assignment",
+] as const;
+
+const removedExternalAdapterRuleIds = [
+    "array-type",
+    "compat",
+    "no-explicit-type-exports",
+    "no-mixed-enums",
+    "no-secret",
+    "no-unused-disable",
+    "no-unused-imports",
+    "no-unused-vars",
+    "no-useless-generics",
+    "no-value-tostring",
+    "prefer-includes",
+    "sort-exports",
+    "sort-imports",
+    "throw-new-error",
+    "typescript/compat",
     "unused-internal-properties",
     "uppercase-iife",
     "words",
+] as const;
+
+const removedRuntimeDependencyNames = [
+    "@eslint-community/eslint-plugin-eslint-comments",
+    "@typescript-eslint/eslint-plugin",
+    "debug",
+    "eslint-plugin-compat",
+    "eslint-plugin-no-secrets",
+    "eslint-plugin-simple-import-sort",
+    "eslint-plugin-unicorn",
+    "eslint-plugin-unused-imports",
+    "eslint-plugin-write-good-comments-2",
+    "semver",
+    "tinyglobby",
+    "tslib",
+] as const;
+
+const samePluginAliases = {
+    "require-usememo": {
+        canonicalRuleId: "no-unstable-react-values",
+        deprecatedSince: "2.0.0",
+    },
+    "require-usememo-children": {
+        canonicalRuleId: "no-unstable-react-children",
+        deprecatedSince: "2.0.0",
+    },
+    "typescript/no-unsafe-object-assignment": {
+        canonicalRuleId: "typescript/no-unsafe-object-assign",
+        deprecatedSince: "1.2.0",
+    },
+} as const;
+
+const reactStabilityRuleIds = [
+    "jsx-no-jsx-as-prop",
+    "jsx-no-new-array-as-prop",
+    "jsx-no-new-function-as-prop",
+    "jsx-no-new-object-as-prop",
+    "no-unstable-react-children",
+    "no-unstable-react-values",
+    "require-memo",
 ] as const;
 
 const recommendedRuleIds = [
@@ -160,6 +213,8 @@ const hasRuleDeprecationInfo = (
     typeof value === "object" && value !== null && "availableUntil" in value;
 
 type RuleDocsMetadata = Readonly<{
+    catalogId: string;
+    catalogIndex: number;
     deprecated: boolean;
     frozen: boolean;
     recommended: boolean;
@@ -173,12 +228,9 @@ const getSortedRuleNames = (
     ruleMap: Readonly<Record<string, unknown>>
 ): readonly string[] => toSortedStrings(Object.keys(ruleMap));
 
-const assertObjectAssignAliasContract = (): void => {
+const assertSamePluginAliasContract = (): void => {
     const exportedRuleIds = getSortedRuleNames(plugin.rules);
-    const samePluginAliasRuleIds = new Set([
-        "typescript/compat",
-        "typescript/no-unsafe-object-assignment",
-    ]);
+    const samePluginAliasRuleIds = new Set(Object.keys(samePluginAliases));
     const presetEligibleExportedRuleIds = exportedRuleIds.filter(
         (ruleId) => !samePluginAliasRuleIds.has(ruleId)
     );
@@ -190,145 +242,201 @@ const assertObjectAssignAliasContract = (): void => {
 
     expect(presetEligibleExportedRuleIds).toStrictEqual(allConfigRuleIds);
 
-    const canonicalRule = plugin.rules["typescript/no-unsafe-object-assign"];
-    const compatibilityAliasRule =
-        plugin.rules["typescript/no-unsafe-object-assignment"];
+    for (const [aliasRuleId, aliasContract] of Object.entries(
+        samePluginAliases
+    )) {
+        const canonicalRule = plugin.rules[aliasContract.canonicalRuleId];
+        const compatibilityAliasRule = plugin.rules[aliasRuleId];
 
-    expect(canonicalRule).toBeDefined();
-    expect(compatibilityAliasRule).toBeDefined();
+        expect(canonicalRule).toBeDefined();
+        expect(compatibilityAliasRule).toBeDefined();
 
-    if (canonicalRule === undefined || compatibilityAliasRule === undefined) {
-        throw new Error("Expected Object.assign rules to remain exported.");
+        if (
+            canonicalRule === undefined ||
+            compatibilityAliasRule === undefined
+        ) {
+            throw new Error(`Expected alias rule ${aliasRuleId} to exist.`);
+        }
+
+        expect(canonicalRule.meta.deprecated).toBe(false);
+        expect(compatibilityAliasRule).not.toBe(canonicalRule);
+        expect(compatibilityAliasRule.create).toBe(canonicalRule.create);
+
+        const aliasDeprecation = compatibilityAliasRule.meta.deprecated;
+
+        expect(aliasDeprecation).toBeTypeOf("object");
+
+        if (typeof aliasDeprecation !== "object") {
+            throw new TypeError(
+                `Expected structured deprecation metadata for ${aliasRuleId}.`
+            );
+        }
+
+        expect(aliasDeprecation.deprecatedSince).toBe(
+            aliasContract.deprecatedSince
+        );
+        expect(aliasDeprecation.availableUntil).toBe("3.0.0");
+
+        const aliasReplacement = aliasDeprecation.replacedBy?.[0];
+
+        expect(aliasReplacement?.rule?.name).toBe(
+            aliasContract.canonicalRuleId
+        );
+        expect(aliasReplacement).not.toHaveProperty("plugin");
+
+        for (const configVariant of configVariants) {
+            expect(
+                `etc-misc/${aliasRuleId}` in plugin.configs[configVariant].rules
+            ).toBe(false);
+        }
     }
 
-    expect(canonicalRule.meta.deprecated).toBe(false);
-    expect(compatibilityAliasRule.create).toBe(canonicalRule.create);
-
-    const aliasDeprecation = compatibilityAliasRule.meta.deprecated;
-
-    expect(aliasDeprecation).toBeTypeOf("object");
-
-    if (typeof aliasDeprecation !== "object" || aliasDeprecation === null) {
-        throw new TypeError("Expected structured alias deprecation metadata.");
-    }
-
-    expect(aliasDeprecation.deprecatedSince).toBe("1.2.0");
-    expect(aliasDeprecation.availableUntil).toBe("2.0.0");
-
-    const aliasReplacement = aliasDeprecation.replacedBy?.[0];
-
-    expect(aliasReplacement?.rule?.name).toBe(
-        "typescript/no-unsafe-object-assign"
-    );
-    expect(aliasReplacement).not.toHaveProperty("plugin");
-
-    for (const configVariant of configVariants) {
-        expect(
-            "etc-misc/typescript/no-unsafe-object-assignment" in
-                plugin.configs[configVariant].rules
-        ).toBe(false);
-    }
-
-    for (const configVariant of [
-        "all",
-        "allStrict",
-        "strictTypeChecked",
+    for (const canonicalRuleId of [
+        "no-unstable-react-children",
+        "no-unstable-react-values",
+        "typescript/no-unsafe-object-assign",
     ] as const) {
+        const expectedAllSeverity = canonicalRuleId.startsWith("no-unstable-")
+            ? "warn"
+            : "error";
+
+        expect(plugin.configs.all.rules[`etc-misc/${canonicalRuleId}`]).toBe(
+            expectedAllSeverity
+        );
         expect(
-            plugin.configs[configVariant].rules[
-                "etc-misc/typescript/no-unsafe-object-assign"
-            ]
+            plugin.configs.allStrict.rules[`etc-misc/${canonicalRuleId}`]
         ).toBe("error");
     }
 };
 
-const assertCompatAliasContract = (): void => {
-    const canonicalRule = plugin.rules["compat"];
-    const compatibilityAliasRule = plugin.rules["typescript/compat"];
+const assertDeprecatedRuleLifecycle = (): void => {
+    for (const deprecatedRuleId of deprecatedRuleIds) {
+        const rule = plugin.rules[deprecatedRuleId];
 
-    expect(canonicalRule).toBeDefined();
-    expect(compatibilityAliasRule).toBeDefined();
+        expect(rule).toBeDefined();
 
-    if (canonicalRule === undefined || compatibilityAliasRule === undefined) {
-        throw new Error("Expected compatibility rules to remain exported.");
-    }
+        if (rule === undefined) {
+            throw new Error(`Expected rule ${deprecatedRuleId} to exist.`);
+        }
 
-    expect(canonicalRule.meta.deprecated).toBe(false);
-    expect(compatibilityAliasRule.create).toBe(canonicalRule.create);
+        expect(rule.meta.docs?.frozen).toBe(true);
 
-    const aliasDeprecation = compatibilityAliasRule.meta.deprecated;
+        const deprecatedMetadata = rule.meta.deprecated;
+        const hasDeprecationMetadata =
+            hasRuleDeprecationInfo(deprecatedMetadata);
+        const availableUntil = hasDeprecationMetadata
+            ? deprecatedMetadata.availableUntil
+            : undefined;
 
-    expect(aliasDeprecation).toBeTypeOf("object");
-
-    if (typeof aliasDeprecation !== "object" || aliasDeprecation === null) {
-        throw new TypeError("Expected structured alias deprecation metadata.");
-    }
-
-    expect(aliasDeprecation.deprecatedSince).toBe("1.3.0");
-    expect(aliasDeprecation.availableUntil).toBe("2.0.0");
-    expect(aliasDeprecation.replacedBy?.[0]?.rule?.name).toBe("compat");
-    expect(aliasDeprecation.replacedBy?.[0]).not.toHaveProperty("plugin");
-
-    for (const configVariant of configVariants) {
-        expect(
-            "etc-misc/typescript/compat" in plugin.configs[configVariant].rules
-        ).toBe(false);
-    }
-
-    for (const configVariant of ["all", "allStrict"] as const) {
-        expect(plugin.configs[configVariant].rules["etc-misc/compat"]).toBe(
-            "error"
-        );
+        expect(hasDeprecationMetadata).toBe(true);
+        expect(availableUntil).toBe("3.0.0");
     }
 };
 
-const assertNoExplicitTypeExportsLifecycle = (): void => {
-    const compatibilityRule = plugin.rules["no-explicit-type-exports"];
+const assertPresetMembershipContracts = (): void => {
+    const deprecatedRuleIdSet = new Set<string>(deprecatedRuleIds);
+    const minimalRuleIdSet = new Set<string>(minimalRuleIds);
+    const preferReadonlyRuleIdSet = new Set<string>(preferReadonlyRuleIds);
+    const recommendedRuleIdSet = new Set<string>(recommendedRuleIds);
+    const recommendedRuleLevelKeys = Object.keys(
+        recommendedRuleLevels
+    ) as readonly (keyof typeof recommendedRuleLevels)[];
+    const minimalRuleLevelKeys = Object.keys(
+        minimalRuleLevels
+    ) as readonly (keyof typeof minimalRuleLevels)[];
 
-    expect(compatibilityRule).toBeDefined();
-
-    if (compatibilityRule === undefined) {
-        throw new Error(
-            "Expected no-explicit-type-exports to remain exported during its deprecation window."
+    for (const ruleName of minimalRuleLevelKeys) {
+        expect(plugin.configs.minimal.rules[ruleName]).toBe(
+            minimalRuleLevels[ruleName]
         );
     }
 
-    expect(compatibilityRule.meta.docs?.requiresTypeChecking).toBe(true);
-
-    const deprecation = compatibilityRule.meta.deprecated;
-
-    expect(deprecation).toBeTypeOf("object");
-
-    if (typeof deprecation !== "object" || deprecation === null) {
-        throw new TypeError(
-            "Expected structured no-explicit-type-exports deprecation metadata."
+    for (const ruleName of recommendedRuleLevelKeys) {
+        expect(plugin.configs.recommended.rules[ruleName]).toBe(
+            recommendedRuleLevels[ruleName]
         );
     }
 
-    const replacement = deprecation.replacedBy?.[0];
-
-    expect(deprecation.deprecatedSince).toBe("1.3.0");
-    expect(deprecation.availableUntil).toBe("2.0.0");
-    expect(replacement?.plugin?.name).toBe("@typescript-eslint");
-    expect(replacement?.plugin?.url).toBe("https://typescript-eslint.io/");
-    expect(replacement?.rule?.name).toBe("consistent-type-exports");
-    expect(replacement?.rule?.url).toBe(
-        "https://typescript-eslint.io/rules/consistent-type-exports"
-    );
-
-    for (const configVariant of ["all", "allStrict"] as const) {
-        expect(
-            plugin.configs[configVariant].rules[
-                "etc-misc/no-explicit-type-exports"
-            ]
-        ).toBe("warn");
+    for (const minimalRuleId of minimalRuleIdSet) {
+        expect(recommendedRuleIdSet.has(minimalRuleId)).toBe(true);
     }
 
-    for (const configVariant of ["recommended", "strictTypeChecked"] as const) {
-        expect(
-            "etc-misc/no-explicit-type-exports" in
-                plugin.configs[configVariant].rules
-        ).toBe(false);
+    for (const preferReadonlyRuleId of preferReadonlyRuleIdSet) {
+        expect(minimalRuleIdSet.has(preferReadonlyRuleId)).toBe(false);
+        expect(recommendedRuleIdSet.has(preferReadonlyRuleId)).toBe(true);
+    }
+
+    for (const [ruleId, rule] of Object.entries(plugin.rules)) {
+        const docs = rule.meta.docs as RuleDocsMetadata | undefined;
+
+        expect(docs).toBeDefined();
+
+        if (docs === undefined) {
+            throw new Error(`Expected docs metadata for rule ${ruleId}.`);
+        }
+
+        const isDeprecatedRule = deprecatedRuleIdSet.has(ruleId);
+
+        expect({
+            deprecated: docs.deprecated,
+            frozen: docs.frozen,
+            recommended: docs.recommended,
+        }).toStrictEqual({
+            deprecated: isDeprecatedRule,
+            frozen: isDeprecatedRule,
+            recommended: recommendedRuleIdSet.has(ruleId),
+        });
+        expect(hasRuleDeprecationInfo(rule.meta.deprecated)).toBe(
+            isDeprecatedRule
+        );
+        expect(rule.meta.languages).toStrictEqual(["js/js"]);
+    }
+};
+
+const assertRemovedExternalSurface = (): void => {
+    expect(Object.keys(plugin.rules)).toHaveLength(141);
+
+    for (const removedRuleId of removedExternalAdapterRuleIds) {
+        expect(plugin.rules).not.toHaveProperty(removedRuleId);
+        expect(ruleCatalogAssignments[removedRuleId]).toStrictEqual({
+            catalogIndex: expect.any(Number),
+            status: "retired",
+        });
+    }
+
+    for (const dependencyName of removedRuntimeDependencyNames) {
+        expect(packageJson.dependencies).not.toHaveProperty(dependencyName);
+    }
+};
+
+const assertStableCatalogContracts = (): void => {
+    const expectedStableCatalogIds = {
+        "class-match-filename": ["R002", 2],
+        "no-only-tests": ["R050", 50],
+        "no-unstable-react-children": ["R159", 159],
+        "no-unstable-react-values": ["R158", 158],
+        "typescript/require-this-void": ["R157", 157],
+    } as const;
+
+    for (const [ruleId, [catalogId, catalogIndex]] of Object.entries(
+        expectedStableCatalogIds
+    )) {
+        const docs = plugin.rules[ruleId]?.meta.docs as
+            RuleDocsMetadata | undefined;
+
+        expect(docs?.catalogId).toBe(catalogId);
+        expect(docs?.catalogIndex).toBe(catalogIndex);
+    }
+};
+
+const assertReactStabilityPresetContracts = (): void => {
+    for (const ruleId of reactStabilityRuleIds) {
+        expect(`etc-misc/${ruleId}` in plugin.configs.minimal.rules).toBe(
+            false
+        );
+        expect(`etc-misc/${ruleId}` in plugin.configs.recommended.rules).toBe(
+            false
+        );
     }
 };
 
@@ -364,90 +472,12 @@ const assertPluginExposesRulesAndConfigs = (): void => {
             ?.projectService
     ).toBe(true);
 
-    assertObjectAssignAliasContract();
-    assertCompatAliasContract();
-    assertNoExplicitTypeExportsLifecycle();
-
-    const recommendedRuleLevelKeys = Object.keys(
-        recommendedRuleLevels
-    ) as readonly (keyof typeof recommendedRuleLevels)[];
-    const minimalRuleLevelKeys = Object.keys(
-        minimalRuleLevels
-    ) as readonly (keyof typeof minimalRuleLevels)[];
-
-    for (const ruleName of minimalRuleLevelKeys) {
-        expect(plugin.configs.minimal.rules[ruleName]).toBe(
-            minimalRuleLevels[ruleName]
-        );
-    }
-
-    for (const ruleName of recommendedRuleLevelKeys) {
-        expect(plugin.configs.recommended.rules[ruleName]).toBe(
-            recommendedRuleLevels[ruleName]
-        );
-    }
-
-    const deprecatedRuleIdSet = new Set<string>(deprecatedRuleIds);
-    const minimalRuleIdSet = new Set<string>(minimalRuleIds);
-    const preferReadonlyRuleIdSet = new Set<string>(preferReadonlyRuleIds);
-    const recommendedRuleIdSet = new Set<string>(recommendedRuleIds);
-
-    for (const deprecatedRuleId of deprecatedRuleIds) {
-        const rule = plugin.rules[deprecatedRuleId];
-
-        expect(rule).toBeDefined();
-
-        if (rule === undefined) {
-            throw new Error(`Expected rule ${deprecatedRuleId} to exist.`);
-        }
-
-        expect(rule.meta?.docs?.frozen).toBe(true);
-
-        const deprecatedMetadata = rule.meta?.deprecated;
-        const hasDeprecationMetadata =
-            hasRuleDeprecationInfo(deprecatedMetadata);
-        const availableUntil = hasDeprecationMetadata
-            ? deprecatedMetadata.availableUntil
-            : undefined;
-
-        expect(hasDeprecationMetadata).toBe(true);
-        expect(availableUntil).toBe("2.0.0");
-    }
-
-    for (const minimalRuleId of minimalRuleIdSet) {
-        expect(recommendedRuleIdSet.has(minimalRuleId)).toBe(true);
-    }
-
-    for (const preferReadonlyRuleId of preferReadonlyRuleIdSet) {
-        expect(minimalRuleIdSet.has(preferReadonlyRuleId)).toBe(false);
-        expect(recommendedRuleIdSet.has(preferReadonlyRuleId)).toBe(true);
-    }
-
-    for (const [ruleId, rule] of Object.entries(plugin.rules)) {
-        const docs = rule.meta?.docs as RuleDocsMetadata | undefined;
-
-        expect(docs).toBeDefined();
-
-        if (docs === undefined) {
-            throw new Error(`Expected docs metadata for rule ${ruleId}.`);
-        }
-
-        const isDeprecatedRule = deprecatedRuleIdSet.has(ruleId);
-
-        expect({
-            deprecated: docs.deprecated,
-            frozen: docs.frozen,
-            recommended: docs.recommended,
-        }).toStrictEqual({
-            deprecated: isDeprecatedRule,
-            frozen: isDeprecatedRule,
-            recommended: recommendedRuleIdSet.has(ruleId),
-        });
-
-        expect(hasRuleDeprecationInfo(rule.meta?.deprecated)).toBe(
-            isDeprecatedRule
-        );
-    }
+    assertDeprecatedRuleLifecycle();
+    assertPresetMembershipContracts();
+    assertReactStabilityPresetContracts();
+    assertRemovedExternalSurface();
+    assertSamePluginAliasContract();
+    assertStableCatalogContracts();
 };
 
 describe("plugin export", () => {

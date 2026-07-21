@@ -310,11 +310,16 @@ const findScopedAncestor = (
 
 const getDirectRelationshipViolation = (
     childName: string,
-    ancestorNames: readonly string[]
+    ancestorNames: readonly string[],
+    checkVoidParents: boolean
 ): NestingViolation | undefined => {
     const parentName = arrayAt(ancestorNames, 0);
 
-    if (isDefined(parentName) && containsName(voidElementNames, parentName)) {
+    if (
+        checkVoidParents &&
+        isDefined(parentName) &&
+        containsName(voidElementNames, parentName)
+    ) {
         return {
             kind: "void-parent",
             relatedName: parentName,
@@ -437,9 +442,13 @@ const getAncestorRelationshipViolation = (
  */
 export const getHtmlNestingViolation = (
     childName: string,
-    ancestorNames: readonly string[]
+    ancestorNames: readonly string[],
+    checkVoidParents = false
 ): NestingViolation | undefined =>
-    getDirectRelationshipViolation(childName, ancestorNames) ??
-    getAncestorRelationshipViolation(childName, ancestorNames);
+    getDirectRelationshipViolation(
+        childName,
+        ancestorNames,
+        checkVoidParents
+    ) ?? getAncestorRelationshipViolation(childName, ancestorNames);
 
 export type { NestingViolation };

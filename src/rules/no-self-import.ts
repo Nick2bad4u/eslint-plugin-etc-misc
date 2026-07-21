@@ -87,6 +87,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-self-import",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             forbidden: "Do not import the current file from itself.",
         },

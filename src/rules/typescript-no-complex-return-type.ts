@@ -35,6 +35,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-complex-return-type",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             forbidden:
                 "Add an explicit return type annotation for complex return expressions.",

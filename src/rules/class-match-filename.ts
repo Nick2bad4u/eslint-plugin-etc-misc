@@ -53,6 +53,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/class-match-filename",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             mismatch:
                 "Class name '{{got}}' does not match filename '{{expected}}'. Rename the class or the file.",

@@ -29,6 +29,7 @@ ruleTester.run("no-invalid-jsx-nesting", rule, {
             code: "function App() { return <img><span /></img>; }",
             errors: [{ messageId: "voidParent" }],
             filename,
+            options: [{ checkVoidParents: true }],
         },
         {
             code: "function App() { return <p><><div /></></p>; }",
@@ -65,6 +66,10 @@ ruleTester.run("no-invalid-jsx-nesting", rule, {
         },
         {
             code: "function App() { return <picture><div /></picture>; }",
+            filename,
+        },
+        {
+            code: "function App() { return <img><span /></img>; }",
             filename,
         },
         {

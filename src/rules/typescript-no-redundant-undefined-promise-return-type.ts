@@ -263,6 +263,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "code",
         hasSuggestions: true,
+        languages: ["js/js"],
         messages: {
             forbidden:
                 "Async Promise return value unions should not redundantly include `undefined` when the function deterministically returns definitely-defined values.",

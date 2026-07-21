@@ -139,6 +139,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "code",
         hasSuggestions: true,
+        languages: ["js/js"],
         messages: {
             forbidden: "Prefer readonly record property types.",
             suggestRequireReadonlyRecordPropertyType:

@@ -228,6 +228,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-constructor-state",
         },
         hasSuggestions: true,
+        languages: ["js/js"],
         messages: {
             moveStateToField:
                 "Move this simple initial state value to a class field.",

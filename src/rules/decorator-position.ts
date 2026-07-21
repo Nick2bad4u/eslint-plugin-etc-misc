@@ -348,6 +348,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "whitespace",
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             expectedAbove:
                 "Decorator '@{{name}}' must be placed above the decorated member.",

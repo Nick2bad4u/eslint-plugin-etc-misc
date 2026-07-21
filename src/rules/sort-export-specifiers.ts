@@ -84,6 +84,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "code",
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             incorrectSortingOrder:
                 "Named export specifiers should be sorted alphabetically.",

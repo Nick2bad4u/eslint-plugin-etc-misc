@@ -2,7 +2,6 @@
 # Label bootstrap (PowerShell / gh):
 # Copy and paste the following command into a PowerShell terminal with the GitHub CLI installed and authenticated to create the labels defined in this file:
 # Make sure you are in the root directory of the repository when running this command.
-# yaml-language-server: $schema=https://www.schemastore.org/pull-request-labeler.json
 #
 # =============================================================================
 # PR Labeler Configuration + Label Bootstrap Helper
@@ -41,21 +40,6 @@ CI/CD:
                 - ".github/*.yml"
                 - ".github/*.yaml"
 
-breaking change:
-    - body:
-          - pattern: "(?i)breaking change"
-          - pattern: "(?i)breaking"
-          - pattern: "(?i)major version"
-    - title:
-          - pattern: "(?i)breaking"
-          - pattern: "(?i)major"
-
-bug:
-    - body:
-          - pattern: "(?i)\\b(fix|fixes|bug|error|issue)\\b"
-    - title:
-          - pattern: "(?i)\\b(fix|bug|hotfix|patch)\\b"
-
 build:
     - changed-files:
           - any-glob-to-any-file:
@@ -65,10 +49,6 @@ build:
                 - "scripts/**/*"
                 - "tsconfig.build.json"
                 - "vite.config.ts"
-    - title:
-          - pattern: "(?i)build"
-          - pattern: "(?i)bundle"
-          - pattern: "(?i)compile"
 
 configuration:
     - changed-files:
@@ -96,10 +76,6 @@ dependencies:
                 - "**/package.json"
 
 documentation:
-    - body:
-          - pattern: "(?i)documentation"
-          - pattern: "(?i)readme"
-          - pattern: "(?i)docs"
     - changed-files:
           - any-glob-to-any-file:
                 - "**/*.md"
@@ -107,66 +83,6 @@ documentation:
                 - "README*"
                 - "CHANGELOG.md"
                 - "RELEASING.md"
-    - title:
-          - pattern: "(?i)docs"
-          - pattern: "(?i)documentation"
-          - pattern: "(?i)readme"
-
-enhancement:
-    - body:
-          - pattern: "(?i)feature"
-          - pattern: "(?i)enhancement"
-          - pattern: "(?i)improve"
-          - pattern: "(?i)add"
-    - title:
-          - pattern: "(?i)feat"
-          - pattern: "(?i)feature"
-          - pattern: "(?i)enhancement"
-          - pattern: "(?i)improve"
-
-good first issue:
-    - body:
-          - pattern: "(?i)good first issue"
-          - pattern: "(?i)beginner friendly"
-          - pattern: "(?i)easy"
-    - title:
-          - pattern: "(?i)good first issue"
-          - pattern: "(?i)beginner"
-          - pattern: "(?i)starter"
-
-help wanted:
-    - body:
-          - pattern: "(?i)help wanted"
-          - pattern: "(?i)looking for help"
-          - pattern: "(?i)assistance needed"
-    - title:
-          - pattern: "(?i)help wanted"
-          - pattern: "(?i)help"
-
-performance:
-    - body:
-          - pattern: "(?i)performance"
-          - pattern: "(?i)optimize"
-          - pattern: "(?i)faster"
-          - pattern: "(?i)speed"
-          - pattern: "(?i)memory"
-    - title:
-          - pattern: "(?i)perf"
-          - pattern: "(?i)performance"
-          - pattern: "(?i)optimize"
-          - pattern: "(?i)speed"
-
-refactor:
-    - body:
-          - pattern: "(?i)refactor"
-          - pattern: "(?i)cleanup"
-          - pattern: "(?i)code quality"
-          - pattern: "(?i)restructure"
-    - title:
-          - pattern: "(?i)refactor"
-          - pattern: "(?i)refactoring"
-          - pattern: "(?i)cleanup"
-          - pattern: "(?i)clean"
 
 rules:
     - changed-files:
@@ -175,29 +91,6 @@ rules:
                 - "src/_internal/**/*.ts"
                 - "src/plugin.ts"
 
-security:
-    - body:
-          - pattern: "(?i)security"
-          - pattern: "(?i)vulnerability"
-          - pattern: "(?i)exploit"
-          - pattern: "(?i)cve"
-    - title:
-          - pattern: "(?i)security"
-          - pattern: "(?i)vuln"
-          - pattern: "(?i)cve"
-
-style:
-    - body:
-          - pattern: "(?i)formatting"
-          - pattern: "(?i)style"
-          - pattern: "(?i)linting"
-          - pattern: "(?i)prettier"
-          - pattern: "(?i)eslint"
-    - title:
-          - pattern: "(?i)style"
-          - pattern: "(?i)formatting"
-          - pattern: "(?i)lint"
-
 testing:
     - changed-files:
           - any-glob-to-any-file:
@@ -205,7 +98,3 @@ testing:
                 - "**/*.spec.{js,ts,tsx}"
                 - "test/**/*"
                 - "__tests__/**/*"
-    - title:
-          - pattern: "(?i)test"
-          - pattern: "(?i)tests"
-          - pattern: "(?i)testing"

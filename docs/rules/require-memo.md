@@ -2,6 +2,11 @@
 
 Require exported function components to use explicit React memoization.
 
+> **Deprecated in v2.0.0.** This rule is frozen and remains available through
+> v3.0.0. Blanket `memo` requirements are not a sound performance policy and
+> conflict with compiler-managed memoization. Remove the rule during migration;
+> there is no direct replacement.
+
 ## Targeted pattern scope
 
 This rule checks exported PascalCase functions and function-valued variables that directly contain JSX and have at most two parameters. It recognizes named, aliased, default, and namespace imports of `memo` and `forwardRef` from React or `preact/compat`.
@@ -54,7 +59,11 @@ export const Input = memo(
 
 This rule reports only. Adding `memo` automatically can regress performance, obscure component names, or imply a stability guarantee that the component's props do not meet.
 
-React Compiler applies automatic component and value memoization in supported builds, reducing the need for manual `memo`. This rule is therefore opt-in and included by both the `all` and `allStrict` presets. Enable it only when a project intentionally requires explicit memo boundaries.
+React Compiler applies automatic component and value memoization in supported builds, reducing the need for manual `memo`. Enable the legacy rule only when a project intentionally requires explicit memo boundaries while migrating away from that policy.
+
+The rule is deprecated and excluded from presets beginning in v2.0.0. Existing
+configurations continue to work through v3.0.0 so projects can remove the policy
+without a forced major-version migration.
 
 ### Options
 

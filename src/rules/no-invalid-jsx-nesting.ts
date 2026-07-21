@@ -18,7 +18,13 @@ type MessageIds =
     | "invalidParent"
     | "voidParent";
 
-type Options = readonly [];
+type Options = readonly [RuleOption?];
+
+type RuleOption = Readonly<{
+    readonly checkVoidParents?: boolean;
+}>;
+
+const defaultOptions: Options = [{ checkVoidParents: false }];
 
 const isTransparentArrayRenderCallback = (
     node: Readonly<
@@ -143,7 +149,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     Options,
     MessageIds
 >({
-    create: (context) => ({
+    create: (context, [configuredOption]) => ({
         JSXElement: (node: Readonly<es.JSXElement>): void => {
             const childName = getSimpleJsxElementName(node.openingElement);
 
@@ -152,7 +158,11 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             }
 
             const ancestorNames = getIntrinsicAncestorNames(context, node);
-            const violation = getHtmlNestingViolation(childName, ancestorNames);
+            const violation = getHtmlNestingViolation(
+                childName,
+                ancestorNames,
+                configuredOption?.checkVoidParents ?? false
+            );
 
             if (!isDefined(violation)) {
                 return;
@@ -173,8 +183,9 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             });
         },
     }),
-    defaultOptions: [],
+    defaultOptions,
     meta: {
+        defaultOptions: [{ checkVoidParents: false }],
         deprecated: false,
         docs: {
             deprecated: false,
@@ -185,6 +196,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-invalid-jsx-nesting",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             invalidAncestor:
                 "Do not render <{{childName}}> inside a <{{relatedName}}> ancestor; the HTML parser can produce a different DOM tree.",
@@ -193,7 +205,21 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             voidParent:
                 "Void element <{{relatedName}}> cannot contain <{{childName}}>.",
         },
-        schema: [],
+        schema: [
+            {
+                additionalProperties: false,
+                description:
+                    "Configuration for optional void-element parent validation.",
+                properties: {
+                    checkVoidParents: {
+                        description:
+                            "Report children written inside void JSX elements.",
+                        type: "boolean",
+                    },
+                },
+                type: "object",
+            },
+        ],
         type: "problem",
     },
     name: "no-invalid-jsx-nesting",

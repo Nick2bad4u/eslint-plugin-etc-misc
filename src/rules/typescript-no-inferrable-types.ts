@@ -46,6 +46,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-inferrable-types",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             forbidden:
                 "Type annotation can be inferred from the assigned literal value.",

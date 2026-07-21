@@ -243,6 +243,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/react-prefer-function-component",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             preferFunctionComponent:
                 "Write this class component as a function component; keep a class only when a class-only React API is required.",

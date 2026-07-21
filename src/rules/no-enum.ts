@@ -27,6 +27,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                 url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-enum",
             },
             hasSuggestions: false,
+            languages: ["js/js"],
             messages: {
                 forbidden: "`enum` declarations are forbidden.",
             },

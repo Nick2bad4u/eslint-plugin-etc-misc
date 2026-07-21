@@ -1,0 +1,638 @@
+{
+    "array-type": {
+        "catalogIndex": 1,
+        "status": "retired"
+    },
+    "class-match-filename": {
+        "catalogIndex": 2,
+        "status": "active"
+    },
+    "comment-spacing": {
+        "catalogIndex": 3,
+        "status": "active"
+    },
+    "compat": {
+        "catalogIndex": 4,
+        "status": "retired"
+    },
+    "consistent-empty-lines": {
+        "catalogIndex": 5,
+        "status": "active"
+    },
+    "consistent-enum-members": {
+        "catalogIndex": 6,
+        "status": "active"
+    },
+    "consistent-filename": {
+        "catalogIndex": 7,
+        "status": "active"
+    },
+    "consistent-import": {
+        "catalogIndex": 8,
+        "status": "active"
+    },
+    "consistent-optional-props": {
+        "catalogIndex": 9,
+        "status": "active"
+    },
+    "consistent-source-extension": {
+        "catalogIndex": 10,
+        "status": "active"
+    },
+    "consistent-symbol-description": {
+        "catalogIndex": 11,
+        "status": "active"
+    },
+    "decorator-position": {
+        "catalogIndex": 12,
+        "status": "active"
+    },
+    "default-case": {
+        "catalogIndex": 13,
+        "status": "active"
+    },
+    "disallow-import": {
+        "catalogIndex": 14,
+        "status": "active"
+    },
+    "export-matching-filename-only": {
+        "catalogIndex": 15,
+        "status": "active"
+    },
+    "jsx-no-jsx-as-prop": {
+        "catalogIndex": 16,
+        "status": "active"
+    },
+    "jsx-no-new-array-as-prop": {
+        "catalogIndex": 17,
+        "status": "active"
+    },
+    "jsx-no-new-function-as-prop": {
+        "catalogIndex": 18,
+        "status": "active"
+    },
+    "jsx-no-new-object-as-prop": {
+        "catalogIndex": 19,
+        "status": "active"
+    },
+    "match-filename": {
+        "catalogIndex": 20,
+        "status": "active"
+    },
+    "max-identifier-blocks": {
+        "catalogIndex": 21,
+        "status": "active"
+    },
+    "no-assign-mutated-array": {
+        "catalogIndex": 22,
+        "status": "active"
+    },
+    "no-at-sign-import": {
+        "catalogIndex": 23,
+        "status": "active"
+    },
+    "no-at-sign-internal-import": {
+        "catalogIndex": 24,
+        "status": "active"
+    },
+    "no-chain-coalescence-mixture": {
+        "catalogIndex": 25,
+        "status": "active"
+    },
+    "no-commented-out-code": {
+        "catalogIndex": 26,
+        "status": "active"
+    },
+    "no-const-enum": {
+        "catalogIndex": 27,
+        "status": "active"
+    },
+    "no-constructor-bind": {
+        "catalogIndex": 28,
+        "status": "active"
+    },
+    "no-constructor-state": {
+        "catalogIndex": 29,
+        "status": "active"
+    },
+    "no-deprecated": {
+        "catalogIndex": 30,
+        "status": "active"
+    },
+    "no-dom-globals-in-constructor": {
+        "catalogIndex": 31,
+        "status": "active"
+    },
+    "no-dom-globals-in-module-scope": {
+        "catalogIndex": 32,
+        "status": "active"
+    },
+    "no-dom-globals-in-react-cc-render": {
+        "catalogIndex": 33,
+        "status": "active"
+    },
+    "no-dom-globals-in-react-fc": {
+        "catalogIndex": 34,
+        "status": "active"
+    },
+    "no-enum": {
+        "catalogIndex": 35,
+        "status": "active"
+    },
+    "no-explicit-type-exports": {
+        "catalogIndex": 36,
+        "status": "retired"
+    },
+    "no-expression-empty-lines": {
+        "catalogIndex": 37,
+        "status": "active"
+    },
+    "no-foreach": {
+        "catalogIndex": 38,
+        "status": "active"
+    },
+    "no-function-declare-after-return": {
+        "catalogIndex": 39,
+        "status": "active"
+    },
+    "no-implicit-any-catch": {
+        "catalogIndex": 40,
+        "status": "active"
+    },
+    "no-index-import": {
+        "catalogIndex": 41,
+        "status": "active"
+    },
+    "no-internal": {
+        "catalogIndex": 42,
+        "status": "active"
+    },
+    "no-internal-modules": {
+        "catalogIndex": 43,
+        "status": "active"
+    },
+    "no-invalid-jsx-nesting": {
+        "catalogIndex": 44,
+        "status": "active"
+    },
+    "no-language-mixing": {
+        "catalogIndex": 45,
+        "status": "active"
+    },
+    "no-misused-generics": {
+        "catalogIndex": 46,
+        "status": "active"
+    },
+    "no-mixed-enums": {
+        "catalogIndex": 47,
+        "status": "retired"
+    },
+    "no-negated-conditions": {
+        "catalogIndex": 48,
+        "status": "active"
+    },
+    "no-nodejs-modules": {
+        "catalogIndex": 49,
+        "status": "active"
+    },
+    "no-only-tests": {
+        "catalogIndex": 50,
+        "status": "active"
+    },
+    "no-param-reassign": {
+        "catalogIndex": 51,
+        "status": "active"
+    },
+    "no-relative-parent-import": {
+        "catalogIndex": 52,
+        "status": "active"
+    },
+    "no-restricted-syntax": {
+        "catalogIndex": 53,
+        "status": "active"
+    },
+    "no-secret": {
+        "catalogIndex": 54,
+        "status": "retired"
+    },
+    "no-self-import": {
+        "catalogIndex": 55,
+        "status": "active"
+    },
+    "no-shadow": {
+        "catalogIndex": 56,
+        "status": "active"
+    },
+    "no-sibling-import": {
+        "catalogIndex": 57,
+        "status": "active"
+    },
+    "no-single-line-comment": {
+        "catalogIndex": 58,
+        "status": "active"
+    },
+    "no-t": {
+        "catalogIndex": 59,
+        "status": "active"
+    },
+    "no-underscore-export": {
+        "catalogIndex": 60,
+        "status": "active"
+    },
+    "no-unnecessary-as-const": {
+        "catalogIndex": 61,
+        "status": "active"
+    },
+    "no-unnecessary-break": {
+        "catalogIndex": 62,
+        "status": "active"
+    },
+    "no-unnecessary-initialization": {
+        "catalogIndex": 63,
+        "status": "active"
+    },
+    "no-unnecessary-template-literal": {
+        "catalogIndex": 64,
+        "status": "active"
+    },
+    "no-unstable-react-children": {
+        "catalogIndex": 159,
+        "status": "active"
+    },
+    "no-unstable-react-values": {
+        "catalogIndex": 158,
+        "status": "active"
+    },
+    "no-unused-disable": {
+        "catalogIndex": 65,
+        "status": "retired"
+    },
+    "no-unused-imports": {
+        "catalogIndex": 66,
+        "status": "retired"
+    },
+    "no-unused-vars": {
+        "catalogIndex": 67,
+        "status": "retired"
+    },
+    "no-use-extend-native": {
+        "catalogIndex": 68,
+        "status": "active"
+    },
+    "no-useless-generics": {
+        "catalogIndex": 69,
+        "status": "retired"
+    },
+    "no-value-tostring": {
+        "catalogIndex": 70,
+        "status": "retired"
+    },
+    "no-vulnerable": {
+        "catalogIndex": 71,
+        "status": "active"
+    },
+    "no-writeonly": {
+        "catalogIndex": 72,
+        "status": "active"
+    },
+    "object-format": {
+        "catalogIndex": 73,
+        "status": "active"
+    },
+    "only-export-name": {
+        "catalogIndex": 74,
+        "status": "active"
+    },
+    "prefer-arrow-function-property": {
+        "catalogIndex": 75,
+        "status": "active"
+    },
+    "prefer-const-require": {
+        "catalogIndex": 76,
+        "status": "active"
+    },
+    "prefer-includes": {
+        "catalogIndex": 77,
+        "status": "retired"
+    },
+    "prefer-interface": {
+        "catalogIndex": 78,
+        "status": "active"
+    },
+    "prefer-less-than": {
+        "catalogIndex": 79,
+        "status": "active"
+    },
+    "prefer-object-has-own": {
+        "catalogIndex": 80,
+        "status": "active"
+    },
+    "prefer-only-export": {
+        "catalogIndex": 81,
+        "status": "active"
+    },
+    "react-prefer-function-component": {
+        "catalogIndex": 82,
+        "status": "active"
+    },
+    "require-jsdoc": {
+        "catalogIndex": 83,
+        "status": "active"
+    },
+    "require-memo": {
+        "catalogIndex": 84,
+        "status": "active"
+    },
+    "require-syntax": {
+        "catalogIndex": 85,
+        "status": "active"
+    },
+    "require-usememo": {
+        "catalogIndex": 86,
+        "status": "active"
+    },
+    "require-usememo-children": {
+        "catalogIndex": 87,
+        "status": "active"
+    },
+    "restrict-identifier-characters": {
+        "catalogIndex": 88,
+        "status": "active"
+    },
+    "sort-array": {
+        "catalogIndex": 89,
+        "status": "active"
+    },
+    "sort-call-signature": {
+        "catalogIndex": 90,
+        "status": "active"
+    },
+    "sort-class-members": {
+        "catalogIndex": 91,
+        "status": "active"
+    },
+    "sort-construct-signature": {
+        "catalogIndex": 92,
+        "status": "active"
+    },
+    "sort-export-specifiers": {
+        "catalogIndex": 93,
+        "status": "active"
+    },
+    "sort-exports": {
+        "catalogIndex": 94,
+        "status": "retired"
+    },
+    "sort-imports": {
+        "catalogIndex": 95,
+        "status": "retired"
+    },
+    "sort-keys": {
+        "catalogIndex": 96,
+        "status": "active"
+    },
+    "sort-top-comments": {
+        "catalogIndex": 97,
+        "status": "active"
+    },
+    "switch-case-spacing": {
+        "catalogIndex": 98,
+        "status": "active"
+    },
+    "template-literal-format": {
+        "catalogIndex": 99,
+        "status": "active"
+    },
+    "throw-error": {
+        "catalogIndex": 100,
+        "status": "active"
+    },
+    "throw-new-error": {
+        "catalogIndex": 101,
+        "status": "retired"
+    },
+    "typescript/array-callback-return-type": {
+        "catalogIndex": 106,
+        "status": "active"
+    },
+    "typescript/class-methods-use-this": {
+        "catalogIndex": 107,
+        "status": "active"
+    },
+    "typescript/compat": {
+        "catalogIndex": 108,
+        "status": "retired"
+    },
+    "typescript/consistent-array-type-name": {
+        "catalogIndex": 109,
+        "status": "active"
+    },
+    "typescript/define-function-in-one-statement": {
+        "catalogIndex": 110,
+        "status": "active"
+    },
+    "typescript/exhaustive-switch": {
+        "catalogIndex": 111,
+        "status": "active"
+    },
+    "typescript/no-boolean-literal-type": {
+        "catalogIndex": 112,
+        "status": "active"
+    },
+    "typescript/no-complex-declarator-type": {
+        "catalogIndex": 113,
+        "status": "active"
+    },
+    "typescript/no-complex-return-type": {
+        "catalogIndex": 114,
+        "status": "active"
+    },
+    "typescript/no-empty-interfaces": {
+        "catalogIndex": 115,
+        "status": "active"
+    },
+    "typescript/no-inferrable-types": {
+        "catalogIndex": 116,
+        "status": "active"
+    },
+    "typescript/no-multi-type-tuples": {
+        "catalogIndex": 117,
+        "status": "active"
+    },
+    "typescript/no-never": {
+        "catalogIndex": 118,
+        "status": "active"
+    },
+    "typescript/no-redundant-undefined-const": {
+        "catalogIndex": 119,
+        "status": "active"
+    },
+    "typescript/no-redundant-undefined-default-parameter": {
+        "catalogIndex": 120,
+        "status": "active"
+    },
+    "typescript/no-redundant-undefined-let": {
+        "catalogIndex": 121,
+        "status": "active"
+    },
+    "typescript/no-redundant-undefined-optional": {
+        "catalogIndex": 122,
+        "status": "active"
+    },
+    "typescript/no-redundant-undefined-promise-return-type": {
+        "catalogIndex": 123,
+        "status": "active"
+    },
+    "typescript/no-redundant-undefined-readonly-property": {
+        "catalogIndex": 124,
+        "status": "active"
+    },
+    "typescript/no-redundant-undefined-return-type": {
+        "catalogIndex": 125,
+        "status": "active"
+    },
+    "typescript/no-redundant-undefined-var": {
+        "catalogIndex": 126,
+        "status": "active"
+    },
+    "typescript/no-restricted-syntax": {
+        "catalogIndex": 127,
+        "status": "active"
+    },
+    "typescript/no-unsafe-object-assign": {
+        "catalogIndex": 128,
+        "status": "active"
+    },
+    "typescript/no-unsafe-object-assignment": {
+        "catalogIndex": 129,
+        "status": "active"
+    },
+    "typescript/prefer-array-type-alias": {
+        "catalogIndex": 130,
+        "status": "active"
+    },
+    "typescript/prefer-class-method": {
+        "catalogIndex": 131,
+        "status": "active"
+    },
+    "typescript/prefer-enum": {
+        "catalogIndex": 132,
+        "status": "active"
+    },
+    "typescript/prefer-named-tuple-members": {
+        "catalogIndex": 133,
+        "status": "active"
+    },
+    "typescript/prefer-readonly-array": {
+        "catalogIndex": 134,
+        "status": "active"
+    },
+    "typescript/prefer-readonly-array-parameter": {
+        "catalogIndex": 135,
+        "status": "active"
+    },
+    "typescript/prefer-readonly-index-signature": {
+        "catalogIndex": 136,
+        "status": "active"
+    },
+    "typescript/prefer-readonly-map": {
+        "catalogIndex": 137,
+        "status": "active"
+    },
+    "typescript/prefer-readonly-property": {
+        "catalogIndex": 138,
+        "status": "active"
+    },
+    "typescript/prefer-readonly-record": {
+        "catalogIndex": 139,
+        "status": "active"
+    },
+    "typescript/prefer-readonly-set": {
+        "catalogIndex": 140,
+        "status": "active"
+    },
+    "typescript/require-prop-type-annotation": {
+        "catalogIndex": 141,
+        "status": "active"
+    },
+    "typescript/require-readonly-array-property-type": {
+        "catalogIndex": 142,
+        "status": "active"
+    },
+    "typescript/require-readonly-array-return-type": {
+        "catalogIndex": 143,
+        "status": "active"
+    },
+    "typescript/require-readonly-array-type-alias": {
+        "catalogIndex": 144,
+        "status": "active"
+    },
+    "typescript/require-readonly-map-parameter-type": {
+        "catalogIndex": 145,
+        "status": "active"
+    },
+    "typescript/require-readonly-map-property-type": {
+        "catalogIndex": 146,
+        "status": "active"
+    },
+    "typescript/require-readonly-map-return-type": {
+        "catalogIndex": 147,
+        "status": "active"
+    },
+    "typescript/require-readonly-map-type-alias": {
+        "catalogIndex": 148,
+        "status": "active"
+    },
+    "typescript/require-readonly-record-parameter-type": {
+        "catalogIndex": 149,
+        "status": "active"
+    },
+    "typescript/require-readonly-record-property-type": {
+        "catalogIndex": 150,
+        "status": "active"
+    },
+    "typescript/require-readonly-record-return-type": {
+        "catalogIndex": 151,
+        "status": "active"
+    },
+    "typescript/require-readonly-record-type-alias": {
+        "catalogIndex": 152,
+        "status": "active"
+    },
+    "typescript/require-readonly-set-parameter-type": {
+        "catalogIndex": 153,
+        "status": "active"
+    },
+    "typescript/require-readonly-set-property-type": {
+        "catalogIndex": 154,
+        "status": "active"
+    },
+    "typescript/require-readonly-set-return-type": {
+        "catalogIndex": 155,
+        "status": "active"
+    },
+    "typescript/require-readonly-set-type-alias": {
+        "catalogIndex": 156,
+        "status": "active"
+    },
+    "typescript/require-this-void": {
+        "catalogIndex": 157,
+        "status": "active"
+    },
+    "underscore-internal": {
+        "catalogIndex": 102,
+        "status": "active"
+    },
+    "unused-internal-properties": {
+        "catalogIndex": 103,
+        "status": "retired"
+    },
+    "uppercase-iife": {
+        "catalogIndex": 104,
+        "status": "retired"
+    },
+    "words": {
+        "catalogIndex": 105,
+        "status": "retired"
+    }
+}

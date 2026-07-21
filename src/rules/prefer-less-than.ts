@@ -76,6 +76,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
             },
             fixable: "code",
             hasSuggestions: true,
+            languages: ["js/js"],
             messages: {
                 forbiddenGT: "Greater-than comparisons are forbidden.",
                 forbiddenGTE:

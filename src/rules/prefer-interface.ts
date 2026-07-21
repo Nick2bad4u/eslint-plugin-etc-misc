@@ -303,6 +303,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
         fixable: "code",
         hasSuggestions: true,
+        languages: ["js/js"],
         messages: {
             forbidden: "Type alias can be declared using an interface.",
             suggest: "Use an interface instead of a type alias.",

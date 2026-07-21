@@ -32,6 +32,7 @@ ruleTester.run("jsx-no-new-array-as-prop", rule, {
             code: "function View() { return <div data-items={[]} />; }",
             errors: [{ messageId: "unstableArrayProp" }],
             filename,
+            options: [{ nativeAllowList: [] }],
         },
         {
             code: "function View() { return <_Item values={[]} />; }",
@@ -66,7 +67,6 @@ ruleTester.run("jsx-no-new-array-as-prop", rule, {
         {
             code: "function View() { return <div data-items={[]} />; }",
             filename,
-            options: [{ nativeAllowList: "all" }],
         },
         {
             code: "function View() { return <div data-items={[]} other={[]} />; }",

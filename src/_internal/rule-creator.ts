@@ -1,12 +1,7 @@
 import type { TSESLint } from "@typescript-eslint/utils";
-import type { UnknownArray } from "type-fest";
+import type { Except, UnknownArray } from "type-fest";
 
 import { ESLintUtils } from "@typescript-eslint/utils";
-
-/**
- * Broad rule-module type used by incrementally migrated rule files.
- */
-export type AnyRuleModule = TSESLint.RuleModule<string, Readonly<UnknownArray>>;
 
 /**
  * Additional docs metadata used by this plugin's rule catalog and presets.
@@ -22,9 +17,35 @@ export interface RuleDocsMetadata extends TSESLint.RuleMetaDataDocs {
     readonly suggestion?: boolean;
 }
 
-type RuleCreatorFactory = ReturnType<
-    typeof ESLintUtils.RuleCreator<RuleDocsMetadata>
->;
+type RuleCreatorFactory = <
+    Options extends Readonly<UnknownArray>,
+    MessageIds extends string,
+>(
+    definition: RuleDefinition<Options, MessageIds>
+) => Readonly<{ readonly name: string }> &
+    TSESLint.RuleModule<MessageIds, Options, RuleDocsMetadata>;
+
+type RuleDefinition<
+    Options extends Readonly<UnknownArray>,
+    MessageIds extends string,
+> = Readonly<{
+    readonly create: (
+        context: Readonly<TSESLint.RuleContext<MessageIds, Options>>,
+        optionsWithDefault: Readonly<Options>
+    ) => TSESLint.RuleListener;
+    readonly defaultOptions?: Readonly<Options>;
+    readonly meta: Except<
+        TSESLint.RuleMetaData<MessageIds, RuleDocsMetadata, Options>,
+        "docs"
+    > &
+        Readonly<{
+            readonly docs: RuleDocsMetadata & TSESLint.RuleMetaDataDocs;
+            readonly languages: RuleLanguages;
+        }>;
+    readonly name: string;
+}>;
+
+type RuleLanguages = readonly ["js/js"];
 
 /**
  * Shared rule factory for plugin rules.

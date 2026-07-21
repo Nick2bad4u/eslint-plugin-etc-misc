@@ -29,6 +29,12 @@ ruleTester.run("jsx-no-jsx-as-prop", rule, {
             filename,
             options: [{ nativeAllowList: "all" }],
         },
+        {
+            code: "function View() { return <div data-icon={<Icon />} />; }",
+            errors: [{ messageId: "unstableJsxProp" }],
+            filename,
+            options: [{ nativeAllowList: [] }],
+        },
     ],
     valid: [
         {
@@ -38,7 +44,6 @@ ruleTester.run("jsx-no-jsx-as-prop", rule, {
         {
             code: "function View() { return <div data-icon={<Icon />} />; }",
             filename,
-            options: [{ nativeAllowList: "all" }],
         },
         {
             code: "function View() { return <Item><Icon /></Item>; }",

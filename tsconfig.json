@@ -26,7 +26,6 @@
         "explainFiles": false,
         "extendedDiagnostics": false,
         "forceConsistentCasingInFileNames": true,
-        "importHelpers": true,
         "incremental": true,
         "inlineSourceMap": false,
         "inlineSources": false,

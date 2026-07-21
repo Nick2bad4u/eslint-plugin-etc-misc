@@ -1,6 +1,9 @@
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
-import type { JsxPropRuleOptions } from "../_internal/jsx-prop-stability.js";
+import type {
+    JsxPropRuleOption,
+    JsxPropRuleOptions,
+} from "../_internal/jsx-prop-stability.js";
 
 import { createJsxPropStabilityVisitor } from "../_internal/jsx-prop-stability.js";
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -9,14 +12,15 @@ type MessageIds = "unstableJsxProp";
 
 type Options = JsxPropRuleOptions;
 
-const defaultOptions: Options = [{}];
+const defaultOption: JsxPropRuleOption = { nativeAllowList: "all" };
+const defaultOptions: Options = [defaultOption];
 
 /** Disallow render-local JSX allocations used as JSX props. */
 const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     Options,
     MessageIds
 >({
-    create: (context, [options = {}]) =>
+    create: (context, [options = defaultOption]) =>
         createJsxPropStabilityVisitor({
             context,
             matcher: (expression) =>
@@ -32,7 +36,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         }),
     defaultOptions,
     meta: {
-        defaultOptions: [{}],
+        defaultOptions: [{ nativeAllowList: "all" }],
         deprecated: false,
         docs: {
             deprecated: false,
@@ -43,6 +47,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/jsx-no-jsx-as-prop",
         },
         hasSuggestions: false,
+        languages: ["js/js"],
         messages: {
             unstableJsxProp:
                 "Avoid creating JSX during render when passing it as a prop solely for reference stability; prefer composition or memoize only after measuring.",

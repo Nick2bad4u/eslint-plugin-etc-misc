@@ -61,9 +61,9 @@ interface Options {
 }
 ```
 
-Default: `{}`
+Default: `{ nativeAllowList: "all" }`
 
-`nativeAllowList` ignores case-insensitive attribute names on lowercase intrinsic JSX elements. Use `"all"` to ignore every intrinsic attribute. Custom components are never affected by this option.
+`nativeAllowList` ignores case-insensitive attribute names on lowercase intrinsic JSX elements. The default `"all"` keeps the rule focused on component props because intrinsic attributes do not participate in a child component's prop-identity contract. Set it to `[]` to check every intrinsic attribute. Custom components are never affected by this option.
 
 ```tsx
 // config: { nativeAllowList: ["data-points"] }
