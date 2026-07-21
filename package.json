@@ -173,7 +173,6 @@
         "sync:preset-rule-links": "node scripts/sync-preset-rule-links.mjs",
         "sync:readme-rules-table": "node scripts/sync-readme-rules-table.mjs",
         "sync:rule-catalog-ids": "node scripts/sync-rule-catalog-ids.mjs",
-        "sync:rule-doc-structure": "node scripts/sync-rule-doc-structure.mjs",
         "sync:rules:write": "npm run sync:readme-rules-table && npm run sync:peer-eslint-range && npm run sync:node-version-files",
         "pretest": "npm run build",
         "test": "npx vitest run",

@@ -61,9 +61,10 @@ This rule reports only. Adding `memo` automatically can regress performance, obs
 
 React Compiler applies automatic component and value memoization in supported builds, reducing the need for manual `memo`. Enable the legacy rule only when a project intentionally requires explicit memo boundaries while migrating away from that policy.
 
-The rule is deprecated and excluded from presets beginning in v2.0.0. Existing
-configurations continue to work through v3.0.0 so projects can remove the policy
-without a forced major-version migration.
+The rule is deprecated and excluded from the `minimal`, `recommended`, `strict`,
+and `strictTypeChecked` presets beginning in v2.0.0. The exhaustive `all` and
+`allStrict` presets retain it at warning level through v3.0.0 so existing
+configurations can remove the policy without a forced major-version migration.
 
 ### Options
 
