@@ -1,0 +1,8 @@
+toml-version = "v1.0.0"
+
+[format.rules]
+    indent-style                    = "space"
+    indent-table-key-value-pairs    = true
+    indent-width                    = 4
+    key-value-equals-sign-alignment = true
+    line-ending                     = "lf"
