@@ -7,6 +7,10 @@ import { isDefined } from "ts-extras";
 import * as tsutils from "tsutils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation.js";
 
 type MessageIds = "cannotInfer" | "canReplace";
 
@@ -252,12 +256,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         };
     },
     meta: {
-        deprecated: false,
+        deprecated: true,
         docs: {
-            deprecated: false,
+            deprecated: true,
             description:
                 "disallow type parameters that cannot be inferred or do not enforce constraints.",
-            frozen: false,
+            frozen: true,
             recommended: false,
             requiresTypeChecking: true,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-misused-generics",
@@ -276,4 +280,26 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "no-misused-generics",
 });
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    deprecatedSince: "3.0.0",
+    message:
+        "Deprecated in favor of @typescript-eslint/no-unnecessary-type-parameters.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "@typescript-eslint",
+                url: "https://typescript-eslint.io/",
+            },
+            rule: {
+                name: "no-unnecessary-type-parameters",
+                url: "https://typescript-eslint.io/rules/no-unnecessary-type-parameters",
+            },
+        }),
+    ],
+    ruleId: "no-misused-generics",
+});
+
+export default deprecatedRule;

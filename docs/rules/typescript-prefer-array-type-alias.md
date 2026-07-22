@@ -2,6 +2,16 @@
 
 Prefer reusable alias names for array and tuple type aliases.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** [`typescript/consistent-array-type-name`](./typescript-consistent-array-type-name.md)
+
+The replacement owns the same type-alias naming policy. Do not enable both rule
+IDs because they report the same declarations.
+
 ## Targeted pattern scope
 
 This rule targets type alias identifiers when the alias annotation is:

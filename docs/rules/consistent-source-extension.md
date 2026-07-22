@@ -43,7 +43,7 @@ import x3 from "source";
 
 - **Lifecycle:** Deprecated and frozen.
 - **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
+- **Available until:** `v4.0.0`
 - **Use instead:** [`import/extensions`](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/extensions.md)
 
 ## Behavior and migration notes

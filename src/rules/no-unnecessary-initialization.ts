@@ -1,5 +1,8 @@
-import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
-
+import {
+    AST_NODE_TYPES,
+    type TSESTree as es,
+    type TSESLint,
+} from "@typescript-eslint/utils";
 import { arrayFirst, isDefined } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
@@ -8,8 +11,10 @@ type MessageIds = "forbidden";
 
 type Options = readonly [];
 
+type Scope = TSESLint.Scope.Scope;
+
 const disallowedSelector =
-    "PropertyDefinition > Identifier.value[name='undefined'], VariableDeclarator > Identifier.init[name='undefined']";
+    "PropertyDefinition > Identifier.value[name='undefined'], VariableDeclaration[kind=/^(?:let|var)$/] > VariableDeclarator[id.type='Identifier'] > Identifier.init[name='undefined']";
 
 const getUndefinedInitializationRemovalRange = (
     sourceCode: Readonly<TSESLint.SourceCode>,
@@ -38,6 +43,25 @@ const getUndefinedInitializationRemovalRange = (
     return [fixStartIndex, node.range[1]];
 };
 
+const isShadowedUndefined = (
+    sourceCode: Readonly<TSESLint.SourceCode>,
+    identifier: Readonly<es.Identifier>
+): boolean => {
+    let scope: null | Scope = sourceCode.getScope(identifier);
+
+    while (scope !== null) {
+        const variable = scope.set.get(identifier.name);
+
+        if (variable !== undefined) {
+            return variable.defs.length > 0;
+        }
+
+        scope = scope.upper;
+    }
+
+    return false;
+};
+
 /**
  * Disallow explicit initialization to `undefined`.
  */
@@ -50,6 +74,13 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 
         return {
             [disallowedSelector]: (node: Readonly<es.Node>): void => {
+                if (
+                    node.type !== AST_NODE_TYPES.Identifier ||
+                    isShadowedUndefined(sourceCode, node)
+                ) {
+                    return;
+                }
+
                 const removalRange = getUndefinedInitializationRemovalRange(
                     sourceCode,
                     node

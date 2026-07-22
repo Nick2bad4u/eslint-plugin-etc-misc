@@ -45,7 +45,7 @@ class Example {
 
 - **Lifecycle:** Deprecated and frozen.
 - **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
+- **Available until:** `v4.0.0`
 - **Use instead:** [`sort-class-members/sort-class-members`](https://www.npmjs.com/package/eslint-plugin-sort-class-members) or [Perfectionist sorting rules](https://perfectionist.dev/)
 
 ## Behavior and migration notes

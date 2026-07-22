@@ -6,11 +6,11 @@ import { ruleTester } from "../_internal/ruleTester";
 const filename = "component.tsx";
 
 describe("require-memo lifecycle", () => {
-    it("remains available as a frozen rule through 3.0.0", () => {
+    it("remains available as a frozen rule until 4.0.0", () => {
         expect.hasAssertions();
 
         expect(rule.meta.deprecated).toMatchObject({
-            availableUntil: "3.0.0",
+            availableUntil: "4.0.0",
             deprecatedSince: "2.0.0",
         });
         expect(rule.meta.docs).toMatchObject({

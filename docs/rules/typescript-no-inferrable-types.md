@@ -35,7 +35,7 @@ const value = 1;
 
 - **Lifecycle:** Deprecated and frozen.
 - **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
+- **Available until:** `v4.0.0`
 - **Use instead:** [`@typescript-eslint/no-inferrable-types`](https://typescript-eslint.io/rules/no-inferrable-types)
 
 ## Behavior and migration notes

@@ -1,12 +1,15 @@
 import type { TSESTree as es } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation.js";
 
 type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-// eslint-disable-next-line etc-misc/no-unnecessary-template-literal -- String.raw preserves selector escapes.
 const disallowedSelector = String.raw`Identifier[name=/[^$\w]/u]`;
 
 /**
@@ -46,4 +49,24 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "restrict-identifier-characters",
 });
 
-export default rule;
+/** Deprecated rule with explicit lifecycle and replacement metadata. */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    availableUntil: "4.0.0",
+    deprecatedSince: "3.0.0",
+    message: "Deprecated in favor of ESLint core id-match.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "eslint",
+                url: "https://eslint.org/docs/latest/rules/",
+            },
+            rule: {
+                name: "id-match",
+                url: "https://eslint.org/docs/latest/rules/id-match",
+            },
+        }),
+    ],
+    ruleId: "restrict-identifier-characters",
+});
+
+export default deprecatedRule;

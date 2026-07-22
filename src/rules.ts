@@ -179,23 +179,14 @@ const recommendedRuleNames = new Set<string>([
     "no-assign-mutated-array",
     "no-const-enum",
     "no-function-declare-after-return",
-    "no-implicit-any-catch",
     "no-internal",
     "no-t",
     "no-unnecessary-as-const",
     "no-unnecessary-break",
     "no-unnecessary-initialization",
-    "no-unnecessary-template-literal",
     "no-vulnerable",
-    "throw-error",
     "typescript/no-boolean-literal-type",
-    "typescript/prefer-readonly-array",
-    "typescript/prefer-readonly-array-parameter",
     "typescript/prefer-readonly-index-signature",
-    "typescript/prefer-readonly-map",
-    "typescript/prefer-readonly-property",
-    "typescript/prefer-readonly-record",
-    "typescript/prefer-readonly-set",
     "typescript/require-readonly-array-return-type",
     "typescript/require-this-void",
 ]);
@@ -424,7 +415,8 @@ const withCatalogDocsMetadata = (
             currentDocsMetadata.frozen ??
             currentDocsMetadata.deprecated ??
             isDeprecatedRule,
-        recommended: setHas(recommendedRuleNames, ruleName),
+        recommended:
+            !isDeprecatedRule && setHas(recommendedRuleNames, ruleName),
         requiresTypeChecking:
             currentDocsMetadata.requiresTypeChecking ?? hasRequiredTypeChecking,
         ruleName,

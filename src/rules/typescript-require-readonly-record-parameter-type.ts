@@ -3,6 +3,10 @@ import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation.js";
 
 type MessageIds = "forbidden" | "suggestRequireReadonlyRecordParameterType";
 
@@ -205,4 +209,25 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "typescript/require-readonly-record-parameter-type",
 });
 
-export default rule;
+/** Deprecated rule with explicit lifecycle and replacement metadata. */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    availableUntil: "4.0.0",
+    deprecatedSince: "3.0.0",
+    message:
+        "Deprecated in favor of the type-aware @typescript-eslint/prefer-readonly-parameter-types rule.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "@typescript-eslint",
+                url: "https://typescript-eslint.io/",
+            },
+            rule: {
+                name: "prefer-readonly-parameter-types",
+                url: "https://typescript-eslint.io/rules/prefer-readonly-parameter-types/",
+            },
+        }),
+    ],
+    ruleId: "typescript/require-readonly-record-parameter-type",
+});
+
+export default deprecatedRule;

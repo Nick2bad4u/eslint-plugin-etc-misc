@@ -44,7 +44,7 @@ function f() {
 
 - **Lifecycle:** Deprecated and frozen.
 - **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
+- **Available until:** `v4.0.0`
 - **Use instead:** [`@typescript-eslint/no-shadow`](https://typescript-eslint.io/rules/no-shadow)
 
 ## Behavior and migration notes

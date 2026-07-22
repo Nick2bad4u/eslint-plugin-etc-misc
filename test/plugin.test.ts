@@ -15,35 +15,79 @@ interface ConfigurablePlugin {
 const configVariants = [
     "all",
     "allStrict",
+    "allStrictWithDeprecated",
+    "allWithDeprecated",
     "minimal",
     "recommended",
     "strict",
     "strictTypeChecked",
 ] as const;
 
+const configNames = {
+    all: "all",
+    allStrict: "all-strict",
+    allStrictWithDeprecated: "all-strict-with-deprecated",
+    allWithDeprecated: "all-with-deprecated",
+    minimal: "minimal",
+    recommended: "recommended",
+    strict: "strict",
+    strictTypeChecked: "strict-type-checked",
+} as const;
+
 const deprecatedRuleIds = [
+    "consistent-empty-lines",
     "consistent-filename",
     "consistent-source-extension",
+    "default-case",
+    "jsx-no-jsx-as-prop",
+    "jsx-no-new-array-as-prop",
+    "jsx-no-new-function-as-prop",
+    "jsx-no-new-object-as-prop",
     "no-commented-out-code",
     "no-deprecated",
+    "no-implicit-any-catch",
+    "no-misused-generics",
     "no-relative-parent-import",
     "no-restricted-syntax",
     "no-self-import",
     "no-shadow",
+    "no-underscore-export",
+    "no-unnecessary-template-literal",
+    "no-writeonly",
     "prefer-interface",
     "prefer-object-has-own",
     "require-jsdoc",
     "require-memo",
     "require-usememo",
     "require-usememo-children",
+    "restrict-identifier-characters",
+    "sort-array",
+    "sort-call-signature",
     "sort-class-members",
+    "sort-construct-signature",
+    "sort-export-specifiers",
+    "sort-keys",
     "switch-case-spacing",
+    "throw-error",
     "typescript/class-methods-use-this",
+    "typescript/define-function-in-one-statement",
     "typescript/exhaustive-switch",
+    "typescript/no-complex-return-type",
     "typescript/no-empty-interfaces",
     "typescript/no-inferrable-types",
     "typescript/no-restricted-syntax",
     "typescript/no-unsafe-object-assignment",
+    "typescript/prefer-array-type-alias",
+    "typescript/prefer-enum",
+    "typescript/prefer-readonly-array",
+    "typescript/prefer-readonly-array-parameter",
+    "typescript/prefer-readonly-map",
+    "typescript/prefer-readonly-property",
+    "typescript/prefer-readonly-record",
+    "typescript/prefer-readonly-set",
+    "typescript/require-readonly-map-parameter-type",
+    "typescript/require-readonly-record-parameter-type",
+    "typescript/require-readonly-set-parameter-type",
 ] as const;
 
 const removedExternalAdapterRuleIds = [
@@ -112,23 +156,14 @@ const recommendedRuleIds = [
     "no-assign-mutated-array",
     "no-const-enum",
     "no-function-declare-after-return",
-    "no-implicit-any-catch",
     "no-internal",
     "no-t",
     "no-unnecessary-as-const",
     "no-unnecessary-break",
     "no-unnecessary-initialization",
-    "no-unnecessary-template-literal",
     "no-vulnerable",
-    "throw-error",
     "typescript/no-boolean-literal-type",
-    "typescript/prefer-readonly-array",
-    "typescript/prefer-readonly-array-parameter",
     "typescript/prefer-readonly-index-signature",
-    "typescript/prefer-readonly-map",
-    "typescript/prefer-readonly-property",
-    "typescript/prefer-readonly-record",
-    "typescript/prefer-readonly-set",
     "typescript/require-readonly-array-return-type",
     "typescript/require-this-void",
 ] as const;
@@ -138,28 +173,19 @@ const minimalRuleIds = [
     "no-assign-mutated-array",
     "no-const-enum",
     "no-function-declare-after-return",
-    "no-implicit-any-catch",
     "no-internal",
     "no-t",
     "no-unnecessary-as-const",
     "no-unnecessary-break",
     "no-unnecessary-initialization",
-    "no-unnecessary-template-literal",
     "no-vulnerable",
-    "throw-error",
     "typescript/no-boolean-literal-type",
     "typescript/require-readonly-array-return-type",
     "typescript/require-this-void",
 ] as const;
 
 const preferReadonlyRuleIds = [
-    "typescript/prefer-readonly-array",
-    "typescript/prefer-readonly-array-parameter",
     "typescript/prefer-readonly-index-signature",
-    "typescript/prefer-readonly-map",
-    "typescript/prefer-readonly-property",
-    "typescript/prefer-readonly-record",
-    "typescript/prefer-readonly-set",
 ] as const;
 
 const recommendedRuleLevels = {
@@ -167,23 +193,14 @@ const recommendedRuleLevels = {
     "etc-misc/no-assign-mutated-array": "error",
     "etc-misc/no-const-enum": "warn",
     "etc-misc/no-function-declare-after-return": "warn",
-    "etc-misc/no-implicit-any-catch": "error",
     "etc-misc/no-internal": "error",
     "etc-misc/no-t": "error",
     "etc-misc/no-unnecessary-as-const": "warn",
     "etc-misc/no-unnecessary-break": "warn",
     "etc-misc/no-unnecessary-initialization": "warn",
-    "etc-misc/no-unnecessary-template-literal": "warn",
     "etc-misc/no-vulnerable": "error",
-    "etc-misc/throw-error": "error",
     "etc-misc/typescript/no-boolean-literal-type": "error",
-    "etc-misc/typescript/prefer-readonly-array": "warn",
-    "etc-misc/typescript/prefer-readonly-array-parameter": "warn",
     "etc-misc/typescript/prefer-readonly-index-signature": "warn",
-    "etc-misc/typescript/prefer-readonly-map": "warn",
-    "etc-misc/typescript/prefer-readonly-property": "warn",
-    "etc-misc/typescript/prefer-readonly-record": "warn",
-    "etc-misc/typescript/prefer-readonly-set": "warn",
     "etc-misc/typescript/require-readonly-array-return-type": "warn",
     "etc-misc/typescript/require-this-void": "warn",
 } as const satisfies Readonly<Record<`etc-misc/${string}`, "error" | "warn">>;
@@ -193,15 +210,12 @@ const minimalRuleLevels = {
     "etc-misc/no-assign-mutated-array": "error",
     "etc-misc/no-const-enum": "warn",
     "etc-misc/no-function-declare-after-return": "warn",
-    "etc-misc/no-implicit-any-catch": "error",
     "etc-misc/no-internal": "error",
     "etc-misc/no-t": "error",
     "etc-misc/no-unnecessary-as-const": "warn",
     "etc-misc/no-unnecessary-break": "warn",
     "etc-misc/no-unnecessary-initialization": "warn",
-    "etc-misc/no-unnecessary-template-literal": "warn",
     "etc-misc/no-vulnerable": "error",
-    "etc-misc/throw-error": "error",
     "etc-misc/typescript/no-boolean-literal-type": "error",
     "etc-misc/typescript/require-readonly-array-return-type": "warn",
     "etc-misc/typescript/require-this-void": "warn",
@@ -211,6 +225,24 @@ const hasRuleDeprecationInfo = (
     value: unknown
 ): value is Readonly<{ availableUntil?: null | string }> =>
     typeof value === "object" && value !== null && "availableUntil" in value;
+
+const hasSamePluginReplacement = (
+    ruleId: string,
+    rule: Readonly<(typeof plugin.rules)[string]>
+): boolean => {
+    const deprecated = rule.meta.deprecated;
+
+    return (
+        typeof deprecated === "object" &&
+        (deprecated.replacedBy?.some(
+            (replacement) =>
+                replacement.plugin === undefined &&
+                replacement.rule?.name !== undefined &&
+                replacement.rule.name !== ruleId
+        ) ??
+            false)
+    );
+};
 
 type RuleDocsMetadata = Readonly<{
     catalogId: string;
@@ -230,17 +262,20 @@ const getSortedRuleNames = (
 
 const assertSamePluginAliasContract = (): void => {
     const exportedRuleIds = getSortedRuleNames(plugin.rules);
-    const samePluginAliasRuleIds = new Set(Object.keys(samePluginAliases));
-    const presetEligibleExportedRuleIds = exportedRuleIds.filter(
-        (ruleId) => !samePluginAliasRuleIds.has(ruleId)
-    );
-    const allConfigRuleIds = toSortedStrings(
-        Object.keys(plugin.configs.all.rules).map((qualifiedRuleName) =>
-            qualifiedRuleName.slice("etc-misc/".length)
+    const presetEligibleExportedRuleIds = exportedRuleIds.filter((ruleId) => {
+        const rule = plugin.rules[ruleId];
+
+        return rule !== undefined && !hasSamePluginReplacement(ruleId, rule);
+    });
+    const allWithDeprecatedConfigRuleIds = toSortedStrings(
+        Object.keys(plugin.configs.allWithDeprecated.rules).map(
+            (qualifiedRuleName) => qualifiedRuleName.slice("etc-misc/".length)
         )
     );
 
-    expect(presetEligibleExportedRuleIds).toStrictEqual(allConfigRuleIds);
+    expect(presetEligibleExportedRuleIds).toStrictEqual(
+        allWithDeprecatedConfigRuleIds
+    );
 
     for (const [aliasRuleId, aliasContract] of Object.entries(
         samePluginAliases
@@ -275,7 +310,7 @@ const assertSamePluginAliasContract = (): void => {
         expect(aliasDeprecation.deprecatedSince).toBe(
             aliasContract.deprecatedSince
         );
-        expect(aliasDeprecation.availableUntil).toBe("3.0.0");
+        expect(aliasDeprecation.availableUntil).toBe("4.0.0");
 
         const aliasReplacement = aliasDeprecation.replacedBy?.[0];
 
@@ -304,7 +339,17 @@ const assertSamePluginAliasContract = (): void => {
             expectedAllSeverity
         );
         expect(
+            plugin.configs.allWithDeprecated.rules[
+                `etc-misc/${canonicalRuleId}`
+            ]
+        ).toBe(expectedAllSeverity);
+        expect(
             plugin.configs.allStrict.rules[`etc-misc/${canonicalRuleId}`]
+        ).toBe("error");
+        expect(
+            plugin.configs.allStrictWithDeprecated.rules[
+                `etc-misc/${canonicalRuleId}`
+            ]
         ).toBe("error");
     }
 };
@@ -329,7 +374,31 @@ const assertDeprecatedRuleLifecycle = (): void => {
             : undefined;
 
         expect(hasDeprecationMetadata).toBe(true);
-        expect(availableUntil).toBe("3.0.0");
+        expect(availableUntil).toBe("4.0.0");
+
+        const qualifiedRuleId = `etc-misc/${deprecatedRuleId}`;
+        const isSamePluginAlias = hasSamePluginReplacement(
+            deprecatedRuleId,
+            rule
+        );
+
+        expect(qualifiedRuleId in plugin.configs.all.rules).toBe(false);
+        expect(qualifiedRuleId in plugin.configs.allStrict.rules).toBe(false);
+        expect(qualifiedRuleId in plugin.configs.allWithDeprecated.rules).toBe(
+            !isSamePluginAlias
+        );
+        expect(
+            qualifiedRuleId in plugin.configs.allStrictWithDeprecated.rules
+        ).toBe(!isSamePluginAlias);
+
+        if (!isSamePluginAlias) {
+            expect(
+                plugin.configs.allWithDeprecated.rules[qualifiedRuleId]
+            ).toBe("warn");
+            expect(
+                plugin.configs.allStrictWithDeprecated.rules[qualifiedRuleId]
+            ).toBe("warn");
+        }
     }
 };
 
@@ -457,13 +526,7 @@ const assertPluginExposesRulesAndConfigs = (): void => {
             plugin.rules
         );
         expect(plugin.configs[configVariant].name).toBe(
-            `etc-misc/${
-                configVariant === "allStrict"
-                    ? "all-strict"
-                    : configVariant === "strictTypeChecked"
-                      ? "strict-type-checked"
-                      : configVariant
-            }`
+            `etc-misc/${configNames[configVariant]}`
         );
     }
 
@@ -581,11 +644,48 @@ describe("plugin export", () => {
         const allStrictRuleNames = getSortedRuleNames(
             plugin.configs.allStrict.rules
         );
+        const expectedAllRuleNames = toSortedStrings(
+            Object.entries(plugin.rules)
+                .filter(
+                    ([, ruleModule]) => ruleModule.meta.deprecated === false
+                )
+                .map(([ruleName]) => `etc-misc/${ruleName}`)
+        );
 
+        expect(allRuleNames).toStrictEqual(expectedAllRuleNames);
         expect(allStrictRuleNames).toStrictEqual(allRuleNames);
 
         for (const [qualifiedRuleName, configuredSeverity] of Object.entries(
             plugin.configs.allStrict.rules
+        )) {
+            expect(qualifiedRuleName.startsWith("etc-misc/")).toBe(true);
+            expect(configuredSeverity).toBe("error");
+        }
+
+        const expectedAllWithDeprecatedRuleNames = toSortedStrings(
+            Object.entries(plugin.rules)
+                .filter(
+                    ([ruleName, ruleModule]) =>
+                        !hasSamePluginReplacement(ruleName, ruleModule)
+                )
+                .map(([ruleName]) => `etc-misc/${ruleName}`)
+        );
+        const allWithDeprecatedRuleNames = getSortedRuleNames(
+            plugin.configs.allWithDeprecated.rules
+        );
+        const allStrictWithDeprecatedRuleNames = getSortedRuleNames(
+            plugin.configs.allStrictWithDeprecated.rules
+        );
+
+        expect(allWithDeprecatedRuleNames).toStrictEqual(
+            expectedAllWithDeprecatedRuleNames
+        );
+        expect(allStrictWithDeprecatedRuleNames).toStrictEqual(
+            allWithDeprecatedRuleNames
+        );
+
+        for (const [qualifiedRuleName, configuredSeverity] of Object.entries(
+            plugin.configs.allStrictWithDeprecated.rules
         )) {
             const shortRuleName = qualifiedRuleName.slice("etc-misc/".length);
             const ruleModule = plugin.rules[shortRuleName];

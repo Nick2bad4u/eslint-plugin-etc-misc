@@ -71,13 +71,16 @@ flowchart TD
   B --> C[Run lint + tests]
   C --> D[Fix violations in batches]
   D --> E[Promote selected warn rules to error]
-  E --> F[Adopt all preset if desired]
+  E --> F[Adopt all current-rule preset if desired]
 ```
 
 ## Common migration notes
 
 - Some legacy rules are intentionally deprecated in this plugin and include
   replacement guidance in docs.
+- Normal presets, including `all` and `allStrict`, exclude deprecated rules.
+  Use a deprecated-inclusive exhaustive preset only as a temporary migration
+  bridge.
 - If you previously maintained a heavily custom rule list, start from
   `recommended`, then layer explicit overrides.
 

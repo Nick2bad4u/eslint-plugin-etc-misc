@@ -2,6 +2,16 @@
 
 Require readonly array-like types for function and method parameters.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** [`@typescript-eslint/prefer-readonly-parameter-types`](https://typescript-eslint.io/rules/prefer-readonly-parameter-types/)
+
+The replacement resolves aliases and inferred or nested types using TypeScript
+type information. It is intentionally not an autofixable, syntax-only drop-in.
+
 ## Targeted pattern scope
 
 This rule targets top-level array-like parameter type annotations, including:

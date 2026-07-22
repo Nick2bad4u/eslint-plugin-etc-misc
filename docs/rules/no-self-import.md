@@ -41,7 +41,7 @@ import value from "./other-file";
 
 - **Lifecycle:** Deprecated and frozen.
 - **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
+- **Available until:** `v4.0.0`
 - **Use instead:** [`import/no-self-import`](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-self-import.md)
 
 ## Behavior and migration notes

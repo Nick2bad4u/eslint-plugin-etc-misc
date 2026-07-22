@@ -2,6 +2,18 @@
 
 Require `ReadonlyMap` instead of `Map` in type positions.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** [`typescript/require-readonly-map-property-type`](./typescript-require-readonly-map-property-type.md), [`typescript/require-readonly-map-return-type`](./typescript-require-readonly-map-return-type.md), [`typescript/require-readonly-map-type-alias`](./typescript-require-readonly-map-type-alias.md), and [`@typescript-eslint/prefer-readonly-parameter-types`](https://typescript-eslint.io/rules/prefer-readonly-parameter-types/)
+
+Use only the scoped local rules for positions your project intends to govern.
+The typescript-eslint replacement performs deeper, type-aware parameter
+analysis. Do not enable this broad rule alongside those replacements because
+their diagnostics overlap.
+
 ## Targeted pattern scope
 
 This rule targets `Map` identifier references in TypeScript type references.

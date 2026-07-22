@@ -2,6 +2,16 @@
 
 Disallow render-local object allocations passed through JSX props.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** [`no-unstable-react-values`](./no-unstable-react-values.md)
+
+The replacement consolidates JSX, function, array, and object prop stability
+checks behind one rule and one intrinsic-element policy. Do not enable both.
+
 ## Targeted pattern scope
 
 This rule reports object literals and unshadowed `Object()` or `new Object()` allocations used as JSX prop values inside a function or class render scope. `Object` calls are reported only when they have no argument or a statically primitive argument; an unknown or object-valued argument may be returned unchanged. The rule follows logical and conditional branches and resolves a single same-function `const` initializer.

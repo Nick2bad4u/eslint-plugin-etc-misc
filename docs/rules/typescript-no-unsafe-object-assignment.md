@@ -42,7 +42,7 @@ Object.assign(target, { count: 2 });
 
 - **Lifecycle:** Deprecated and frozen.
 - **Deprecated since:** `v1.2.0`
-- **Available until:** `v2.0.0`
+- **Available until:** `v4.0.0`
 - **Use instead:** [`typescript/no-unsafe-object-assign`](./typescript-no-unsafe-object-assign.md)
 
 ## Behavior and migration notes

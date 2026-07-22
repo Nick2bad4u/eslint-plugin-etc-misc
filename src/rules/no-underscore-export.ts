@@ -3,6 +3,10 @@ import type { TSESTree as es } from "@typescript-eslint/utils";
 import { arrayJoin } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation.js";
 
 type MessageIds = "forbidden";
 
@@ -52,4 +56,24 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "no-underscore-export",
 });
 
-export default rule;
+/** Deprecated rule with explicit lifecycle and replacement metadata. */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    availableUntil: "4.0.0",
+    deprecatedSince: "3.0.0",
+    message: "Deprecated in favor of ESLint core no-restricted-exports.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "eslint",
+                url: "https://eslint.org/docs/latest/rules/",
+            },
+            rule: {
+                name: "no-restricted-exports",
+                url: "https://eslint.org/docs/latest/rules/no-restricted-exports",
+            },
+        }),
+    ],
+    ruleId: "no-underscore-export",
+});
+
+export default deprecatedRule;

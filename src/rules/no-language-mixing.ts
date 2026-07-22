@@ -8,7 +8,6 @@ type MessageIds = "forbidden";
 
 type Options = readonly [];
 
-// eslint-disable-next-line etc-misc/no-unnecessary-template-literal -- String.raw preserves selector escapes.
 const languageMixPattern = String.raw`/\w[\d_]*[^\u0000-\xff]|[^\u0000-\xff][\d_]*\w/u`;
 const disallowedSelector = arrayJoin(
     [

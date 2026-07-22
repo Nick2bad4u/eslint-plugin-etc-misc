@@ -2,6 +2,16 @@
 
 Enforce alphabetical sorting of object keys.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** [`perfectionist/sort-objects`](https://perfectionist.dev/rules/sort-objects)
+
+The replacement provides maintained, configurable ordering and safer handling
+of object partitions and dependencies. Review its options before migration.
+
 ## Targeted pattern scope
 
 This rule checks object literals (`ObjectExpression`) and evaluates non-computed

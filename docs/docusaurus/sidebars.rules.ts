@@ -284,6 +284,22 @@ if (hasRulesPluginDocId("presets/all")) {
     });
 }
 
+if (hasRulesPluginDocId("presets/all-strict-with-deprecated")) {
+    presetItems.push({
+        id: "presets/all-strict-with-deprecated",
+        label: "🔴⚠️ All Strict With Deprecated",
+        type: "doc",
+    });
+}
+
+if (hasRulesPluginDocId("presets/all-with-deprecated")) {
+    presetItems.push({
+        id: "presets/all-with-deprecated",
+        label: "🟣⚠️ All With Deprecated",
+        type: "doc",
+    });
+}
+
 if (presetItems.length > 0) {
     preRuleDocs.push({
         className: "sb-cat-presets",

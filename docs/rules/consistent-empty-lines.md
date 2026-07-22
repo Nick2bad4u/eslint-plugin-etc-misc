@@ -2,6 +2,17 @@
 
 Enforce configured empty-line consistency between selected nodes.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** [`@stylistic/no-multiple-empty-lines`](https://eslint.style/rules/no-multiple-empty-lines)
+
+The replacement owns maintained empty-line normalization. Translate this
+rule's selector-specific policy into the nearest supported Stylistic limits;
+its option shape is not a direct match.
+
 ## Targeted pattern scope
 
 This rule operates on the full file text and checks for runs of empty lines.

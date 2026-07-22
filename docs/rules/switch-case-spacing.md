@@ -44,7 +44,7 @@ switch (x) {
 
 - **Lifecycle:** Deprecated and frozen.
 - **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
+- **Available until:** `v4.0.0`
 - **Use instead:** [`@stylistic/switch-colon-spacing`](https://eslint.style/rules/switch-colon-spacing)
 
 ## Behavior and migration notes

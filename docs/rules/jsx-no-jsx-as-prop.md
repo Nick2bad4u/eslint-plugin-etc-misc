@@ -2,6 +2,16 @@
 
 Disallow render-local JSX allocations passed through JSX props.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** [`no-unstable-react-values`](./no-unstable-react-values.md)
+
+The replacement consolidates JSX, function, array, and object prop stability
+checks behind one rule and one intrinsic-element policy. Do not enable both.
+
 ## Targeted pattern scope
 
 This rule reports JSX elements and fragments used as prop expressions inside a function or class render scope. It follows logical and conditional branches and resolves a single same-function `const` initializer.

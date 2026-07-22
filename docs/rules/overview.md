@@ -31,18 +31,20 @@ That is enough for TypeScript files (`**/*.{ts,tsx,mts,cts}`).
 
 ## Presets
 
-| Preset                                 | Purpose                                                                   |
-| -------------------------------------- | ------------------------------------------------------------------------- |
-| 🟢 `etcMisc.configs.minimal`           | `recommended` minus the `typescript/prefer-readonly*` rules.              |
-| 🟡 `etcMisc.configs.recommended`       | Balanced starter preset for most projects.                                |
-| 🟠 `etcMisc.configs.strict`            | Same rule set as `recommended`, but every enabled rule is `error`.        |
-| 🔵 `etcMisc.configs.strictTypeChecked` | `strict` plus additional non-deprecated type-aware rules at `error`.      |
-| 🔴 `etcMisc.configs.allStrict`         | Every preset-eligible rule at `error`; external deprecations stay `warn`. |
-| 🟣 `etcMisc.configs.all`               | Every preset-eligible rule with metadata-derived severities.              |
+| Preset                                         | Purpose                                                                                     |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| 🟢 `etcMisc.configs.minimal`                   | `recommended` minus the `typescript/prefer-readonly*` rules.                                |
+| 🟡 `etcMisc.configs.recommended`               | Balanced starter preset for most projects.                                                  |
+| 🟠 `etcMisc.configs.strict`                    | Same rule set as `recommended`, but every enabled rule is `error`.                          |
+| 🔵 `etcMisc.configs.strictTypeChecked`         | `strict` plus additional non-deprecated type-aware rules at `error`.                        |
+| 🔴 `etcMisc.configs.allStrict`                 | Every non-deprecated rule at `error`.                                                       |
+| 🟣 `etcMisc.configs.all`                       | Every non-deprecated rule with metadata-derived severities.                                 |
+| 🔴⚠️ `etcMisc.configs.allStrictWithDeprecated` | `allStrict` plus deprecated rules without same-plugin replacements at `warn` for migration. |
+| 🟣⚠️ `etcMisc.configs.allWithDeprecated`       | `all` plus deprecated rules without same-plugin replacements at `warn` for migration.       |
 
-Deprecated same-plugin compatibility aliases remain exported for manual
-configuration but are excluded from executable presets to avoid running the
-same implementation twice.
+Deprecated rules with same-plugin replacements remain exported for manual
+configuration but are excluded from every executable preset to avoid running
+overlapping implementations together.
 
 ## Next steps
 

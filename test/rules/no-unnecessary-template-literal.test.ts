@@ -16,10 +16,18 @@ ruleTester.run("no-unnecessary-template-literal", rule, {
             errors: [{ messageId: "forbidden" }],
             output: String.raw`const x = "line\nvalue";`,
         },
+        {
+            code: "function f() { `use strict`; return this; }",
+            errors: [{ messageId: "forbidden" }],
+            output: null,
+        },
     ],
     valid: [
         {
             code: `const x = \`value ${suffixInterpolation}\`;`,
+        },
+        {
+            code: "tag`value`; String.raw`line\\nvalue`;",
         },
     ],
 });

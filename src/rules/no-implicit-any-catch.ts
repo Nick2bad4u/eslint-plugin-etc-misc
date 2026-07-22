@@ -11,6 +11,10 @@ import {
 import { arrayFirst } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation.js";
 
 type MessageIds =
     | "explicitAny"
@@ -221,7 +225,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             description:
                 "require explicit unknown for Promise rejection callback parameters.",
             frozen: false,
-            recommended: true,
+            recommended: false,
             requiresTypeChecking: true,
             suggestion: true,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-implicit-any-catch",
@@ -257,4 +261,25 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "no-implicit-any-catch",
 });
 
-export default rule;
+/** Deprecated rule with explicit lifecycle and replacement metadata. */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    availableUntil: "4.0.0",
+    deprecatedSince: "3.0.0",
+    message:
+        "Deprecated in favor of the type-aware @typescript-eslint/use-unknown-in-catch-callback-variable rule.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "@typescript-eslint",
+                url: "https://typescript-eslint.io/",
+            },
+            rule: {
+                name: "use-unknown-in-catch-callback-variable",
+                url: "https://typescript-eslint.io/rules/use-unknown-in-catch-callback-variable/",
+            },
+        }),
+    ],
+    ruleId: "no-implicit-any-catch",
+});
+
+export default deprecatedRule;

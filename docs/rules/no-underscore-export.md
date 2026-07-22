@@ -2,6 +2,16 @@
 
 Disallow underscore-prefixed named exports.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** ESLint core [`no-restricted-exports`](https://eslint.org/docs/latest/rules/no-restricted-exports)
+
+Configure the replacement with `restrictedNamedExportsPattern: "^_"` to retain
+this rule's underscore-prefix policy.
+
 ## Targeted pattern scope
 
 This rule reports underscore-prefixed identifiers exported via named export

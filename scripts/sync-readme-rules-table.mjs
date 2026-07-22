@@ -54,6 +54,8 @@ import prettier from "prettier";
 /**
  * @typedef {"all"
  *     | "allStrict"
+ *     | "allStrictWithDeprecated"
+ *     | "allWithDeprecated"
  *     | "minimal"
  *     | "recommended"
  *     | "strict"
@@ -133,6 +135,18 @@ const presetMetadataByName = {
             "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/all",
         icon: "🟣",
     },
+    allStrictWithDeprecated: {
+        configKey: "etcMisc.configs.allStrictWithDeprecated",
+        docsUrl:
+            "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/all-strict-with-deprecated",
+        icon: "🔴⚠️",
+    },
+    allWithDeprecated: {
+        configKey: "etcMisc.configs.allWithDeprecated",
+        docsUrl:
+            "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/presets/all-with-deprecated",
+        icon: "🟣⚠️",
+    },
 };
 
 /** @type {readonly PresetName[]} */
@@ -143,6 +157,8 @@ const presetOrder = [
     "strictTypeChecked",
     "allStrict",
     "all",
+    "allStrictWithDeprecated",
+    "allWithDeprecated",
 ];
 
 const rulesSectionHeading = "## Rules";
@@ -161,6 +177,8 @@ const detectLineEnding = (markdownText) =>
 const createEmptyPresetRuleNamesByPreset = () => ({
     all: new Set(),
     allStrict: new Set(),
+    allStrictWithDeprecated: new Set(),
+    allWithDeprecated: new Set(),
     minimal: new Set(),
     recommended: new Set(),
     strict: new Set(),

@@ -4,6 +4,10 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayJoin } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation.js";
 
 type MessageIds = "forbidden";
 
@@ -80,4 +84,43 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "typescript/prefer-readonly-array",
 });
 
-export default rule;
+/** Deprecated rule with explicit lifecycle and replacement metadata. */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    availableUntil: "4.0.0",
+    deprecatedSince: "3.0.0",
+    message:
+        "Deprecated in favor of the scoped readonly-array rules and @typescript-eslint/prefer-readonly-parameter-types.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            rule: {
+                name: "typescript/require-readonly-array-property-type",
+                url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-require-readonly-array-property-type",
+            },
+        }),
+        createReplacementRuleInfo({
+            rule: {
+                name: "typescript/require-readonly-array-return-type",
+                url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-require-readonly-array-return-type",
+            },
+        }),
+        createReplacementRuleInfo({
+            rule: {
+                name: "typescript/require-readonly-array-type-alias",
+                url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-require-readonly-array-type-alias",
+            },
+        }),
+        createReplacementRuleInfo({
+            plugin: {
+                name: "@typescript-eslint",
+                url: "https://typescript-eslint.io/",
+            },
+            rule: {
+                name: "prefer-readonly-parameter-types",
+                url: "https://typescript-eslint.io/rules/prefer-readonly-parameter-types/",
+            },
+        }),
+    ],
+    ruleId: "typescript/prefer-readonly-array",
+});
+
+export default deprecatedRule;

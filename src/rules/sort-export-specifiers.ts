@@ -6,6 +6,10 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayFirst, arrayJoin, arrayLast } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation.js";
 
 type MessageIds = "incorrectSortingOrder";
 
@@ -95,6 +99,26 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "sort-export-specifiers",
 });
 
-export default rule;
+/** Deprecated rule with explicit lifecycle and replacement metadata. */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    availableUntil: "4.0.0",
+    deprecatedSince: "3.0.0",
+    message: "Deprecated in favor of perfectionist/sort-named-exports.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "perfectionist",
+                url: "https://perfectionist.dev/",
+            },
+            rule: {
+                name: "sort-named-exports",
+                url: "https://perfectionist.dev/rules/sort-named-exports",
+            },
+        }),
+    ],
+    ruleId: "sort-export-specifiers",
+});
+
+export default deprecatedRule;
 
 /* eslint-enable @typescript-eslint/prefer-readonly-parameter-types -- Re-enable after file-scoped fixer callback implementations. */

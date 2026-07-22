@@ -2,6 +2,18 @@
 
 Require `Readonly<Record<K, V>>` instead of mutable `Record<K, V>`.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** [`typescript/require-readonly-record-property-type`](./typescript-require-readonly-record-property-type.md), [`typescript/require-readonly-record-return-type`](./typescript-require-readonly-record-return-type.md), [`typescript/require-readonly-record-type-alias`](./typescript-require-readonly-record-type-alias.md), and [`@typescript-eslint/prefer-readonly-parameter-types`](https://typescript-eslint.io/rules/prefer-readonly-parameter-types/)
+
+Use only the scoped local rules for positions your project intends to govern.
+The typescript-eslint replacement performs deeper, type-aware parameter
+analysis. Do not enable this broad rule alongside those replacements because
+their diagnostics overlap.
+
 ## Targeted pattern scope
 
 This rule targets `Record` type references in TypeScript type positions.

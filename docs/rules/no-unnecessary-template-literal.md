@@ -9,7 +9,10 @@ This rule matches template literals with zero interpolations:
 - `` `plain text` ``
 - ` ` \`\` (empty template)
 
-It reports only when `expressions.length === 0`.
+It reports only when `expressions.length === 0`. Tagged templates are excluded
+because tag functions receive template objects rather than ordinary strings,
+so replacing one with a string literal would change behavior or produce invalid
+syntax.
 
 ## What this rule reports
 
@@ -36,11 +39,21 @@ const x = `value ${suffix}`;
 const y = "value";
 ```
 
+```ts
+const raw = String.raw`line\nvalue`;
+```
+
+## Deprecated
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** [`unicorn/no-useless-template-literals`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-useless-template-literals.md)
+
 ## Behavior and migration notes
 
-This rule reports only and does not provide an autofix.
-
-Most migrations are straightforward replacements from backticks to single or
+This rule is deprecated in favor of `unicorn/no-useless-template-literals`.
+Until removal, it autofixes untagged expression-free templates to JSON-escaped
 double-quoted strings.
 
 ### Options

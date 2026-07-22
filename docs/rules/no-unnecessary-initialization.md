@@ -6,14 +6,17 @@ Disallow unnecessary initialization to `undefined`.
 
 This rule checks for explicit `undefined` initializers in two places:
 
-- variable declarators (`const value = undefined;`), and
+- `let` and `var` declarators with identifier bindings (`let value = undefined;`), and
 - class property definitions (`field = undefined;`).
 
-Only direct identifier `undefined` is matched.
+Only direct identifier `undefined` is matched. `const` declarations and
+destructuring bindings are excluded because deleting their initializers would
+produce invalid syntax.
 
 ## What this rule reports
 
-This rule reports variables and class fields explicitly initialized with `undefined`.
+This rule reports eligible variables and class fields explicitly initialized
+with `undefined`.
 
 ## Why this rule exists
 
@@ -23,7 +26,7 @@ Removing these initializers makes intent clearer and avoids unnecessary syntax.
 ## ❌ Incorrect
 
 ```ts
-const value = undefined;
+let value = undefined;
 class C {
  field = undefined;
 }
@@ -36,13 +39,16 @@ let value: number | undefined;
 class C {
  field?: number;
 }
+
+// Allowed because a const declaration requires an initializer.
+const sentinel = undefined;
 ```
 
 ## Behavior and migration notes
 
-This rule reports only and does not provide an autofix.
-
-In most cases, migration is a direct deletion of `= undefined`.
+This rule autofixes reports by deleting `= undefined`. It deliberately skips
+declarations for which that deletion would produce invalid JavaScript or
+TypeScript.
 
 ### Options
 

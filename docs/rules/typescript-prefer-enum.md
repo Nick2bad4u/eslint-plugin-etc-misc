@@ -2,6 +2,19 @@
 
 Prefer enums over string literal comparisons and unions.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Replacement:** None.
+
+This policy contradicts the plugin's `no-enum` rule and is not recommended as a
+general TypeScript default. Projects that deliberately retain enums may also
+consider the related
+[`@typescript-eslint/no-unsafe-enum-comparison`](https://typescript-eslint.io/rules/no-unsafe-enum-comparison/)
+rule, but it does not replace this rule's behavior.
+
 ## Targeted pattern scope
 
 ⚠️ This rule requires type information to run. Configure type-aware linting (`parserOptions.project` or `projectService`) before enabling it.

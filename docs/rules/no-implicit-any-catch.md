@@ -2,6 +2,17 @@
 
 Require explicit error parameter typing in Promise rejection callbacks.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** [`@typescript-eslint/use-unknown-in-catch-callback-variable`](https://typescript-eslint.io/rules/use-unknown-in-catch-callback-variable/)
+
+The replacement uses type information to detect unsafe callback variables even
+when their type is inferred or hidden behind an alias. Unlike this rule, it does
+not autofix annotations and does not provide `allowExplicitAny`.
+
 ## Targeted pattern scope
 
 ⚠️ This rule requires type information to run. Configure type-aware linting (`parserOptions.project` or `projectService`) before enabling it.

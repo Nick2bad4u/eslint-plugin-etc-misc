@@ -11,7 +11,7 @@ describe("require-usememo compatibility alias", () => {
         expect(rule).not.toBe(canonicalRule);
         expect(rule.create).toBe(canonicalRule.create);
         expect(rule.meta.deprecated).toMatchObject({
-            availableUntil: "3.0.0",
+            availableUntil: "4.0.0",
             deprecatedSince: "2.0.0",
             replacedBy: [
                 {

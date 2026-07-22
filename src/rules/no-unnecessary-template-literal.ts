@@ -4,12 +4,66 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import { arrayFirst } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation.js";
 
 type MessageIds = "forbidden";
 
 type Options = readonly [];
 
 const selector = "TemplateLiteral[expressions.length=0] > TemplateElement";
+
+const isStringLiteralStatement = (
+    statement: Readonly<es.ProgramStatement>
+): boolean =>
+    statement.type === AST_NODE_TYPES.ExpressionStatement &&
+    statement.expression.type === AST_NODE_TYPES.Literal &&
+    typeof statement.expression.value === "string";
+
+const isFunctionBody = (block: Readonly<es.BlockStatement>): boolean =>
+    (block.parent.type === AST_NODE_TYPES.ArrowFunctionExpression ||
+        block.parent.type === AST_NODE_TYPES.FunctionDeclaration ||
+        block.parent.type === AST_NODE_TYPES.FunctionExpression) &&
+    block.parent.body === block;
+
+const wouldCreateDirective = (
+    templateLiteral: Readonly<es.TemplateLiteral>
+): boolean => {
+    const statement = templateLiteral.parent;
+
+    if (statement.type !== AST_NODE_TYPES.ExpressionStatement) {
+        return false;
+    }
+
+    const container = statement.parent;
+    let statements: readonly es.ProgramStatement[] | undefined;
+
+    if (
+        container.type === AST_NODE_TYPES.Program ||
+        (container.type === AST_NODE_TYPES.BlockStatement &&
+            isFunctionBody(container))
+    ) {
+        statements = container.body;
+    }
+
+    if (statements === undefined) {
+        return false;
+    }
+
+    for (const currentStatement of statements) {
+        if (currentStatement === statement) {
+            return true;
+        }
+
+        if (!isStringLiteralStatement(currentStatement)) {
+            return false;
+        }
+    }
+
+    return false;
+};
 
 const toSafeStringLiteralText = (
     templateLiteral: Readonly<es.TemplateLiteral>
@@ -39,6 +93,21 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 return;
             }
 
+            if (
+                templateLiteral.parent.type ===
+                AST_NODE_TYPES.TaggedTemplateExpression
+            ) {
+                return;
+            }
+
+            if (wouldCreateDirective(templateLiteral)) {
+                context.report({
+                    messageId: "forbidden",
+                    node,
+                });
+                return;
+            }
+
             context.report({
                 fix: (fixer) =>
                     fixer.replaceText(
@@ -51,12 +120,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         },
     }),
     meta: {
-        deprecated: false,
+        deprecated: true,
         docs: {
-            deprecated: false,
+            deprecated: true,
             description:
                 "disallow template literals that have no interpolated expressions.",
-            frozen: false,
+            frozen: true,
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-unnecessary-template-literal",
         },
@@ -73,4 +142,25 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "no-unnecessary-template-literal",
 });
 
-export default rule;
+/**
+ * Wrapper rule with explicit lifecycle metadata and replacement mapping.
+ */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    deprecatedSince: "3.0.0",
+    message: "Deprecated in favor of unicorn/no-useless-template-literals.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "unicorn",
+                url: "https://github.com/sindresorhus/eslint-plugin-unicorn",
+            },
+            rule: {
+                name: "no-useless-template-literals",
+                url: "https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-useless-template-literals.md",
+            },
+        }),
+    ],
+    ruleId: "no-unnecessary-template-literal",
+});
+
+export default deprecatedRule;

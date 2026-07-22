@@ -2,6 +2,17 @@
 
 Require readonly class and interface properties.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** [`@typescript-eslint/prefer-readonly`](https://typescript-eslint.io/rules/prefer-readonly/)
+
+The replacement uses type information to report private members that are never
+modified outside construction. It intentionally does not impose this rule's
+broader syntactic policy on every public, protected, or interface property.
+
 ## Targeted pattern scope
 
 This rule targets class properties (`PropertyDefinition`) and interface/type

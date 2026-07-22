@@ -2,6 +2,16 @@
 
 Require identifiers to contain only english characters, digits, underscore, or dollar sign.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** ESLint core [`id-match`](https://eslint.org/docs/latest/rules/id-match)
+
+Configure `id-match` with the project's intended ASCII identifier pattern. Its
+regular-expression option replaces this rule's fixed character policy.
+
 ## Targeted pattern scope
 
 This rule checks all identifier names and reports names containing characters

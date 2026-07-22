@@ -21,8 +21,10 @@ friction and encourages blanket disabling.
 - Use severity tiering:
   - `error` for correctness and safety rules with strong signal.
   - `warn` for low-risk maintainability and style guidance.
-- Keep `etcMisc.configs.all` as the exhaustive preset for teams that want full
-  rule coverage.
+- Keep `etcMisc.configs.all` as the exhaustive preset for teams that want every
+  current, non-deprecated rule.
+- Keep deprecated rules out of normal presets and expose explicitly named
+  deprecated-inclusive variants only for staged migrations.
 
 ## Consequences
 

@@ -2,6 +2,16 @@
 
 Require a `default` branch in `switch` statements.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** ESLint core [`default-case`](https://eslint.org/docs/latest/rules/default-case)
+
+This rule is a direct runtime proxy of the core rule and adds no independent
+analysis. Migrate the options unchanged to the core rule ID.
+
 ## Targeted pattern scope
 
 This rule targets all JavaScript and TypeScript `switch` statements.

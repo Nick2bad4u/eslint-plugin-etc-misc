@@ -17,6 +17,10 @@ import { arrayFirst, isDefined } from "ts-extras";
 import * as tsutils from "tsutils";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation.js";
 
 type MessageIds = "forbidden" | "suggestWrapInError";
 
@@ -209,4 +213,35 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "throw-error",
 });
 
-export default rule;
+/** Deprecated rule with explicit lifecycle and replacement metadata. */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    availableUntil: "4.0.0",
+    deprecatedSince: "3.0.0",
+    message:
+        "Deprecated in favor of @typescript-eslint/only-throw-error and @typescript-eslint/prefer-promise-reject-errors.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "@typescript-eslint",
+                url: "https://typescript-eslint.io/",
+            },
+            rule: {
+                name: "only-throw-error",
+                url: "https://typescript-eslint.io/rules/only-throw-error/",
+            },
+        }),
+        createReplacementRuleInfo({
+            plugin: {
+                name: "@typescript-eslint",
+                url: "https://typescript-eslint.io/",
+            },
+            rule: {
+                name: "prefer-promise-reject-errors",
+                url: "https://typescript-eslint.io/rules/prefer-promise-reject-errors/",
+            },
+        }),
+    ],
+    ruleId: "throw-error",
+});
+
+export default deprecatedRule;

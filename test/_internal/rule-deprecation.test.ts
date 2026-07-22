@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
     createDeprecatedRuleInfo,
     createReplacementRuleInfo,
-    isDeprecatedSamePluginAlias,
+    hasDeprecatedSamePluginReplacement,
     withDeprecatedRuleLifecycle,
 } from "../../src/_internal/rule-deprecation";
 
@@ -96,7 +96,7 @@ describe("deprecated rule metadata helpers", () => {
         });
 
         expect(deprecationInfo).toMatchObject({
-            availableUntil: "3.0.0",
+            availableUntil: "4.0.0",
             deprecatedSince: "1.0.0",
             message: "Use typescript/prefer-readonly-array instead.",
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/typescript-no-multi-type-tuples",
@@ -120,19 +120,19 @@ describe("deprecated rule metadata helpers", () => {
         expect.hasAssertions();
 
         const deprecationInfo = createDeprecatedRuleInfo({
-            availableUntil: "3.0.0",
+            availableUntil: "4.0.0",
             deprecatedSince: "2.0.0",
             message: "Use the canonical replacement.",
             ruleId: "legacy-rule",
         });
 
         expect(deprecationInfo).toMatchObject({
-            availableUntil: "3.0.0",
+            availableUntil: "4.0.0",
             deprecatedSince: "2.0.0",
         });
     });
 
-    it("identifies only different-rule replacements from the same plugin as aliases", () => {
+    it("identifies only different-rule replacements from the same plugin", () => {
         expect.hasAssertions();
 
         const samePluginAlias = createDeprecatedRuleInfo({
@@ -165,31 +165,31 @@ describe("deprecated rule metadata helpers", () => {
         });
 
         expect(
-            isDeprecatedSamePluginAlias({
+            hasDeprecatedSamePluginReplacement({
                 deprecated: samePluginAlias,
                 ruleId: "typescript/no-unsafe-object-assignment",
             })
         ).toBe(true);
         expect(
-            isDeprecatedSamePluginAlias({
+            hasDeprecatedSamePluginReplacement({
                 deprecated: externalReplacement,
                 ruleId: "typescript/no-unsafe-object-assignment",
             })
         ).toBe(false);
         expect(
-            isDeprecatedSamePluginAlias({
+            hasDeprecatedSamePluginReplacement({
                 deprecated: sameRuleReplacement,
                 ruleId: "no-restricted-syntax",
             })
         ).toBe(false);
         expect(
-            isDeprecatedSamePluginAlias({
+            hasDeprecatedSamePluginReplacement({
                 deprecated: false,
                 ruleId: "example",
             })
         ).toBe(false);
         expect(
-            isDeprecatedSamePluginAlias({
+            hasDeprecatedSamePluginReplacement({
                 deprecated: true,
                 ruleId: "example",
             })
@@ -198,7 +198,7 @@ describe("deprecated rule metadata helpers", () => {
 });
 
 describe("deprecated rule lifecycle decoration", () => {
-    it("adds deprecated metadata and freezes docs when docs are present", () => {
+    it("adds metadata and makes documented rules frozen and non-recommended", () => {
         expect.hasAssertions();
 
         const ruleWithDocs: TSESLint.RuleModule<string, readonly unknown[]> = {
@@ -217,14 +217,18 @@ describe("deprecated rule lifecycle decoration", () => {
         };
 
         const decoratedRule = withDeprecatedRuleLifecycle(ruleWithDocs, {
-            availableUntil: "3.0.0",
+            availableUntil: "4.0.0",
             message: "Use etc-misc/no-t instead.",
             ruleId: "prefer-interface",
         });
 
-        expect(decoratedRule.meta?.docs?.frozen).toBe(true);
+        expect(decoratedRule.meta?.docs).toMatchObject({
+            deprecated: true,
+            frozen: true,
+            recommended: false,
+        });
         expect(decoratedRule.meta?.deprecated).toMatchObject({
-            availableUntil: "3.0.0",
+            availableUntil: "4.0.0",
             deprecatedSince: "1.0.0",
             message: "Use etc-misc/no-t instead.",
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/prefer-interface",

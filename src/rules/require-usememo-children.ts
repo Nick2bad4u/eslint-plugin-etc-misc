@@ -23,7 +23,7 @@ const compatibilityAlias: typeof canonicalRule = {
 const rule: typeof compatibilityAlias = withDeprecatedRuleLifecycle(
     compatibilityAlias,
     {
-        availableUntil: "3.0.0",
+        availableUntil: "4.0.0",
         deprecatedSince: "2.0.0",
         message:
             "Deprecated compatibility alias. Use no-unstable-react-children instead.",

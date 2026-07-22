@@ -3,6 +3,10 @@ import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 import { arrayJoin, stringSplit } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation.js";
 
 type MessageIds = "inconsistent";
 
@@ -98,4 +102,24 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "consistent-empty-lines",
 });
 
-export default rule;
+/** Deprecated rule with explicit lifecycle and replacement metadata. */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    availableUntil: "4.0.0",
+    deprecatedSince: "3.0.0",
+    message: "Deprecated in favor of @stylistic/no-multiple-empty-lines.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "@stylistic",
+                url: "https://eslint.style/",
+            },
+            rule: {
+                name: "no-multiple-empty-lines",
+                url: "https://eslint.style/rules/no-multiple-empty-lines",
+            },
+        }),
+    ],
+    ruleId: "consistent-empty-lines",
+});
+
+export default deprecatedRule;

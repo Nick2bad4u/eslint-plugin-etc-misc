@@ -52,7 +52,8 @@ type Worker = Person | Robot;
 
 ## Behavior and migration notes
 
-Lifecycle: Deprecated and frozen since `v1.0.0` and available until `v2.0.0`.
+Lifecycle: Deprecated and frozen since `v1.0.0`, retained in v3, and scheduled
+for removal in `v4.0.0`.
 Use instead: [`@typescript-eslint/consistent-type-definitions`](https://typescript-eslint.io/rules/consistent-type-definitions).
 
 ### Options

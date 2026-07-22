@@ -39,12 +39,13 @@ The corresponding upstream plugins are no longer runtime dependencies of
 
 Use `no-unstable-react-values` instead of `require-usememo`, and use
 `no-unstable-react-children` instead of `require-usememo-children`. The old
-IDs remain deprecated compatibility aliases through 3.0.0 and are excluded from
-presets to prevent duplicate reports.
+IDs remain deprecated compatibility aliases in v3, are scheduled for removal in
+v4.0.0, and are excluded from presets to prevent duplicate reports.
 
-`require-memo` is deprecated through 3.0.0 with no replacement. React Compiler
-already performs memo-like optimization, and manual memoization should be driven
-by profiling rather than a blanket lint requirement.
+`require-memo` remains deprecated in v3 with no replacement and is scheduled for
+removal in v4.0.0. React Compiler already performs memo-like optimization, and
+manual memoization should be driven by profiling rather than a blanket lint
+requirement.
 
 ## Changed defaults
 
@@ -67,5 +68,7 @@ flat config:
 npx eslint .
 ```
 
-If you use `all` or `all-strict`, inspect the changed rule inventory before
-promoting the upgrade.
+If you use an exhaustive preset, inspect the changed rule inventory before
+promoting the upgrade. Current `all` and `allStrict` presets exclude deprecated
+rules; use the explicitly named deprecated-inclusive variants only as temporary
+migration bridges.

@@ -2,10 +2,10 @@
 
 Require exported function components to use explicit React memoization.
 
-> **Deprecated in v2.0.0.** This rule is frozen and remains available through
-> v3.0.0. Blanket `memo` requirements are not a sound performance policy and
-> conflict with compiler-managed memoization. Remove the rule during migration;
-> there is no direct replacement.
+> **Deprecated in v2.0.0.** This rule is frozen, retained in v3, and scheduled
+> for removal in v4.0.0. Blanket `memo` requirements are not a sound performance
+> policy and conflict with compiler-managed memoization. Remove the rule during
+> migration; there is no direct replacement.
 
 ## Targeted pattern scope
 
@@ -61,10 +61,11 @@ This rule reports only. Adding `memo` automatically can regress performance, obs
 
 React Compiler applies automatic component and value memoization in supported builds, reducing the need for manual `memo`. Enable the legacy rule only when a project intentionally requires explicit memo boundaries while migrating away from that policy.
 
-The rule is deprecated and excluded from the `minimal`, `recommended`, `strict`,
-and `strictTypeChecked` presets beginning in v2.0.0. The exhaustive `all` and
-`allStrict` presets retain it at warning level through v3.0.0 so existing
-configurations can remove the policy without a forced major-version migration.
+The rule is deprecated and excluded from `minimal`, `recommended`, `strict`,
+`strictTypeChecked`, `all`, and `allStrict`. The migration-only
+`allWithDeprecated` and `allStrictWithDeprecated` presets retain it at warning
+level in v3 so existing configurations can remove the policy before its
+scheduled removal in v4.0.0.
 
 ### Options
 

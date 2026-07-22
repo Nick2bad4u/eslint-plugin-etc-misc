@@ -2,6 +2,17 @@
 
 Enforce alphabetical sorting of named export specifiers.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** [`perfectionist/sort-named-exports`](https://perfectionist.dev/rules/sort-named-exports)
+
+The replacement provides maintained, configurable ordering and autofixing.
+Review its comparison and partition options rather than assuming this rule's
+fixed lexical ordering.
+
 ## Targeted pattern scope
 
 This rule inspects `ExportNamedDeclaration` nodes that have at least two

@@ -49,7 +49,19 @@ declare function compare<T>(left: T, right: T): boolean;
 declare function compare<T, U extends T>(left: T, right: U): boolean;
 ```
 
+## Deprecated
+
+- **Lifecycle:** Deprecated and frozen.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** [`@typescript-eslint/no-unnecessary-type-parameters`](https://typescript-eslint.io/rules/no-unnecessary-type-parameters)
+
 ## Behavior and migration notes
+
+This rule is deprecated in favor of
+`@typescript-eslint/no-unnecessary-type-parameters`, which covers both
+non-inferable return-only type parameters and type parameters that appear only
+once in a signature.
 
 This rule has no options.
 

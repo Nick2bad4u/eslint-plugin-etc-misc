@@ -2,6 +2,17 @@
 
 Disallow complex inferred return types for arrow functions.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** [`@typescript-eslint/explicit-function-return-type`](https://typescript-eslint.io/rules/explicit-function-return-type/)
+
+The replacement provides the maintained, configurable return-type policy. It is
+broader than this rule's arrow-function-only heuristic, so review its options
+before enabling it across an existing codebase.
+
 ## Targeted pattern scope
 
 This rule targets arrow functions with no explicit return type annotation when

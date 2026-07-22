@@ -12,6 +12,10 @@ import {
 } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation.js";
 
 type MessageIds = "incorrectSorting";
 
@@ -120,6 +124,26 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "sort-array",
 });
 
-export default rule;
+/** Deprecated rule with explicit lifecycle and replacement metadata. */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    availableUntil: "4.0.0",
+    deprecatedSince: "3.0.0",
+    message: "Deprecated in favor of perfectionist/sort-arrays.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            plugin: {
+                name: "perfectionist",
+                url: "https://perfectionist.dev/",
+            },
+            rule: {
+                name: "sort-arrays",
+                url: "https://perfectionist.dev/rules/sort-arrays",
+            },
+        }),
+    ],
+    ruleId: "sort-array",
+});
+
+export default deprecatedRule;
 
 /* eslint-enable @typescript-eslint/prefer-readonly-parameter-types -- Re-enable after file-scoped fixer callback implementations. */

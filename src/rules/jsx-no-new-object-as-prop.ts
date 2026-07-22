@@ -10,6 +10,10 @@ import {
     isBuiltinAllocation,
 } from "../_internal/jsx-prop-stability.js";
 import { ruleCreator } from "../_internal/rule-creator.js";
+import {
+    createReplacementRuleInfo,
+    withDeprecatedRuleLifecycle,
+} from "../_internal/rule-deprecation.js";
 
 type MessageIds = "unstableObjectProp";
 
@@ -93,4 +97,21 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "jsx-no-new-object-as-prop",
 });
 
-export default rule;
+/** Deprecated rule with explicit lifecycle and replacement metadata. */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    availableUntil: "4.0.0",
+    deprecatedSince: "3.0.0",
+    message:
+        "Deprecated because no-unstable-react-values consolidates JSX prop stability checks.",
+    replacedBy: [
+        createReplacementRuleInfo({
+            rule: {
+                name: "no-unstable-react-values",
+                url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/no-unstable-react-values",
+            },
+        }),
+    ],
+    ruleId: "jsx-no-new-object-as-prop",
+});
+
+export default deprecatedRule;

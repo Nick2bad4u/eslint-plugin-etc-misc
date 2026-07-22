@@ -12,6 +12,7 @@ import * as tsutils from "tsutils";
 import ts from "typescript";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
+import { withDeprecatedRuleLifecycle } from "../_internal/rule-deprecation.js";
 
 type MessageIds =
     | "preferEnumComparison"
@@ -198,4 +199,13 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     name: "typescript/prefer-enum",
 });
 
-export default rule;
+/** Deprecated rule with explicit lifecycle metadata. */
+const deprecatedRule: typeof rule = withDeprecatedRuleLifecycle(rule, {
+    availableUntil: "4.0.0",
+    deprecatedSince: "3.0.0",
+    message:
+        "Deprecated without replacement because requiring enums conflicts with this plugin's no-enum policy.",
+    ruleId: "typescript/prefer-enum",
+});
+
+export default deprecatedRule;

@@ -63,6 +63,8 @@ export interface ReadmePlugin {
 export type PresetName =
     | "all"
     | "allStrict"
+    | "allStrictWithDeprecated"
+    | "allWithDeprecated"
     | "minimal"
     | "recommended"
     | "strict"

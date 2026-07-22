@@ -2,6 +2,16 @@
 
 Disallow throwing or rejecting values that are not `Error`-like.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** [`@typescript-eslint/only-throw-error`](https://typescript-eslint.io/rules/only-throw-error/) and [`@typescript-eslint/prefer-promise-reject-errors`](https://typescript-eslint.io/rules/prefer-promise-reject-errors/)
+
+Enable both replacements to preserve coverage for direct `throw` statements and
+Promise rejection values. Their option shapes differ from this combined rule.
+
 > ⚠️ This rule requires type information to run.
 
 ## Targeted pattern scope

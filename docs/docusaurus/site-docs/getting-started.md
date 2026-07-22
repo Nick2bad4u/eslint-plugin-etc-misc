@@ -23,7 +23,9 @@ export default [etcMisc.configs.recommended];
 - Start with `etcMisc.configs.minimal` if you want to defer readonly-style constraints.
 - Start with `etcMisc.configs.recommended`.
 - Fix violations in small batches.
-- Move to `etcMisc.configs.all` when you want every available rule enabled.
+- Move to `etcMisc.configs.all` when you want every non-deprecated rule enabled.
+- Use `etcMisc.configs.allWithDeprecated` only as a temporary migration bridge
+  for configurations that still rely on deprecated rules.
 
 ## Rollout flow
 
@@ -32,7 +34,7 @@ flowchart TD
     A[Install plugin] --> B[Enable recommended preset]
     B --> C[Fix warnings + errors incrementally]
     C --> D[Promote selected warnings to errors]
-    D --> E[Adopt all preset for full coverage]
+    D --> E[Adopt all preset for all current rules]
 ```
 
 ## Migration guide

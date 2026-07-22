@@ -128,8 +128,16 @@ describe("plugin.mjs entrypoint", () => {
         });
         expect(commonJsPlugin).toHaveProperty("rules.default-case");
         expect(commonJsPlugin).toHaveProperty("rules.require-usememo");
-        expect(commonJsPlugin).toHaveProperty(
+        expect(commonJsPlugin).not.toHaveProperty(
             "configs.all.rules.etc-misc/default-case"
+        );
+        expect(commonJsPlugin).toHaveProperty(
+            "configs.allWithDeprecated.rules.etc-misc/default-case",
+            "warn"
+        );
+        expect(commonJsPlugin).toHaveProperty(
+            "configs.allWithDeprecated.rules.etc-misc/require-memo",
+            "warn"
         );
     });
 
@@ -142,6 +150,8 @@ describe("plugin.mjs entrypoint", () => {
         const configVariants = [
             "all",
             "allStrict",
+            "allStrictWithDeprecated",
+            "allWithDeprecated",
             "minimal",
             "recommended",
             "strict",
@@ -222,49 +232,53 @@ describe("plugin.mjs entrypoint", () => {
         expect(defaultExportIdentifier.name).toBe("plugin");
     });
 
-    it("maps every all-config rule key back to a real exported rule", () => {
+    it("maps exhaustive-config rule keys back to real exported rules", () => {
         expect.hasAssertions();
 
-        const allConfigRuleEntries = Object.entries(plugin.configs.all.rules);
+        for (const configVariant of ["all", "allWithDeprecated"] as const) {
+            const configRuleEntries = Object.entries(
+                plugin.configs[configVariant].rules
+            );
 
-        fc.assert(
-            fc.property(
-                fc.constantFrom(...allConfigRuleEntries),
-                ([qualifiedRuleName, severity]) => {
-                    expect(severity === "error" || severity === "warn").toBe(
-                        true
-                    );
-                    expect(qualifiedRuleName.startsWith("etc-misc/")).toBe(
-                        true
-                    );
-
-                    const shortRuleName = qualifiedRuleName.slice(
-                        "etc-misc/".length
-                    );
-
-                    const ruleModule = plugin.rules[shortRuleName];
-
-                    expect(ruleModule).toBeDefined();
-
-                    if (ruleModule === undefined) {
-                        throw new TypeError(
-                            `Expected exported rule for ${qualifiedRuleName}.`
+            fc.assert(
+                fc.property(
+                    fc.constantFrom(...configRuleEntries),
+                    ([qualifiedRuleName, severity]) => {
+                        expect(
+                            severity === "error" || severity === "warn"
+                        ).toBe(true);
+                        expect(qualifiedRuleName.startsWith("etc-misc/")).toBe(
+                            true
                         );
-                    }
 
-                    const expectedSeverity = (() => {
-                        if (ruleModule.meta.deprecated === false) {
-                            return ruleModule.meta.type === "problem"
-                                ? "error"
-                                : "warn";
+                        const shortRuleName = qualifiedRuleName.slice(
+                            "etc-misc/".length
+                        );
+
+                        const ruleModule = plugin.rules[shortRuleName];
+
+                        expect(ruleModule).toBeDefined();
+
+                        if (ruleModule === undefined) {
+                            throw new TypeError(
+                                `Expected exported rule for ${qualifiedRuleName}.`
+                            );
                         }
 
-                        return "warn";
-                    })();
+                        const expectedSeverity = (() => {
+                            if (ruleModule.meta.deprecated === false) {
+                                return ruleModule.meta.type === "problem"
+                                    ? "error"
+                                    : "warn";
+                            }
 
-                    expect(severity).toBe(expectedSeverity);
-                }
-            )
-        );
+                            return "warn";
+                        })();
+
+                        expect(severity).toBe(expectedSeverity);
+                    }
+                )
+            );
+        }
     });
 });

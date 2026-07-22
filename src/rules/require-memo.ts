@@ -329,7 +329,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     meta: {
         defaultOptions: [{ ignoredComponents: {} }],
         deprecated: createDeprecatedRuleInfo({
-            availableUntil: "3.0.0",
+            availableUntil: "4.0.0",
             deprecatedSince: "2.0.0",
             message:
                 "Deprecated because blanket React.memo requirements are not a sound performance policy and conflict with compiler-managed memoization.",

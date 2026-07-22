@@ -45,7 +45,7 @@ export const createReplacementRuleInfo = (
  * Create standardized deprecation metadata for this plugin.
  */
 export const createDeprecatedRuleInfo = ({
-    availableUntil = "3.0.0",
+    availableUntil = "4.0.0",
     deprecatedSince = "1.0.0",
     message,
     replacedBy = [],
@@ -59,10 +59,10 @@ export const createDeprecatedRuleInfo = ({
 });
 
 /**
- * Determine whether structured deprecation metadata describes a compatibility
- * alias whose replacement belongs to this plugin.
+ * Determine whether structured deprecation metadata points to a replacement
+ * that belongs to this plugin.
  */
-export const isDeprecatedSamePluginAlias = ({
+export const hasDeprecatedSamePluginReplacement = ({
     deprecated,
     ruleId,
 }: Readonly<{
@@ -99,6 +99,7 @@ export const withDeprecatedRuleLifecycle = <TRule extends RuleModule>(
                 ...rule.meta.docs,
                 deprecated: true,
                 frozen: true,
+                recommended: false,
             },
         }),
     },

@@ -7,7 +7,9 @@ import {
     type PluginMeta,
     type PluginNamespace,
 } from "./_internal/plugin-meta.js";
+import { allStrictWithDeprecated as allStrictWithDeprecatedConfig } from "./configs/all-strict-with-deprecated.js";
 import { allStrict as allStrictConfig } from "./configs/all-strict.js";
+import { allWithDeprecated as allWithDeprecatedConfig } from "./configs/all-with-deprecated.js";
 import { all as allConfig } from "./configs/all.js";
 import { minimal as minimalConfig } from "./configs/minimal.js";
 import { recommended as recommendedConfig } from "./configs/recommended.js";
@@ -61,6 +63,14 @@ export interface PluginConfigs extends Readonly<UnknownRecord> {
         typeof allStrictConfig.name,
         typeof allStrictConfig.rules
     >;
+    readonly allStrictWithDeprecated: PresetWithPlugin<
+        typeof allStrictWithDeprecatedConfig.name,
+        typeof allStrictWithDeprecatedConfig.rules
+    >;
+    readonly allWithDeprecated: PresetWithPlugin<
+        typeof allWithDeprecatedConfig.name,
+        typeof allWithDeprecatedConfig.rules
+    >;
     readonly minimal: PresetWithPlugin<
         typeof minimalConfig.name,
         typeof minimalConfig.rules
@@ -87,6 +97,8 @@ export interface PluginConfigs extends Readonly<UnknownRecord> {
 export const configs: PluginConfigs = {
     all: withPluginReference(allConfig),
     allStrict: withPluginReference(allStrictConfig),
+    allStrictWithDeprecated: withPluginReference(allStrictWithDeprecatedConfig),
+    allWithDeprecated: withPluginReference(allWithDeprecatedConfig),
     minimal: withPluginReference(minimalConfig),
     recommended: withPluginReference(recommendedConfig),
     strict: withPluginReference(strictConfig),

@@ -33,7 +33,7 @@ This rule forwards options and behavior to ESLint core
 
 - **Lifecycle:** Deprecated and frozen.
 - **Deprecated since:** `v1.0.0`
-- **Available until:** `v2.0.0`
+- **Available until:** `v4.0.0`
 - **Use instead:** [`prefer-object-has-own` (ESLint core)](https://eslint.org/docs/latest/rules/prefer-object-has-own)
 
 ## Additional examples

@@ -6,6 +6,8 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 /**
  * @typedef {"all"
+ *     | "allStrictWithDeprecated"
+ *     | "allWithDeprecated"
  *     | "minimal"
  *     | "recommended"
  *     | "strict"
@@ -68,6 +70,20 @@ const allStrictPresetDocPath = path.join(
     "rules",
     "presets",
     "all-strict.md"
+);
+const allStrictWithDeprecatedPresetDocPath = path.join(
+    repositoryRootPath,
+    "docs",
+    "rules",
+    "presets",
+    "all-strict-with-deprecated.md"
+);
+const allWithDeprecatedPresetDocPath = path.join(
+    repositoryRootPath,
+    "docs",
+    "rules",
+    "presets",
+    "all-with-deprecated.md"
 );
 const recommendedPresetDocPath = path.join(
     repositoryRootPath,
@@ -245,6 +261,8 @@ const presetOrder = [
     "strictTypeChecked",
     "allStrict",
     "all",
+    "allStrictWithDeprecated",
+    "allWithDeprecated",
 ];
 
 /** @type {readonly RuleCatalogEntry[]} */
@@ -261,6 +279,8 @@ const namespace = plugin.meta?.namespace ?? "etc-misc";
 const presetRuleLinksByPresetName = {
     all: [],
     allStrict: [],
+    allStrictWithDeprecated: [],
+    allWithDeprecated: [],
     minimal: [],
     recommended: [],
     strict: [],
@@ -331,6 +351,14 @@ const allTypeScriptRuleLinks = ruleCatalogMap
     .map((entry) => toPresetRuleLinkLine(entry));
 
 const allStrictPresetContent = await readFile(allStrictPresetDocPath, "utf8");
+const allStrictWithDeprecatedPresetContent = await readFile(
+    allStrictWithDeprecatedPresetDocPath,
+    "utf8"
+);
+const allWithDeprecatedPresetContent = await readFile(
+    allWithDeprecatedPresetDocPath,
+    "utf8"
+);
 const minimalPresetContent = await readFile(minimalPresetDocPath, "utf8");
 const recommendedPresetContent = await readFile(
     recommendedPresetDocPath,
@@ -347,6 +375,16 @@ const updatedAllStrictPresetContent = replaceSection(
     allStrictPresetContent,
     "Rules in this preset",
     presetRuleLinksByPresetName["allStrict"].join("\n")
+);
+const updatedAllStrictWithDeprecatedPresetContent = replaceSection(
+    allStrictWithDeprecatedPresetContent,
+    "Rules in this preset",
+    presetRuleLinksByPresetName["allStrictWithDeprecated"].join("\n")
+);
+const updatedAllWithDeprecatedPresetContent = replaceSection(
+    allWithDeprecatedPresetContent,
+    "Rules in this preset",
+    presetRuleLinksByPresetName["allWithDeprecated"].join("\n")
 );
 
 const updatedMinimalPresetContent = replaceSection(
@@ -388,6 +426,16 @@ const updatedAllPresetContent = replaceSection(
 );
 
 await writeFile(allStrictPresetDocPath, updatedAllStrictPresetContent, "utf8");
+await writeFile(
+    allStrictWithDeprecatedPresetDocPath,
+    updatedAllStrictWithDeprecatedPresetContent,
+    "utf8"
+);
+await writeFile(
+    allWithDeprecatedPresetDocPath,
+    updatedAllWithDeprecatedPresetContent,
+    "utf8"
+);
 await writeFile(minimalPresetDocPath, updatedMinimalPresetContent, "utf8");
 await writeFile(
     recommendedPresetDocPath,

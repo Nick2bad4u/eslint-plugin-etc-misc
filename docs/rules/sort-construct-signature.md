@@ -2,6 +2,17 @@
 
 Require construct signatures to be the first member in interfaces.
 
+**Deprecated**
+
+- **Lifecycle:** Deprecated, frozen, and non-recommended.
+- **Deprecated since:** `v3.0.0`
+- **Available until:** `v4.0.0`
+- **Use instead:** [`@typescript-eslint/member-ordering`](https://typescript-eslint.io/rules/member-ordering/)
+
+Configure the replacement's interface member order explicitly. This rule cannot
+be safely combined with `sort-call-signature`, because each independently
+requires its own signature kind to be first.
+
 ## Targeted pattern scope
 
 This rule targets `TSConstructSignatureDeclaration` nodes that are not the

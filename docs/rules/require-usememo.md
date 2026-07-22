@@ -37,8 +37,9 @@ function Search({ options }: { options: SearchOptions }) {
 
 ## Deprecated
 
-This rule was deprecated in v2.0.0 and remains available through v3.0.0. It
-uses the same implementation, options, and diagnostics as the canonical rule.
+This rule was deprecated in v2.0.0, remains available in v3, and is scheduled
+for removal in v4.0.0. It uses the same implementation, options, and diagnostics
+as the canonical rule.
 Rename the rule ID without changing its configuration:
 
 ```ts
