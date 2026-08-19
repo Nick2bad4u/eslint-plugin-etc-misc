@@ -1,6 +1,6 @@
 /* eslint-disable canonical/no-reassign-imports -- Flat-config preset object intentionally references imported preset modules. */
 
-import type { UnknownRecord } from "type-fest";
+import type { Arrayable, UnknownRecord } from "type-fest";
 
 import {
     pluginMeta,
@@ -17,6 +17,8 @@ import { strictTypeChecked as strictTypeCheckedConfig } from "./configs/strict-t
 import { strict as strictConfig } from "./configs/strict.js";
 import { rules } from "./rules.js";
 
+type FlatConfigFiles = Arrayable<string>[];
+
 interface PluginReference {
     readonly meta: PluginMeta;
     readonly rules: typeof rules;
@@ -26,12 +28,15 @@ interface PresetWithPlugin<
     TName extends string,
     TRules extends Readonly<Record<string, RuleSeverity>>,
 > {
+    readonly files: FlatConfigFiles;
     readonly name: TName;
     readonly plugins: Readonly<Record<PluginNamespace, PluginReference>>;
     readonly rules: TRules;
 }
 
 type RuleSeverity = "error" | "warn";
+
+const javascriptFilePattern = "**/*.{js,mjs,cjs,ts,mts,cts,tsx,jsx}";
 
 const pluginReference: PluginReference = {
     meta: pluginMeta,
@@ -44,6 +49,7 @@ const withPluginReference = <
 >(
     config: Readonly<{ readonly name: TName; readonly rules: TRules }>
 ): PresetWithPlugin<TName, TRules> => ({
+    files: [javascriptFilePattern],
     name: config.name,
     plugins: {
         [pluginMeta.namespace]: pluginReference,

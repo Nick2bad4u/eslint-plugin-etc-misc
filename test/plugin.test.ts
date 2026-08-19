@@ -518,6 +518,9 @@ const assertPluginExposesRulesAndConfigs = (): void => {
     expect(plugin.processors).toStrictEqual({});
 
     for (const configVariant of configVariants) {
+        expect(plugin.configs[configVariant].files).toStrictEqual([
+            "**/*.{js,mjs,cjs,ts,mts,cts,tsx,jsx}",
+        ]);
         expect(plugin.configs[configVariant].rules).toBeDefined();
         expect(
             plugin.configs[configVariant].plugins["etc-misc"].meta

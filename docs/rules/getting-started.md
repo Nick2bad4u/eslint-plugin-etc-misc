@@ -19,6 +19,10 @@ import etcMisc from "eslint-plugin-etc-misc";
 export default [etcMisc.configs.recommended];
 ```
 
+Every exported preset is scoped to JavaScript and TypeScript file extensions,
+so it can be composed safely with ESLint language plugins for JSON, CSS, or
+other non-JavaScript languages.
+
 Use `minimal` or `recommended` first, then move through stricter presets as
 your baseline stabilizes.
 
