@@ -613,6 +613,7 @@ jobs:
               run: "npm run release:check"
 
             - name: "Confirm release is still recoverable"
+              id: "recovery-state"
               env:
                   GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
                   PACKAGE_NAME: "${{ steps.recovery.outputs.package_name }}"
@@ -620,16 +621,63 @@ jobs:
                   VERSION: "${{ steps.recovery.outputs.version }}"
               run: |
                   set -euo pipefail
+
+                  already_published=false
                   if npm view "${PACKAGE_NAME}@${VERSION}" version >/dev/null 2>&1; then
-                    echo "::error::${PACKAGE_NAME}@${VERSION} is already published; recovery must not overwrite it."
-                    exit 1
-                  fi
-                  if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-                    echo "::error::GitHub release ${TAG} already exists; recovery must not overwrite it."
-                    exit 1
+                    registry_integrity=$(npm view "${PACKAGE_NAME}@${VERSION}" dist.integrity)
+                    integrity_dir="temp/recovery-integrity"
+                    integrity_metadata_path="${integrity_dir}/npm-pack.json"
+                    mkdir -p "$integrity_dir"
+                    npm pack --json --pack-destination "$integrity_dir" > "$integrity_metadata_path"
+                    local_integrity=$(node - "$integrity_metadata_path" <<'NODE'
+                  const fs = require("node:fs");
+                  const packMetadata = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
+                  const entries = Array.isArray(packMetadata) ? packMetadata : Object.values(packMetadata);
+                  if (
+                    entries.length !== 1 ||
+                    typeof entries[0] !== "object" ||
+                    entries[0] === null ||
+                    typeof entries[0].integrity !== "string" ||
+                    entries[0].integrity.length === 0
+                  ) {
+                    throw new Error("npm pack returned unexpected integrity metadata");
+                  }
+                  process.stdout.write(entries[0].integrity);
+                  NODE
+                    )
+                    if [ "$local_integrity" != "$registry_integrity" ]; then
+                      echo "::error::Published ${PACKAGE_NAME}@${VERSION} integrity does not match the recovery artifact."
+                      exit 1
+                    fi
+                    already_published=true
+                    echo "${PACKAGE_NAME}@${VERSION} is already published with matching integrity."
                   fi
 
+                  already_released=false
+                  if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+                    if [ "$already_published" != "true" ]; then
+                      echo "::error::GitHub release ${TAG} exists, but ${PACKAGE_NAME}@${VERSION} is not published."
+                      exit 1
+                    fi
+                    release_state=$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" \
+                      --json isDraft,isPrerelease,tagName \
+                      --jq '[.tagName, (.isDraft | tostring), (.isPrerelease | tostring)] | @tsv')
+                    IFS=$'\t' read -r release_tag release_draft release_prerelease <<< "$release_state"
+                    if [ "$release_tag" != "$TAG" ] || [ "$release_draft" != "false" ] || [ "$release_prerelease" != "false" ]; then
+                      echo "::error::Existing GitHub release ${TAG} is not the expected final release."
+                      exit 1
+                    fi
+                    already_released=true
+                    echo "GitHub release ${TAG} already exists in final form."
+                  fi
+
+                  {
+                    echo "already_published=$already_published"
+                    echo "already_released=$already_released"
+                  } >> "$GITHUB_OUTPUT"
+
             - name: "Generate release notes from git-cliff"
+              if: "steps.recovery-state.outputs.already_released != 'true'"
               env:
                   GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
                   RELEASE_COMMIT: "${{ steps.recovery.outputs.release_commit }}"
@@ -649,10 +697,12 @@ jobs:
                   fi
 
             - name: "Publish to npm"
+              if: "steps.recovery-state.outputs.already_published != 'true'"
               run: "npm publish --access public --provenance --ignore-scripts"
 
             - name: "Create release archives"
               id: "recovery-assets"
+              if: "steps.recovery-state.outputs.already_released != 'true'"
               env:
                   PACKAGE_NAME: "${{ steps.recovery.outputs.package_name }}"
                   VERSION: "${{ steps.recovery.outputs.version }}"
@@ -702,6 +752,7 @@ jobs:
                   } >> "$GITHUB_OUTPUT"
 
             - name: "Create GitHub release"
+              if: "steps.recovery-state.outputs.already_released != 'true'"
               uses: "softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228" # v3.0.2
               with:
                   tag_name: "${{ steps.recovery.outputs.tag }}"
@@ -728,6 +779,8 @@ jobs:
                     echo "- Release commit: \`${{ steps.recovery.outputs.release_commit }}\`"
                     echo "- Package: \`${{ steps.recovery.outputs.package_name }}@${{ steps.recovery.outputs.version }}\`"
                     echo "- Tag: \`${{ steps.recovery.outputs.tag }}\`"
+                    echo "- Already published on npm: \`${{ steps.recovery-state.outputs.already_published }}\`"
+                    echo "- GitHub release already existed: \`${{ steps.recovery-state.outputs.already_released }}\`"
                     echo "- npm package: [${{ steps.recovery.outputs.npm_release_url }}](${{ steps.recovery.outputs.npm_release_url }})"
                     echo "- GitHub release: [${{ steps.recovery.outputs.github_release_url }}](${{ steps.recovery.outputs.github_release_url }})"
                     echo "- Release assets: \`${{ steps.recovery-assets.outputs.tarball_name }}\`, \`${{ steps.recovery-assets.outputs.zip_name }}\`"
