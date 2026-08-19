@@ -63,10 +63,19 @@ jobs:
      uses: actions/setup-node@v6
    with:
       node-version-file: .node-version
-      cache: npm
-      cache-dependency-path: package-lock.json
    - name: Setup pinned npm
      run: node scripts/setup-package-manager.mjs --install
+   - name: Locate npm cache
+     id: npm-cache
+     shell: bash
+     run: echo "dir=$(npm config get cache)" >> "$GITHUB_OUTPUT"
+   - name: Cache npm downloads
+     uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+     with:
+      path: ${{ steps.npm-cache.outputs.dir }}
+      key: ${{ runner.os }}-npm-${{ hashFiles('.node-version', 'package.json', 'package-lock.json') }}
+      restore-keys: |
+       ${{ runner.os }}-npm-
    - name: Install dependencies
      run: npm ci
    - name: Verify package
@@ -248,7 +257,8 @@ jobs:
   - **Restore Keys:** Use `restore-keys` for fallbacks to older, compatible caches.
   - **Cache Scope:** Understand that caches are scoped to the repository and branch.
 - **Guidance for Copilot:**
-  - In this npm repository, prefer `actions/setup-node` with `node-version-file: .node-version` and `cache: npm` before reaching for a custom `actions/cache` block.
+  - In this npm repository, do not enable `actions/setup-node`'s built-in npm cache: its cache probe invokes the runner's bundled npm before the repository's exact `devEngines.packageManager` version is installed.
+  - Install the pinned npm first, discover its cache directory with `npm config get cache`, and then use a full-SHA-pinned `actions/cache` step.
   - Treat `.node-version` as the workflow source of truth and keep `.nvmrc` synchronized with the same exact version for local tooling compatibility.
   - Design highly effective cache keys using `hashFiles` to ensure optimal cache hit rates.
   - Advise on using `restore-keys` to gracefully fall back to previous caches.
@@ -259,8 +269,22 @@ jobs:
   uses: actions/setup-node@v6
   with:
    node-version-file: .node-version
-   cache: npm
-   cache-dependency-path: package-lock.json
+
+- name: Setup pinned npm
+  run: node scripts/setup-package-manager.mjs --install
+
+- name: Locate npm cache
+  id: npm-cache
+  shell: bash
+  run: echo "dir=$(npm config get cache)" >> "$GITHUB_OUTPUT"
+
+- name: Cache npm downloads
+  uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+  with:
+   path: ${{ steps.npm-cache.outputs.dir }}
+   key: ${{ runner.os }}-npm-${{ hashFiles('.node-version', 'package.json', 'package-lock.json') }}
+   restore-keys: |
+    ${{ runner.os }}-npm-
 ```
 
 ### **2. Matrix Strategies for Parallelization**
@@ -299,11 +323,22 @@ jobs:
      uses: actions/setup-node@v6
    with:
       node-version-file: .node-version
-      cache: npm
-      cache-dependency-path: package-lock.json
 
    - name: Setup pinned npm
      run: node scripts/setup-package-manager.mjs --install
+
+   - name: Locate npm cache
+     id: npm-cache
+     shell: bash
+     run: echo "dir=$(npm config get cache)" >> "$GITHUB_OUTPUT"
+
+   - name: Cache npm downloads
+     uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+     with:
+      path: ${{ steps.npm-cache.outputs.dir }}
+      key: ${{ runner.os }}-npm-${{ hashFiles('.node-version', 'package.json', 'package-lock.json') }}
+      restore-keys: |
+       ${{ runner.os }}-npm-
 
    - name: Install dependencies
      run: npm ci
