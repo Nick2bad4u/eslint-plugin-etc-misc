@@ -10,7 +10,7 @@ import type { KnipConfig } from "knip";
  * repository layout.
  */
 const knipConfig: KnipConfig = {
-    $schema: "https://unpkg.com/knip@6/schema.json",
+    $schema: "https://unpkg.com/knip/schema.json",
     ignore: [
         ".secretlintrc.cjs",
         "benchmarks/fixtures/**",
@@ -56,11 +56,10 @@ const knipConfig: KnipConfig = {
         "typedoc-config-nick2bad4u",
         "yamllint-config-nick2bad4u",
     ],
-    ignoreExportsUsedInFile: {
-        interface: true,
-        type: true,
-    },
+    ignoreExportsUsedInFile: true,
     includeEntryExports: true,
+    treatConfigHintsAsErrors: true,
+    treatTagHintsAsErrors: true,
     rules: {
         binaries: "error",
         dependencies: "error",
@@ -69,6 +68,9 @@ const knipConfig: KnipConfig = {
         enumMembers: "warn",
         exports: "warn",
         files: "error",
+        catalog: "warn",
+        cycles: "warn",
+        namespaceMembers: "warn",
         nsExports: "warn",
         nsTypes: "warn",
         optionalPeerDependencies: "error",
