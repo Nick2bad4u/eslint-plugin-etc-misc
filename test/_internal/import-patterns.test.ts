@@ -106,9 +106,11 @@ const assertImportAndExportNodes = (
     exportNamedDeclaration: TSESTree.ExportNamedDeclaration;
     importDeclaration: TSESTree.ImportDeclaration;
 }> => {
-    const importDeclaration = program.body[0];
-    const exportNamedDeclaration = program.body[1];
-    const exportAllDeclaration = program.body[2];
+    const [
+        importDeclaration,
+        exportNamedDeclaration,
+        exportAllDeclaration,
+    ] = program.body;
 
     expect(importDeclaration?.type).toBe(AST_NODE_TYPES.ImportDeclaration);
     expect(exportNamedDeclaration?.type).toBe(

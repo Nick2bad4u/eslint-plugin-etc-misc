@@ -45,15 +45,17 @@ const collectObjectExpressions = (
     while (stack.length > 0) {
         const node = stack.pop();
 
-        if (node !== undefined) {
-            if (node.type === AST_NODE_TYPES.ObjectExpression) {
-                objectExpressions.push(node);
-            }
+        if (node === undefined) {
+            continue;
+        }
 
-            for (const value of Object.values(node)) {
-                if (value !== null && value !== undefined) {
-                    stack.push(...toChildNodes(value));
-                }
+        if (node.type === AST_NODE_TYPES.ObjectExpression) {
+            objectExpressions.push(node);
+        }
+
+        for (const value of Object.values(node)) {
+            if (value !== null && value !== undefined) {
+                stack.push(...toChildNodes(value));
             }
         }
     }

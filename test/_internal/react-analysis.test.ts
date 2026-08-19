@@ -67,17 +67,22 @@ const connectParentsAndCollect = (
 
         if (Array.isArray(value)) {
             for (const item of value) {
-                if (isNode(item)) {
-                    connectParentsAndCollect(item, node, visitorKeys, nodes);
-                }
+                connectNodeIfPresent(item, node, visitorKeys, nodes);
             }
-
-            continue;
+        } else {
+            connectNodeIfPresent(value, node, visitorKeys, nodes);
         }
+    }
+};
 
-        if (isNode(value)) {
-            connectParentsAndCollect(value, node, visitorKeys, nodes);
-        }
+const connectNodeIfPresent = (
+    value: unknown,
+    parent: Readonly<es.Node>,
+    visitorKeys: Readonly<VisitorKeys>,
+    nodes: es.Node[]
+): void => {
+    if (isNode(value)) {
+        connectParentsAndCollect(value, parent, visitorKeys, nodes);
     }
 };
 

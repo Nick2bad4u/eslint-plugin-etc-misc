@@ -108,6 +108,8 @@ const toRuleDocId = (ruleName: string): string => ruleName.replaceAll("/", "-");
 
 /**
  * Build a globally ordered rule catalog from persistent, never-reused ids.
+ *
+ * @throws When catalog assignments are duplicated or inconsistent.
  */
 export const buildRuleCatalog = (ruleNames: readonly string[]): RuleCatalog => {
     const registeredRuleNames = new Set(ruleNames);

@@ -5,7 +5,9 @@ import { arrayAt, arrayFirst, isDefined } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
-type Alignment = "above" | "prefer-inline";
+const preferInlineAlignment = "prefer-inline";
+
+type Alignment = "above" | typeof preferInlineAlignment;
 
 type DecoratedMember =
     | es.AccessorProperty
@@ -21,7 +23,7 @@ type NormalizedOptions = Readonly<{
     readonly methods: Alignment;
     readonly overrides: Readonly<{
         readonly above: readonly DecoratorMatcher[];
-        readonly "prefer-inline": readonly DecoratorMatcher[];
+        readonly [preferInlineAlignment]: readonly DecoratorMatcher[];
     }>;
     readonly printWidth: number;
     readonly properties: Alignment;
@@ -32,7 +34,7 @@ type Options = readonly [
         readonly methods?: Alignment;
         readonly overrides?: Readonly<{
             readonly above?: readonly DecoratorMatcher[];
-            readonly "prefer-inline"?: readonly DecoratorMatcher[];
+            readonly [preferInlineAlignment]?: readonly DecoratorMatcher[];
         }>;
         readonly printWidth?: number;
         readonly properties?: Alignment;
@@ -44,10 +46,10 @@ const defaultOptions = [
         methods: "above",
         overrides: {
             above: [],
-            "prefer-inline": [],
+            [preferInlineAlignment]: [],
         },
         printWidth: 100,
-        properties: "prefer-inline",
+        properties: preferInlineAlignment,
     },
 ] as const satisfies Options;
 
@@ -126,7 +128,8 @@ const normalizeOptions = (rawOptions: Options[0]): NormalizedOptions => ({
     methods: rawOptions?.methods ?? arrayFirst(defaultOptions).methods,
     overrides: {
         above: rawOptions?.overrides?.above ?? [],
-        "prefer-inline": rawOptions?.overrides?.["prefer-inline"] ?? [],
+        [preferInlineAlignment]:
+            rawOptions?.overrides?.[preferInlineAlignment] ?? [],
     },
     printWidth: rawOptions?.printWidth ?? arrayFirst(defaultOptions).printWidth,
     properties: rawOptions?.properties ?? arrayFirst(defaultOptions).properties,
@@ -148,11 +151,11 @@ const getConfiguredAlignment = (
     }
 
     if (
-        options.overrides["prefer-inline"].some((matcher) =>
+        options.overrides[preferInlineAlignment].some((matcher) =>
             matcherMatchesDecorator(matcher, decorator, decoratorName)
         )
     ) {
-        return "prefer-inline";
+        return preferInlineAlignment;
     }
 
     return undefined;
@@ -209,7 +212,7 @@ const createWhitespaceFix = (
             return null;
         }
 
-        if (alignment === "prefer-inline") {
+        if (alignment === preferInlineAlignment) {
             return fixer.replaceTextRange(whitespaceRange, " ");
         }
 
@@ -265,7 +268,7 @@ const checkMember = (
     // A multiline decorator cannot be safely collapsed. Likewise, respect the
     // configured width by expanding an otherwise inline-preferred declaration.
     if (
-        desiredAlignment === "prefer-inline" &&
+        desiredAlignment === preferInlineAlignment &&
         (decorator.loc.start.line !== decorator.loc.end.line ||
             getProjectedInlineLength(context.sourceCode, decorator, member) >
                 options.printWidth)
@@ -275,7 +278,7 @@ const checkMember = (
 
     const isInline = decorator.loc.end.line === firstMemberToken.loc.start.line;
     const alignmentMatches =
-        desiredAlignment === "prefer-inline" ? isInline : !isInline;
+        desiredAlignment === preferInlineAlignment ? isInline : !isInline;
 
     if (alignmentMatches) {
         return;
@@ -295,7 +298,7 @@ const checkMember = (
             desiredAlignment
         ),
         messageId:
-            desiredAlignment === "prefer-inline"
+            desiredAlignment === preferInlineAlignment
                 ? "expectedInline"
                 : "expectedAbove",
         node: decorator,
@@ -331,10 +334,10 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 methods: "above",
                 overrides: {
                     above: [],
-                    "prefer-inline": [],
+                    [preferInlineAlignment]: [],
                 },
                 printWidth: 100,
-                properties: "prefer-inline",
+                properties: preferInlineAlignment,
             },
         ],
         deprecated: false,
@@ -362,7 +365,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 properties: {
                     methods: {
                         description: "Default placement for method decorators.",
-                        enum: ["prefer-inline", "above"],
+                        enum: [preferInlineAlignment, "above"],
                         type: "string",
                     },
                     overrides: {
@@ -399,7 +402,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                                 type: "array",
                                 uniqueItems: true,
                             },
-                            "prefer-inline": {
+                            [preferInlineAlignment]: {
                                 description:
                                     "Decorators that should share a line with the member.",
                                 items: {
@@ -441,7 +444,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                     properties: {
                         description:
                             "Default placement for property and auto-accessor decorators.",
-                        enum: ["prefer-inline", "above"],
+                        enum: [preferInlineAlignment, "above"],
                         type: "string",
                     },
                 },

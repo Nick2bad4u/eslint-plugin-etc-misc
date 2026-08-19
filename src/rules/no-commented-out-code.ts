@@ -222,50 +222,44 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                 es.Program | null
             >();
 
+            const parseComment = (content: string): es.Program | undefined => {
+                const [nextCache, parsedComment] = parseCommentProgram(
+                    parseCache,
+                    content
+                );
+                parseCache = nextCache;
+                return parsedComment;
+            };
+
+            const shouldReportBlock = (
+                block: Readonly<CommentBlock>
+            ): boolean => {
+                const parsedComment = parseComment(block.content);
+                if (parsedComment !== undefined) {
+                    return !isTrivialProgram(parsedComment);
+                }
+
+                const index = context.sourceCode.getIndexFromLoc(
+                    block.loc.start
+                );
+                const node = context.sourceCode.getNodeByRangeIndex(index);
+                const wrappedContent = getWrappedContent(block.content, node);
+
+                return (
+                    isDefined(wrappedContent) &&
+                    parseComment(wrappedContent) !== undefined
+                );
+            };
+
             return {
                 Program: () => {
-                    const { sourceCode } = context;
-
                     for (const block of toCommentBlocks(
-                        sourceCode.getAllComments()
+                        context.sourceCode.getAllComments()
                     )) {
-                        if (isRegionComment(block.content)) {
-                            continue;
-                        }
-
-                        const [nextCacheAfterParse, parsedComment] =
-                            parseCommentProgram(parseCache, block.content);
-                        parseCache = nextCacheAfterParse;
-                        if (parsedComment !== undefined) {
-                            if (!isTrivialProgram(parsedComment)) {
-                                context.report({
-                                    loc: block.loc,
-                                    messageId: "forbidden",
-                                });
-                            }
-
-                            continue;
-                        }
-
-                        const index = sourceCode.getIndexFromLoc(
-                            block.loc.start
-                        );
-                        const node = sourceCode.getNodeByRangeIndex(index);
-                        const wrappedContent = getWrappedContent(
-                            block.content,
-                            node
-                        );
-                        if (!isDefined(wrappedContent)) {
-                            continue;
-                        }
-
-                        const [
-                            nextCacheAfterWrappedParse,
-                            parsedWrappedComment,
-                        ] = parseCommentProgram(parseCache, wrappedContent);
-                        parseCache = nextCacheAfterWrappedParse;
-
-                        if (parsedWrappedComment !== undefined) {
+                        if (
+                            !isRegionComment(block.content) &&
+                            shouldReportBlock(block)
+                        ) {
                             context.report({
                                 loc: block.loc,
                                 messageId: "forbidden",

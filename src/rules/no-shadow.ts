@@ -54,40 +54,46 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
     Options,
     MessageIds
 >({
-    create: (context) => ({
-        "Program:exit": (node: Readonly<es.Program>): void => {
-            const programScope = context.sourceCode.getScope(node);
-
-            for (const scope of collectScopes(programScope)) {
-                for (const variable of scope.variables) {
-                    if (shouldIgnoreVariable(variable)) {
-                        continue;
-                    }
-
-                    const [identifier] = variable.identifiers;
-                    if (identifier === undefined) {
-                        continue;
-                    }
-
-                    const shadowed = findShadowedVariable(scope, variable.name);
-                    if (
-                        shadowed === undefined ||
-                        shouldIgnoreVariable(shadowed)
-                    ) {
-                        continue;
-                    }
-
-                    context.report({
-                        data: {
-                            name: variable.name,
-                        },
-                        messageId: "forbidden",
-                        node: identifier,
-                    });
-                }
+    create: (context) => {
+        const reportIfShadowed = (
+            scope: Readonly<Scope>,
+            variable: Readonly<Variable>
+        ): void => {
+            if (shouldIgnoreVariable(variable)) {
+                return;
             }
-        },
-    }),
+
+            const [identifier] = variable.identifiers;
+            if (identifier === undefined) {
+                return;
+            }
+
+            const shadowed = findShadowedVariable(scope, variable.name);
+            if (shadowed === undefined || shouldIgnoreVariable(shadowed)) {
+                return;
+            }
+
+            context.report({
+                data: {
+                    name: variable.name,
+                },
+                messageId: "forbidden",
+                node: identifier,
+            });
+        };
+
+        return {
+            "Program:exit": (node: Readonly<es.Program>): void => {
+                const programScope = context.sourceCode.getScope(node);
+
+                for (const scope of collectScopes(programScope)) {
+                    for (const variable of scope.variables) {
+                        reportIfShadowed(scope, variable);
+                    }
+                }
+            },
+        };
+    },
     meta: {
         deprecated: true,
         docs: {

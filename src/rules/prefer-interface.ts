@@ -123,15 +123,11 @@ const canSafelyConvertIntersection = (
     for (const intersectionMember of intersectionTypeNode.types) {
         if (intersectionMember.type === AST_NODE_TYPES.TSTypeLiteral) {
             literals = [...literals, intersectionMember];
-            continue;
-        }
-
-        if (intersectionMember.type === AST_NODE_TYPES.TSTypeReference) {
+        } else if (intersectionMember.type === AST_NODE_TYPES.TSTypeReference) {
             references = [...references, intersectionMember];
-            continue;
+        } else {
+            return undefined;
         }
-
-        return undefined;
     }
 
     if (literals.length > 1) {

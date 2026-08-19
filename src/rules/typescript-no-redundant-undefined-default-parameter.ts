@@ -155,6 +155,42 @@ const createReplaceTypeFix =
         return fixer.replaceTextRange([start, end], replacementText);
     };
 
+type FixableDefaultParameter = Readonly<{
+    readonly fixedTypeText: string;
+    readonly unionType: es.TSUnionType;
+}>;
+
+const getFixableDefaultParameter = (
+    sourceCode: Readonly<TSESLint.SourceCode>,
+    parameter: Readonly<es.Parameter>
+): FixableDefaultParameter | undefined => {
+    const assignmentPattern = getAssignmentPatternFromParameter(parameter);
+    if (
+        assignmentPattern === undefined ||
+        !isDefinitelyDefinedExpression(assignmentPattern.right)
+    ) {
+        return undefined;
+    }
+
+    const typeAnnotation =
+        getTypeAnnotationFromAssignmentPattern(assignmentPattern);
+    if (typeAnnotation?.typeAnnotation.type !== AST_NODE_TYPES.TSUnionType) {
+        return undefined;
+    }
+
+    const fixedTypeText = buildFixedTypeText(
+        sourceCode,
+        typeAnnotation.typeAnnotation
+    );
+
+    return isDefined(fixedTypeText)
+        ? {
+              fixedTypeText,
+              unionType: typeAnnotation.typeAnnotation,
+          }
+        : undefined;
+};
+
 /**
  * Disallow redundant `undefined` unions on default parameters with
  * definitely-defined initializers.
@@ -175,60 +211,30 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 }
 
                 for (const parameter of parameters) {
-                    const assignmentPattern =
-                        getAssignmentPatternFromParameter(parameter);
+                    const fixableParameter = getFixableDefaultParameter(
+                        sourceCode,
+                        parameter
+                    );
 
-                    if (assignmentPattern === undefined) {
-                        continue;
-                    }
-
-                    if (
-                        !isDefinitelyDefinedExpression(assignmentPattern.right)
-                    ) {
-                        continue;
-                    }
-
-                    const typeAnnotation =
-                        getTypeAnnotationFromAssignmentPattern(
-                            assignmentPattern
+                    if (isDefined(fixableParameter)) {
+                        const fix = createReplaceTypeFix(
+                            fixableParameter.unionType,
+                            fixableParameter.fixedTypeText
                         );
 
-                    if (typeAnnotation === undefined) {
-                        continue;
+                        context.report({
+                            fix,
+                            messageId: "forbidden",
+                            node: fixableParameter.unionType,
+                            suggest: [
+                                {
+                                    fix,
+                                    messageId:
+                                        "suggestRemoveRedundantUndefined",
+                                },
+                            ],
+                        });
                     }
-
-                    if (
-                        typeAnnotation.typeAnnotation.type !==
-                        AST_NODE_TYPES.TSUnionType
-                    ) {
-                        continue;
-                    }
-
-                    const fixedTypeText = buildFixedTypeText(
-                        sourceCode,
-                        typeAnnotation.typeAnnotation
-                    );
-
-                    if (!isDefined(fixedTypeText)) {
-                        continue;
-                    }
-
-                    const fix = createReplaceTypeFix(
-                        typeAnnotation.typeAnnotation,
-                        fixedTypeText
-                    );
-
-                    context.report({
-                        fix,
-                        messageId: "forbidden",
-                        node: typeAnnotation.typeAnnotation,
-                        suggest: [
-                            {
-                                fix,
-                                messageId: "suggestRemoveRedundantUndefined",
-                            },
-                        ],
-                    });
                 }
             },
         };

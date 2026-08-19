@@ -43,40 +43,34 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
         return {
             Program: () => {
                 for (const comment of context.sourceCode.getAllComments()) {
-                    if (comment.type !== AST_TOKEN_TYPES.Line) {
-                        continue;
-                    }
-
-                    if (
-                        allowDirectiveComments &&
-                        isDirectiveComment(comment.value)
-                    ) {
-                        continue;
-                    }
-
                     const isDirective = isDirectiveComment(comment.value);
-                    const suggestionFix = isDirective
-                        ? undefined
-                        : createConvertToBlockSuggestionFix(
-                              comment.value,
-                              comment.range
-                          );
+                    if (
+                        comment.type === AST_TOKEN_TYPES.Line &&
+                        (!allowDirectiveComments || !isDirective)
+                    ) {
+                        const suggestionFix = isDirective
+                            ? undefined
+                            : createConvertToBlockSuggestionFix(
+                                  comment.value,
+                                  comment.range
+                              );
 
-                    context.report({
-                        ...(suggestionFix !== undefined && {
-                            fix: suggestionFix,
-                        }),
-                        loc: comment.loc,
-                        messageId: "forbidden",
-                        ...(suggestionFix !== undefined && {
-                            suggest: [
-                                {
-                                    fix: suggestionFix,
-                                    messageId: "suggestConvertToBlock",
-                                },
-                            ],
-                        }),
-                    });
+                        context.report({
+                            ...(suggestionFix !== undefined && {
+                                fix: suggestionFix,
+                            }),
+                            loc: comment.loc,
+                            messageId: "forbidden",
+                            ...(suggestionFix !== undefined && {
+                                suggest: [
+                                    {
+                                        fix: suggestionFix,
+                                        messageId: "suggestConvertToBlock",
+                                    },
+                                ],
+                            }),
+                        });
+                    }
                 }
             },
         };

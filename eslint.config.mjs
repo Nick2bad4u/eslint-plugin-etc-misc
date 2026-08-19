@@ -64,6 +64,24 @@ const config = [
         },
     },
     {
+        files: [
+            "src/_internal/jsx-prop-stability.ts",
+            "src/_internal/ssr-dom-globals.ts",
+            "src/rules/**/*.ts",
+            "test/_internal/create-external-rule.test.ts",
+        ],
+        name: "ESLint listener naming compatibility",
+        rules: {
+            // ESLint visitor-map keys must retain AST node and selector names.
+            // Restore the shared lowercase-only format when SonarJS recognizes
+            // listener maps instead of treating their AST keys as function names.
+            "sonarjs/function-name": [
+                "warn",
+                { format: "^[_a-zA-Z][a-zA-Z0-9]*$" },
+            ],
+        },
+    },
+    {
         name: "Shared config compatibility overrides",
         rules: {
             "copilot/require-repository-instructions-file": "off",

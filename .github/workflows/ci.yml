@@ -57,11 +57,27 @@ jobs:
               uses: "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020" # v7.0.0
               with:
                   node-version-file: ".node-version"
-                  cache: "npm"
-                  cache-dependency-path: "package-lock.json"
+                  package-manager-cache: false
+
+            - name: "Setup pinned npm"
+              run: "node scripts/setup-package-manager.mjs --install"
+
+            - name: "Locate npm cache"
+              id: "npm-cache"
+              shell: "bash"
+              run: >-
+                  echo "dir=$(npm config get cache)" >> "$GITHUB_OUTPUT"
+
+            - name: "Cache npm downloads"
+              uses: "actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9" # v6.1.0
+              with:
+                  path: "${{ steps.npm-cache.outputs.dir }}"
+                  key: "${{ runner.os }}-npm-${{ hashFiles('.node-version', 'package.json', 'package-lock.json') }}"
+                  restore-keys: |
+                      ${{ runner.os }}-npm-
 
             - name: "Install dependencies"
-              run: "npm ci --force"
+              run: "npm ci"
 
             - name: "Build package"
               run: "npm run build"
@@ -70,7 +86,7 @@ jobs:
               if: "${{ matrix.os == 'ubuntu-latest' && !cancelled() && env.CODECOV_TOKEN != '' }}"
               continue-on-error: true
               run: |
-                  npx @codecov/bundle-analyzer ./dist --bundle-name=${{ github.repository }} --upload-token="${CODECOV_TOKEN}"
+                  npm exec --yes --ignore-scripts --package=@codecov/bundle-analyzer@2.0.1 -- bundle-analyzer ./dist --bundle-name=${{ github.repository }} --upload-token="${CODECOV_TOKEN}"
               env:
                   GITHUB_SHA: "${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}"
                   GITHUB_REF: "${{ github.event_name == 'pull_request' && format('refs/heads/{0}', github.head_ref) || github.ref }}"
@@ -157,18 +173,34 @@ jobs:
             - name: "Setup Node.js"
               uses: "actions/setup-node@820762786026740c76f36085b0efc47a31fe5020" # v7.0.0
               with:
-                  cache: "npm"
-                  cache-dependency-path: "package-lock.json"
                   node-version-file: ".node-version"
+                  package-manager-cache: false
+
+            - name: "Setup pinned npm"
+              run: "node scripts/setup-package-manager.mjs --install"
+
+            - name: "Locate npm cache"
+              id: "npm-cache"
+              shell: "bash"
+              run: >-
+                  echo "dir=$(npm config get cache)" >> "$GITHUB_OUTPUT"
+
+            - name: "Cache npm downloads"
+              uses: "actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9" # v6.1.0
+              with:
+                  path: "${{ steps.npm-cache.outputs.dir }}"
+                  key: "${{ runner.os }}-npm-${{ hashFiles('.node-version', 'package.json', 'package-lock.json') }}"
+                  restore-keys: |
+                      ${{ runner.os }}-npm-
 
             - name: "Install dependencies"
-              run: "npm ci --force"
+              run: "npm ci"
 
             - name: "Build package"
               run: "npm run build"
 
             - name: "Install ESLint 9 runtime for compatibility smoke checks"
-              run: "npm install --no-save --force eslint@${{ matrix.eslint-version }} @eslint/js@${{ matrix.eslint-js-version }}"
+              run: "npm install --no-save --ignore-scripts eslint@${{ matrix.eslint-version }} @eslint/js@${{ matrix.eslint-js-version }}"
 
             - name: "Run ESLint 9 compatibility smoke checks"
-              run: "npm run lint:compat:eslint9 -- --expect-eslint-major=9"
+              run: "node scripts/eslint9-compat-smoke.mjs --expect-eslint-major=9"

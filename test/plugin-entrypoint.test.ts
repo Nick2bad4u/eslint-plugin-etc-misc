@@ -159,6 +159,9 @@ describe("plugin.mjs entrypoint", () => {
         ] as const;
 
         for (const configVariant of configVariants) {
+            expect(plugin.configs[configVariant].files).toStrictEqual(
+                configs[configVariant].files
+            );
             expect(plugin.configs[configVariant].rules).toStrictEqual(
                 configs[configVariant].rules
             );

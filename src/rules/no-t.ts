@@ -65,6 +65,7 @@ const rule: ReturnType<typeof ruleCreator<typeof defaultOptions, MessageIds>> =
             },
             schema: [
                 {
+                    additionalProperties: false,
                     description:
                         "Configuration for enforced generic type parameter prefix.",
                     properties: {

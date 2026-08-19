@@ -19,7 +19,8 @@ Release from a clean, current `main` after the exact source commit has passed
 CI and security checks.
 
 ```powershell
-npm ci --force
+node scripts/setup-package-manager.mjs --check
+npm ci
 npm run release:check
 npm run lint:package-check:strict
 npm run docs:typecheck
@@ -29,6 +30,23 @@ npm run changelog:preview
 
 Also install the packed tarball in an isolated production consumer and verify
 ESM, CommonJS, declarations, real ESLint execution, and `npm audit --omit=dev`.
+
+### Dependency lifecycle policy
+
+The committed `.npmrc` denies Git/remote lifecycle sources and enables npm
+12's strict lifecycle allowlist. `package.json#allowScripts` records every
+install-script decision by exact locked version:
+
+- `@swc/core`, `esbuild`, and `unrs-resolver` are allowed because their native
+  binaries are required and are smoke-tested after a clean install;
+- `core-js` is denied because its postinstall only prints a funding message;
+- optional `fsevents` is denied because supported platforms retain their
+  non-native watcher fallback.
+
+After any lockfile update, inspect `npm install-scripts ls --json`, run
+`npm install-scripts prune --dry-run --json`, and update the exact decisions
+only when the installed lifecycle package set changes. Never use
+`--dangerously-allow-all-scripts`.
 
 ## Create a release
 
@@ -49,7 +67,8 @@ required; it overrides `release_type`.
 The workflow:
 
 1. checks out the requested branch with full history and tags;
-2. installs with `npm ci --force` and runs `npm run release:check`;
+2. installs with `npm ci` under the exact npm and lifecycle policy, then runs
+   `npm run release:check`;
 3. computes and applies the requested version;
 4. rebuilds the package and verifies the version is unpublished;
 5. commits the manifest and lockfile version, creates the annotated `v*` tag,

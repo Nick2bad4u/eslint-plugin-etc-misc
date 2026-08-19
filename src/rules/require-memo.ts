@@ -72,7 +72,10 @@ const collectReactImportSpecifier = (
 
     if (specifier.imported.name === "memo") {
         memoNames.add(specifier.local.name);
-    } else if (specifier.imported.name === "forwardRef") {
+        return;
+    }
+
+    if (specifier.imported.name === "forwardRef") {
         forwardRefNames.add(specifier.local.name);
     }
 };

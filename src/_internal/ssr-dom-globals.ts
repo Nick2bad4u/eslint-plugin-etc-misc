@@ -11,6 +11,7 @@ import {
     setHas,
 } from "ts-extras";
 
+import { isSameNode } from "./node-identity.js";
 import { ruleCreator } from "./rule-creator.js";
 
 type AnalysisCache = Readonly<{
@@ -498,8 +499,10 @@ const isGuardedByAncestor = (
         );
 
         return (
-            (availability === "true" && ancestor.consequent === childOnPath) ||
-            (availability === "false" && ancestor.alternate === childOnPath)
+            (availability === "true" &&
+                isSameNode(ancestor.consequent, childOnPath)) ||
+            (availability === "false" &&
+                isSameNode(ancestor.alternate, childOnPath))
         );
     }
 
@@ -542,11 +545,8 @@ const isGuardedAvailabilityUse = (
         const ancestor = ancestors[index];
         const childOnPath = ancestors[index + 1] ?? node;
 
-        if (ancestor === undefined) {
-            continue;
-        }
-
         if (
+            ancestor !== undefined &&
             isGuardedByAncestor(
                 sourceCode,
                 ancestor,
@@ -684,7 +684,7 @@ const isImmediatelyInvoked = (node: Readonly<FunctionNode>): boolean => {
         return false;
     }
 
-    return unwrapCallee(parent.callee) === node;
+    return isSameNode(unwrapCallee(parent.callee), node);
 };
 
 const renderTimeHookNames: ReadonlySet<string> = new Set([
@@ -846,6 +846,17 @@ const getChildNodes = (
     return childNodes;
 };
 
+const getFunctionJsxSearchChildren = (
+    sourceCode: Readonly<SourceCode>,
+    current: Readonly<es.Node>
+): readonly Readonly<es.Node>[] => {
+    if (!isFunctionNode(current)) {
+        return getChildNodes(sourceCode, current);
+    }
+
+    return isRenderTimeNestedFunction(current) ? [current.body] : [];
+};
+
 const functionContainsJsx = (
     sourceCode: Readonly<SourceCode>,
     node: Readonly<FunctionNode>,
@@ -857,32 +868,30 @@ const functionContainsJsx = (
         return cachedResult;
     }
 
-    const stack: es.Node[] = [node.body];
+    if (
+        node.body.type === AST_NODE_TYPES.JSXElement ||
+        node.body.type === AST_NODE_TYPES.JSXFragment
+    ) {
+        cache.functionContainsJsx.set(node, true);
+        return true;
+    }
+
+    const stack: es.Node[] = [...getChildNodes(sourceCode, node.body)];
 
     while (stack.length > 0) {
         const current = stack.pop();
 
-        if (current === undefined) {
-            continue;
-        }
-
-        if (
-            current.type === AST_NODE_TYPES.JSXElement ||
-            current.type === AST_NODE_TYPES.JSXFragment
-        ) {
-            cache.functionContainsJsx.set(node, true);
-            return true;
-        }
-
-        if (current !== node.body && isFunctionNode(current)) {
-            if (isRenderTimeNestedFunction(current)) {
-                stack.push(current.body);
+        if (current !== undefined) {
+            if (
+                current.type === AST_NODE_TYPES.JSXElement ||
+                current.type === AST_NODE_TYPES.JSXFragment
+            ) {
+                cache.functionContainsJsx.set(node, true);
+                return true;
             }
 
-            continue;
+            stack.push(...getFunctionJsxSearchChildren(sourceCode, current));
         }
-
-        stack.push(...getChildNodes(sourceCode, current));
     }
 
     cache.functionContainsJsx.set(node, false);
@@ -956,7 +965,7 @@ const isReactFunctionComponent = (
 
     while (
         parent?.type === AST_NODE_TYPES.CallExpression &&
-        arrayFirst(parent.arguments) === valueNode &&
+        isSameNode(arrayFirst(parent.arguments), valueNode) &&
         isComponentWrapperCall(sourceCode, parent, cache)
     ) {
         valueNode = parent;

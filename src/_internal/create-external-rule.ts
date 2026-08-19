@@ -114,6 +114,8 @@ const createLegacyContextCompat = (context: RuleContext): RuleContext =>
 
 /**
  * Adapt an ESLint rule so it points docs to this repository.
+ *
+ * @throws When the external rule does not expose a create function.
  */
 export const adaptExternalRule = (
     externalRule: unknown,

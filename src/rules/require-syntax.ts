@@ -48,28 +48,25 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             "Program:exit": (node: Readonly<es.Program>): void => {
                 for (const [index, entry] of entries.entries()) {
                     const count = counters[index] ?? 0;
-                    if (count > 0) {
-                        continue;
+                    if (count === 0) {
+                        if (isDefined(entry.message)) {
+                            context.report({
+                                data: {
+                                    message: entry.message,
+                                },
+                                messageId: "customMessage",
+                                node,
+                            });
+                        } else {
+                            context.report({
+                                data: {
+                                    selector: entry.selector,
+                                },
+                                messageId: "missing",
+                                node,
+                            });
+                        }
                     }
-
-                    if (isDefined(entry.message)) {
-                        context.report({
-                            data: {
-                                message: entry.message,
-                            },
-                            messageId: "customMessage",
-                            node,
-                        });
-                        continue;
-                    }
-
-                    context.report({
-                        data: {
-                            selector: entry.selector,
-                        },
-                        messageId: "missing",
-                        node,
-                    });
                 }
             },
         };

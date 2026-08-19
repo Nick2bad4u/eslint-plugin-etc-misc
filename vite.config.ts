@@ -1,7 +1,6 @@
 // eslint-disable-next-line @eslint-community/eslint-comments/disable-enable-pair -- project-wide disable pattern for build configs
 /* eslint-disable comment-length/limit-single-line-comments   -- Disable specific rules for build configs */
 
-import { codecovVitePlugin } from "@codecov/vite-plugin";
 import pc from "picocolors";
 import {
     coverageConfigDefaults,
@@ -61,15 +60,6 @@ const vitestConfig: ReturnType<typeof defineConfig> = defineConfig({
         sourcemap: true, // Generate source maps for accurate coverage mapping
     },
     cacheDir: "./.cache/vitest",
-    plugins: [
-        // Put the Codecov Vite plugin after all other plugins
-        codecovVitePlugin({
-            bundleName: "eslint-plugin-etc-misc",
-            enableBundleAnalysis: process.env["CODECOV_TOKEN"] !== undefined,
-            retryCount: 3,
-            uploadToken: process.env["CODECOV_TOKEN"] ?? "",
-        }),
-    ],
     test: {
         // Directory for storing Vitest test attachments (screenshots, logs, etc.) in a hidden cache folder.
         // This helps keep test artifacts organized and out of the main source tree.
