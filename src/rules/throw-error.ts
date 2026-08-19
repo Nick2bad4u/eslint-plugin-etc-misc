@@ -16,6 +16,7 @@ import {
 import { arrayFirst, isDefined } from "ts-extras";
 import * as tsutils from "tsutils";
 
+import { isSameNode } from "../_internal/node-identity.js";
 import { ruleCreator } from "../_internal/rule-creator.js";
 import {
     createReplacementRuleInfo,
@@ -176,7 +177,7 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         const parent = identifier.parent;
                         if (
                             parent.type === AST_NODE_TYPES.CallExpression &&
-                            parent.callee === identifier
+                            isSameNode(parent.callee, identifier)
                         ) {
                             checkRejectionCall(parent);
                         }

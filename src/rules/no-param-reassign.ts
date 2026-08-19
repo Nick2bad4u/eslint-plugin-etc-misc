@@ -66,14 +66,11 @@ const isInFirstFunctionExpressionStatement = (
 
     for (let index = ancestors.length - 1; index >= 0; index -= 1) {
         const ancestor = ancestors[index];
-        if (ancestor === undefined) {
-            continue;
-        }
-
         if (
-            ancestor.type === AST_NODE_TYPES.ArrowFunctionExpression ||
-            ancestor.type === AST_NODE_TYPES.FunctionDeclaration ||
-            ancestor.type === AST_NODE_TYPES.FunctionExpression
+            ancestor !== undefined &&
+            (ancestor.type === AST_NODE_TYPES.ArrowFunctionExpression ||
+                ancestor.type === AST_NODE_TYPES.FunctionDeclaration ||
+                ancestor.type === AST_NODE_TYPES.FunctionExpression)
         ) {
             enclosingFunction = ancestor;
             break;

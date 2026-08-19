@@ -86,6 +86,19 @@ const getFunctionName = (
         : undefined;
 };
 
+const getReportableObjectPropertyValue = (
+    property: Readonly<es.ObjectLiteralElement>
+): Readonly<es.Expression> | undefined => {
+    if (property.type === AST_NODE_TYPES.SpreadElement) {
+        return property.argument;
+    }
+
+    return property.value.type === AST_NODE_TYPES.AssignmentPattern ||
+        property.value.type === AST_NODE_TYPES.TSEmptyBodyFunctionExpression
+        ? undefined
+        : property.value;
+};
+
 /**
  * Report unstable values at React prop and custom-hook boundaries without
  * generating dependency arrays or changing runtime behavior.
@@ -153,21 +166,11 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 !option.checkHookReturnObject
             ) {
                 for (const property of expression.properties) {
-                    if (property.type === AST_NODE_TYPES.Property) {
-                        if (
-                            property.value.type !==
-                                AST_NODE_TYPES.AssignmentPattern &&
-                            property.value.type !==
-                                AST_NODE_TYPES.TSEmptyBodyFunctionExpression
-                        ) {
-                            reportValues(
-                                collect(property.value),
-                                "unstableHookReturn"
-                            );
-                        }
-                    } else {
+                    const propertyValue =
+                        getReportableObjectPropertyValue(property);
+                    if (isDefined(propertyValue)) {
                         reportValues(
-                            collect(property.argument),
+                            collect(propertyValue),
                             "unstableHookReturn"
                         );
                     }

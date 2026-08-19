@@ -25,6 +25,11 @@ const functionNodeTypes: ReadonlySet<es.Node["type"]> = new Set([
 
 const intrinsicJsxNamePattern = /^[a-z]/v;
 
+type JsxName = es.JSXAttribute["name"] | es.JSXOpeningElement["name"];
+
+const getSimpleJsxName = (name: Readonly<JsxName>): string | undefined =>
+    name.type === AST_NODE_TYPES.JSXIdentifier ? name.name : undefined;
+
 /** Return whether a node introduces a JavaScript function scope. */
 export const isFunctionNode = (
     node: Readonly<es.Node>
@@ -53,10 +58,7 @@ export const unwrapExpression = (
 /** Return a simple JSX tag name, or `undefined` for member/namespaced names. */
 export const getSimpleJsxElementName = (
     node: Readonly<es.JSXOpeningElement>
-): string | undefined =>
-    node.name.type === AST_NODE_TYPES.JSXIdentifier
-        ? node.name.name
-        : undefined;
+): string | undefined => getSimpleJsxName(node.name);
 
 /** React treats an ASCII-lowercase JSX identifier as a host/custom element. */
 export const isIntrinsicJsxName = (name: string): boolean =>
@@ -74,10 +76,7 @@ export const isComponentOpeningElement = (
 /** Return a static JSX attribute name. */
 export const getJsxAttributeName = (
     node: Readonly<es.JSXAttribute>
-): string | undefined =>
-    node.name.type === AST_NODE_TYPES.JSXIdentifier
-        ? node.name.name
-        : undefined;
+): string | undefined => getSimpleJsxName(node.name);
 
 /** Find the nearest enclosing JavaScript function. */
 export const getEnclosingFunction = (
@@ -170,22 +169,24 @@ const getChildNodes = (
     const visitorKeys = sourceCode.visitorKeys[node.type] ?? [];
     const childNodes: Readonly<es.Node>[] = [];
 
+    const addNode = (value: unknown): void => {
+        if (isNode(value)) {
+            childNodes.push(value);
+        }
+    };
+
     for (const visitorKey of visitorKeys) {
         const value: unknown = Reflect.get(node, visitorKey);
 
         if (Array.isArray(value)) {
             for (const item of value) {
-                if (isNode(item)) {
-                    childNodes.push(item);
-                }
+                addNode(item);
             }
 
             continue;
         }
 
-        if (isNode(value)) {
-            childNodes.push(value);
-        }
+        addNode(value);
     }
 
     return childNodes;
@@ -196,27 +197,30 @@ export const functionContainsJsx = (
     sourceCode: Readonly<SourceCode>,
     node: Readonly<FunctionNode>
 ): boolean => {
-    const stack: es.Node[] = [node.body];
+    if (
+        node.body.type === AST_NODE_TYPES.JSXElement ||
+        node.body.type === AST_NODE_TYPES.JSXFragment
+    ) {
+        return true;
+    }
+
+    const stack: es.Node[] = [...getChildNodes(sourceCode, node.body)];
 
     while (stack.length > 0) {
         const current = stack.pop();
 
-        if (!isDefined(current)) {
-            continue;
-        }
+        if (isDefined(current)) {
+            if (
+                current.type === AST_NODE_TYPES.JSXElement ||
+                current.type === AST_NODE_TYPES.JSXFragment
+            ) {
+                return true;
+            }
 
-        if (
-            current.type === AST_NODE_TYPES.JSXElement ||
-            current.type === AST_NODE_TYPES.JSXFragment
-        ) {
-            return true;
+            if (!isFunctionNode(current)) {
+                stack.push(...getChildNodes(sourceCode, current));
+            }
         }
-
-        if (current !== node.body && isFunctionNode(current)) {
-            continue;
-        }
-
-        stack.push(...getChildNodes(sourceCode, current));
     }
 
     return false;

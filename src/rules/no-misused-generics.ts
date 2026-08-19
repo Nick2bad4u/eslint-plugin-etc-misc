@@ -123,23 +123,25 @@ const analyzeTypeParameterUses = (
     let isUsedInReturnOrExtends = tsutils.isFunctionWithBody(signature);
 
     for (const use of uses) {
-        if (isUseWithinParameterRange(use.location.pos, signature)) {
+        const isWithinParameterRange = isUseWithinParameterRange(
+            use.location.pos,
+            signature
+        );
+
+        if (isWithinParameterRange) {
             if (isUsedInParameters) {
                 isAppearsInMultipleParameters = true;
                 break;
             }
 
             isUsedInParameters = true;
-            continue;
         }
 
-        if (isUsedInReturnOrExtends) {
-            continue;
+        if (!isWithinParameterRange && !isUsedInReturnOrExtends) {
+            isUsedInReturnOrExtends =
+                use.location.pos > signature.parameters.end ||
+                isTypeUseInsideConstraint(use.location, typeParameters);
         }
-
-        isUsedInReturnOrExtends =
-            use.location.pos > signature.parameters.end ||
-            isTypeUseInsideConstraint(use.location, typeParameters);
     }
 
     return {
@@ -165,22 +167,19 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             typeParameters: readonly Readonly<ts.TypeParameterDeclaration>[],
             signature: Readonly<ts.SignatureDeclaration>
         ): void => {
-            usageMap ??= tsutils.collectVariableUsage(
-                signature.getSourceFile()
-            );
+            const currentUsageMap =
+                usageMap ??
+                tsutils.collectVariableUsage(signature.getSourceFile());
+            usageMap = currentUsageMap;
 
             const sourceFile = signature.getSourceFile();
 
-            for (const typeParameter of typeParameters) {
-                const uses = getVariableUses(usageMap, typeParameter.name);
-                const usageAnalysis = analyzeTypeParameterUses(
-                    uses,
-                    signature,
-                    typeParameters
-                );
-
+            const reportTypeParameter = (
+                typeParameter: Readonly<ts.TypeParameterDeclaration>,
+                usageAnalysis: Readonly<TypeParameterUsageAnalysis>
+            ): void => {
                 if (usageAnalysis.appearsInMultipleParameters) {
-                    continue;
+                    return;
                 }
 
                 if (!usageAnalysis.usedInParameters) {
@@ -195,33 +194,49 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                         ),
                         messageId: "cannotInfer",
                     });
-                    continue;
+                    return;
                 }
 
                 if (
-                    !usageAnalysis.usedInReturnOrExtends &&
-                    !isConstrainedByAnotherTypeParameter(
+                    usageAnalysis.usedInReturnOrExtends ||
+                    isConstrainedByAnotherTypeParameter(
                         typeParameter,
                         typeParameters,
-                        usageMap
+                        currentUsageMap
                     )
                 ) {
-                    context.report({
-                        data: {
-                            name: typeParameter.name.text,
-                            replacement: getTypeParameterReplacement(
-                                sourceFile,
-                                typeParameter
-                            ),
-                        },
-                        loc: toReportLocation(
-                            context.sourceCode,
+                    return;
+                }
+
+                context.report({
+                    data: {
+                        name: typeParameter.name.text,
+                        replacement: getTypeParameterReplacement(
                             sourceFile,
                             typeParameter
                         ),
-                        messageId: "canReplace",
-                    });
-                }
+                    },
+                    loc: toReportLocation(
+                        context.sourceCode,
+                        sourceFile,
+                        typeParameter
+                    ),
+                    messageId: "canReplace",
+                });
+            };
+
+            for (const typeParameter of typeParameters) {
+                const uses = getVariableUses(
+                    currentUsageMap,
+                    typeParameter.name
+                );
+                const usageAnalysis = analyzeTypeParameterUses(
+                    uses,
+                    signature,
+                    typeParameters
+                );
+
+                reportTypeParameter(typeParameter, usageAnalysis);
             }
         };
 

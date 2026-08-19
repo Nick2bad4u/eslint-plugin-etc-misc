@@ -27,19 +27,20 @@ const collectNodeChildren = (
         }
     };
 
-    for (const [key, child] of objectEntries(node)) {
-        if (key === "loc" || key === "parent" || key === "range") {
-            continue;
-        }
-
-        if (Array.isArray(child)) {
-            for (const item of child) {
+    const addNodes = (value: unknown): void => {
+        if (Array.isArray(value)) {
+            for (const item of value) {
                 addNode(item);
             }
-            continue;
+        } else {
+            addNode(value);
         }
+    };
 
-        addNode(child);
+    for (const [key, child] of objectEntries(node)) {
+        if (key !== "loc" && key !== "parent" && key !== "range") {
+            addNodes(child);
+        }
     }
 
     return children;

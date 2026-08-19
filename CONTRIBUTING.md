@@ -8,7 +8,7 @@ This repository contains an ESLint plugin that curates and extends rules from
 ## Prerequisites
 
 - Node.js `>=20.19.0` (see `package.json#engines`)
-- npm `>=11`
+- npm `12.0.2` (the exact version declared by `packageManager`)
 - Git
 
 ## Local setup
@@ -18,8 +18,13 @@ This repository contains an ESLint plugin that curates and extends rules from
 2. Install dependencies from the repository root:
 
    ```bash
-   npm ci --force
+   node scripts/setup-package-manager.mjs --check
+   npm ci
    ```
+
+   CI may use `node scripts/setup-package-manager.mjs --install` immediately
+   after setting up Node. Local checks never replace a developer's global npm
+   implicitly.
 
 3. Run the main quality gate:
 

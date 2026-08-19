@@ -61,13 +61,14 @@ jobs:
      uses: actions/checkout@v6
    - name: Setup Node.js
      uses: actions/setup-node@v6
-     with:
+   with:
       node-version-file: .node-version
       cache: npm
       cache-dependency-path: package-lock.json
+   - name: Setup pinned npm
+     run: node scripts/setup-package-manager.mjs --install
    - name: Install dependencies
-     run: |
-      npm ci --force
+     run: npm ci
    - name: Verify package
      run: npm run release:check
    - name: Pack tarball
@@ -296,19 +297,22 @@ jobs:
 
    - name: Setup Node.js
      uses: actions/setup-node@v6
-     with:
+   with:
       node-version-file: .node-version
       cache: npm
       cache-dependency-path: package-lock.json
 
+   - name: Setup pinned npm
+     run: node scripts/setup-package-manager.mjs --install
+
    - name: Install dependencies
-     run: npm ci --force
+     run: npm ci
 
    - name: Install ESLint
-     run: npm install --no-save --force eslint@${{ matrix.eslint-version }} @eslint/js@${{ matrix.eslint-version }}
+     run: npm install --no-save --ignore-scripts eslint@${{ matrix.eslint-version }} @eslint/js@${{ matrix.eslint-version }}
 
    - name: Run compat lint
-     run: npm run lint:compat:eslint9 -- --expect-eslint-major=9
+     run: node scripts/eslint9-compat-smoke.mjs --expect-eslint-major=9
 ```
 
 ### **3. Self-Hosted Runners**

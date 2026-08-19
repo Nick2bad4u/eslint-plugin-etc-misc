@@ -60,27 +60,23 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 const nextNode = context.sourceCode.getTokenAfter(comment, {
                     includeComments: false,
                 });
-                if (nextNode === null) {
-                    continue;
+                if (nextNode !== null) {
+                    const blankLines =
+                        nextNode.loc.start.line - comment.loc.end.line - 1;
+                    const expected = expectedBlankLines(comment);
+                    if (blankLines !== expected) {
+                        context.report({
+                            fix: buildFix(
+                                context.sourceCode,
+                                comment,
+                                nextNode,
+                                expected
+                            ),
+                            messageId: "invalidSpacing",
+                            node: comment,
+                        });
+                    }
                 }
-
-                const blankLines =
-                    nextNode.loc.start.line - comment.loc.end.line - 1;
-                const expected = expectedBlankLines(comment);
-                if (blankLines === expected) {
-                    continue;
-                }
-
-                context.report({
-                    fix: buildFix(
-                        context.sourceCode,
-                        comment,
-                        nextNode,
-                        expected
-                    ),
-                    messageId: "invalidSpacing",
-                    node: comment,
-                });
             }
         },
     }),

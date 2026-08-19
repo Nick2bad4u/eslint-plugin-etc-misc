@@ -145,22 +145,20 @@ const getIntrinsicAncestorNames = (
     for (let index = ancestors.length - 1; index >= 0; index -= 1) {
         const ancestor = ancestors[index];
 
-        if (!isDefined(ancestor)) {
-            continue;
-        }
+        if (isDefined(ancestor)) {
+            const traversal = getAncestorTraversal(ancestors, index, ancestor);
 
-        const traversal = getAncestorTraversal(ancestors, index, ancestor);
+            if (traversal.kind === "clear") {
+                return [];
+            }
 
-        if (traversal.kind === "clear") {
-            return [];
-        }
+            if (traversal.kind === "stop") {
+                break;
+            }
 
-        if (traversal.kind === "stop") {
-            break;
-        }
-
-        if (traversal.kind === "collect") {
-            intrinsicAncestorNames.push(traversal.name);
+            if (traversal.kind === "collect") {
+                intrinsicAncestorNames.push(traversal.name);
+            }
         }
     }
 

@@ -31,18 +31,15 @@ const isEnumLikeOrUndefinedType = (
         const apparentType = checker.getApparentType(typeVariant);
 
         if (isTypeFlagSet(typeVariant, ts.TypeFlags.Undefined)) {
-            continue;
-        }
-
-        if (
+            // Undefined is permitted alongside an otherwise enum-like type.
+        } else if (
             isTypeFlagSet(typeVariant, ts.TypeFlags.EnumLike) ||
             isTypeFlagSet(apparentType, ts.TypeFlags.EnumLike)
         ) {
             hasEnumLike = true;
-            continue;
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     return hasEnumLike;

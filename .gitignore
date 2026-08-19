@@ -827,6 +827,8 @@ node_modules_backup/
 
 # NPM
 .npmrc
+# The repository root contains only the audited npm 12 lifecycle policy.
+!/.npmrc
 
 # OhMyPosh
 !.vscode/OhMyPosh-Atomic-Custom.json

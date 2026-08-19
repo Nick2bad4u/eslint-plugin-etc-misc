@@ -436,9 +436,9 @@ const inferBinaryType = (
 
 const inferObjectConstructorResult = (
     context: Readonly<TSESLint.RuleContext<MessageIds, Options>>,
-    arguments_: readonly Readonly<es.CallExpressionArgument>[]
+    callArguments: readonly Readonly<es.CallExpressionArgument>[]
 ): NativeAccess | null => {
-    const firstArgument = arrayFirst(arguments_);
+    const firstArgument = arrayFirst(callArguments);
     if (!isDefined(firstArgument)) {
         return toInstanceAccess("Object");
     }

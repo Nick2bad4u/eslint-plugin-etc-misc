@@ -53,8 +53,11 @@ jobs:
                   cache-dependency-path: "package-lock.json"
                   node-version-file: ".node-version"
 
+            - name: "Setup pinned npm"
+              run: "node scripts/setup-package-manager.mjs --install"
+
             - name: "Install dependencies"
-              run: "npm ci --force"
+              run: "npm ci"
 
             - name: "Build before TypeDoc"
               run: "npm run build"

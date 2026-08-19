@@ -26,7 +26,8 @@ Release from a clean, current `main` after the exact source commit passes CI
 and security checks.
 
 ```powershell
-npm ci --force
+node scripts/setup-package-manager.mjs --check
+npm ci
 npm run release:check
 npm run lint:package-check:strict
 npm run docs:typecheck
@@ -37,6 +38,18 @@ npm run changelog:preview
 Verify the packed tarball separately in a clean production consumer, including
 ESM, CommonJS, declarations, real ESLint execution, and
 `npm audit --omit=dev`.
+
+### Dependency lifecycle policy
+
+The committed `.npmrc` denies Git/remote lifecycle sources and enables npm
+12's strict lifecycle allowlist. `package.json#allowScripts` allows the native
+binary setup required by `@swc/core`, `esbuild`, and `unrs-resolver`, while
+denying the message-only `core-js` postinstall and optional `fsevents` script.
+
+After a lockfile update, inspect `npm install-scripts ls --json`, run
+`npm install-scripts prune --dry-run --json`, and change exact-version
+decisions only when the installed lifecycle package set changes. Never use
+`--dangerously-allow-all-scripts`.
 
 ## Create a release
 

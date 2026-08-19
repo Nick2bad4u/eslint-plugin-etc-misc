@@ -60,8 +60,11 @@ jobs:
                   cache: "npm"
                   cache-dependency-path: "package-lock.json"
 
+            - name: "Setup pinned npm"
+              run: "node scripts/setup-package-manager.mjs --install"
+
             - name: "Install dependencies"
-              run: "npm ci --force"
+              run: "npm ci"
 
             - name: "Build package"
               run: "npm run build"
@@ -70,7 +73,7 @@ jobs:
               if: "${{ matrix.os == 'ubuntu-latest' && !cancelled() && env.CODECOV_TOKEN != '' }}"
               continue-on-error: true
               run: |
-                  npx @codecov/bundle-analyzer ./dist --bundle-name=${{ github.repository }} --upload-token="${CODECOV_TOKEN}"
+                  npm exec --yes --ignore-scripts --package=@codecov/bundle-analyzer@2.0.1 -- bundle-analyzer ./dist --bundle-name=${{ github.repository }} --upload-token="${CODECOV_TOKEN}"
               env:
                   GITHUB_SHA: "${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}"
                   GITHUB_REF: "${{ github.event_name == 'pull_request' && format('refs/heads/{0}', github.head_ref) || github.ref }}"
@@ -161,14 +164,17 @@ jobs:
                   cache-dependency-path: "package-lock.json"
                   node-version-file: ".node-version"
 
+            - name: "Setup pinned npm"
+              run: "node scripts/setup-package-manager.mjs --install"
+
             - name: "Install dependencies"
-              run: "npm ci --force"
+              run: "npm ci"
 
             - name: "Build package"
               run: "npm run build"
 
             - name: "Install ESLint 9 runtime for compatibility smoke checks"
-              run: "npm install --no-save --force eslint@${{ matrix.eslint-version }} @eslint/js@${{ matrix.eslint-js-version }}"
+              run: "npm install --no-save --ignore-scripts eslint@${{ matrix.eslint-version }} @eslint/js@${{ matrix.eslint-js-version }}"
 
             - name: "Run ESLint 9 compatibility smoke checks"
-              run: "npm run lint:compat:eslint9 -- --expect-eslint-major=9"
+              run: "node scripts/eslint9-compat-smoke.mjs --expect-eslint-major=9"
