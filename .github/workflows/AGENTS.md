@@ -63,6 +63,7 @@ jobs:
      uses: actions/setup-node@v6
    with:
       node-version-file: .node-version
+      package-manager-cache: false
    - name: Setup pinned npm
      run: node scripts/setup-package-manager.mjs --install
    - name: Locate npm cache
@@ -257,7 +258,7 @@ jobs:
   - **Restore Keys:** Use `restore-keys` for fallbacks to older, compatible caches.
   - **Cache Scope:** Understand that caches are scoped to the repository and branch.
 - **Guidance for Copilot:**
-  - In this npm repository, do not enable `actions/setup-node`'s built-in npm cache: its cache probe invokes the runner's bundled npm before the repository's exact `devEngines.packageManager` version is installed.
+  - In this npm repository, explicitly set `package-manager-cache: false` on `actions/setup-node`: v7 automatically enables its built-in npm cache when `packageManager` or `devEngines.packageManager` names npm, and that cache probe invokes the runner's bundled npm before the repository's exact version is installed.
   - Install the pinned npm first, discover its cache directory with `npm config get cache`, and then use a full-SHA-pinned `actions/cache` step.
   - Treat `.node-version` as the workflow source of truth and keep `.nvmrc` synchronized with the same exact version for local tooling compatibility.
   - Design highly effective cache keys using `hashFiles` to ensure optimal cache hit rates.
@@ -269,6 +270,7 @@ jobs:
   uses: actions/setup-node@v6
   with:
    node-version-file: .node-version
+   package-manager-cache: false
 
 - name: Setup pinned npm
   run: node scripts/setup-package-manager.mjs --install
@@ -323,6 +325,7 @@ jobs:
      uses: actions/setup-node@v6
    with:
       node-version-file: .node-version
+      package-manager-cache: false
 
    - name: Setup pinned npm
      run: node scripts/setup-package-manager.mjs --install
