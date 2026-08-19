@@ -13,7 +13,7 @@ run-name: >-
 
 concurrency:
     group: "${{ github.workflow }}-${{ github.repository }}"
-    cancel-in-progress: "${{ !startsWith(github.ref, 'refs/tags/v') }}"
+    cancel-in-progress: "${{ false }}"
 
 on:
     push:
@@ -659,16 +659,32 @@ jobs:
                       echo "::error::GitHub release ${TAG} exists, but ${PACKAGE_NAME}@${VERSION} is not published."
                       exit 1
                     fi
-                    release_state=$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" \
-                      --json isDraft,isPrerelease,tagName \
-                      --jq '[.tagName, (.isDraft | tostring), (.isPrerelease | tostring)] | @tsv')
-                    IFS=$'\t' read -r release_tag release_draft release_prerelease <<< "$release_state"
+                    release_json=$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" \
+                      --json assets,isDraft,isPrerelease,tagName)
+                    release_tag=$(node -e 'process.stdout.write(JSON.parse(process.argv[1]).tagName)' "$release_json")
+                    release_draft=$(node -e 'process.stdout.write(String(JSON.parse(process.argv[1]).isDraft))' "$release_json")
+                    release_prerelease=$(node -e 'process.stdout.write(String(JSON.parse(process.argv[1]).isPrerelease))' "$release_json")
                     if [ "$release_tag" != "$TAG" ] || [ "$release_draft" != "false" ] || [ "$release_prerelease" != "false" ]; then
                       echo "::error::Existing GitHub release ${TAG} is not the expected final release."
                       exit 1
                     fi
-                    already_released=true
-                    echo "GitHub release ${TAG} already exists in final form."
+
+                    safe_package_name=$(printf '%s' "$PACKAGE_NAME" | sed 's/^@//; s#/#-#g')
+                    expected_tarball="${safe_package_name}-${VERSION}.tgz"
+                    expected_zip="${safe_package_name}-${VERSION}.zip"
+                    assets_complete=$(node - "$release_json" "$expected_tarball" "$expected_zip" <<'NODE'
+                  const release = JSON.parse(process.argv[2]);
+                  const expectedAssets = process.argv.slice(3);
+                  const actualAssets = new Set(release.assets.map((asset) => asset.name));
+                  process.stdout.write(String(expectedAssets.every((name) => actualAssets.has(name))));
+                  NODE
+                    )
+                    if [ "$assets_complete" = "true" ]; then
+                      already_released=true
+                      echo "GitHub release ${TAG} already exists with both expected assets."
+                    else
+                      echo "GitHub release ${TAG} is missing or has unexpected assets; recovery will repair it."
+                    fi
                   fi
 
                   {
@@ -764,7 +780,7 @@ jobs:
                       ${{ steps.recovery-assets.outputs.zip_path }}
                   fail_on_unmatched_files: true
                   generate_release_notes: false
-                  overwrite_files: false
+                  overwrite_files: true
                   prerelease: false
               env:
                   GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
