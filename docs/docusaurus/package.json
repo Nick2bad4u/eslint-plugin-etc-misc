@@ -34,7 +34,7 @@
         "site-docs"
     ],
     "scripts": {
-        "build": "npm run docs:api && cd ../../ && npm run build:eslint-inspector && cd docs/docusaurus && npx cross-env NODE_OPTIONS=--no-experimental-webstorage npx docusaurus build",
+        "build": "npm run docs:api && cd ../../ && npm run build:eslint-inspector && cd docs/docusaurus && node ../../scripts/run-docusaurus.mjs build",
         "build:fast": "npx cross-env DOCUSAURUS_ENABLE_EXPERIMENTAL=true npx docusaurus build",
         "build:local": "npm run docs:api && npm run build:eslint-inspector:local && npx cross-env NODE_OPTIONS=--no-deprecation npx docusaurus build",
         "clear": "npx docusaurus clear",
