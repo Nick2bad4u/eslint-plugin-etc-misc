@@ -5,6 +5,8 @@
 Opinionated ESLint plugin that combines and curates rules from `etc` and `misc`
 style linting patterns for TypeScript-heavy codebases.
 
+> **Oxlint:** Not compatible as a complete plugin (verified with Oxlint 1.80.0). Parser-agnostic rules can work, but 12 of the 141 rules require TypeScript parser services, and [Oxlint does not support type-aware JavaScript plugin rules](https://oxc.rs/docs/guide/usage/linter/type-aware.html#type-aware-linting-with-javascript-plugins). Use ESLint for the complete rule and preset surface.
+
 ## Credits
 
 This plugin builds on ideas and rule work from:
