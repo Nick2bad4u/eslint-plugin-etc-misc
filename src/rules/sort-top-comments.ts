@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-readonly-parameter-types -- ESLint fixer API callback signatures. */
-
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
 import { arrayFirst, arrayJoin, arrayLast } from "ts-extras";
@@ -12,18 +10,6 @@ type Options = readonly [];
 
 const commentText = (comment: Readonly<es.Comment>): string =>
     comment.value.trim();
-
-const buildReplacement = (
-    sourceCode: Readonly<TSESLint.SourceCode>,
-    comments: readonly es.Comment[]
-): string =>
-    arrayJoin(
-        comments
-            .map((comment) => sourceCode.getText(comment))
-            // eslint-disable-next-line unicorn/no-array-sort -- Node >=16.0 support baseline
-            .sort((a, b) => a.localeCompare(b)),
-        "\n"
-    );
 
 /**
  * Enforce alphabetical ordering of top-of-file comments.
@@ -42,7 +28,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             const comments = context.sourceCode
                 .getCommentsBefore(firstNode)
                 .filter(
-                    (comment) => comment.loc.end.line < firstNode.loc.start.line
+                    (comment) =>
+                        comment.loc.end.line < firstNode.loc.start.line &&
+                        !context.sourceCode.text.startsWith(
+                            "#!",
+                            arrayFirst(comment.range)
+                        )
                 );
             if (comments.length < 2) {
                 return;
@@ -70,7 +61,12 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
                 fix: (fixer): TSESLint.RuleFix =>
                     fixer.replaceTextRange(
                         [arrayFirst(firstComment.range), lastComment.range[1]],
-                        buildReplacement(context.sourceCode, comments)
+                        arrayJoin(
+                            sorted.map((comment) =>
+                                context.sourceCode.getText(comment)
+                            ),
+                            "\n"
+                        )
                     ),
                 messageId: "incorrectSorting",
                 node: firstComment,
@@ -101,5 +97,3 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
 });
 
 export default rule;
-
-/* eslint-enable @typescript-eslint/prefer-readonly-parameter-types -- Re-enable after file-scoped fixer callback implementations. */

@@ -1,5 +1,8 @@
 import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
 
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import { arrayFirst, setHas } from "ts-extras";
+
 import { ruleCreator } from "../_internal/rule-creator.js";
 
 type MessageIds =
@@ -8,22 +11,73 @@ type MessageIds =
     | "suggestLT"
     | "suggestLTE";
 
+const relationalOperators = new Set<es.BinaryExpression["operator"]>([
+    "<",
+    "<=",
+    ">",
+    ">=",
+    "in",
+    "instanceof",
+]);
+
+const needsGroupingOnRight = (
+    operand: Readonly<es.BinaryExpression["left"]>
+): boolean =>
+    (operand.type === AST_NODE_TYPES.BinaryExpression &&
+        setHas(relationalOperators, operand.operator)) ||
+    operand.type === AST_NODE_TYPES.TSAsExpression ||
+    operand.type === AST_NODE_TYPES.TSSatisfiesExpression;
+
+const needsGroupingOnLeft = (operand: Readonly<es.Expression>): boolean =>
+    operand.type === AST_NODE_TYPES.ClassExpression ||
+    operand.type === AST_NODE_TYPES.FunctionExpression ||
+    operand.type === AST_NODE_TYPES.ObjectExpression;
+
 const createFixes = (
     fixer: Readonly<TSESLint.RuleFixer>,
-    context: Readonly<TSESLint.RuleContext<MessageIds, readonly []>>,
+    sourceCode: Readonly<TSESLint.SourceCode>,
     expression: Readonly<es.BinaryExpression>,
     operatorText: "<" | "<="
-): readonly TSESLint.RuleFix[] => {
+): null | readonly TSESLint.RuleFix[] => {
     const { left, right } = expression;
-    const operatorToken = context.sourceCode.getTokenAfter(left);
+    const operatorToken = sourceCode.getFirstTokenBetween(left, right, {
+        filter: (token) => token.value === expression.operator,
+    });
     if (operatorToken === null) {
-        return [];
+        return null;
     }
 
+    const leftEnd = sourceCode.getTokenBefore(operatorToken);
+    const rightStart = sourceCode.getTokenAfter(operatorToken);
+    if (leftEnd === null || rightStart === null) {
+        return null;
+    }
+
+    const leftRange: [number, number] = [
+        arrayFirst(expression.range),
+        leftEnd.range[1],
+    ];
+    const rightRange: [number, number] = [
+        arrayFirst(rightStart.range),
+        expression.range[1],
+    ];
+    const leftText = sourceCode.text.slice(...leftRange);
+    const rightText = sourceCode.text.slice(...rightRange);
+    const movedLeftText =
+        arrayFirst(leftRange) === arrayFirst(left.range) &&
+        needsGroupingOnRight(left)
+            ? `(${leftText})`
+            : leftText;
+    const movedRightText =
+        arrayFirst(rightRange) === arrayFirst(right.range) &&
+        needsGroupingOnLeft(right)
+            ? `(${rightText})`
+            : rightText;
+
     return [
-        fixer.replaceText(left, context.sourceCode.getText(right)),
+        fixer.replaceTextRange(leftRange, movedRightText),
         fixer.replaceTextRange(operatorToken.range, operatorText),
-        fixer.replaceText(right, context.sourceCode.getText(left)),
+        fixer.replaceTextRange(rightRange, movedLeftText),
     ];
 };
 
@@ -47,7 +101,12 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
 
                 context.report({
                     fix: (fixer) =>
-                        createFixes(fixer, context, expression, fixOperator),
+                        createFixes(
+                            fixer,
+                            context.sourceCode,
+                            expression,
+                            fixOperator
+                        ),
                     messageId,
                     node: expression,
                     suggest: [
@@ -55,7 +114,7 @@ const rule: ReturnType<typeof ruleCreator<readonly [], MessageIds>> =
                             fix: (fixer) =>
                                 createFixes(
                                     fixer,
-                                    context,
+                                    context.sourceCode,
                                     expression,
                                     fixOperator
                                 ),

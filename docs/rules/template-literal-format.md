@@ -16,7 +16,7 @@ It requires the template content to have boundary newlines:
 This rule reports multiline template literals that do not start and end on their
 own lines.
 
-It provides an autofix that normalizes indentation in the template body.
+The rule reports the formatting issue for manual review.
 
 ## Why this rule exists
 
@@ -41,10 +41,8 @@ const text = `
 
 ## Behavior and migration notes
 
-This rule is autofixable.
-
-The fixer adds required boundary newlines and normalizes content indentation
-based on minimum detected indent.
+Adding boundary newlines or changing indentation can change the evaluated string
+or the text passed to a template tag. ESLint leaves the template text untouched.
 
 ### Options
 
@@ -97,4 +95,4 @@ template style.
 ## Adoption resources
 
 - Start at warning level in CI, then move to error after cleanup.
-- Use focused codemods/autofix batches per package or directory.
+- Review the expected string value or tag behavior before editing each template.

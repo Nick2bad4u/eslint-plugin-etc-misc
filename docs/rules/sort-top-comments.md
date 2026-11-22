@@ -40,8 +40,8 @@ const value = 1;
 
 This rule is autofixable.
 
-The fixer only rewrites the contiguous top comment span before the first
-statement.
+The fixer sorts line and block comments before the first statement. A leading
+shebang stays on the first line.
 
 ### Options
 

@@ -41,8 +41,9 @@ if (min <= value && value <= max) {
 
 This rule has no options.
 
-The rule is auto-fixable. The fixer swaps both operands and rewrites the
-operator:
+The autofix and suggestion swap both operands, preserve their parentheses, and
+add parentheses when needed to keep the original grouping. They also rewrite
+the operator:
 
 - `>` → `<`
 - `>=` → `<=`

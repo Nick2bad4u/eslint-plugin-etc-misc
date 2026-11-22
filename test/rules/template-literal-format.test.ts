@@ -6,6 +6,22 @@ ruleTester.run("template-literal-format", rule, {
         {
             code: "const msg = `line\n  body\nline`;",
             errors: [{ messageId: "invalidFormat" }],
+            output: null,
+        },
+        {
+            code: "const sql = `SELECT *\n  FROM t`;",
+            errors: [{ messageId: "invalidFormat" }],
+            output: null,
+        },
+        {
+            code: "const sql = `SELECT *\n    col1,\n  FROM t`;",
+            errors: [{ messageId: "invalidFormat" }],
+            output: null,
+        },
+        {
+            code: `const msg = tag\`line\n  \${value}\`;`,
+            errors: [{ messageId: "invalidFormat" }],
+            output: null,
         },
     ],
     valid: [
