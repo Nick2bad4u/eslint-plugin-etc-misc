@@ -125,6 +125,16 @@ ruleTester.run("sort-top-comments", getSortTopCommentsRuleFromPlugin(), {
             output: "/* alpha */\n// zebra\nconst value = 1;",
         },
         {
+            code: "#!/usr/bin/env node\n// zebra\n// alpha\nconsole.log(1);",
+            errors: [{ messageId: "incorrectSorting" }],
+            output: "#!/usr/bin/env node\n// alpha\n// zebra\nconsole.log(1);",
+        },
+        {
+            code: "#!/usr/bin/env node\n/* zebra */\n// alpha\nconsole.log(1);",
+            errors: [{ messageId: "incorrectSorting" }],
+            output: "#!/usr/bin/env node\n// alpha\n/* zebra */\nconsole.log(1);",
+        },
+        {
             code: readFixture(),
             errors: [{ messageId: "incorrectSorting" }],
             output: readFixtureWithExpectedFixes(),
@@ -133,6 +143,9 @@ ruleTester.run("sort-top-comments", getSortTopCommentsRuleFromPlugin(), {
     valid: [
         {
             code: "",
+        },
+        {
+            code: "#!/usr/bin/env node\n// alpha\nconsole.log(1);",
         },
         {
             code: "// alpha\nconst value = 1;",

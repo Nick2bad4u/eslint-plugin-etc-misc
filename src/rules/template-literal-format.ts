@@ -1,12 +1,6 @@
-import type { TSESTree as es, TSESLint } from "@typescript-eslint/utils";
+import type { TSESTree as es } from "@typescript-eslint/utils";
 
-import {
-    arrayFirst,
-    arrayJoin,
-    arrayLast,
-    isEmpty,
-    stringSplit,
-} from "ts-extras";
+import { arrayFirst, arrayLast } from "ts-extras";
 
 import { ruleCreator } from "../_internal/rule-creator.js";
 
@@ -26,45 +20,6 @@ const hasExpectedBoundaryNewlines = (
     return first.startsWith("\n") && last.endsWith("\n");
 };
 
-const normalizeTemplate = (sourceText: string): string => {
-    const lines = stringSplit(sourceText.replaceAll(/\r\n?/gv, "\n"), "\n");
-    const contentLines = lines.slice(1, -1);
-    const indents = contentLines
-        .filter((line) => line.trim().length > 0)
-        .map((line) => /^\s*/v.exec(line)?.[0].length ?? 0);
-    const minIndent = isEmpty(indents) ? 0 : Math.min(...indents);
-
-    const normalizedContent = arrayJoin(
-        contentLines
-            .map((line) =>
-                line.length >= minIndent ? line.slice(minIndent) : line
-            )
-            .map((line) => `  ${line}`),
-        "\n"
-    );
-
-    const lastLine = arrayLast(lines) ?? "";
-
-    return arrayJoin(
-        [
-            arrayFirst(lines),
-            normalizedContent,
-            lastLine,
-        ],
-        "\n"
-    );
-};
-
-const buildFix =
-    (
-        sourceCode: Readonly<TSESLint.SourceCode>,
-        node: Readonly<es.TemplateLiteral>
-    ): TSESLint.ReportFixFunction =>
-    (fixer): TSESLint.RuleFix => {
-        const text = sourceCode.getText(node);
-        return fixer.replaceText(node, normalizeTemplate(text));
-    };
-
 /**
  * Enforce newline boundary formatting for multiline template literals.
  */
@@ -82,7 +37,6 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             }
 
             context.report({
-                fix: buildFix(context.sourceCode, node),
                 messageId: "invalidFormat",
                 node,
             });
@@ -98,7 +52,6 @@ const rule: ReturnType<typeof ruleCreator<Options, MessageIds>> = ruleCreator<
             recommended: false,
             url: "https://nick2bad4u.github.io/eslint-plugin-etc-misc/docs/rules/template-literal-format",
         },
-        fixable: "code",
         hasSuggestions: false,
         languages: ["js/js"],
         messages: {
